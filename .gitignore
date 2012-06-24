@@ -1,0 +1,16 @@
+.settings
+.project
+.classpath
+.cproject
+target/
+*~
+*.dylib
+*.jnilib
+*.so
+*.a
+*.o
+*.obj
+*.dll
+\#*
+*\#
+
