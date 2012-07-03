@@ -70,12 +70,12 @@ public final class LEIO
 
     public final static void writeFloat(final OutputStream out, final float value) throws IOException
     {
-        write32(out, Float.floatToRawIntBits(value));
+        write32(out, Float.floatToIntBits(value));
     }
 
     public final static void writeDouble(final OutputStream out, final double value) throws IOException
     {
-        write64(out, Double.doubleToRawLongBits(value));
+        write64(out, Double.doubleToLongBits(value));
     }
 
     public final static void writeString(final OutputStream out, final String value, final int length,
@@ -168,7 +168,7 @@ public final class LEIO
         long v = in.read();
         v |= in.read() << 8;
         v |= in.read() << 16;
-        v |= in.read() << 24;
+        v |= (long)in.read() << 24;
         v |= (long)in.read() << 32;
         v |= (long)in.read() << 40;
         v |= (long)in.read() << 48;

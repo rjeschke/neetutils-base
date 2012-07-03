@@ -64,7 +64,7 @@ public class RndCMWC implements RNG
     @Override
     public int nextInt(int max)
     {
-        return (int)(nextFloatUnipolar() * max);
+        return (int)(nextDoubleUnipolar() * max);
     }
     
     @Override

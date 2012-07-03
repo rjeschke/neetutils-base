@@ -108,10 +108,10 @@ public final class BEIO
      */
     public final static void write64(final OutputStream out, final long value) throws IOException
     {
-        out.write((int)(value >> 56));
-        out.write((int)(value >> 48));
-        out.write((int)(value >> 40));
-        out.write((int)(value >> 32));
+        out.write((int)(value >> 56L));
+        out.write((int)(value >> 48L));
+        out.write((int)(value >> 40L));
+        out.write((int)(value >> 32L));
         out.write((int)(value >> 24));
         out.write((int)(value >> 16));
         out.write((int)(value >> 8));
@@ -130,7 +130,7 @@ public final class BEIO
      */
     public final static void writeFloat(final OutputStream out, final float value) throws IOException
     {
-        write32(out, Float.floatToRawIntBits(value));
+        write32(out, Float.floatToIntBits(value));
     }
 
     /**
@@ -145,7 +145,7 @@ public final class BEIO
      */
     public final static void writeDouble(final OutputStream out, final double value) throws IOException
     {
-        write64(out, Double.doubleToRawLongBits(value));
+        write64(out, Double.doubleToLongBits(value));
     }
 
     public final static void writeString(final OutputStream out, final String value, final int length,
@@ -243,11 +243,11 @@ public final class BEIO
 
     public final static long readI64(final InputStream in) throws IOException
     {
-        long v = (long)in.read() << 56;
+        long v = (long)in.read() << 56L;
         v |= (long)in.read() << 48;
         v |= (long)in.read() << 40;
         v |= (long)in.read() << 32;
-        v |= in.read() << 24;
+        v |= (long)in.read() << 24;
         v |= in.read() << 16;
         v |= in.read() << 8;
         v |= in.read();
