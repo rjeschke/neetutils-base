@@ -20,46 +20,78 @@ import java.io.IOException;
 import com.github.rjeschke.neetutils.io.NInputStream;
 import com.github.rjeschke.neetutils.io.NOutputStream;
 
-public class Layer
+class Layer
 {
-    LayerType type;
-    Neuron[] neurons;
+    final TransferFunction tf;
+    final int numInputs;
+    final int numOutputs;
+    final int width;
+    final double[] matrix;
     
-    Layer(LayerType type, int neurons, int inputs, TransferFunction tf)
+    Layer(final TransferFunction tf, int numInputs, int numOutputs)
     {
-        this.type = type;
-        this.neurons = new Neuron[neurons];
-        for(int i = 0; i < neurons; i++)
-            this.neurons[i] = new Neuron(inputs, tf);
+        this.tf = tf;
+        this.numInputs = numInputs;
+        this.numOutputs = numOutputs;
+        this.width = numInputs + 1;
+        this.matrix = new double[this.width * this.numOutputs];
     }
     
-    Layer(LayerType type, int neurons)
+    double[] eval(double[] inputs, double[] outputs)
     {
-        this.type = type;
-        this.neurons = new Neuron[neurons];
+        for(int y = 0; y < this.numOutputs; y++)
+        {
+            double o = 0;
+            final int p = y * this.width;
+            for(int x = 0; x < this.numInputs; x++)
+                o += inputs[x] * this.matrix[p + x];
+            outputs[y] = this.tf.map(o + this.matrix[p + this.numInputs]);
+        }
+        return outputs;
     }
     
-    public void reset()
+    State createState()
     {
-        for(int n = 0; n < this.neurons.length; n++)
-            this.neurons[n].reset();
+        return new State(this.numOutputs);
+    }
+
+    State createState(double[] outputs)
+    {
+        return new State(outputs);
+    }
+
+    void toStream(NOutputStream out) throws IOException
+    {
+        out.write32(this.numInputs);
+        out.write32(this.numOutputs);
+        this.tf.toStream(out);
+        for(int i = 0; i < this.matrix.length; i++)
+            out.writeDouble(this.matrix[i]);
     }
     
-    public void toStream(NOutputStream out) throws IOException
+    static Layer fromStream(NInputStream in) throws IOException
     {
-        out.write32(this.type.index);
-        out.write32(this.neurons.length);
-        for(Neuron n : this.neurons)
-            n.toStream(out);
-    }
-    
-    public static Layer fromStream(NInputStream in) throws IOException
-    {
-        LayerType lt = LayerType.fromInt(in.readI32());
-        int count = in.readI32();
-        Layer l = new Layer(lt, count);
-        for(int i = 0; i < count; i++)
-            l.neurons[i] = Neuron.fromStream(in);
+        final int a = in.readI32();
+        final int b = in.readI32();
+        final TransferFunction tf = TransferFunctions.fromStream(in);
+        final Layer l = new Layer(tf, a, b);
+        for(int i = 0; i < l.matrix.length; i++)
+            l.matrix[i] = in.readDouble();
         return l;
+    }
+    
+    static class State
+    {
+        public final double[] values;
+        
+        State(int values)
+        {
+            this.values = new double[values];
+        }
+
+        State(double[] values)
+        {
+            this.values = values;
+        }
     }
 }

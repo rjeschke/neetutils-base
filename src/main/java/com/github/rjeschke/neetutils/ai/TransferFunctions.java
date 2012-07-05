@@ -36,6 +36,8 @@ public class TransferFunctions
             return new TanhTransferFunction();
         case STEP:
             return new StepTransferFunction(in.readDouble());
+        case ATAN:
+            return new AtanTransferFunction();
         }
         return null;
     }

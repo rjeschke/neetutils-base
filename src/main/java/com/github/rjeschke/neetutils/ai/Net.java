@@ -17,176 +17,139 @@ package com.github.rjeschke.neetutils.ai;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.github.rjeschke.neetutils.SysUtils;
-import com.github.rjeschke.neetutils.ai.Neuron.NConnect;
+import com.github.rjeschke.neetutils.ai.Layer.State;
 import com.github.rjeschke.neetutils.io.NInputStream;
 import com.github.rjeschke.neetutils.io.NOutputStream;
 
 public class Net
 {
-    ArrayList<Layer> layers = new ArrayList<Layer>();
+    final Layer[] layers;
+    final int numInputs;
+    final int numOutputs;
     
-    public Net()
+    Net(int numLayers, int numInputs, int numOutputs)
     {
-        //
-    }
-    
-    public void addLayer(int neurons)
-    {
-        this.addLayer(neurons, null);
+        this.layers = new Layer[numLayers];
+        this.numInputs = numInputs;
+        this.numOutputs = numOutputs;
     }
 
-    public void addLayer(int neurons, TransferFunction tf)
-    {
-        if(this.layers.isEmpty())
-        {
-            this.layers.add(new Layer(LayerType.INPUT, neurons, 1, tf == null ? new UnityTransferFunction() : tf));
-        }
-        else
-        {
-            if(tf == null)
-                throw new IllegalArgumentException("TransferFunction can not be null");
-            final Layer l = this.layers.get(this.layers.size() - 1);
-            this.layers.add(new Layer(LayerType.HIDDEN, neurons, l.neurons.length, tf));
-        }
-    }
-    
-    public void finish()
-    {
-        if(this.layers.size() < 2)
-            throw new IllegalStateException("At least two layers are necessary");
-        this.layers.get(this.layers.size() - 1).type = LayerType.OUTPUT;
-        
-        for(int i = 0; i < this.layers.size() - 1; i++)
-        {
-            final Layer l0 = this.layers.get(i);
-            final Layer l1 = this.layers.get(i + 1);
-            for(int t0 = 0; t0 < l0.neurons.length; t0++)
-            {
-                final Neuron no = l0.neurons[t0];
-                for(int t1 = 0; t1 < l1.neurons.length; t1++)
-                {
-                    no.connect(l1.neurons[t1], t0);
-                }
-            }
-        }
-        final Layer l = this.layers.get(0);
-        for(int t0 = 0; t0 < l.neurons.length; t0++)
-        {
-            final Neuron no = l.neurons[t0];
-            no.bias = 0;
-            for(int t1 = 0; t1 < no.weights.length; t1++)
-            {
-                no.weights[t1] = 1;
-            }
-        }
-        int nc = 0;
-        for(int i = 0; i < this.layers.size(); i++)
-        {
-            final Layer l0 = this.layers.get(i);
-            for(int t0 = 0; t0 < l0.neurons.length; t0++)
-                l0.neurons[t0].index = nc++;
-        }
-    }
-    
     public void randomize()
     {
-        for(int i = 1; i < this.layers.size(); i++)
+        for(Layer l : this.layers)
         {
-            final Layer l = this.layers.get(i);
-            for(int n = 0; n < l.neurons.length; n++)
-            {
-                final Neuron no = l.neurons[n];
-                no.bias = SysUtils.rndDoubleBipolar();
-                for(int t = 0; t < no.weights.length; t++)
-                    no.weights[t] = SysUtils.rndDoubleUnipolar();
-            }
+            for(int i = 0; i < l.matrix.length; i++)
+                l.matrix[i] = SysUtils.rndDoubleBipolar();
         }
     }
     
     public double[] run(double[] inputs, double[] outputs)
     {
-        Layer l;
-        for(int i = 0; i < this.layers.size(); i++)
-            this.layers.get(i).reset();
+        final State[] states = this.createStates(outputs);
         
-        l = this.layers.get(0);
-        for(int n = 0; n < l.neurons.length; n++)
+        for(int i = 0; i < this.layers.length; i++)
         {
-            l.neurons[n].setInput(0, inputs[n]);
+            if(i == 0)
+                this.layers[i].eval(inputs, states[i].values);
+            else
+                this.layers[i].eval(states[i - 1].values, states[i].values);
         }
-        
-        for(int i = 0; i < this.layers.size(); i++)
-        {
-            l = this.layers.get(i);
-            for(int n = 0; n < l.neurons.length; n++)
-                l.neurons[n].propagate();
-        }
-
-        l = this.layers.get(this.layers.size() - 1);
-        for(int i = 0; i < l.neurons.length; i++)
-            outputs[i] = l.neurons[i].output;
         
         return outputs;
     }
-    
-    public double[] train(double[] inputs, double[] outputs, double learn)
+
+    double[] run(State[] states)
     {
-        double[] outs = new double[outputs.length];
-        
-        this.run(inputs, outs);
+        for(int i = 0; i < this.layers.length; i++)
+            this.layers[i].eval(states[i].values, states[i + 1].values);
+        return states[this.layers.length].values;
+    }
 
-        Layer l = this.layers.get(this.layers.size() - 1);
-        for(int i = 0; i < l.neurons.length; i++)
-            l.neurons[i].setExpectedOutputValue(outputs[i]);
-        
-        for(int i = this.layers.size() - 2; i >= 0; i--)
+    State[] createStates(double[] outputs)
+    {
+        final State[] s = new State[this.layers.length];
+        for(int i = 0; i < this.layers.length; i++)
         {
-            l = this.layers.get(i);
-            for(int n = 0; n < l.neurons.length; n++)
-                l.neurons[n].backPropagatePrepare();
+            if(i == this.layers.length - 1)
+                s[i] = this.layers[i].createState(outputs);
+            else
+                s[i] = this.layers[i].createState();
         }
-
-        for(int i = this.layers.size() - 2; i >= 0; i--)
+        return s;
+    }
+    
+    State[] createExtraStates(double[] inputs)
+    {
+        final State[] s = new State[this.layers.length + 1];
+        for(int i = 0; i < this.layers.length + 1; i++)
         {
-            l = this.layers.get(i);
-            for(int n = 0; n < l.neurons.length; n++)
-                l.neurons[n].backPropagate(learn);
+            if(i == 0)
+                s[i] = new State(inputs);
+            else
+                s[i] = this.layers[i - 1].createState();
         }
-        
-        return outs;
+        return s;
     }
     
     public void toStream(NOutputStream out) throws IOException
     {
-        out.write32(this.layers.size());
-        for(Layer l : this.layers)
+        out.write32(this.layers.length);
+        out.write32(this.numInputs);
+        out.write32(this.numOutputs);
+        for(final Layer l : this.layers)
             l.toStream(out);
     }
     
     public static Net fromStream(NInputStream in) throws IOException
     {
-        HashMap<Integer, Neuron> map = new HashMap<Integer, Neuron>();
-        Net net = new Net();
-        int ls = in.readI32();
-        for(int i = 0; i < ls; i++)
-            net.layers.add(Layer.fromStream(in));
-        
-        for(Layer l : net.layers)
-        {
-            for(Neuron n : l.neurons)
-                map.put(n.index, n);
-        }
-        
-        for(Layer l : net.layers)
-        {
-            for(Neuron n : l.neurons)
-                for(NConnect nc : n.cons)
-                    nc.n = map.get(nc.n.index);
-        }
-
+        final int l = in.readI32();
+        final int a = in.readI32();
+        final int b = in.readI32();
+        final Net net = new Net(l, a, b);
+        for(int i = 0; i < l; i++)
+            net.layers[i] = Layer.fromStream(in);
         return net;
+    }
+    
+    public static Builder builder(int numInputs)
+    {
+        return new Builder(numInputs);
+    }
+    
+    public static class Builder
+    {
+        private int numInputs;
+        ArrayList<Integer> outputs = new ArrayList<Integer>();
+        ArrayList<TransferFunction> tfs = new ArrayList<TransferFunction>();
+        
+        Builder(int numInputs)
+        {
+            this.numInputs = numInputs;
+        }
+        
+        public Builder addLayer(int outputs, TransferFunction tf)
+        {
+            if(outputs < 1)
+                throw new IllegalArgumentException("Number of outputs must be greater than zero");
+            this.outputs.add(outputs);
+            this.tfs.add(tf);
+            return this;
+        }
+        
+        public Net build()
+        {
+            if(this.outputs.size() == 0)
+                throw new IllegalStateException("At least one layer is needed");
+            
+            final Net net = new Net(this.outputs.size(), this.numInputs, this.outputs.get(this.outputs.size() - 1));
+            for(int i = 0; i < net.layers.length; i++)
+            {
+                net.layers[i] = new Layer(this.tfs.get(i), i == 0 ? this.numInputs : this.outputs.get(i - 1), this.outputs.get(i));
+            }
+            
+            return net;
+        }
     }
 }

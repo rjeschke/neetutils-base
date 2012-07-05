@@ -15,31 +15,23 @@
  */
 package com.github.rjeschke.neetutils.ai;
 
-import java.util.HashMap;
+import java.io.IOException;
 
-public enum LayerType
+import com.github.rjeschke.neetutils.io.NOutputStream;
+
+public class AtanTransferFunction implements TransferFunction
 {
-    INPUT(0),
-    HIDDEN(1),
-    OUTPUT(2);
+    final static double REC_PI = 1.0 / Math.PI;
+    
+    @Override
+    public double map(double input)
+    {
+        return 0.5 - Math.atan(-input) * REC_PI;
+    }
 
-    public final int index;
-    private final static HashMap<Integer, LayerType> TYPE_MAP = new HashMap<Integer, LayerType>();
-    private LayerType(int i)
+    @Override
+    public void toStream(NOutputStream out) throws IOException
     {
-        this.index = i;
-    }
-    
-    static
-    {
-        for(LayerType t : LayerType.values())
-        {
-            TYPE_MAP.put(t.index, t);
-        }
-    }
-    
-    public static LayerType fromInt(int i)
-    {
-        return TYPE_MAP.get(i);
+        out.write32(TransferFunctionType.ATAN.index);
     }
 }

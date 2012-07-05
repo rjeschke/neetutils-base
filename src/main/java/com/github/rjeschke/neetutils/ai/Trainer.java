@@ -15,34 +15,7 @@
  */
 package com.github.rjeschke.neetutils.ai;
 
-import java.util.HashMap;
-
-public enum TransferFunctionType
+public interface Trainer
 {
-    UNITY(0),
-    STEP(1),
-    LINEAR(2),
-    TANH(3),
-    SIGMOID(4),
-    ATAN(5);
-    
-    public final int index;
-    private final static HashMap<Integer, TransferFunctionType> TYPE_MAP = new HashMap<Integer, TransferFunctionType>();
-    private TransferFunctionType(int i)
-    {
-        this.index = i;
-    }
-    
-    static
-    {
-        for(TransferFunctionType t : TransferFunctionType.values())
-        {
-            TYPE_MAP.put(t.index, t);
-        }
-    }
-    
-    public static TransferFunctionType fromInt(int i)
-    {
-        return TYPE_MAP.get(i);
-    }
+    public void train(double[] input, double[] expectedOutput);
 }
