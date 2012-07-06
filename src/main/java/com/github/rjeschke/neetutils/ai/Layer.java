@@ -37,6 +37,14 @@ class Layer
         this.matrix = new double[this.width * this.numOutputs];
     }
     
+    @Override
+    public Layer clone()
+    {
+        final Layer l = new Layer(this.tf, this.numInputs, this.numOutputs);
+        System.arraycopy(this.matrix, 0, l.matrix, 0, this.matrix.length);
+        return l;
+    }
+    
     double[] eval(double[] inputs, double[] outputs)
     {
         for(int y = 0; y < this.numOutputs; y++)

@@ -77,7 +77,7 @@ public class BackpropMomentumTrainer implements Trainer
             for(int y = 0; y < l.numOutputs; y++)
             {
                 int p = y * l.width;
-                double d = this.step * ((1.0 - this.alpha) * deltas[i + 1].values[y] + this.alpha * this.oldDeltas[i + 1].values[y]);
+                double d = this.step * deltas[i + 1].values[y] + this.alpha * this.oldDeltas[i + 1].values[y];
                 l.matrix[p + l.numInputs] += d;
                 
                 for(int x = 0; x < l.numInputs; x++)

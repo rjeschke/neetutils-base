@@ -26,8 +26,8 @@ import com.github.rjeschke.neetutils.io.NOutputStream;
 public class Net
 {
     final Layer[] layers;
-    final int numInputs;
-    final int numOutputs;
+    public final int numInputs;
+    public final int numOutputs;
     
     Net(int numLayers, int numInputs, int numOutputs)
     {
@@ -36,6 +36,15 @@ public class Net
         this.numOutputs = numOutputs;
     }
 
+    @Override
+    public Net clone()
+    {
+        final Net net = new Net(this.layers.length, this.numInputs, this.numOutputs);
+        for(int i = 0; i < this.layers.length; i++)
+            net.layers[i] = this.layers[i].clone();
+        return net;
+    }
+    
     public void randomize()
     {
         for(Layer l : this.layers)
