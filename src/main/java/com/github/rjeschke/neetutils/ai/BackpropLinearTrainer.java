@@ -84,4 +84,9 @@ public class BackpropLinearTrainer implements Trainer
             }
         }
     }
+    
+    public void setStep(double v)
+    {
+        this.step = v;
+    }
 }
