@@ -54,6 +54,12 @@ public class Net
         }
     }
     
+    public void zeroNaNsAndInfs()
+    {
+        for(final Layer l : this.layers)
+            l.zeroNaNsAndInfs();
+    }
+    
     public double[] run(double[] inputs, double[] outputs)
     {
         final State[] states = this.createStates(outputs);

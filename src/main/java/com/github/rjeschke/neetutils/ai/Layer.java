@@ -77,6 +77,16 @@ class Layer
             out.writeDouble(this.matrix[i]);
     }
     
+    public void zeroNaNsAndInfs()
+    {
+        for(int i = 0; i < this.matrix.length; i++)
+        {
+            final double d = this.matrix[i];
+            if(Double.isNaN(d) || Double.isInfinite(d))
+                this.matrix[i] = 0;
+        }
+    }
+    
     static Layer fromStream(NInputStream in) throws IOException
     {
         final int a = in.readI32();
