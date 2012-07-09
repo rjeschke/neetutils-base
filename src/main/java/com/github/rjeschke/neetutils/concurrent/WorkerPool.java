@@ -51,9 +51,9 @@ public class WorkerPool<T> implements Runnable
     public static <T> WorkerPool<T> start(WorkerCallback<T> callback, int threads, int queueLimit,
             boolean serialCallbacks)
     {
-        final WorkerPool<T> jobber = new WorkerPool<T>(callback, threads, queueLimit, serialCallbacks);
+        final WorkerPool<T> jobber = new WorkerPool<T>(callback, ThreadPool.defaultThreadcount(threads), queueLimit, serialCallbacks);
 
-        for(int i = 0; i < threads; i++)
+        for(int i = 0; i < jobber.threads.length; i++)
         {
             final ThreadWorker<T> w = new ThreadWorker<T>(jobber);
             final Thread t = new Thread(w);
@@ -156,9 +156,6 @@ public class WorkerPool<T> implements Runnable
 
         for(int i = 0; i < this.numThreads; i++)
             SysUtils.threadJoin(this.threads[i]);
-
-        if(join)
-            this.join();
 
         if(this.callbackThread != null)
         {

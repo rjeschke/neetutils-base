@@ -40,11 +40,16 @@ public class ThreadPool
         this.threads = new Thread[threads];
     }
 
+    final static int defaultThreadcount(int threads)
+    {
+        return threads < 1 ? Runtime.getRuntime().availableProcessors() : threads;
+    }
+    
     public static ThreadPool start(int threads, int queueLimit)
     {
-        final ThreadPool jobber = new ThreadPool(threads, queueLimit);
+        final ThreadPool jobber = new ThreadPool(defaultThreadcount(threads), queueLimit);
 
-        for(int i = 0; i < threads; i++)
+        for(int i = 0; i < jobber.threads.length; i++)
         {
             final ThreadWorker w = new ThreadWorker(jobber);
             final Thread t = new Thread(w);
@@ -80,7 +85,6 @@ public class ThreadPool
                 while(this.jobs.size() > ql)
                     SysUtils.fineSleep(5);
             }
-
             this.jobs.offer(job);
         }
     }
@@ -114,11 +118,11 @@ public class ThreadPool
         for(int i = 0; i < this.numThreads; i++)
             this.enqueue(stop);
 
-        for(int i = 0; i < this.numThreads; i++)
-            SysUtils.threadJoin(this.threads[i]);
-
         if(join)
             this.join();
+
+        for(int i = 0; i < this.numThreads; i++)
+            SysUtils.threadJoin(this.threads[i]);
     }
 
     static class ThreadWorker implements Runnable
@@ -153,12 +157,10 @@ public class ThreadPool
                 }
                 catch (Throwable t)
                 {
-                    //
+                    t.printStackTrace();
                 }
-                finally
-                {
-                    this.pool.reuseOrEnqueue(this);
-                }
+                
+                this.pool.reuseOrEnqueue(this);
             }
         }
     }
