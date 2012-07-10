@@ -413,7 +413,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
                     pool.enqueue(worker, new NImagePBlock(rx, ry, rw, rh));
                 }
             }
-            pool.stop(true);
+            pool.stop();
         }
 
         return this;

@@ -23,14 +23,14 @@ public class BackpropMomentumTrainer implements Trainer
     double step;
     double alpha;
     Net net;
-    State[] oldDeltas;
+    Net oldDeltas;
     
     public BackpropMomentumTrainer(Net net, double step, double alpha)
     {
         this.net = net;
         this.step = step;
         this.alpha = alpha;
-        this.oldDeltas = net.createExtraStates(new double[net.numInputs]);
+        this.oldDeltas = net.clone().clear();
     }
     
     @Override
@@ -52,7 +52,7 @@ public class BackpropMomentumTrainer implements Trainer
 
         for(int i = this.net.layers.length - 1; i >= 0; i--)
         {
-            Layer l = this.net.layers[i];
+            final Layer l = this.net.layers[i];
             
             os = netState[i].values;
             ds = deltas[i + 1].values;
@@ -72,26 +72,29 @@ public class BackpropMomentumTrainer implements Trainer
 
         for(int i = 0; i < this.net.layers.length; i++)
         {
-            Layer l = this.net.layers[i];
+            final Layer l = this.net.layers[i];
+            final Layer l2 = this.oldDeltas.layers[i];
 
             for(int y = 0; y < l.numOutputs; y++)
             {
-                int p = y * l.width;
-                double d = this.step * (deltas[i + 1].values[y] + this.alpha * this.oldDeltas[i + 1].values[y]);
-                l.matrix[p + l.numInputs] += d;
+                final int p = y * l.width;
+                final double d = this.step * deltas[i + 1].values[y];
+                l.matrix[p + l.numInputs] += l2.matrix[p + l.numInputs] = d + this.alpha * l2.matrix[p + l.numInputs];
                 
                 for(int x = 0; x < l.numInputs; x++)
-                {
-                    l.matrix[p + x] += d * netState[i].values[x];
-                }
+                    l.matrix[p + x] += l2.matrix[p + x] = d * netState[i].values[x] + this.alpha * l2.matrix[p + x];
+                
             }
         }
-        
-        this.oldDeltas = deltas;
     }
     
     public void setStep(double v)
     {
         this.step = v;
+    }
+    
+    public void setAlpha(double v)
+    {
+        this.alpha = v;
     }
 }

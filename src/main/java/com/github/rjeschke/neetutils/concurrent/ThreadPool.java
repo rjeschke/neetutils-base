@@ -109,17 +109,17 @@ public class ThreadPool
             SysUtils.sleep(10);
     }
 
+    @Deprecated
     public void stop(boolean join)
     {
-        if(join)
-            this.join();
-
+        this.stop();
+    }
+    
+    public void stop()
+    {
         final StopWorker stop = new StopWorker();
         for(int i = 0; i < this.numThreads; i++)
             this.enqueue(stop);
-
-        if(join)
-            this.join();
 
         for(int i = 0; i < this.numThreads; i++)
             SysUtils.threadJoin(this.threads[i]);

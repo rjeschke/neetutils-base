@@ -17,6 +17,7 @@ package com.github.rjeschke.neetutils.ai;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.github.rjeschke.neetutils.SysUtils;
 import com.github.rjeschke.neetutils.ai.Layer.State;
@@ -45,19 +46,28 @@ public class Net
         return net;
     }
     
-    public void randomize()
+    public Net randomize()
     {
         for(Layer l : this.layers)
         {
             for(int i = 0; i < l.matrix.length; i++)
                 l.matrix[i] = SysUtils.rndDoubleBipolar();
         }
+        return this;
     }
     
-    public void zeroNaNsAndInfs()
+    public Net clear()
+    {
+        for(Layer l : this.layers)
+            Arrays.fill(l.matrix, 0);
+        return this;
+    }
+    
+    public Net zeroNaNsAndInfs()
     {
         for(final Layer l : this.layers)
             l.zeroNaNsAndInfs();
+        return this;
     }
     
     public double[] run(double[] inputs, double[] outputs)
