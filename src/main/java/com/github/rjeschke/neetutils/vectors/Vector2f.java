@@ -20,10 +20,21 @@ public class Vector2f
     public float x;
     public float y;
 
+    public Vector2f()
+    {
+        // 0
+    }
+    
     public Vector2f(float x, float y)
     {
         this.x = x;
         this.y = y;
+    }
+    
+    public Vector2f(float xy)
+    {
+        this.x = xy;
+        this.y = xy;
     }
     
     public Vector2f scale(float f)
@@ -96,6 +107,13 @@ public class Vector2f
             this.x *= len;
             this.y *= len;
         }
+        return this;
+    }
+    
+    public Vector2f negate()
+    {
+        this.x = -this.x;
+        this.y = -this.y;
         return this;
     }
     

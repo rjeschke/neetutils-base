@@ -13,15 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.collections;
+package com.github.rjeschke.neetutils.fn;
 
-public interface Tuple2<A, B>
+public interface FnFilter<A>
 {
-    public A a();
-
-    public B b();
-
-    public A _1();
-
-    public B _2();
+    public boolean filter(A a);
 }

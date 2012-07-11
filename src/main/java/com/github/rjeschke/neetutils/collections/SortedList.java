@@ -15,131 +15,29 @@
  */
 package com.github.rjeschke.neetutils.collections;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class NSortedList<E extends Comparable<? super E>> implements NList<E>, Cloneable
+public class SortedList<E extends Comparable<? super E>> implements List<E>, Cloneable
 {
     private final LinkedList<E> list;
 
-    public NSortedList()
+    public SortedList()
     {
         this.list = new LinkedList<E>();
     }
 
-    public NSortedList(Collection<? extends E> c)
+    public SortedList(Collection<? extends E> c)
     {
         this.list = new LinkedList<E>();
         for(E e : c)
         {
             this.add(e);
         }
-    }
-
-    public NSortedList(E... args)
-    {
-        this.list = new LinkedList<E>();
-        for(int i = 0; i < args.length; i++)
-        {
-            this.add(args[i]);
-        }
-    }
-
-    @Override
-    public NList<E> filter(ListFilter<E> filter)
-    {
-        NList<E> ret = new NSortedList<E>();
-        for(E e : this.list)
-        {
-            if(!filter.filter(e))
-            {
-                ret.add(e);
-            }
-        }
-        return ret;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public NList<E> sort()
-    {
-        Object[] arr = this.list.toArray();
-        Arrays.sort(arr);
-        ListIterator<E> i = this.list.listIterator();
-        for(int n = 0; n < arr.length; n++)
-        {
-            i.next();
-            i.set((E)arr[n]);
-        }
-        return this;
-    }
-
-    @SuppressWarnings(
-        { "unchecked", "rawtypes" })
-    @Override
-    public NList<E> sort(Comparator<? super E> c)
-    {
-        Object[] arr = this.list.toArray();
-        Arrays.sort(arr, (Comparator)c);
-        ListIterator<E> i = this.list.listIterator();
-        for(int n = 0; n < arr.length; n++)
-        {
-            i.next();
-            i.set((E)arr[n]);
-        }
-        return this;
-    }
-
-    @Override
-    public NList<NList<E>> split(ListFilter<E> filter)
-    {
-        NList<E> rt = new NSortedList<E>();
-        NList<E> rf = new NSortedList<E>();
-        for(E e : this.list)
-        {
-            if(filter.filter(e))
-            {
-                rt.add(e);
-            }
-            else
-            {
-                rf.add(e);
-            }
-        }
-
-        NList<NList<E>> ret = new NArrayList<NList<E>>();
-        ret.add(rt);
-        ret.add(rf);
-        return ret;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public NList<E> modify(ListModifier<E> modifier)
-    {
-        Object[] arr = this.list.toArray();
-        this.list.clear();
-        for(Object e : arr)
-        {
-            this.add(modifier.modify((E)e));
-        }
-        return this;
-    }
-
-    @Override
-    public NList<E> operate(ListOperator<E> operator)
-    {
-        for(E e : this.list)
-        {
-            operator.operate(e);
-        }
-        return this;
     }
 
     @Override
@@ -294,38 +192,8 @@ public class NSortedList<E extends Comparable<? super E>> implements NList<E>, C
     }
 
     @Override
-    public E getFirst()
+    public SortedList<E> clone()
     {
-        return this.list.getFirst();
-    }
-
-    @Override
-    public E getLast()
-    {
-        return this.list.getLast();
-    }
-
-    @SuppressWarnings("unchecked")
-    private NSortedList(LinkedList<E> list, boolean clone)
-    {
-        this.list = clone ? (LinkedList<E>)list.clone() : list;
-    }
-
-    @Override
-    public Object clone()
-    {
-        return new NSortedList<E>(this.list, true);
-    }
-
-    @Override
-    public E removeFirst()
-    {
-        return this.list.removeFirst();
-    }
-
-    @Override
-    public E removeLast()
-    {
-        return this.list.removeLast();
+        return new SortedList<E>(this.list);
     }
 }

@@ -75,6 +75,11 @@ public class WorkerPool<T> implements Runnable
         return jobber;
     }
 
+    public final static int availableProcessors()
+    {
+        return Runtime.getRuntime().availableProcessors();
+    }
+    
     public int threadCount()
     {
         return this.numThreads;

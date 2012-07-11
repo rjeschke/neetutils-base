@@ -40,6 +40,11 @@ public class ThreadPool
         this.threads = new Thread[threads];
     }
 
+    public final static int availableProcessors()
+    {
+        return Runtime.getRuntime().availableProcessors();
+    }
+    
     final static int defaultThreadcount(int threads)
     {
         return threads < 1 ? Runtime.getRuntime().availableProcessors() : threads;

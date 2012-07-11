@@ -13,19 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.collections;
+package com.github.rjeschke.neetutils.fn;
 
-public interface Tuple3<A, B, C>
+public interface FnReduceWithIndex<A, B>
 {
-    public A a();
-
-    public B b();
-
-    public C c();
-
-    public A _1();
-
-    public B _2();
-
-    public C _3();
+    public B reduce(A a, B b, int index);
 }

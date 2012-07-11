@@ -13,9 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.collections;
+package com.github.rjeschke.neetutils;
 
-public interface ListOperator<E>
+public class WrappedCheckedException extends RuntimeException
 {
-    public void operate(E value);
+    private static final long serialVersionUID = 8291912688634403030L;
+
+    public WrappedCheckedException(Exception e)
+    {
+        super(e);
+    }
+    
+    @Override
+    public String getMessage()
+    {
+        return this.getCause().getMessage();
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.getCause().toString();
+    }
 }

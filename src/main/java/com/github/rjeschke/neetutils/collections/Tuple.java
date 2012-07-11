@@ -15,64 +15,50 @@
  */
 package com.github.rjeschke.neetutils.collections;
 
-import java.io.Serializable;
-
-public class NTuple2<A, B> implements Serializable, Tuple2<A, B>
+public class Tuple<A, B>
 {
-    private static final long serialVersionUID = -1883584188678434246L;
-    private final A a;
-    private final B b;
+    public final A a;
+    public final B b;
 
-    public NTuple2(A a, B b)
+    public Tuple(A a, B b)
     {
         this.a = a;
         this.b = b;
     }
 
-    @Override
-    public A a()
+    public final static <A, B> Tuple<A, B> of(A a, B b)
     {
-        return this.a;
-    }
-
-    @Override
-    public B b()
-    {
-        return this.b;
-    }
-
-    @Override
-    public A _1()
-    {
-        return this.a;
-    }
-
-    @Override
-    public B _2()
-    {
-        return this.b;
+        return new Tuple<A, B>(a, b);
     }
 
     @Override
     public int hashCode()
     {
-        return this.a.hashCode() * 31 + this.b.hashCode();
+        return (this.a == null ? 0 : this.a.hashCode()) * 31 + (this.b == null ? 0 : this.b.hashCode());
     }
 
     @Override
     public boolean equals(Object obj)
     {
-        if(obj == null || !(obj instanceof NTuple2<?, ?>))
-        {
+        if(obj == this)
+            return true;
+
+        if(!(obj instanceof Tuple))
             return false;
-        }
-        NTuple2<?, ?> tup = (NTuple2<?, ?>)obj;
-        return this.a.equals(tup.a) && this.b.equals(tup.b);
+
+        final Tuple<?, ?> p = (Tuple<?, ?>)obj;
+        
+        if(this.a == null && p.a != null)
+            return false;
+        if(this.b == null && p.b != null)
+            return false;
+        
+        return this.a.equals(p.a) && this.b.equals(p.b);
     }
 
     @Override
     public String toString()
     {
-        return "{" + this.a.toString() + "," + this.b.toString() + "}";
+        return "(" + this.a.toString() + ", " + this.b.toString() + ")";
     }
 }

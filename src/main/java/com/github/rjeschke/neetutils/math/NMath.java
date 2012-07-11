@@ -122,7 +122,7 @@ public final class NMath
      */
     public final static float denormalize(final float v)
     {
-        return Math.abs(v) < 1e-45f ? 0 : v;
+        return Math.abs(v) < Float.MIN_NORMAL ? 0 : v;
     }
 
     /**
@@ -135,7 +135,7 @@ public final class NMath
      */
     public final static double denormalize(final double v)
     {
-        return Math.abs(v) < 1e-323 ? 0 : v;
+        return Math.abs(v) < Double.MIN_NORMAL ? 0 : v;
     }
 
     public final static int nextPow2(final int value)
@@ -178,11 +178,13 @@ public final class NMath
         return Math.max(0, Math.min(1, x));
     }
 
+    // TODO verify
     public final static float fract(float x)
     {
         return x - (float)Math.floor(x);
     }
 
+    // TODO verify
     public final static double fract(double x)
     {
         return x - Math.floor(x);

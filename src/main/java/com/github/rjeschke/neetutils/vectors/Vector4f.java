@@ -24,12 +24,25 @@ public class Vector4f
     public float y;
     public float z;
 
+    public Vector4f()
+    {
+        // 0
+    }
+    
     public Vector4f(float x, float y, float z, float w)
     {
         this.x = x;
         this.y = y;
         this.z = z;
         this.w = w;
+    }
+    
+    public Vector4f(float xyzw)
+    {
+        this.x = xyzw;
+        this.y = xyzw;
+        this.z = xyzw;
+        this.w = xyzw;
     }
     
     public Vector4f(Vector2f v, float z, float w)
@@ -147,6 +160,15 @@ public class Vector4f
         return this;
     }
     
+    public Vector4f negate()
+    {
+        this.x = -this.x;
+        this.y = -this.y;
+        this.z = -this.z;
+        this.w = -this.w;
+        return this;
+    }
+    
     public float length()
     {
         return (float)Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
@@ -158,6 +180,32 @@ public class Vector4f
         arr[offset + 1] = this.y;
         arr[offset + 2] = this.z;
         arr[offset + 3] = this.w;
+    }
+    
+    public Vector3f toVector3f(Vector3f v)
+    {
+        v.x = this.x;
+        v.y = this.y;
+        v.z = this.z;
+        return v;
+    }
+    
+    public Vector3f toVector3f()
+    {
+        return toVector3f(new Vector3f());
+    }
+    
+    public Vector3f toVector3fN(Vector3f v)
+    {
+        v.x = this.x / this.w;
+        v.y = this.y / this.w;
+        v.z = this.z / this.w;
+        return v;
+    }
+    
+    public Vector3f toVector3fN()
+    {
+        return toVector3fN(new Vector3f());
     }
     
     public NColor toNColor()

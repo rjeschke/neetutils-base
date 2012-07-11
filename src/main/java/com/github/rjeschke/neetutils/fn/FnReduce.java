@@ -13,30 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.collections;
+package com.github.rjeschke.neetutils.fn;
 
-import java.util.Comparator;
-import java.util.List;
-
-public interface NList<E> extends List<E>
+public interface FnReduce<A, B>
 {
-    public NList<E> sort();
-
-    public NList<E> sort(Comparator<? super E> c);
-
-    public NList<E> modify(ListModifier<E> modifier);
-
-    public NList<E> operate(ListOperator<E> operator);
-
-    public NList<E> filter(ListFilter<E> filter);
-
-    public NList<NList<E>> split(ListFilter<E> filter);
-
-    public E getFirst();
-
-    public E getLast();
-
-    public E removeFirst();
-
-    public E removeLast();
+    public B reduce(A a, B b);
 }

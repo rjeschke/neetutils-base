@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.collections;
+package com.github.rjeschke.neetutils.fn;
 
-public interface ListFilter<E>
+public interface FnInstanceWithIndex<A>
 {
-    public boolean filter(E value);
+    public A create(int index);
 }

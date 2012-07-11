@@ -23,11 +23,23 @@ public class Vector3f
     public float y;
     public float z;
 
+    public Vector3f()
+    {
+        // 0
+    }
+    
     public Vector3f(float x, float y, float z)
     {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+    
+    public Vector3f(float xyz)
+    {
+        this.x = xyz;
+        this.y = xyz;
+        this.z = xyz;
     }
     
     public Vector3f(Vector3f v, float z)
@@ -136,6 +148,14 @@ public class Vector3f
             this.y *= len;
             this.z *= len;
         }
+        return this;
+    }
+    
+    public Vector3f negate()
+    {
+        this.x = -this.x;
+        this.y = -this.y;
+        this.z = -this.z;
         return this;
     }
     
