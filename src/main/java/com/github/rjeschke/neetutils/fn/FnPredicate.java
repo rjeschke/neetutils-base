@@ -15,7 +15,7 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
-public interface FnFilterWithIndex<A>
+public interface FnPredicate<A>
 {
-    public boolean filter(A a, int index);
+    public boolean predicate(A a);
 }

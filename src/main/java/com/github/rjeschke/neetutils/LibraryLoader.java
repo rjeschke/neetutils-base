@@ -23,6 +23,13 @@ import java.util.Set;
 
 import com.github.rjeschke.neetutils.io.Files;
 
+/**
+ * Utility class to load JNI and other native libraries.
+ * 
+ * 
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public final class LibraryLoader
 {
     private final static File TEMP_DIR = Files.createUniqueTempFolder();

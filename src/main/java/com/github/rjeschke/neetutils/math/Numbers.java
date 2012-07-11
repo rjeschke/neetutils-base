@@ -77,7 +77,7 @@ public final class Numbers
         case SHORT:
             return Short.valueOf((short)(a.shortValue() + b.shortValue()));
         case INT:
-            return Integer.valueOf(a.intValue() + b.intValue());
+            return integerOf(a.intValue() + b.intValue());
         case LONG:
             return Long.valueOf(a.longValue() + b.longValue());
         case FLOAT:
@@ -97,7 +97,7 @@ public final class Numbers
         case SHORT:
             return Short.valueOf((short)(a.shortValue() - b.shortValue()));
         case INT:
-            return Integer.valueOf(a.intValue() - b.intValue());
+            return integerOf(a.intValue() - b.intValue());
         case LONG:
             return Long.valueOf(a.longValue() - b.longValue());
         case FLOAT:
@@ -117,7 +117,7 @@ public final class Numbers
         case SHORT:
             return Short.valueOf((short)(a.shortValue() * b.shortValue()));
         case INT:
-            return Integer.valueOf(a.intValue() * b.intValue());
+            return integerOf(a.intValue() * b.intValue());
         case LONG:
             return Long.valueOf(a.longValue() * b.longValue());
         case FLOAT:
@@ -137,7 +137,7 @@ public final class Numbers
         case SHORT:
             return Short.valueOf((short)(a.shortValue() / b.shortValue()));
         case INT:
-            return Integer.valueOf(a.intValue() / b.intValue());
+            return integerOf(a.intValue() / b.intValue());
         case LONG:
             return Long.valueOf(a.longValue() / b.longValue());
         case FLOAT:

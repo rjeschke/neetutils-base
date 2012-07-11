@@ -30,7 +30,7 @@ public class StringUtils
      *            The String to escape.
      * @return Escape String or &quote;null&quote; if str is <code>null</code>
      */
-    public static String escapeString(String str)
+    public final static String escapeString(String str)
     {
         if(str == null)
             return "null";

@@ -150,13 +150,6 @@ public class WorkerPool<T> implements Runnable
             SysUtils.sleep(10);
     }
 
-    @SuppressWarnings("unused")
-    @Deprecated
-    public void stop(boolean join)
-    {
-        this.stop();
-    }
-    
     public void stop()
     {
         final StopWorker<T> stop = new StopWorker<T>();

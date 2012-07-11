@@ -17,17 +17,31 @@ package com.github.rjeschke.neetutils;
 
 import java.util.ArrayList;
 
+/**
+ * Simple benchmark helper.
+ * 
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class ElapsedTime
 {
     private long min = Long.MAX_VALUE;
     private long max = Long.MIN_VALUE;
     private ArrayList<Long> runs = new ArrayList<Long>();
     
+    /**
+     * Constructor.
+     */
     public ElapsedTime()
     {
         //
     }
     
+    /**
+     * Resets all runs, minimum and maximum durations. 
+     * 
+     * @return this
+     */
     public ElapsedTime reset()
     {
         this.min = Long.MAX_VALUE;
@@ -36,11 +50,24 @@ public class ElapsedTime
         return this;
     }
     
+    /**
+     * Executes the given Runnable once.
+     * 
+     * @param r Runnable to measure.
+     * @return this
+     */
     public ElapsedTime measure(Runnable r)
     {
         return this.measure(r, 1);
     }
     
+    /**
+     * Executes the given Runnable 'runs' times.
+     * 
+     * @param r The Runnable to measure.
+     * @param runs Number of runs.
+     * @return this
+     */
     public ElapsedTime measure(Runnable r, int runs)
     {
         for(int i = 0; i < runs; i++)
@@ -63,6 +90,11 @@ public class ElapsedTime
         return this;
     }
     
+    /**
+     * Returns a String representation of all benchmark results.
+     * 
+     * @return A String.
+     */
     @Override
     public String toString()
     {

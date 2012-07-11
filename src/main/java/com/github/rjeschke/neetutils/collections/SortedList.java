@@ -15,36 +15,47 @@
  */
 package com.github.rjeschke.neetutils.collections;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 public class SortedList<E extends Comparable<? super E>> implements List<E>, Cloneable
 {
-    private final LinkedList<E> list;
+    private final ArrayList<E> list = new ArrayList<E>();
+    private final Comparator<? super E> comparator;
 
     public SortedList()
     {
-        this.list = new LinkedList<E>();
+        this.comparator = null;
+    }
+
+    public SortedList(Comparator<? super E> comparator)
+    {
+        this.comparator = comparator;
     }
 
     public SortedList(Collection<? extends E> c)
     {
-        this.list = new LinkedList<E>();
-        for(E e : c)
-        {
-            this.add(e);
-        }
+        this.comparator = null;
+        this.addAll(c);
+    }
+
+    public SortedList(Collection<? extends E> c, Comparator<? super E> comparator)
+    {
+        this.comparator = comparator;
+        this.addAll(c);
     }
 
     @Override
     public boolean add(E e)
     {
-        final int index = Collections.binarySearch(this.list, e);
-        if(index < 0)
+        final int index = this.comparator == null ? Collections.binarySearch(this.list, e) : Collections.binarySearch(this.list, e,
+                this.comparator);
+        if (index < 0)
         {
             this.list.add(-index - 1, e);
         }
@@ -64,7 +75,7 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     @Override
     public boolean addAll(Collection<? extends E> c)
     {
-        for(E e : c)
+        for (E e : c)
         {
             this.add(e);
         }
@@ -194,6 +205,27 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     @Override
     public SortedList<E> clone()
     {
-        return new SortedList<E>(this.list);
+        return this.comparator == null ? new SortedList<E>(this.list) : new SortedList<E>(this.list, this.comparator);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.list.hashCode();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (!(obj instanceof SortedList))
+            return false;
+        return this.list.equals(((SortedList<E>)obj).list);
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.list.toString();
     }
 }

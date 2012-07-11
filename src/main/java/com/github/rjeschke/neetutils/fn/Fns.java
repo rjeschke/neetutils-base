@@ -15,28 +15,29 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
-import com.github.rjeschke.neetutils.collections.Pair;
-import com.github.rjeschke.neetutils.collections.Tuple;
+import com.github.rjeschke.neetutils.WrappedCheckedException;
 
-public class Fns
+public final class Fns
 {
     private Fns()
     {
         //
     }
 
-    public final static <A extends Comparable<A>, B extends Comparable<B>> FnMap<Tuple<A, B>, Pair<A, B>> tuple2pair()
+    public final static <A> FnExamine<A> examineEquals()
     {
-        return new FnMap<Tuple<A, B>, Pair<A, B>>()
+        return new FnExamine<A>()
         {
             @Override
-            public Pair<A, B> map(Tuple<A, B> value)
+            public boolean examine(A a, A b) 
             {
-                return Pair.of(value.a, value.b);
+                if(a == null)
+                    return b == null;
+                return a.equals(b);
             }
         };
     }
-
+    
     public final static <A> FnInstance<A> defaultInstanceFn(final A object)
     {
         return new FnInstance<A>()
@@ -51,11 +52,11 @@ public class Fns
                 }
                 catch (InstantiationException e)
                 {
-                    throw new RuntimeException(e);
+                    throw new WrappedCheckedException(e);
                 }
                 catch (IllegalAccessException e)
                 {
-                    throw new RuntimeException(e);
+                    throw new WrappedCheckedException(e);
                 }
             }
         };

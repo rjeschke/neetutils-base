@@ -15,21 +15,35 @@
  */
 package com.github.rjeschke.neetutils;
 
+/**
+ * Generic Exception to wrap checked exceptions into unchecked exceptions.
+ * 
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public class WrappedCheckedException extends RuntimeException
 {
     private static final long serialVersionUID = 8291912688634403030L;
 
+    /**
+     * @see RuntimeException#RuntimeException(Throwable)
+     */
     public WrappedCheckedException(Exception e)
     {
         super(e);
     }
-    
+
+    /**
+     * @see Throwable#getMessage()
+     */
     @Override
     public String getMessage()
     {
         return this.getCause().getMessage();
     }
-    
+
+    /**
+     * @see Throwable#toString()
+     */
     @Override
     public String toString()
     {

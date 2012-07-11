@@ -114,13 +114,6 @@ public class ThreadPool
             SysUtils.sleep(10);
     }
 
-    @SuppressWarnings("unused")
-    @Deprecated
-    public void stop(boolean join)
-    {
-        this.stop();
-    }
-    
     public void stop()
     {
         final StopWorker stop = new StopWorker();

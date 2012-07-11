@@ -15,6 +15,8 @@
  */
 package com.github.rjeschke.neetutils.collections;
 
+import com.github.rjeschke.neetutils.SysUtils;
+
 public class Tuple<A, B>
 {
     public final A a;
@@ -47,13 +49,8 @@ public class Tuple<A, B>
             return false;
 
         final Tuple<?, ?> p = (Tuple<?, ?>)obj;
-        
-        if(this.a == null && p.a != null)
-            return false;
-        if(this.b == null && p.b != null)
-            return false;
-        
-        return this.a.equals(p.a) && this.b.equals(p.b);
+
+        return SysUtils.equals(this.a, p.a) && SysUtils.equals(this.b, p.b);
     }
 
     @Override
