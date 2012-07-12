@@ -228,4 +228,9 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     {
         return this.list.toString();
     }
+    
+    public void trimToSize()
+    {
+        this.list.trimToSize();
+    }
 }

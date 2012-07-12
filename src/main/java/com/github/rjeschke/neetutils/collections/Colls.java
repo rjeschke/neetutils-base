@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import com.github.rjeschke.neetutils.fn.FnCombine;
 import com.github.rjeschke.neetutils.fn.FnExamine;
@@ -41,7 +42,7 @@ import com.github.rjeschke.neetutils.fn.Fns;
  * Some handy collection methods.
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
- *
+ * 
  */
 public final class Colls
 {
@@ -62,8 +63,9 @@ public final class Colls
 
     /**
      * Creates a new instance of the default List type.
-     *
-     * @param initialSize Initial list size.
+     * 
+     * @param initialSize
+     *            Initial list size.
      * @return A List instance.
      */
     public final static <A> List<A> list(final int initialSize)
@@ -74,7 +76,8 @@ public final class Colls
     /**
      * Creates a new instance of the default List type.
      * 
-     * @param coll Collection of values to populate List with.
+     * @param coll
+     *            Collection of values to populate List with.
      * @return A List instance.
      */
     public final static <A> List<A> list(final Collection<A> coll)
@@ -85,7 +88,8 @@ public final class Colls
     /**
      * Creates a new instance of the default List type.
      * 
-     * @param coll Collection of values to populate List with.
+     * @param coll
+     *            Collection of values to populate List with.
      * @return A List instance.
      */
     public final static <A> List<A> list(final Iterable<A> coll)
@@ -95,11 +99,12 @@ public final class Colls
             ret.add(a);
         return ret;
     }
-    
+
     /**
      * Creates a new instance of the default List type.
      * 
-     * @param coll Array of values to populate List with.
+     * @param coll
+     *            Array of values to populate List with.
      * @return A List instance.
      */
     public final static <A> List<A> list(final A... coll)
@@ -113,7 +118,8 @@ public final class Colls
     /**
      * Creates a new instance of the default ImmutableList type.
      * 
-     * @param coll Collection of values to populate List with.
+     * @param coll
+     *            Collection of values to populate List with.
      * @return A List instance.
      */
     public final static <A> List<A> ilist(final Collection<A> coll)
@@ -124,18 +130,20 @@ public final class Colls
     /**
      * Creates a new instance of the default ImmutableList type.
      * 
-     * @param coll Collection of values to populate List with.
+     * @param coll
+     *            Collection of values to populate List with.
      * @return A List instance.
      */
     public final static <A> List<A> ilist(final Iterable<A> coll)
     {
         return new ImmutableList<A>(coll);
     }
-    
+
     /**
      * Creates a new instance of the default ImmutableList type.
      * 
-     * @param coll Array of values to populate List with.
+     * @param coll
+     *            Array of values to populate List with.
      * @return A List instance.
      */
     public final static <A> List<A> ilist(final A... coll)
@@ -144,9 +152,33 @@ public final class Colls
     }
 
     /**
+     * Tries to call trimToSize() on the given list. If no suitable type is
+     * found, then this method is a no-op.
+     * 
+     * @param list
+     *            The list
+     * @return The same list
+     * @see Vector
+     * @see ArrayList
+     * @see SortedList
+     */
+    public final static <A> List<A> trimToSize(List<A> list)
+    {
+        if(list instanceof Vector)
+            ((Vector<?>)list).trimToSize();
+        else if(list instanceof ArrayList)
+            ((ArrayList<?>)list).trimToSize();
+        else if(list instanceof SortedList)
+            ((SortedList<?>)list).trimToSize();
+
+        return list;
+    }
+
+    /**
      * Transforms a Map into a list of Tuples.
      * 
-     * @param map Map to transform.
+     * @param map
+     *            Map to transform.
      * @return List of Tuples.
      */
     public final static <A, B> List<Tuple<A, B>> asList(final Map<A, B> map)
@@ -156,17 +188,19 @@ public final class Colls
             ret.add(Tuple.of(e.getKey(), e.getValue()));
         return ret;
     }
-    
+
     /**
      * Puts the given key/value pairs into the given map.
      * 
-     * @param keys Collection of keys.
-     * @param values Collection of values.
-     * @param map Map to populate.
+     * @param keys
+     *            Collection of keys.
+     * @param values
+     *            Collection of values.
+     * @param map
+     *            Map to populate.
      * @return The supplied map argument.
      */
-    public final static <A, B> Map<A, B> intoMap(final Iterable<A> keys, final Iterable<B> values,
-            final Map<A, B> map)
+    public final static <A, B> Map<A, B> intoMap(final Iterable<A> keys, final Iterable<B> values, final Map<A, B> map)
     {
         final Iterator<A> a = keys.iterator();
         final Iterator<B> b = values.iterator();
@@ -176,12 +210,13 @@ public final class Colls
         return map;
     }
 
-    
     /**
      * Puts the given key/value pairs into the given map.
      * 
-     * @param keyValues Collection of keys.
-     * @param map Map to populate.
+     * @param keyValues
+     *            Collection of keys.
+     * @param map
+     *            Map to populate.
      * @return The supplied map argument.
      */
     public final static <A, B> Map<A, B> intoMap(final Iterable<Tuple<A, B>> keyValues, final Map<A, B> map)
@@ -194,8 +229,10 @@ public final class Colls
     /**
      * Puts the given key/value pairs into a HashMap.
      * 
-     * @param keys Collection of keys.
-     * @param values Collection of values.
+     * @param keys
+     *            Collection of keys.
+     * @param values
+     *            Collection of values.
      * @return The HashMap.
      * @see HashMap
      */
@@ -207,7 +244,8 @@ public final class Colls
     /**
      * Puts the given key/value pairs into a HashMap.
      * 
-     * @param keyValues Collection of keys.
+     * @param keyValues
+     *            Collection of keys.
      * @return The HashMap.
      * @see HashMap
      */
@@ -219,8 +257,10 @@ public final class Colls
     /**
      * Puts the given key/value pairs into a TreeMap.
      * 
-     * @param keys Collection of keys.
-     * @param values Collection of values.
+     * @param keys
+     *            Collection of keys.
+     * @param values
+     *            Collection of values.
      * @return The TreeMap.
      * @see TreeMap
      */
@@ -232,7 +272,8 @@ public final class Colls
     /**
      * Puts the given key/value pairs into a TreeMap.
      * 
-     * @param keyValues Collection of keys.
+     * @param keyValues
+     *            Collection of keys.
      * @return The TreeMap.
      * @see TreeMap
      */
@@ -244,8 +285,10 @@ public final class Colls
     /**
      * Puts the given key/value pairs into a LinkedHashMap.
      * 
-     * @param keys Collection of keys.
-     * @param values Collection of values.
+     * @param keys
+     *            Collection of keys.
+     * @param values
+     *            Collection of values.
      * @return The LinkedHashMap.
      * @see LinkedHashMap
      */
@@ -257,7 +300,8 @@ public final class Colls
     /**
      * Puts the given key/value pairs into a LinkedHashMap.
      * 
-     * @param keyValues Collection of keys.
+     * @param keyValues
+     *            Collection of keys.
      * @return The LinkedHashMap.
      * @see LinkedHashMap
      */
@@ -269,7 +313,8 @@ public final class Colls
     /**
      * Sorts the given List.
      * 
-     * @param list The list to sort.
+     * @param list
+     *            The list to sort.
      * @return The sorted list.
      */
     public final static <A extends Comparable<A>> List<A> sort(final List<A> list)
@@ -279,11 +324,13 @@ public final class Colls
     }
 
     /**
-     * Creates a new default List instance initialized with 'init' objects created
-     * by an FnInstance.
+     * Creates a new default List instance initialized with 'init' objects
+     * created by an FnInstance.
      * 
-     * @param fn Instance creation function.
-     * @param size NUmber of entries.
+     * @param fn
+     *            Instance creation function.
+     * @param size
+     *            NUmber of entries.
      * @return The List.
      * @see FnInstance
      */
@@ -296,11 +343,13 @@ public final class Colls
     }
 
     /**
-     * Creates a new default List instance initialized with 'init' objects created
-     * by an FnInstance.
+     * Creates a new default List instance initialized with 'init' objects
+     * created by an FnInstance.
      * 
-     * @param fn Instance creation function.
-     * @param size NUmber of entries.
+     * @param fn
+     *            Instance creation function.
+     * @param size
+     *            NUmber of entries.
      * @return The List.
      * @see FnInstanceWithIndex
      */
@@ -315,7 +364,8 @@ public final class Colls
     /**
      * Returns the first element of the given collection.
      * 
-     * @param coll The collection.
+     * @param coll
+     *            The collection.
      * @return The first element.
      */
     public final static <A> A head(final Iterable<A> coll)
@@ -326,30 +376,32 @@ public final class Colls
     /**
      * Returns the first element of the given collection.
      * 
-     * @param coll The collection.
+     * @param coll
+     *            The collection.
      * @return The first element.
      */
     public final static <A> A head(final List<A> coll)
     {
         return coll.get(0);
     }
-    
+
     /**
      * Returns the last element of the given List.
      * 
-     * @param coll The list.
+     * @param coll
+     *            The list.
      * @return The first element.
      */
     public final static <A> A last(final List<A> coll)
     {
         return coll.get(coll.size() - 1);
     }
-    
+
     /**
-     * Returns a new List containing all but the first element
-     * of 'coll'.
+     * Returns a new List containing all but the first element of 'coll'.
      * 
-     * @param coll The collection.
+     * @param coll
+     *            The collection.
      * @return The list.
      */
     public final static <A> List<A> tail(final Collection<A> coll)
@@ -358,10 +410,10 @@ public final class Colls
     }
 
     /**
-     * Returns a new List containing all but the first element
-     * of 'coll'.
+     * Returns a new List containing all but the first element of 'coll'.
      * 
-     * @param coll The collection.
+     * @param coll
+     *            The collection.
      * @return The list.
      */
     public final static <A> List<A> tail(final Iterable<A> coll)
@@ -370,11 +422,13 @@ public final class Colls
     }
 
     /**
-     * Returns a new list containing the first 'amount' elements of the
-     * given collection.
+     * Returns a new list containing the first 'amount' elements of the given
+     * collection.
      * 
-     * @param coll The collection.
-     * @param amount Elements to take.
+     * @param coll
+     *            The collection.
+     * @param amount
+     *            Elements to take.
      * @return The list.
      */
     public final static <A> List<A> take(final Collection<A> coll, final int amount)
@@ -391,11 +445,13 @@ public final class Colls
     }
 
     /**
-     * Returns a new list containing the first 'amount' elements of the
-     * given collection.
+     * Returns a new list containing the first 'amount' elements of the given
+     * collection.
      * 
-     * @param coll The collection.
-     * @param amount Elements to take.
+     * @param coll
+     *            The collection.
+     * @param amount
+     *            Elements to take.
      * @return The list.
      */
     public final static <A> List<A> take(final Iterable<A> coll, final int amount)
@@ -410,11 +466,13 @@ public final class Colls
     }
 
     /**
-     * Returns a new List containing all but the first 'amount' elements
-     * of 'coll'.
+     * Returns a new List containing all but the first 'amount' elements of
+     * 'coll'.
      * 
-     * @param coll The collection.
-     * @param amount Number of element to leave out.
+     * @param coll
+     *            The collection.
+     * @param amount
+     *            Number of element to leave out.
      * @return The list.
      */
     public final static <A> List<A> drop(final Collection<A> coll, final int amount)
@@ -434,11 +492,13 @@ public final class Colls
     }
 
     /**
-     * Returns a new List containing all but the first 'amount' elements
-     * of 'coll'.
+     * Returns a new List containing all but the first 'amount' elements of
+     * 'coll'.
      * 
-     * @param coll The collection.
-     * @param amount Number of element to leave out.
+     * @param coll
+     *            The collection.
+     * @param amount
+     *            Number of element to leave out.
      * @return The list.
      */
     public final static <A> List<A> drop(final Iterable<A> coll, final int amount)
@@ -475,7 +535,10 @@ public final class Colls
         final List<B> l = list(coll.size());
         int i = 0;
         for(final A a : coll)
-            l.add(fn.map(a, i++));
+        {
+            l.add(fn.map(a, i));
+            ++i;
+        }
         return l;
     }
 
@@ -484,7 +547,10 @@ public final class Colls
         final List<B> l = list();
         int i = 0;
         for(final A a : coll)
-            l.add(fn.map(a, i++));
+        {
+            l.add(fn.map(a, i));
+            ++i;
+        }
         return l;
     }
 
@@ -505,10 +571,141 @@ public final class Colls
         int i = 0;
         for(final A a : coll)
         {
-            if(fn.predicate(a, i++))
+            if(fn.predicate(a, i))
                 l.add(a);
+            ++i;
         }
         return l;
+    }
+
+    public final static <A, B> List<B> filterMap(final Iterable<A> coll, final FnPredicate<A> fnPredicate,
+            final FnMap<A, B> fnMap)
+    {
+        final List<B> l = list();
+        for(final A a : coll)
+        {
+            if(fnPredicate.predicate(a))
+                l.add(fnMap.map(a));
+        }
+        return l;
+    }
+
+    public final static <A, B> List<B> filterMap(final Iterable<A> coll, final FnPredicateWithIndex<A> fnPredicate,
+            final FnMapWithIndex<A, B> fnMap)
+    {
+        final List<B> l = list();
+        int i = 0;
+        for(final A a : coll)
+        {
+            if(fnPredicate.predicate(a, i))
+                l.add(fnMap.map(a, i));
+            ++i;
+        }
+        return l;
+    }
+
+    public final static <A, B> List<B> mapFilter(final Iterable<A> coll, final FnMap<A, B> fnMap,
+            final FnPredicate<B> fnPredicate)
+    {
+        final List<B> l = list();
+        for(final A a : coll)
+        {
+            final B b = fnMap.map(a);
+            if(fnPredicate.predicate(b))
+                l.add(b);
+        }
+        return l;
+    }
+
+    public final static <A, B> List<B> mapFilter(final Iterable<A> coll, final FnMapWithIndex<A, B> fnMap,
+            final FnPredicateWithIndex<B> fnPredicate)
+    {
+        final List<B> l = list();
+        int i = 0;
+        for(final A a : coll)
+        {
+            final B b = fnMap.map(a, i);
+            if(fnPredicate.predicate(b, i))
+                l.add(b);
+            ++i;
+        }
+        return l;
+    }
+
+    public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMap<A, B> fnMap,
+            final FnReduce<B, C> fnReduce, final C initial)
+    {
+        C c = initial;
+        for(final A a : coll)
+            c = fnReduce.reduce(fnMap.map(a), c);
+        return c;
+    }
+
+    public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMapWithIndex<A, B> fnMap,
+            final FnReduceWithIndex<B, C> fnReduce, final C initial)
+    {
+        C c = initial;
+        int i = 0;
+        for(final A a : coll)
+        {
+            c = fnReduce.reduce(fnMap.map(a, i), c, i);
+            ++i;
+        }
+        return c;
+    }
+
+    public final static <A, B, C> C filterMapReduce(final Iterable<A> coll, final FnPredicate<A> fnPredicate,
+            final FnMap<A, B> fnMap, final FnReduce<B, C> fnReduce, final C initial)
+    {
+        C c = initial;
+        for(final A a : coll)
+        {
+            if(fnPredicate.predicate(a))
+                c = fnReduce.reduce(fnMap.map(a), c);
+        }
+        return c;
+    }
+
+    public final static <A, B, C> C filterMapReduce(final Iterable<A> coll, final FnPredicateWithIndex<A> fnPredicate,
+            final FnMapWithIndex<A, B> fnMap, final FnReduceWithIndex<B, C> fnReduce, final C initial)
+    {
+        C c = initial;
+        int i = 0;
+        for(final A a : coll)
+        {
+            if(fnPredicate.predicate(a, i))
+                c = fnReduce.reduce(fnMap.map(a, i), c, i);
+            ++i;
+        }
+        return c;
+    }
+
+    public final static <A, B, C> C mapFilterReduce(final Iterable<A> coll, final FnMap<A, B> fnMap,
+            final FnPredicate<B> fnPredicate, final FnReduce<B, C> fnReduce, final C initial)
+    {
+        C c = initial;
+        for(final A a : coll)
+        {
+            final B b = fnMap.map(a);
+            if(fnPredicate.predicate(b))
+                c = fnReduce.reduce(b, c);
+        }
+        return c;
+    }
+
+    public final static <A, B, C> C mapFilterReduce(final Iterable<A> coll, final FnMapWithIndex<A, B> fnMap,
+            final FnPredicateWithIndex<B> fnPredicate, final FnReduceWithIndex<B, C> fnReduce, final C initial)
+    {
+        C c = initial;
+        int i = 0;
+        for(final A a : coll)
+        {
+            final B b = fnMap.map(a, i);
+            if(fnPredicate.predicate(b, i))
+                c = fnReduce.reduce(b, c, i);
+            ++i;
+        }
+        return c;
     }
 
     public final static <A, B> B reduce(final Iterable<A> coll, final FnReduce<A, B> fn, final B initial)
@@ -528,6 +725,32 @@ public final class Colls
         return b;
     }
 
+    public final static <A, B> B filterReduce(final Iterable<A> coll, final FnPredicate<A> fnPredicate,
+            final FnReduce<A, B> fnReduce, final B initial)
+    {
+        B b = initial;
+        for(final A a : coll)
+        {
+            if(fnPredicate.predicate(a))
+                b = fnReduce.reduce(a, b);
+        }
+        return b;
+    }
+
+    public final static <A, B> B filterReduce(final Iterable<A> coll, final FnPredicateWithIndex<A> fnPredicate,
+            final FnReduceWithIndex<A, B> fnReduce, final B initial)
+    {
+        B b = initial;
+        int i = 0;
+        for(final A a : coll)
+        {
+            if(fnPredicate.predicate(a, i))
+                b = fnReduce.reduce(a, b, i);
+            ++i;
+        }
+        return b;
+    }
+    
     public final static <A, B> List<Tuple<A, B>> zip(final Collection<A> collA, final Collection<B> collB)
     {
         final int todo = Math.min(collA.size(), collB.size());
@@ -601,7 +824,7 @@ public final class Colls
         final List<List<A>> ret = list();
         if(size < 1)
             throw new IllegalArgumentException("Partition size must be > 0");
-        
+
         List<A> part = list();
         for(final A a : coll)
         {
@@ -616,7 +839,7 @@ public final class Colls
             ret.add(part);
         return ret;
     }
-    
+
     public final static <A> Tuple<List<A>, List<A>> partition(final Iterable<A> coll, final FnPredicate<A> fn)
     {
         final List<A> l0 = list();
@@ -638,23 +861,24 @@ public final class Colls
         int i = 0;
         for(final A a : coll)
         {
-            if(fn.predicate(a, i++))
+            if(fn.predicate(a, i))
                 l0.add(a);
             else
                 l1.add(a);
+            ++i;
         }
         return Tuple.of(l0, l1);
     }
-    
+
     public final static <A> List<List<A>> group(final Iterable<A> coll)
     {
-        return group(coll, Fns.<A>examineEquals());
+        return group(coll, Fns.<A> examineEquals());
     }
-    
+
     public final static <A> List<List<A>> group(final Iterable<A> coll, final FnExamine<A> fn)
     {
         final List<List<A>> ret = list();
-        
+
         List<A> part = list();
         for(final A a : coll)
         {
