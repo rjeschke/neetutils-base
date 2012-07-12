@@ -102,13 +102,45 @@ public final class Colls
      * @param coll Array of values to populate List with.
      * @return A List instance.
      */
-    @SafeVarargs
     public final static <A> List<A> list(final A... coll)
     {
         final List<A> ret = list(coll.length);
         for(int i = 0; i < coll.length; i++)
             ret.add(coll[i]);
         return ret;
+    }
+
+    /**
+     * Creates a new instance of the default ImmutableList type.
+     * 
+     * @param coll Collection of values to populate List with.
+     * @return A List instance.
+     */
+    public final static <A> List<A> ilist(final Collection<A> coll)
+    {
+        return new ImmutableList<A>(coll);
+    }
+
+    /**
+     * Creates a new instance of the default ImmutableList type.
+     * 
+     * @param coll Collection of values to populate List with.
+     * @return A List instance.
+     */
+    public final static <A> List<A> ilist(final Iterable<A> coll)
+    {
+        return new ImmutableList<A>(coll);
+    }
+    
+    /**
+     * Creates a new instance of the default ImmutableList type.
+     * 
+     * @param coll Array of values to populate List with.
+     * @return A List instance.
+     */
+    public final static <A> List<A> ilist(final A... coll)
+    {
+        return new ImmutableList<A>(coll);
     }
 
     /**

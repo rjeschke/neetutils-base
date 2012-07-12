@@ -16,13 +16,14 @@
 package com.github.rjeschke.neetutils.io;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.github.rjeschke.neetutils.WrappedCheckedException;
 
-public class LineReaderIterator implements Iterable<String>
+public class LineReaderIterator implements Iterable<String>, Closeable
 {
     final BufferedReader in;
     boolean closed = false;
@@ -103,5 +104,11 @@ public class LineReaderIterator implements Iterable<String>
         {
             throw new UnsupportedOperationException("Can not remove characters from an InputStream");
         }
+    }
+
+    @Override
+    public void close() throws IOException
+    {
+        this.in.close();
     }
 }

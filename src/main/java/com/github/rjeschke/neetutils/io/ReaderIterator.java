@@ -15,6 +15,7 @@
  */
 package com.github.rjeschke.neetutils.io;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
@@ -23,7 +24,7 @@ import java.util.NoSuchElementException;
 import com.github.rjeschke.neetutils.WrappedCheckedException;
 import com.github.rjeschke.neetutils.math.Numbers;
 
-public class ReaderIterator implements Iterable<Integer>
+public class ReaderIterator implements Iterable<Integer>, Closeable
 {
     final Reader in;
     boolean closed = false;
@@ -103,5 +104,11 @@ public class ReaderIterator implements Iterable<Integer>
         {
             throw new UnsupportedOperationException("Can not remove characters from an InputStream");
         }
+    }
+    
+    @Override
+    public void close() throws IOException
+    {
+        this.in.close();
     }
 }
