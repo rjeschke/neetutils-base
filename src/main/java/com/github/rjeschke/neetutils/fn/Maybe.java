@@ -12,50 +12,58 @@ public abstract class Maybe<A> implements Iterable<A>
     
     public final static <A> Maybe<A> nothing()
     {
-        return new Maybe<A>()
-        {
-            @Override
-            public Iterator<A> iterator()
-            {
-                return Collections.<A>emptyList().iterator();
-            }
-
-            @Override
-            public boolean isNothing()
-            {
-                return true;
-            }
-
-            @Override
-            public Maybe<A> or(Maybe<A> a)
-            {
-                return a;
-            }
-            
-            @Override
-            public int hashCode()
-            {
-                return 0;
-            }
-            
-            @Override
-            public boolean equals(Object obj)
-            {
-                return false;
-            }
-            
-            @Override
-            public String toString()
-            {
-                return "nothing";
-            }
-        };
+        return new Nothing<A>();
     }
 
     public final static <A> Maybe<A> just(A value)
     {
         return new Just<A>(value);
     }
+    
+    private final static class Nothing<A> extends Maybe<A>
+    {
+        public Nothing()
+        {
+            //
+        }
+        
+        @Override
+        public Iterator<A> iterator()
+        {
+            return Collections.<A>emptyList().iterator();
+        }
+
+        @Override
+        public boolean isNothing()
+        {
+            return true;
+        }
+
+        @Override
+        public Maybe<A> or(Maybe<A> a)
+        {
+            return a;
+        }
+        
+        @Override
+        public int hashCode()
+        {
+            return 0;
+        }
+        
+        @Override
+        public boolean equals(Object obj)
+        {
+            return false;
+        }
+        
+        @Override
+        public String toString()
+        {
+            return "nothing";
+        }
+    }
+    
     
     private final static class Just<A> extends Maybe<A>
     {

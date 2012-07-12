@@ -46,17 +46,17 @@ public class LineReaderIterator implements Iterable<String>, Closeable
             
             if(this.current == null)
             {
-                this.closed = true;
                 this.in.close();
+                this.closed = true;
             }
         }
         catch(IOException e)
         {
-            this.closed = true;
             this.current = null;
             try
             {
                 this.in.close();
+                this.closed = true;
             }
             catch (IOException e1)
             {
@@ -76,17 +76,17 @@ public class LineReaderIterator implements Iterable<String>, Closeable
 
     private class StreamIterator implements Iterator<String>
     {
-        final LineReaderIterator ist;
+        final LineReaderIterator lri;
         
-        public StreamIterator(LineReaderIterator ist)
+        public StreamIterator(LineReaderIterator lri)
         {
-            this.ist = ist; 
+            this.lri = lri; 
         }
 
         @Override
         public boolean hasNext()
         {
-            return this.ist.current != null;
+            return this.lri.current != null;
         }
 
         @Override
@@ -94,8 +94,8 @@ public class LineReaderIterator implements Iterable<String>, Closeable
         {
             if(!this.hasNext())
                 throw new NoSuchElementException("Trying to read past end of stream");
-            final String ret = this.ist.current;
-            this.ist.read();
+            final String ret = this.lri.current;
+            this.lri.read();
             return ret;
         }
 
@@ -110,5 +110,7 @@ public class LineReaderIterator implements Iterable<String>, Closeable
     public void close() throws IOException
     {
         this.in.close();
+        this.closed = true;
+        this.current = null;
     }
 }

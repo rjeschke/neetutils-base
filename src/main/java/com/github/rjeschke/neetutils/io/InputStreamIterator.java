@@ -46,17 +46,17 @@ public class InputStreamIterator implements Iterable<Integer>, Closeable
             this.current = this.in.read();
             if(this.current == -1)
             {
-                this.closed = true;
                 this.in.close();
+                this.closed = true;
             }
         }
         catch(IOException e)
         {
-            this.closed = true;
             this.current = -1;
             try
             {
                 this.in.close();
+                this.closed = true;
             }
             catch (IOException e1)
             {
@@ -110,5 +110,7 @@ public class InputStreamIterator implements Iterable<Integer>, Closeable
     public void close() throws IOException
     {
         this.in.close();
+        this.current = -1;
+        this.closed = true;
     }
 }
