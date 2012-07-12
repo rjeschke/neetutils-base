@@ -750,7 +750,15 @@ public final class Colls
         }
         return b;
     }
-    
+
+    /**
+     * Zips the two given collections into a list of tuples.
+     * 
+     * @param collA First collection.
+     * @param collB Second collection.
+     * @return The list of tuples.
+     * @see Tuple
+     */
     public final static <A, B> List<Tuple<A, B>> zip(final Collection<A> collA, final Collection<B> collB)
     {
         final int todo = Math.min(collA.size(), collB.size());
@@ -762,6 +770,14 @@ public final class Colls
         return ret;
     }
 
+    /**
+     * Zips the two given collections into a list of tuples.
+     * 
+     * @param collA First collection.
+     * @param collB Second collection.
+     * @return The list of tuples.
+     * @see Tuple
+     */
     public final static <A, B> List<Tuple<A, B>> zip(final Iterable<A> collA, final Iterable<B> collB)
     {
         final List<Tuple<A, B>> ret = list();
@@ -795,6 +811,13 @@ public final class Colls
         return ret;
     }
 
+    /**
+     * Unzips the given collection of tuples into two lists.
+     *
+     * @param coll The collection
+     * @return A tuple of two lists
+     * @see Tuple 
+     */
     public final static <A, B> Tuple<List<A>, List<B>> unzip(final Collection<Tuple<A, B>> coll)
     {
         final List<A> listA = list(coll.size());
@@ -807,6 +830,13 @@ public final class Colls
         return Tuple.of(listA, listB);
     }
 
+    /**
+     * Unzips the given collection of tuples into two lists.
+     *
+     * @param coll The collection
+     * @return A tuple of two lists
+     * @see Tuple 
+     */
     public final static <A, B> Tuple<List<A>, List<B>> unzip(final Iterable<Tuple<A, B>> coll)
     {
         final List<A> listA = list();
@@ -899,6 +929,12 @@ public final class Colls
         return ret;
     }
 
+    /**
+     * Returns the given collection of numbers as an array of bytes.
+     * 
+     * @param coll The collection
+     * @return The array
+     */
     public final static byte[] asByteArray(Collection<? extends Number> coll)
     {
         final byte[] ret = new byte[coll.size()];
@@ -908,6 +944,12 @@ public final class Colls
         return ret;
     }
 
+    /**
+     * Returns the given collection of numbers as an array of shorts.
+     * 
+     * @param coll The collection
+     * @return The array
+     */
     public final static short[] asShortArray(Collection<? extends Number> coll)
     {
         final short[] ret = new short[coll.size()];
@@ -917,6 +959,12 @@ public final class Colls
         return ret;
     }
 
+    /**
+     * Returns the given collection of numbers as an array of ints.
+     * 
+     * @param coll The collection
+     * @return The array
+     */
     public final static int[] asIntArray(Collection<? extends Number> coll)
     {
         final int[] ret = new int[coll.size()];
@@ -926,6 +974,12 @@ public final class Colls
         return ret;
     }
 
+    /**
+     * Returns the given collection of numbers as an array of longs.
+     * 
+     * @param coll The collection
+     * @return The array
+     */
     public final static long[] asLongArray(Collection<? extends Number> coll)
     {
         final long[] ret = new long[coll.size()];
@@ -935,6 +989,12 @@ public final class Colls
         return ret;
     }
 
+    /**
+     * Returns the given collection of numbers as an array of floats.
+     * 
+     * @param coll The collection
+     * @return The array
+     */
     public final static float[] asFloatArray(Collection<? extends Number> coll)
     {
         final float[] ret = new float[coll.size()];
@@ -944,6 +1004,12 @@ public final class Colls
         return ret;
     }
 
+    /**
+     * Returns the given collection of numbers as an array of doubles.
+     * 
+     * @param coll The collection
+     * @return The array
+     */
     public final static double[] asDoubleArray(Collection<? extends Number> coll)
     {
         final double[] ret = new double[coll.size()];

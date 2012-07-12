@@ -26,6 +26,8 @@ public final class NMath
     { /* forbidden */
     }
 
+    public final static double INV_LOG_2 = 1.0 / Math.log(2);
+    
    /**
      * Returns <code>min</code> if <code>x</code> is less than <code>min</code>,
      * <code>max</code> if <code>x</code> is greater than <code>max</code> and
@@ -113,34 +115,34 @@ public final class NMath
     }
 
     /**
-     * Denormalizes a float number.
+     * Normalizes a denormalized float number.
      * 
      * @param v
-     *            Number to denormalize
+     *            Number to normalize
      * @return <code>0</code> if <code>abs(v)</code> is smaller than
-     *         <code>1E-45</code>
+     *         <code>Float.MIN_NORMAL</code>
      */
-    public final static float denormalize(final float v)
+    public final static float normalize(final float v)
     {
         return Math.abs(v) < Float.MIN_NORMAL ? 0 : v;
     }
 
     /**
-     * Denormalizes a double number.
+     * Normalizes a denormalized double number.
      * 
      * @param v
-     *            Number to denormalize
+     *            Number to normalize
      * @return <code>0</code> if <code>abs(v)</code> is smaller than
-     *         <code>1E-323</code>
+     *         <code>Double.MIN_NORMAL</code>
      */
-    public final static double denormalize(final double v)
+    public final static double normalize(final double v)
     {
         return Math.abs(v) < Double.MIN_NORMAL ? 0 : v;
     }
 
     public final static int nextPow2(final int value)
     {
-        int t = Math.max(value >> 1, 2);
+        int t = Math.max((int)Math.floor(Math.log(value) * INV_LOG_2), 1);
         while(t < value)
             t <<= 1;
         return t;
@@ -181,13 +183,13 @@ public final class NMath
     // TODO verify
     public final static float fract(float x)
     {
-        return x - (float)Math.floor(x);
+        return  x < 0 ? x - (float)Math.ceil(x) : x - (float)Math.floor(x);
     }
 
     // TODO verify
     public final static double fract(double x)
     {
-        return x - Math.floor(x);
+        return  x < 0 ? x - Math.ceil(x) : x - Math.floor(x);
     }
 
     public final static float sinc(final float x)

@@ -198,6 +198,30 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     }
     
     @Override
+    public int hashCode()
+    {
+        return this.list.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj == this)
+            return true;
+        
+        if(!(obj instanceof ImmutableList))
+            return false;
+        
+        return this.list.equals(((ImmutableList<?>)obj).list);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.list.toString();
+    }
+    
+    @Override
     public ImmutableList<A> clone()
     {
         // FIXME ... we are immutable, so we could just return 'this', isn't it?
