@@ -17,26 +17,29 @@ package com.github.rjeschke.neetutils.collections;
 
 import com.github.rjeschke.neetutils.Objects;
 
-public class Tuple<A, B>
+public class Triplet<A, B, C>
 {
     public final A a;
     public final B b;
+    public final C c;
 
-    public Tuple(A a, B b)
+    public Triplet(A a, B b, C c)
     {
         this.a = a;
         this.b = b;
+        this.c = c;
     }
 
-    public final static <A, B> Tuple<A, B> of(A a, B b)
+    public final static <A, B, C> Triplet<A, B, C> of(A a, B b, C c)
     {
-        return new Tuple<A, B>(a, b);
+        return new Triplet<A, B, C>(a, b, c);
     }
 
     @Override
     public int hashCode()
     {
-        return (this.a == null ? 0 : this.a.hashCode()) * 31 + (this.b == null ? 0 : this.b.hashCode());
+        return ((this.a == null ? 0 : this.a.hashCode()) * 31 + (this.b == null ? 0 : this.b.hashCode())) * 31
+                + (this.c == null ? 0 : this.c.hashCode());
     }
 
     @Override
@@ -45,17 +48,17 @@ public class Tuple<A, B>
         if(obj == this)
             return true;
 
-        if(!(obj instanceof Tuple))
+        if(!(obj instanceof Triplet))
             return false;
 
-        final Tuple<?, ?> p = (Tuple<?, ?>)obj;
+        final Triplet<?, ?, ?> p = (Triplet<?, ?, ?>)obj;
 
-        return Objects.equals(this.a, p.a) && Objects.equals(this.b, p.b);
+        return Objects.equals(this.a, p.a) && Objects.equals(this.b, p.b) && Objects.equals(this.c, p.c);
     }
 
     @Override
     public String toString()
     {
-        return "(" + this.a.toString() + ", " + this.b.toString() + ")";
+        return "(" + this.a.toString() + ", " + this.b.toString() +  ", " + this.c.toString() + ")";
     }
 }

@@ -15,6 +15,8 @@
  */
 package com.github.rjeschke.neetutils;
 
+//import sun.misc.Unsafe;
+
 import com.github.rjeschke.neetutils.rng.RNG;
 import com.github.rjeschke.neetutils.rng.RNGFactory;
 import com.github.rjeschke.neetutils.rng.RNGType;
@@ -155,53 +157,48 @@ public final class SysUtils
     {
         return RNG.get().nextDoubleBipolar();
     }
-    
+
     public final static int availableProcessors()
     {
         return Runtime.getRuntime().availableProcessors();
     }
-    
+
     public final static void gc()
     {
         System.gc();
     }
-    
+
     public final static long usedMemory()
     {
         return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
-    
+
     public final static double usedMemoryRatio()
     {
         return (double)usedMemory() / (double)maxMemory();
     }
-    
+
     public final static long freeMemory()
     {
         return Runtime.getRuntime().freeMemory();
     }
-    
+
     public final static long maxMemory()
     {
         return Runtime.getRuntime().maxMemory();
     }
-    
+
     public final static long totalMemory()
     {
         return Runtime.getRuntime().totalMemory();
     }
-    
-    public final static boolean equals(Object a, Object b)
+
+    /*
+    public final static Unsafe getUnsafe()
     {
-        if(a == b)
-            return true;
-        
-        if(a == null)
-            return b == null;
-        
-        if(a.getClass() != b.getClass())
-            return false;
-        
-        return a.equals(b);
+        final Field f = Unsafe.class.getDeclaredField("theUnsafe");
+        f.setAccessible(true);
+        return (Unsafe)f.get(null);
     }
+    */
 }

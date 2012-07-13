@@ -16,83 +16,104 @@
 package com.github.rjeschke.neetutils.collections;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.NoSuchElementException;
 import java.util.RandomAccess;
+
+import com.github.rjeschke.neetutils.Objects;
 
 public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Serializable 
 {
     private static final long serialVersionUID = 634340469636541150L;
-
-    private final ArrayList<A> list;
     
+    private final Object[] data;
+     
     public ImmutableList(Collection<? extends A> coll)
     {
-        this.list = new ArrayList<A>(coll.size());
+        this.data = new Object[coll.size()];
+        int i = 0;
         for(final A a : coll)
-            this.list.add(a);
-        this.list.trimToSize();
+            this.data[i++] = a;
     }
     
     public ImmutableList(A ... coll)
     {
-        this.list = new ArrayList<A>(coll.length);
-        for(final A a : coll)
-            this.list.add(a);
-        this.list.trimToSize();
+        this.data = Arrays.copyOf(coll, coll.length);
     }
     
     public ImmutableList(Iterable<? extends A> coll)
     {
-        this.list = new ArrayList<A>();
+        Object[] d = new Object[8];
+        int i = 0;
         for(final A a : coll)
-            this.list.add(a);
-        this.list.trimToSize();
-    }
-    
-    private ImmutableList(ArrayList<A> list)
-    {
-        this.list = list;
+        {
+            if(i == d.length)
+                d = Arrays.copyOf(d, (d.length * 3) >> 1);
+            d[i++] = a;
+        }
+        this.data = Arrays.copyOf(d, i);
     }
     
     @Override
     public int size()
     {
-        return this.list.size();
+        return this.data.length;
     }
 
     @Override
     public boolean isEmpty()
     {
-        return this.list.isEmpty();
+        return this.data.length == 0;
     }
 
     @Override
     public boolean contains(Object o)
     {
-        return this.list.contains(o);
+        if(o == null)
+        {
+            for(int i = 0; i < this.data.length; i++)
+            {
+                if(this.data[i] == null)
+                    return true;
+            }
+        }
+        else
+        {
+            for(int i = 0; i < this.data.length; i++)
+            {
+                if(o.equals(this.data[i]))
+                    return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public Iterator<A> iterator()
     {
-        return new ImmutableListIterator<A>(this.list, 0);
+        return new ImmutableListIterator(0, this.data.length);
     }
 
     @Override
     public Object[] toArray()
     {
-        return this.list.toArray();
+        return Arrays.copyOf(this.data, this.data.length);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a)
     {
-        return this.list.toArray(a);
+        if(a.length >= this.data.length)
+        {
+            System.arraycopy(this.data, 0, a, 0, this.data.length);
+            return a;
+        }
+        
+        return (T[])Arrays.copyOf(this.data, this.data.length, a.getClass());
     }
 
     @Override
@@ -110,7 +131,12 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     @Override
     public boolean containsAll(Collection<?> c)
     {
-        return this.list.containsAll(c);
+        for(final Object o : c)
+        {
+            if(!this.contains(o))
+                return false;
+        }
+        return true;
     }
 
     @Override
@@ -143,10 +169,11 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public A get(int index)
     {
-        return this.list.get(index);
+        return (A)this.data[index];
     }
 
     @Override
@@ -170,33 +197,44 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     @Override
     public int indexOf(Object o)
     {
-        return this.list.indexOf(o);
+        for(int i = 0; i < this.data.length; i++)
+        {
+            if(Objects.equals(this.data[i], o))
+                return i;
+        }
+        return -1;
     }
 
     @Override
     public int lastIndexOf(Object o)
     {
-        return this.list.lastIndexOf(o);
+        for(int i = this.data.length - 1; i >= 0; i--)
+        {
+            if(Objects.equals(this.data[i], o))
+                return i;
+        }
+        return -1;
     }
 
     @Override
     public ListIterator<A> listIterator()
     {
-        return new ImmutableListIterator<A>(this.list, 0);
+        return new ImmutableListIterator(0, this.data.length);
     }
 
     @Override
     public ListIterator<A> listIterator(int index)
     {
-        return new ImmutableListIterator<A>(this.list, index);
+        return new ImmutableListIterator(index, this.data.length - index);
     }
 
     @Override
     public List<A> subList(int fromIndex, int toIndex)
     {
-        return new ImmutableList<A>((ArrayList<A>)this.list.subList(fromIndex, toIndex));
+        return null; //new ImmutableList<A>((ArrayList<A>)this.list.subList(fromIndex, toIndex));
     }
-    
+
+    /*
     @Override
     public int hashCode()
     {
@@ -214,59 +252,63 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         
         return this.list.equals(((ImmutableList<?>)obj).list);
     }
+    */
     
     @Override
     public String toString()
     {
-        return this.list.toString();
+        final StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for(int i = 0; i < this.data.length; i++)
+        {
+            if(i != 0)
+                sb.append(", ");
+            sb.append(this.data[i].toString());
+        }
+        sb.append(']');
+        return sb.toString();
     }
     
     @Override
     public ImmutableList<A> clone()
     {
-        // FIXME ... we are immutable, so we could just return 'this', isn't it?
-        return new ImmutableList<A>(this.list);
+        return this;
     }
     
-    private final static class ImmutableListIterator<A> implements ListIterator<A>
+    private final class ImmutableListIterator implements ListIterator<A>
     {
-        private final List<A> list;
-        private int index = 0;
-        private final int size;
+        private final int end;
+        private final int start;
+        private int index;
         
-        public ImmutableListIterator(List<A> list, int index)
+        public ImmutableListIterator(int index, int size)
         {
-            this.list = list;
-            this.index = index;
-            this.size = this.list.size();
+            this.index = this.start = index;
+            this.end = this.start + size;
         }
         
         @Override
         public boolean hasNext()
         {
-            return this.index < this.size;
+            return this.index != this.end;
         }
 
         @Override
         public A next()
         {
-            if(this.index >= this.size)
-                throw new NoSuchElementException();
-            return this.list.get(this.index++);
+            return get(this.index++);
         }
 
         @Override
         public boolean hasPrevious()
         {
-            return this.index > 0;
+            return this.index > this.start;
         }
 
         @Override
         public A previous()
         {
-            if(this.index == 0)
-                throw new NoSuchElementException();
-            return this.list.get(this.index - 1);
+            return get(this.index - 1);
         }
 
         @Override

@@ -15,7 +15,7 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
-public interface FnReduce<A, B>
+public interface FnFoldStep<A, B>
 {
-    public B reduce(A a, B b);
+    public B applyFoldStep(A a, B b);
 }

@@ -15,7 +15,7 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
-public interface FnExamine<A>
+public interface FnMappingWithIndex<A, B>
 {
-    public boolean examine(A a, A b);
+    public B applyMapping(A value, int index);
 }

@@ -17,5 +17,5 @@ package com.github.rjeschke.neetutils.fn;
 
 public interface FnPredicateWithIndex<A>
 {
-    public boolean predicate(A a, int index);
+    public boolean applyPredicate(A a, int index);
 }

@@ -23,7 +23,7 @@ import com.github.rjeschke.neetutils.rng.RNG;
 import com.github.rjeschke.neetutils.rng.RNGFactory;
 import com.github.rjeschke.neetutils.rng.RNGType;
 
-public class NImagePerlin implements Worker<NImagePBlock>
+class NImagePerlin implements Worker<NImagePBlock>
 {
     final NImage image;
     final int[] perm = new int[256];

@@ -27,15 +27,15 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import com.github.rjeschke.neetutils.fn.FnCombine;
-import com.github.rjeschke.neetutils.fn.FnExamine;
+import com.github.rjeschke.neetutils.fn.FnEquals;
 import com.github.rjeschke.neetutils.fn.FnPredicate;
 import com.github.rjeschke.neetutils.fn.FnPredicateWithIndex;
 import com.github.rjeschke.neetutils.fn.FnInstance;
 import com.github.rjeschke.neetutils.fn.FnInstanceWithIndex;
-import com.github.rjeschke.neetutils.fn.FnMap;
-import com.github.rjeschke.neetutils.fn.FnMapWithIndex;
-import com.github.rjeschke.neetutils.fn.FnReduce;
-import com.github.rjeschke.neetutils.fn.FnReduceWithIndex;
+import com.github.rjeschke.neetutils.fn.FnMapping;
+import com.github.rjeschke.neetutils.fn.FnMappingWithIndex;
+import com.github.rjeschke.neetutils.fn.FnFoldStep;
+import com.github.rjeschke.neetutils.fn.FnFoldStepWithIndex;
 import com.github.rjeschke.neetutils.fn.Fns;
 
 /**
@@ -149,6 +149,34 @@ public final class Colls
     public final static <A> List<A> ilist(final A... coll)
     {
         return new ImmutableList<A>(coll);
+    }
+
+    public final static <A> Iterable<Tuple<Integer, A>> idxIter(final Collection<A> coll)
+    {
+        return new Iterable<Tuple<Integer, A>>()
+        {
+            final Collection<A> collection = coll;
+
+            @Override
+            public Iterator<Tuple<Integer, A>> iterator()
+            {
+                return new IndexedIterator<A>(this.collection.iterator());
+            }
+        };
+    }
+
+    public final static <A> Iterable<Tuple<Integer, A>> idxIter(final Iterable<A> iter)
+    {
+        return new Iterable<Tuple<Integer, A>>()
+        {
+            final Iterable<A> iterable = iter;
+
+            @Override
+            public Iterator<Tuple<Integer, A>> iterator()
+            {
+                return new IndexedIterator<A>(this.iterable.iterator());
+            }
+        };
     }
 
     /**
@@ -338,7 +366,7 @@ public final class Colls
     {
         final List<A> l = list(size);
         for(int i = 0; i < size; i++)
-            l.add(fn.create());
+            l.add(fn.newInstance());
         return l;
     }
 
@@ -357,7 +385,7 @@ public final class Colls
     {
         final List<A> l = list(size);
         for(int i = 0; i < size; i++)
-            l.add(fn.create(i));
+            l.add(fn.newInstance(i));
         return l;
     }
 
@@ -514,41 +542,41 @@ public final class Colls
         return ret;
     }
 
-    public final static <A, B> List<B> map(final Collection<A> coll, final FnMap<A, B> fn)
+    public final static <A, B> List<B> map(final Collection<A> coll, final FnMapping<A, B> fn)
     {
         final List<B> l = list(coll.size());
         for(final A a : coll)
-            l.add(fn.map(a));
+            l.add(fn.applyMapping(a));
         return l;
     }
 
-    public final static <A, B> List<B> map(final Iterable<A> coll, final FnMap<A, B> fn)
+    public final static <A, B> List<B> map(final Iterable<A> coll, final FnMapping<A, B> fn)
     {
         final List<B> l = list();
         for(final A a : coll)
-            l.add(fn.map(a));
+            l.add(fn.applyMapping(a));
         return l;
     }
 
-    public final static <A, B> List<B> map(final Collection<A> coll, final FnMapWithIndex<A, B> fn)
+    public final static <A, B> List<B> map(final Collection<A> coll, final FnMappingWithIndex<A, B> fn)
     {
         final List<B> l = list(coll.size());
         int i = 0;
         for(final A a : coll)
         {
-            l.add(fn.map(a, i));
+            l.add(fn.applyMapping(a, i));
             ++i;
         }
         return l;
     }
 
-    public final static <A, B> List<B> map(final Iterable<A> coll, final FnMapWithIndex<A, B> fn)
+    public final static <A, B> List<B> map(final Iterable<A> coll, final FnMappingWithIndex<A, B> fn)
     {
         final List<B> l = list();
         int i = 0;
         for(final A a : coll)
         {
-            l.add(fn.map(a, i));
+            l.add(fn.applyMapping(a, i));
             ++i;
         }
         return l;
@@ -559,7 +587,7 @@ public final class Colls
         final List<A> l = list();
         for(final A a : coll)
         {
-            if(fn.predicate(a))
+            if(fn.applyPredicate(a))
                 l.add(a);
         }
         return l;
@@ -571,7 +599,7 @@ public final class Colls
         int i = 0;
         for(final A a : coll)
         {
-            if(fn.predicate(a, i))
+            if(fn.applyPredicate(a, i))
                 l.add(a);
             ++i;
         }
@@ -579,173 +607,173 @@ public final class Colls
     }
 
     public final static <A, B> List<B> filterMap(final Iterable<A> coll, final FnPredicate<A> fnPredicate,
-            final FnMap<A, B> fnMap)
+            final FnMapping<A, B> fnMap)
     {
         final List<B> l = list();
         for(final A a : coll)
         {
-            if(fnPredicate.predicate(a))
-                l.add(fnMap.map(a));
+            if(fnPredicate.applyPredicate(a))
+                l.add(fnMap.applyMapping(a));
         }
         return l;
     }
 
     public final static <A, B> List<B> filterMap(final Iterable<A> coll, final FnPredicateWithIndex<A> fnPredicate,
-            final FnMapWithIndex<A, B> fnMap)
+            final FnMappingWithIndex<A, B> fnMap)
     {
         final List<B> l = list();
         int i = 0;
         for(final A a : coll)
         {
-            if(fnPredicate.predicate(a, i))
-                l.add(fnMap.map(a, i));
+            if(fnPredicate.applyPredicate(a, i))
+                l.add(fnMap.applyMapping(a, i));
             ++i;
         }
         return l;
     }
 
-    public final static <A, B> List<B> mapFilter(final Iterable<A> coll, final FnMap<A, B> fnMap,
+    public final static <A, B> List<B> mapFilter(final Iterable<A> coll, final FnMapping<A, B> fnMap,
             final FnPredicate<B> fnPredicate)
     {
         final List<B> l = list();
         for(final A a : coll)
         {
-            final B b = fnMap.map(a);
-            if(fnPredicate.predicate(b))
+            final B b = fnMap.applyMapping(a);
+            if(fnPredicate.applyPredicate(b))
                 l.add(b);
         }
         return l;
     }
 
-    public final static <A, B> List<B> mapFilter(final Iterable<A> coll, final FnMapWithIndex<A, B> fnMap,
+    public final static <A, B> List<B> mapFilter(final Iterable<A> coll, final FnMappingWithIndex<A, B> fnMap,
             final FnPredicateWithIndex<B> fnPredicate)
     {
         final List<B> l = list();
         int i = 0;
         for(final A a : coll)
         {
-            final B b = fnMap.map(a, i);
-            if(fnPredicate.predicate(b, i))
+            final B b = fnMap.applyMapping(a, i);
+            if(fnPredicate.applyPredicate(b, i))
                 l.add(b);
             ++i;
         }
         return l;
     }
 
-    public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMap<A, B> fnMap,
-            final FnReduce<B, C> fnReduce, final C initial)
+    public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMapping<A, B> fnMap,
+            final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
         for(final A a : coll)
-            c = fnReduce.reduce(fnMap.map(a), c);
+            c = fnReduce.applyFoldStep(fnMap.applyMapping(a), c);
         return c;
     }
 
-    public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMapWithIndex<A, B> fnMap,
-            final FnReduceWithIndex<B, C> fnReduce, final C initial)
+    public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMappingWithIndex<A, B> fnMap,
+            final FnFoldStepWithIndex<B, C> fnReduce, final C initial)
     {
         C c = initial;
         int i = 0;
         for(final A a : coll)
         {
-            c = fnReduce.reduce(fnMap.map(a, i), c, i);
+            c = fnReduce.applyFoldStep(fnMap.applyMapping(a, i), c, i);
             ++i;
         }
         return c;
     }
 
     public final static <A, B, C> C filterMapReduce(final Iterable<A> coll, final FnPredicate<A> fnPredicate,
-            final FnMap<A, B> fnMap, final FnReduce<B, C> fnReduce, final C initial)
+            final FnMapping<A, B> fnMap, final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
         for(final A a : coll)
         {
-            if(fnPredicate.predicate(a))
-                c = fnReduce.reduce(fnMap.map(a), c);
+            if(fnPredicate.applyPredicate(a))
+                c = fnReduce.applyFoldStep(fnMap.applyMapping(a), c);
         }
         return c;
     }
 
     public final static <A, B, C> C filterMapReduce(final Iterable<A> coll, final FnPredicateWithIndex<A> fnPredicate,
-            final FnMapWithIndex<A, B> fnMap, final FnReduceWithIndex<B, C> fnReduce, final C initial)
+            final FnMappingWithIndex<A, B> fnMap, final FnFoldStepWithIndex<B, C> fnReduce, final C initial)
     {
         C c = initial;
         int i = 0;
         for(final A a : coll)
         {
-            if(fnPredicate.predicate(a, i))
-                c = fnReduce.reduce(fnMap.map(a, i), c, i);
+            if(fnPredicate.applyPredicate(a, i))
+                c = fnReduce.applyFoldStep(fnMap.applyMapping(a, i), c, i);
             ++i;
         }
         return c;
     }
 
-    public final static <A, B, C> C mapFilterReduce(final Iterable<A> coll, final FnMap<A, B> fnMap,
-            final FnPredicate<B> fnPredicate, final FnReduce<B, C> fnReduce, final C initial)
+    public final static <A, B, C> C mapFilterReduce(final Iterable<A> coll, final FnMapping<A, B> fnMap,
+            final FnPredicate<B> fnPredicate, final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
         for(final A a : coll)
         {
-            final B b = fnMap.map(a);
-            if(fnPredicate.predicate(b))
-                c = fnReduce.reduce(b, c);
+            final B b = fnMap.applyMapping(a);
+            if(fnPredicate.applyPredicate(b))
+                c = fnReduce.applyFoldStep(b, c);
         }
         return c;
     }
 
-    public final static <A, B, C> C mapFilterReduce(final Iterable<A> coll, final FnMapWithIndex<A, B> fnMap,
-            final FnPredicateWithIndex<B> fnPredicate, final FnReduceWithIndex<B, C> fnReduce, final C initial)
+    public final static <A, B, C> C mapFilterReduce(final Iterable<A> coll, final FnMappingWithIndex<A, B> fnMap,
+            final FnPredicateWithIndex<B> fnPredicate, final FnFoldStepWithIndex<B, C> fnReduce, final C initial)
     {
         C c = initial;
         int i = 0;
         for(final A a : coll)
         {
-            final B b = fnMap.map(a, i);
-            if(fnPredicate.predicate(b, i))
-                c = fnReduce.reduce(b, c, i);
+            final B b = fnMap.applyMapping(a, i);
+            if(fnPredicate.applyPredicate(b, i))
+                c = fnReduce.applyFoldStep(b, c, i);
             ++i;
         }
         return c;
     }
 
-    public final static <A, B> B reduce(final Iterable<A> coll, final FnReduce<A, B> fn, final B initial)
+    public final static <A, B> B reduce(final Iterable<A> coll, final FnFoldStep<A, B> fn, final B initial)
     {
         B b = initial;
         for(final A a : coll)
-            b = fn.reduce(a, b);
+            b = fn.applyFoldStep(a, b);
         return b;
     }
 
-    public final static <A, B> B reduce(final Iterable<A> coll, final FnReduceWithIndex<A, B> fn, final B initial)
+    public final static <A, B> B reduce(final Iterable<A> coll, final FnFoldStepWithIndex<A, B> fn, final B initial)
     {
         B b = initial;
         int i = 0;
         for(final A a : coll)
-            b = fn.reduce(a, b, i++);
+            b = fn.applyFoldStep(a, b, i++);
         return b;
     }
 
     public final static <A, B> B filterReduce(final Iterable<A> coll, final FnPredicate<A> fnPredicate,
-            final FnReduce<A, B> fnReduce, final B initial)
+            final FnFoldStep<A, B> fnReduce, final B initial)
     {
         B b = initial;
         for(final A a : coll)
         {
-            if(fnPredicate.predicate(a))
-                b = fnReduce.reduce(a, b);
+            if(fnPredicate.applyPredicate(a))
+                b = fnReduce.applyFoldStep(a, b);
         }
         return b;
     }
 
     public final static <A, B> B filterReduce(final Iterable<A> coll, final FnPredicateWithIndex<A> fnPredicate,
-            final FnReduceWithIndex<A, B> fnReduce, final B initial)
+            final FnFoldStepWithIndex<A, B> fnReduce, final B initial)
     {
         B b = initial;
         int i = 0;
         for(final A a : coll)
         {
-            if(fnPredicate.predicate(a, i))
-                b = fnReduce.reduce(a, b, i);
+            if(fnPredicate.applyPredicate(a, i))
+                b = fnReduce.applyFoldStep(a, b, i);
             ++i;
         }
         return b;
@@ -796,7 +824,7 @@ public final class Colls
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
         for(int i = 0; i < todo; i++)
-            ret.add(fn.combine(a.next(), b.next()));
+            ret.add(fn.applyCombine(a.next(), b.next()));
         return ret;
     }
 
@@ -807,7 +835,7 @@ public final class Colls
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
         while(a.hasNext() && b.hasNext())
-            ret.add(fn.combine(a.next(), b.next()));
+            ret.add(fn.applyCombine(a.next(), b.next()));
         return ret;
     }
 
@@ -876,7 +904,7 @@ public final class Colls
         final List<A> l1 = list();
         for(final A a : coll)
         {
-            if(fn.predicate(a))
+            if(fn.applyPredicate(a))
                 l0.add(a);
             else
                 l1.add(a);
@@ -891,7 +919,7 @@ public final class Colls
         int i = 0;
         for(final A a : coll)
         {
-            if(fn.predicate(a, i))
+            if(fn.applyPredicate(a, i))
                 l0.add(a);
             else
                 l1.add(a);
@@ -905,7 +933,7 @@ public final class Colls
         return group(coll, Fns.<A> examineEquals());
     }
 
-    public final static <A> List<List<A>> group(final Iterable<A> coll, final FnExamine<A> fn)
+    public final static <A> List<List<A>> group(final Iterable<A> coll, final FnEquals<A> fn)
     {
         final List<List<A>> ret = list();
 
@@ -916,7 +944,7 @@ public final class Colls
                 part.add(a);
             else
             {
-                if(!fn.examine(last(part), a))
+                if(!fn.applyEquals(last(part), a))
                 {
                     ret.add(part);
                     part = list();

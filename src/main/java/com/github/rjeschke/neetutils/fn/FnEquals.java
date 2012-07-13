@@ -15,7 +15,7 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
-public interface FnReduceWithIndex<A, B>
+public interface FnEquals<A>
 {
-    public B reduce(A a, B b, int index);
+    public boolean applyEquals(A a, A b);
 }

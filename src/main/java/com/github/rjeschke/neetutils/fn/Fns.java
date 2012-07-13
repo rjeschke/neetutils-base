@@ -15,6 +15,7 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
+import com.github.rjeschke.neetutils.Objects;
 import com.github.rjeschke.neetutils.WrappedCheckedException;
 
 public final class Fns
@@ -24,12 +25,12 @@ public final class Fns
         //
     }
 
-    public final static <A> FnExamine<A> examineEquals()
+    public final static <A> FnEquals<A> examineEquals()
     {
-        return new FnExamine<A>()
+        return new FnEquals<A>()
         {
             @Override
-            public boolean examine(A a, A b) 
+            public boolean applyEquals(A a, A b) 
             {
                 if(a == null)
                     return b == null;
@@ -42,13 +43,12 @@ public final class Fns
     {
         return new FnInstance<A>()
         {
-            @SuppressWarnings("unchecked")
             @Override
-            public A create()
+            public A newInstance()
             {
                 try
                 {
-                    return (A)object.getClass().newInstance();
+                    return Objects.<A>uncheckedCast(object.getClass().newInstance());
                 }
                 catch (InstantiationException e)
                 {

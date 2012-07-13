@@ -15,7 +15,7 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
-public interface FnMapWithIndex<A, B>
+public interface FnMapping<A, B>
 {
-    public B map(A value, int index);
+    public B applyMapping(A value);
 }

@@ -31,6 +31,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import com.github.rjeschke.neetutils.SysUtils;
+import com.github.rjeschke.neetutils.collections.Colls;
 import com.github.rjeschke.neetutils.rng.RNG;
 import com.github.rjeschke.neetutils.rng.RNGFactory;
 import com.github.rjeschke.neetutils.rng.RNGType;
@@ -47,6 +48,30 @@ public final class Files implements Runnable
     static
     {
         Runtime.getRuntime().addShutdownHook(new Thread(new Files()));
+    }
+    
+    public final static List<File> listFiles(File parent)
+    {
+        List<File> files = Colls.list();
+        listFiles(parent, files);
+        return files;
+    }
+    
+    private final static void listFiles(File parent, List<File> files)
+    {
+        if(parent.isFile())
+            files.add(parent);
+        else
+        {
+            final File[] fs = parent.listFiles();
+            for(final File f : fs)
+            {
+                if(f.isFile())
+                    files.add(f);
+                else
+                    listFiles(f, files);
+            }
+        }
     }
     
     public final static File createUniqueTempFolder()

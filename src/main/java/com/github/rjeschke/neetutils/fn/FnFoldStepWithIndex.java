@@ -15,7 +15,7 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
-public interface FnMap<A, B>
+public interface FnFoldStepWithIndex<A, B>
 {
-    public B map(A value);
+    public B applyFoldStep(A a, B b, int index);
 }

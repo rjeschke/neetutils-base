@@ -13,9 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.fn;
+package com.github.rjeschke.neetutils;
 
-public interface FnPredicate<A>
+public final class Objects
 {
-    public boolean applyPredicate(A a);
+    private Objects()
+    {
+        //
+    }
+    
+    public final static boolean equals(Object a, Object b)
+    {
+        if(a == b)
+            return true;
+        
+        if(a == null)
+            return b == null;
+        
+        if(a.getClass() != b.getClass())
+            return false;
+        
+        return a.equals(b);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final static <A> A uncheckedCast(Object a)
+    {
+        return (A)a;
+    }
 }

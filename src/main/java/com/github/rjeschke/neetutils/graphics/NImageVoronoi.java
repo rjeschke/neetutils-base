@@ -21,7 +21,7 @@ import com.github.rjeschke.neetutils.rng.RNG;
 import com.github.rjeschke.neetutils.rng.RNGFactory;
 import com.github.rjeschke.neetutils.rng.RNGType;
 
-public class NImageVoronoi implements Worker<NImagePBlock>
+class NImageVoronoi implements Worker<NImagePBlock>
 {
     final NImage image;
     final float[][] points;

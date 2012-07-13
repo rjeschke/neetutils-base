@@ -3,7 +3,7 @@ package com.github.rjeschke.neetutils.fn;
 import java.util.Collections;
 import java.util.Iterator;
 
-import com.github.rjeschke.neetutils.SysUtils;
+import com.github.rjeschke.neetutils.Objects;
 
 public abstract class Maybe<A> implements Iterable<A>
 {
@@ -105,7 +105,7 @@ public abstract class Maybe<A> implements Iterable<A>
                 return false;
             final Just<?> just = (Just<?>)obj;
             
-            return SysUtils.equals(this.value, just.value);
+            return Objects.equals(this.value, just.value);
         }
         
         @Override

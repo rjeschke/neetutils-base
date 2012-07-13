@@ -17,5 +17,5 @@ package com.github.rjeschke.neetutils.fn;
 
 public interface FnInstanceWithIndex<A>
 {
-    public A create(int index);
+    public A newInstance(int index);
 }

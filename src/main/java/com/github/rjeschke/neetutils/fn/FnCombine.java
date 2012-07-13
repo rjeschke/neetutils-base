@@ -17,5 +17,5 @@ package com.github.rjeschke.neetutils.fn;
 
 public interface FnCombine<A, B, C>
 {
-    public C combine(A a, B b);
+    public C applyCombine(A a, B b);
 }
