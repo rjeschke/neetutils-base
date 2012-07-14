@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.RandomAccess;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -736,6 +737,32 @@ public final class Colls
         return c;
     }
 
+    public final static <A, B> B reduce(final List<A> coll, final FnFoldStep<A, B> fn, final B initial)
+    {
+        if(coll instanceof RandomAccess)
+        {
+            final int sz = coll.size();
+            B b = initial;
+            for(int i = 0; i < sz; i++)
+                b = fn.applyFoldStep(coll.get(i), b);
+            return b;
+        }
+        return reduce((Iterable<A>)coll, fn, initial);
+    }
+
+    public final static <A, B> B reduce(final List<A> coll, final FnFoldStepWithIndex<A, B> fn, final B initial)
+    {
+        if(coll instanceof RandomAccess)
+        {
+            final int sz = coll.size();
+            B b = initial;
+            for(int i = 0; i < sz; i++)
+                b = fn.applyFoldStep(coll.get(i), b, i);
+            return b;
+        }
+        return reduce((Iterable<A>)coll, fn, initial);
+    }
+    
     public final static <A, B> B reduce(final Iterable<A> coll, final FnFoldStep<A, B> fn, final B initial)
     {
         B b = initial;
