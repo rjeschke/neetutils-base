@@ -211,4 +211,100 @@ public final class NMath
         }
         return 1.0;
     }
+
+    public final static long rol64(long value, int bits)
+    {
+        final int b = bits & 63;
+        if(b == 0)
+            return value;
+        
+        return (value << b) | (value >>> (64 - b));
+    }
+
+    public final static long ror64(long value, int bits)
+    {
+        final int b = bits & 63;
+        if(b == 0)
+            return value;
+        
+        return (value >>> b) | (value << (64 - b));
+    }
+    
+    public final static int rol32(int value, int bits)
+    {
+        final int b = bits & 31;
+        if(b == 0)
+            return value;
+        
+        return (value << b) | (value >>> (32 - b));
+    }
+    
+    public final static int ror32(int value, int bits)
+    {
+        final int b = bits & 31;
+        if(b == 0)
+            return value;
+        
+        return (value >>> b) | (value << (32 - b));
+    }
+    
+    public final static int rol24(int value, int bits)
+    {
+        final int b = Math.abs(bits % 24);
+        if(b == 0)
+            return value;
+        
+        final int v = value & 0xffffff;
+        return ((v >> b) | (v << (24 - b))) & 0xffffff;
+    }
+    
+    public final static int ror24(int value, int bits)
+    {
+        final int b = Math.abs(bits % 24);
+        if(b == 0)
+            return value;
+        
+        final int v = value & 0xffffff;
+        return ((v >> b) | (v << (24 - b))) & 0xffffff;
+    }
+    
+    public final static int rol16(int value, int bits)
+    {
+        final int b = bits & 15;
+        if(b == 0)
+            return value;
+        
+        final int v = value & 65535;
+        return ((v << b) | (v >> (16 - b))) & 65535;
+    }
+    
+    public final static int ror16(int value, int bits)
+    {
+        final int b = bits & 15;
+        if(b == 0)
+            return value;
+        
+        final int v = value & 65535;
+        return ((v >> b) | (v << (16 - b))) & 65535;
+    }
+    
+    public final static int rol8(int value, int bits)
+    {
+        final int b = bits & 7;
+        if(b == 0)
+            return value;
+        
+        final int v = value & 255;
+        return ((v << b) | (v >> (8 - b))) & 255;
+    }
+    
+    public final static int ror8(int value, int bits)
+    {
+        final int b = bits & 7;
+        if(b == 0)
+            return value;
+        
+        final int v = value & 255;
+        return ((v >> b) | (v << (8 - b))) & 255;
+    }
 }

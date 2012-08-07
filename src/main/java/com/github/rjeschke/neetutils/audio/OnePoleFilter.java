@@ -17,6 +17,8 @@ package com.github.rjeschke.neetutils.audio;
 
 public interface OnePoleFilter
 {
+    public void reset();
+    
     public void setCutoff(double freq);
 
     public double coef(double previous);

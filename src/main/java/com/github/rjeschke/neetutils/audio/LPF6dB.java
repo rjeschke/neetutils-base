@@ -27,6 +27,12 @@ public class LPF6dB implements OnePoleFilter
     }
 
     @Override
+    public void reset()
+    {
+        this.b = 0;
+    }
+    
+    @Override
     public void setCutoff(final double freq)
     {
         this.f = Math.tan(Math.PI * freq / this.fs);

@@ -35,6 +35,12 @@ public class HPF6dB implements OnePoleFilter
     }
 
     @Override
+    public void reset()
+    {
+        this.b = 0;
+    }
+    
+    @Override
     public double coef(double previous)
     {
         return previous * this.f3;
