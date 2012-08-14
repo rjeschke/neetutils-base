@@ -16,7 +16,10 @@
 package com.github.rjeschke.neetutils.audio;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import com.github.rjeschke.neetutils.math.NMath;
@@ -43,7 +46,7 @@ public final class FIRUtils
      *            x.
      * @return sinc of x.
      */
-    public static double sinc(final double x)
+    public final static double sinc(final double x)
     {
         if(x != 0)
         {
@@ -51,6 +54,31 @@ public final class FIRUtils
             return Math.sin(xpi) / xpi;
         }
         return 1.0;
+    }
+
+    /**
+     * Zeroth order modified Bessel function.
+     * 
+     * @param x
+     *            Value.
+     * @return Return value.
+     */
+    public final static double i0(double x)
+    {
+        double f = 1;
+        final double x2 = x * x * 0.25;
+        double xc = x2;
+        double v = 1 + x2;
+        for(int i = 2; i < 100; i++)
+        {
+            f *= i;
+            xc *= x2;
+            final double a = xc / (f * f);
+            v += a;
+            if(a < 1e-20)
+                break;
+        }
+        return v;
     }
 
     /**
@@ -64,7 +92,7 @@ public final class FIRUtils
      *            Filter sampling rate.
      * @return The FIR filter.
      */
-    public static double[] createLowpass(final int order, final double fc, double fs)
+    public final static double[] createLowpass(final int order, final double fc, double fs)
     {
         final double cutoff = fc / fs;
         final double[] fir = new double[order + 1];
@@ -88,7 +116,7 @@ public final class FIRUtils
      *            Filter sampling rate.
      * @return The FIR filter.
      */
-    public static double[] createHighpass(final int order, final double fc, double fs)
+    public final static double[] createHighpass(final int order, final double fc, double fs)
     {
         final double cutoff = fc / fs;
         final double[] fir = new double[order + 1];
@@ -114,7 +142,7 @@ public final class FIRUtils
      *            Filter sampling rate.
      * @return The FIR filter.
      */
-    public static double[] createBandstop(final int order, final double fcl, final double fch, final double fs)
+    public final static double[] createBandstop(final int order, final double fcl, final double fch, final double fs)
     {
         final double[] low = createLowpass(order, fcl, fs);
         final double[] high = createHighpass(order, fch, fs);
@@ -138,7 +166,7 @@ public final class FIRUtils
      *            Filter sampling rate.
      * @return The FIR filter.
      */
-    public static double[] createBandpass(final int order, final double fcl, final double fch, final double fs)
+    public final static double[] createBandpass(final int order, final double fcl, final double fch, final double fs)
     {
         final double[] fir = createBandstop(order, fcl, fch, fs);
         final int half = order >> 1;
@@ -156,7 +184,7 @@ public final class FIRUtils
      *            The FIR filter.
      * @return Normalized FIR filter.
      */
-    public static double[] normalize(final double[] fir)
+    public final static double[] normalize(final double[] fir)
     {
         double sum = 0;
         for(int i = 0; i < fir.length; i++)
@@ -171,13 +199,56 @@ public final class FIRUtils
     }
 
     /**
+     * Creates a Kaiser window.
+     * 
+     * @param transitionWidth
+     *            The transition width in Hz
+     * @param attenuation
+     *            Attenuation in dB
+     * @param fs
+     *            Sampling frequency
+     * @return The window.
+     */
+    public final static double[] windowKaiser(double transitionWidth, double attenuation, double fs)
+    {
+        final double tw = 2.0 * Math.PI * transitionWidth / fs;
+        int m;
+        if(attenuation <= 21)
+            m = (int)Math.ceil(5.79 / tw);
+        else
+            m = (int)Math.ceil((attenuation - 7.95) / (2.285 * tw));
+        if((m & 1) == 0)
+            m++;
+        final double[] win = new double[m];
+
+        final double beta;
+
+        if(attenuation <= 21)
+            beta = 0;
+        else if(attenuation <= 50)
+            beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
+        else
+            beta = 0.1102 * (attenuation - 8.7);
+
+        final double i0b = i0(beta);
+
+        for(int n = 0; n < m; n++)
+        {
+            final double v = beta * Math.sqrt(1.0 - Math.pow(2.0 * n / (m - 1) - 1.0, 2));
+            win[n] = i0(v) / i0b;
+        }
+
+        return win;
+    }
+
+    /**
      * Applies a Bartlett window to the given FIR.
      * 
      * @param fir
      *            The FIR filter.
      * @return The windowed FIR filter.
      */
-    public static double[] windowBartlett(final double[] fir)
+    public final static double[] windowBartlett(final double[] fir)
     {
         final int m = fir.length - 1;
         final int m2 = m >> 1;
@@ -195,7 +266,7 @@ public final class FIRUtils
      *            The FIR filter.
      * @return The windowed FIR filter.
      */
-    public static double[] windowSinc(final double[] fir)
+    public final static double[] windowSinc(final double[] fir)
     {
         final int m = fir.length - 1;
         for(int i = 0; i < fir.length; i++)
@@ -212,7 +283,7 @@ public final class FIRUtils
      *            The FIR filter.
      * @return The windowed FIR filter.
      */
-    public static double[] windowHanning(final double[] fir)
+    public final static double[] windowHanning(final double[] fir)
     {
         final int m = fir.length - 1;
         for(int i = 0; i < fir.length; i++)
@@ -229,7 +300,7 @@ public final class FIRUtils
      *            The FIR filter.
      * @return The windowed FIR filter.
      */
-    public static double[] windowHamming(final double[] fir)
+    public final static double[] windowHamming(final double[] fir)
     {
         final int m = fir.length - 1;
         for(int i = 0; i < fir.length; i++)
@@ -246,7 +317,7 @@ public final class FIRUtils
      *            The FIR filter.
      * @return The windowed FIR filter.
      */
-    public static double[] windowBlackman(final double[] fir)
+    public final static double[] windowBlackman(final double[] fir)
     {
         final int m = fir.length - 1;
         for(int i = 0; i < fir.length; i++)
@@ -263,7 +334,7 @@ public final class FIRUtils
      *            The double array.
      * @return The float array.
      */
-    public static float[] toFloats(final double[] array)
+    public final static float[] toFloats(final double[] array)
     {
         final float[] ret = new float[array.length];
         for(int i = 0; i < ret.length; i++)
@@ -273,6 +344,27 @@ public final class FIRUtils
         return ret;
     }
 
+    private final static String[] PRES =
+        { "1", "10", "100" };
+    private final static String[] POSTS =
+        { "", "k", "M", "G", "T", "P" };
+
+    private final static String engVal(int val)
+    {
+        int v = 1;
+        int z = 0;
+        while(v < val)
+        {
+            z++;
+            v *= 10;
+        }
+
+        final int pre = z % 3;
+        final int post = z / 3;
+
+        return PRES[pre] + POSTS[post];
+    }
+
     /**
      * Renders the frequency response of the given FIR filter.
      * 
@@ -280,36 +372,67 @@ public final class FIRUtils
      *            The FIR filter.
      * @return The response as an BufferedImage.
      */
-    public static BufferedImage freqResponse(double[] fir, final double fs, boolean log)
+    public final static BufferedImage freqResponse(double[] fir, final double fs)
     {
-        final double[] dbs = new double[]
-            { 12, 6, 0, -6, -12, -24, -48, -96 };
+        final int[] dbs = new int[]
+            { 12, 6, 0, -6, -12, -24, -48, -72, -96, -120 };
         final BufferedImage ret = new BufferedImage(1024, 512, BufferedImage.TYPE_INT_RGB);
-        final Graphics g = ret.createGraphics();
+        final Graphics2D g = ret.createGraphics();
+        g.setFont(new Font("Arial", Font.PLAIN, 12));
+        FontRenderContext frc = g.getFontRenderContext();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, 1024, 512);
         g.setColor(Color.GRAY);
-        for(int i = 0; i < dbs.length; i++)
+
+        for(int i = 0, n = 0; i < 500; i += 6)
         {
-            int dy = 511 - (int)((dbs[i] + 144) * 512 / 156);
+            final int db = 12 - i;
+            final int dy = 511 - (db + 144) * 512 / 156;
+            if(dy > 511)
+                break;
             g.drawLine(0, dy, 1024, dy);
+
+            if(n < dbs.length && dbs[n] == db)
+            {
+                g.setColor(Color.WHITE);
+                final String value = Integer.toString(db);
+                final Rectangle2D r = g.getFont().getStringBounds(value, frc);
+                g.drawString(value, 2, dy - (float)r.getMinY());
+                g.setColor(Color.GRAY);
+                n++;
+            }
+
         }
+
         final double logFs = Math.log10(fs * 0.5);
         {
-            int v = log ? 1 : 100;
+            int v = 1;
             int st = v;
             int next = v * 10;
+            boolean wasNext = false;
             for(;;)
             {
-                int x = log ? (int)(1024.0 * Math.log10(v) / logFs) : (int)(v * 2048.0 / fs);
+                final int x = (int)(1024.0 * Math.log10(v) / logFs);
                 if(x >= 1024)
                     break;
                 g.drawLine(x, 0, x, 512);
+
+                if(wasNext)
+                {
+                    g.setColor(Color.WHITE);
+                    final String value = engVal(next / 10);
+                    final Rectangle2D r = g.getFont().getStringBounds(value, frc);
+                    g.drawString(value, x - (float)r.getWidth() * 0.5f, 518 + (float)r.getMinY());
+                    g.setColor(Color.GRAY);
+                    wasNext = false;
+                }
+
                 v += st;
                 if(v == next)
                 {
                     next *= 10;
                     st *= 10;
+                    wasNext = true;
                 }
             }
         }
@@ -323,7 +446,7 @@ public final class FIRUtils
         int oldy = 0;
         for(int x = 0; x < 1024; x++)
         {
-            final double w = (log ? Math.pow(10, logFs * x / 1024.0) / (fs * 0.5) : x / 1024.0) * Math.PI;
+            final double w = (Math.pow(10, logFs * x / 1024.0) / (fs * 0.5)) * Math.PI;
             double re = 0, im = 0;
             for(int i = 0; i < fir.length; i++)
             {
@@ -356,7 +479,7 @@ public final class FIRUtils
     }
 
     /**
-     * Convolves two FIR filters (multiply).
+     * Multiplies two FIR filters.
      * 
      * @param inout
      *            In and output FIR filter.
@@ -364,7 +487,7 @@ public final class FIRUtils
      *            Second FIR filter.
      * @return inout.
      */
-    public static double[] convolve(final double[] inout, final double[] in)
+    public final static double[] multiply(final double[] inout, final double[] in)
     {
         if(inout.length != in.length)
             throw new RuntimeException("Filter lengths do not match!");
@@ -382,7 +505,7 @@ public final class FIRUtils
      *            Second FIR filter.
      * @return inout.
      */
-    public static double[] add(final double[] inout, final double[] in)
+    public final static double[] add(final double[] inout, final double[] in)
     {
         if(inout.length != in.length)
             throw new RuntimeException("Filter lengths do not match!");
@@ -400,7 +523,7 @@ public final class FIRUtils
      *            Scaling factor.
      * @return FIR filter.
      */
-    public static double[] scale(final double[] fir, final double f)
+    public final static double[] scale(final double[] fir, final double f)
     {
         for(int i = 0; i < fir.length; i++)
             fir[i] *= f;

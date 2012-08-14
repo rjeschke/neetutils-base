@@ -142,10 +142,7 @@ public final class NMath
 
     public final static int nextPow2(final int value)
     {
-        int t = Math.max((int)Math.floor(Math.log(value) * INV_LOG_2), 1);
-        while(t < value)
-            t <<= 1;
-        return t;
+        return 1 << (int)Math.ceil(Math.log(value) * INV_LOG_2);
     }
 
     public final static float step(float edge, float x)
