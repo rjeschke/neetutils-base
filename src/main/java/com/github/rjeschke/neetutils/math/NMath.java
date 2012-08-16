@@ -28,7 +28,48 @@ public final class NMath
 
     public final static double INV_LOG_2 = 1.0 / Math.log(2);
     
-   /**
+    /** yotta */
+    public final static double U_Y = 1e24;
+    /** zetta */
+    public final static double U_Z = 1e21;
+    /** exa */
+    public final static double U_E = 1e18;
+    /** peta */
+    public final static double U_P = 1e15;
+    /** tera */
+    public final static double U_T = 1e12;
+    /** giga */
+    public final static double U_G = 1e9;
+    /** mega */
+    public final static double U_M = 1e6;
+    /** kilo */
+    public final static double U_k = 1e3;
+    /** hecto */
+    public final static double U_h = 1e2;
+    /** deca */
+    public final static double U_da = 1e1;
+    /** deci */
+    public final static double U_d = 1e-1;
+    /** centi */
+    public final static double U_c = 1e-2;
+    /** milli */
+    public final static double U_m = 1e-3;
+    /** micro */
+    public final static double U_u = 1e-6;
+    /** nano */
+    public final static double U_n = 1e-9;
+    /** pico */
+    public final static double U_p = 1e-12;
+    /** femto */
+    public final static double U_f = 1e-15;
+    /** atto */
+    public final static double U_a = 1e-18;
+    /** zepto */
+    public final static double U_z = 1e-21;
+    /** yocto */
+    public final static double U_y = 1e-24;
+    
+    /**
      * Returns <code>min</code> if <code>x</code> is less than <code>min</code>,
      * <code>max</code> if <code>x</code> is greater than <code>max</code> and
      * </code>x</code> otherwise.

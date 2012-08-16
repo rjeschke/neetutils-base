@@ -15,12 +15,16 @@
  */
 package com.github.rjeschke.neetutils;
 
+import java.util.List;
+
+import com.github.rjeschke.neetutils.collections.Colls;
+
 /**
  * String utility methods.
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
-public class StringUtils
+public class Strings
 {
     /**
      * Produces a in Java usable string representation of the given String,
@@ -69,5 +73,27 @@ public class StringUtils
         sb.append('"');
 
         return sb.toString();
+    }
+    
+    public final static List<String> split(String str, char ch)
+    {
+        List<String> ret = Colls.list();
+        
+        if(str != null)
+        {
+            int s = 0, e = 0;
+            while(e < str.length())
+            {
+                if(str.charAt(e) == ch)
+                {
+                    ret.add(str.substring(s, e));
+                    s = e + 1;
+                }
+                e++;
+            }
+            ret.add(str.substring(s, e));
+        }
+        
+        return ret;
     }
 }

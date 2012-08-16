@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.github.rjeschke.neetutils.Strings;
 import com.github.rjeschke.neetutils.SysUtils;
 import com.github.rjeschke.neetutils.collections.Colls;
 import com.github.rjeschke.neetutils.rng.RNG;
@@ -50,6 +51,12 @@ public final class Files implements Runnable
         Runtime.getRuntime().addShutdownHook(new Thread(new Files()));
     }
     
+    /**
+     * Recursively lists all files at the given path.
+     * 
+     * @param parent Path.
+     * @return List of files.
+     */
     public final static List<File> listFiles(File parent)
     {
         List<File> files = Colls.list();
@@ -226,6 +233,37 @@ public final class Files implements Runnable
         return getFiles(url.getPath(), pkgName);
     }
 
+    /**
+     * Gets a list of all resources on the classpath.
+     * 
+     * @return A list of Strings.
+     */
+    public final static List<String> getFilesOnClasspath()
+    {
+        final ArrayList<String> ret = new ArrayList<String>();
+        final char sep = System.getProperty("path.separator").charAt(0);
+        final List<String> paths = Strings.split(System.getProperty("java.class.path"), sep);
+
+        for(final String path : paths)
+        {
+            final File file = new File(path);
+            if(file.isDirectory())
+            {
+                final List<File> files = listFiles(file);
+                final int cut = file.toString().length();
+                for(final File f : files)
+                {
+                    ret.add(f.toString().substring(cut).replace('\\', '/'));
+                }
+            }
+            else if(file.isFile() && file.getName().toLowerCase().endsWith(".jar"))
+            {
+                ret.addAll(getJarFiles(file));
+            }
+        }
+        return ret;
+    }
+    
     private final static List<String> getFiles(final String path, String basePackage)
     {
         final ArrayList<String> classes = new ArrayList<String>();
@@ -243,6 +281,31 @@ public final class Files implements Runnable
             {
                 classes.add(basePath + fn);
             }
+        }
+        return classes;
+    }
+
+    private final static List<String> getJarFiles(File file)
+    {
+        final ArrayList<String> classes = new ArrayList<String>();
+        try
+        {
+            final JarFile jar = new JarFile(file);
+            final Enumeration<JarEntry> j = jar.entries();
+            while(j.hasMoreElements())
+            {
+                final JarEntry je = j.nextElement();
+                if(!je.isDirectory())
+                {
+                    classes.add("/" + je.getName());
+                }
+            }
+            jar.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
         }
         return classes;
     }
