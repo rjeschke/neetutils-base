@@ -15,17 +15,24 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
-public interface OnePoleFilter
+/**
+ * A soft clipper with linear transfer characteristics from -1.0 to 1.0 and
+ * a maximum output level of +/- 2.0.
+ * 
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
+public class SoftSaturator1_2 implements Clipper
 {
-    public void reset();
+    private final TubeCompress tube;
     
-    public void setCutoff(double freq);
-
-    public double coef(double previous);
-
-    public double output(final double input);
-
-    public double tick(final double input);
-
-    public void setClipper(Clipper clipper);
+    public SoftSaturator1_2()
+    {
+        this.tube = new TubeCompress(0, 1, 1.1, 0.2, 0.5, 1);
+    }
+    
+    @Override
+    public double clip(double value)
+    {
+        return Math.abs(value) < 1e-100 ? 0 : this.tube.process(value);
+    }
 }

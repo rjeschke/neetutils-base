@@ -40,48 +40,6 @@ public final class FIRUtils
     }
 
     /**
-     * The sinc function.
-     * 
-     * @param x
-     *            x.
-     * @return sinc of x.
-     */
-    public final static double sinc(final double x)
-    {
-        if(x != 0)
-        {
-            final double xpi = Math.PI * x;
-            return Math.sin(xpi) / xpi;
-        }
-        return 1.0;
-    }
-
-    /**
-     * Zeroth order modified Bessel function.
-     * 
-     * @param x
-     *            Value.
-     * @return Return value.
-     */
-    public final static double i0(double x)
-    {
-        double f = 1;
-        final double x2 = x * x * 0.25;
-        double xc = x2;
-        double v = 1 + x2;
-        for(int i = 2; i < 100; i++)
-        {
-            f *= i;
-            xc *= x2;
-            final double a = xc / (f * f);
-            v += a;
-            if(a < 1e-20)
-                break;
-        }
-        return v;
-    }
-
-    /**
      * Creates a lowpass filter.
      * 
      * @param order
@@ -100,7 +58,7 @@ public final class FIRUtils
         final int half = order >> 1;
         for(int i = 0; i < fir.length; i++)
         {
-            fir[i] = factor * sinc(factor * (i - half));
+            fir[i] = factor * NMath.sinc(factor * (i - half));
         }
         return fir;
     }
@@ -124,7 +82,7 @@ public final class FIRUtils
         final int half = order >> 1;
         for(int i = 0; i < fir.length; i++)
         {
-            fir[i] = (i == half ? 1.0 : 0.0) - factor * sinc(factor * (i - half));
+            fir[i] = (i == half ? 1.0 : 0.0) - factor * NMath.sinc(factor * (i - half));
         }
         return fir;
     }
@@ -230,12 +188,12 @@ public final class FIRUtils
         else
             beta = 0.1102 * (attenuation - 8.7);
 
-        final double i0b = i0(beta);
+        final double i0b = NMath.i0(beta);
 
         for(int n = 0; n < m; n++)
         {
             final double v = beta * Math.sqrt(1.0 - Math.pow(2.0 * n / (m - 1) - 1.0, 2));
-            win[n] = i0(v) / i0b;
+            win[n] = NMath.i0(v) / i0b;
         }
 
         return win;
@@ -271,7 +229,7 @@ public final class FIRUtils
         final int m = fir.length - 1;
         for(int i = 0; i < fir.length; i++)
         {
-            fir[i] *= sinc(2.0 * i / m - 1.0);
+            fir[i] *= NMath.sinc(2.0 * i / m - 1.0);
         }
         return fir;
     }

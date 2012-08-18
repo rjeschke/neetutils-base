@@ -230,6 +230,13 @@ public final class NMath
         return  x < 0 ? x - Math.ceil(x) : x - Math.floor(x);
     }
 
+    /**
+     * The sinc function.
+     * 
+     * @param x
+     *            x.
+     * @return sinc of x.
+     */
     public final static float sinc(final float x)
     {
         if(x != 0)
@@ -240,6 +247,38 @@ public final class NMath
         return 1.f;
     }
 
+    /**
+     * Zeroth order modified Bessel function.
+     * 
+     * @param x
+     *            Value.
+     * @return Return value.
+     */
+    public final static double i0(double x)
+    {
+        double f = 1;
+        final double x2 = x * x * 0.25;
+        double xc = x2;
+        double v = 1 + x2;
+        for(int i = 2; i < 100; i++)
+        {
+            f *= i;
+            xc *= x2;
+            final double a = xc / (f * f);
+            v += a;
+            if(a < 1e-20)
+                break;
+        }
+        return v;
+    }
+
+    /**
+     * The sinc function.
+     * 
+     * @param x
+     *            x.
+     * @return sinc of x.
+     */
     public final static double sinc(final double x)
     {
         if(x != 0)
@@ -344,5 +383,10 @@ public final class NMath
         
         final int v = value & 255;
         return ((v >> b) | (v << (8 - b))) & 255;
+    }
+
+    public final static double getButterworthFactor(int n, int k)
+    {
+        return -2.0 * Math.cos((2.0 * k + n - 1) / (2 * n) * Math.PI);
     }
 }

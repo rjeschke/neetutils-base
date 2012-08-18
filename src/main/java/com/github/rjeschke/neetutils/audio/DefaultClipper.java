@@ -25,6 +25,6 @@ public class DefaultClipper implements Clipper
     @Override
     public double clip(double value)
     {
-        return Math.max(-1, Math.min(1, Math.abs(value) < 1e-300 ? 0 : value));
+        return Math.max(-1, Math.min(1, Math.abs(value) < 1e-100 ? 0 : value));
     }
 }

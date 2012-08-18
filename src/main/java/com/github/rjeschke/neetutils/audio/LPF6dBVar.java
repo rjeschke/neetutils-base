@@ -15,23 +15,16 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
-public class HPF6dB
+public class LPF6dBVar
 {
     private final double fs;
-    private double f, f2, f3, b = 0;
+    private double f, f2, b = 0, fb = 1;
     private Clipper clipper = new DefaultClipper();
 
-    public HPF6dB(final double fs)
+    public LPF6dBVar(final double fs)
     {
         this.fs = fs;
         this.setCutoff(fs * 0.1);
-    }
-
-    public void setCutoff(final double freq)
-    {
-        this.f = Math.tan(Math.PI * freq / this.fs);
-        this.f2 = 1.0 / (1 + this.f);
-        this.f3 = 1.0 - this.f2 * this.f;
     }
 
     public void reset()
@@ -39,21 +32,33 @@ public class HPF6dB
         this.b = 0;
     }
     
+    public void setCutoff(final double freq)
+    {
+        this.f = Math.tan(Math.PI * freq / this.fs);
+        this.f2 = 1.0 / (1 + this.f * this.fb);
+    }
+
+    public void setFeedback(double fb)
+    {
+        this.fb = fb;
+        this.f2 = 1.0 / (1 + this.f * this.fb);
+    }
+    
     public double coef(double previous)
     {
-        return previous * this.f3;
+        return previous * this.f * this.f2;
     }
 
     public double output(final double input)
     {
-        return this.f3 * input - this.f2 * this.b;
+        return (this.b + this.f * input) * this.f2;
     }
 
     public double tick(final double input)
     {
         final double o = (this.b + this.f * input) * this.f2;
-        this.b = this.clipper.clip(o + this.f * (input - o));
-        return input - o;
+        this.b = this.clipper.clip(o + this.f * (input - this.fb * o));
+        return o;
     }
 
     public void setClipper(Clipper clipper)

@@ -15,7 +15,7 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
-public class LPF6dB implements OnePoleFilter
+public class LPF6dB
 {
     private final double fs;
     private double f, f2, b = 0;
@@ -24,34 +24,30 @@ public class LPF6dB implements OnePoleFilter
     public LPF6dB(final double fs)
     {
         this.fs = fs;
+        this.setCutoff(fs * 0.1);
     }
 
-    @Override
     public void reset()
     {
         this.b = 0;
     }
     
-    @Override
     public void setCutoff(final double freq)
     {
         this.f = Math.tan(Math.PI * freq / this.fs);
         this.f2 = 1.0 / (1 + this.f);
     }
 
-    @Override
     public double coef(double previous)
     {
         return previous * this.f * this.f2;
     }
 
-    @Override
     public double output(final double input)
     {
         return (this.b + this.f * input) * this.f2;
     }
 
-    @Override
     public double tick(final double input)
     {
         final double o = (this.b + this.f * input) * this.f2;
@@ -59,7 +55,6 @@ public class LPF6dB implements OnePoleFilter
         return o;
     }
 
-    @Override
     public void setClipper(Clipper clipper)
     {
         this.clipper = clipper;
