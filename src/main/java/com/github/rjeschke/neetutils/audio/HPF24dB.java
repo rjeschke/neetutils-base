@@ -73,11 +73,12 @@ public class HPF24dB
         return this;
     }
     
-    public void setRawQs(double r0, double r1)
+    public HPF24dB setRawQs(double r0, double r1)
     {
         this.r0 = r0;
         this.r1 = r1;
         this.recalc();
+        return this;
     }
 
     public void reset()

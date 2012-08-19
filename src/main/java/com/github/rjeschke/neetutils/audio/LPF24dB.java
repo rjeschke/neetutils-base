@@ -75,11 +75,12 @@ public class LPF24dB
         this.bb0 = this.bb1 = 0;
     }
     
-    public void setRawQs(double r0, double r1)
+    public LPF24dB setRawQs(double r0, double r1)
     {
         this.r0 = r0;
         this.r1 = r1;
         this.recalc();
+        return this;
     }
 
     public LPF24dB setClipper(Clipper clipper)

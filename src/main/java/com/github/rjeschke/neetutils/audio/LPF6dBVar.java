@@ -38,10 +38,11 @@ public class LPF6dBVar
         this.f2 = 1.0 / (1 + this.f * this.fb);
     }
 
-    public void setFeedback(double fb)
+    public LPF6dBVar setFeedback(double fb)
     {
         this.fb = fb;
         this.f2 = 1.0 / (1 + this.f * this.fb);
+        return this;
     }
     
     public double coef(double previous)
@@ -61,8 +62,9 @@ public class LPF6dBVar
         return o;
     }
 
-    public void setClipper(Clipper clipper)
+    public LPF6dBVar setClipper(Clipper clipper)
     {
         this.clipper = clipper;
+        return this;
     }
 }
