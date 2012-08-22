@@ -149,9 +149,12 @@ public final class FIRUtils
         {
             sum += fir[i];
         }
-        for(int i = 0; i < fir.length; i++)
+        if(sum != 0)
         {
-            fir[i] /= sum;
+            for(int i = 0; i < fir.length; i++)
+            {
+                fir[i] /= sum;
+            }
         }
         return fir;
     }

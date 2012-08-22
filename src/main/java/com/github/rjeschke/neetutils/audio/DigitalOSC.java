@@ -23,40 +23,40 @@ public class DigitalOSC
     private final double freqMul;
     private int phase;
     private int step;
-    private float fstep;
-    private float invFstep;
-    private float rampFstep;
-    private float fpw;
+    private double fstep;
+    private double invFstep;
+    private double rampFstep;
+    private double fpw;
     private int pw;
     private int nextPw;
-    private final static float SIN3 = -1.0f / 6.0f;
-    private final static float SIN5 = 1.0f / 120.0f;
-    private final static float SIN7 = -1.0f / 5040.0f;
-    private final static float SIN9 = 1.0f / 362880.0f;
-    private final static float F0PI5 = 1.570796327f;
-    private final static float P1 = 1.f / 16777216.f;
+    private final static double SIN3 = -1.0 / 6.0;
+    private final static double SIN5 = 1.0 / 120.0;
+    private final static double SIN7 = -1.0 / 5040.0;
+    private final static double SIN9 = 1.0 / 362880.0;
+    private final static double F0PI5 = Math.PI / 2;
+    private final static double P1 = 1. / 16777216.0;
 
     public DigitalOSC(final double fs)
     {
         this.freqMul = 440.0 * 16777216.0 / fs;
 
         this.pw = 0x800000;
-        this.fpw = 0.5f;
+        this.fpw = 0.5;
         this.nextPw = 0xffffff;
     }
 
-    public void setPw(final float v)
+    public void setPw(final double v)
     {
-        this.nextPw = (int)(NMath.clamp(v, 0.05f, 0.95f) * 16777216.f);
+        this.nextPw = (int)(NMath.clamp(v, 0.05, 0.95) * 16777216.0);
     }
 
     public void setPitch(final int cents)
     {
         final int c = NMath.clamp(cents, 0, 12799);
         this.step = (int)(this.freqMul * Math.pow(2.0, (c - 6900) / 1200.0));
-        this.fstep = this.step / 16777216.f;
-        this.invFstep = 1.f / this.fstep;
-        this.rampFstep = (this.fstep * (this.fstep + P1) * 0.5f) * this.invFstep;
+        this.fstep = this.step / 16777216.0;
+        this.invFstep = 1.0 / this.fstep;
+        this.rampFstep = (this.fstep * (this.fstep + P1) * 0.50) * this.invFstep;
     }
 
     public void setWave(final Wave w)
@@ -64,22 +64,27 @@ public class DigitalOSC
         this.wave = w;
     }
 
-    public static float fastSin(final int p)
+    public static int pitchFromFreq(double freq)
     {
-        float x = (p & 0x3fffff) / 4194304.f;
+        return (int)Math.floor(6900.5 + 1200.0 * Math.log(freq / 440) / Math.log(2));
+    }
+
+    public static double fastSin(final int p)
+    {
+        double x = (p & 0x3fffff) / 4194304.0;
         if((p & 0x400000) != 0)
             x = 1.0f - x;
         x *= F0PI5;
-        final float x2 = x * x;
-        final float asin = ((((SIN9 * x2 + SIN7) * x2 + SIN5) * x2 + SIN3) * x2 + 1.0f) * x;
+        final double x2 = x * x;
+        final double asin = ((((SIN9 * x2 + SIN7) * x2 + SIN5) * x2 + SIN3) * x2 + 1.0) * x;
         return p > 0x7fffff ? -asin : asin;
     }
 
-    public float tick()
+    public double tick()
     {
         final int np = (this.phase + this.step) & 0xffffff;
 
-        float out = 0;
+        double out = 0;
         switch(this.wave)
         {
         case NONE:
@@ -90,24 +95,24 @@ public class DigitalOSC
             break;
         case SAWTOOTH:
         {
-            float fp = this.phase / 16777216.f;
+            double fp = this.phase / 16777216.0;
             if(this.phase > np)
             {
-                float a = 1 - fp;
-                out = a * (fp + (a + P1) * 0.5f);
+                double a = 1 - fp;
+                out = a * (fp + (a + P1) * 0.5);
                 a = this.fstep - a;
-                out = (out + a * (a + P1) * 0.5f) * this.invFstep;
+                out = (out + a * (a + P1) * 0.5) * this.invFstep;
             }
             else
             {
                 out = fp + this.rampFstep;
             }
-            out = 2.f * out - 1.f;
-        }
+            out = 2.0 * out - 1.0;
             break;
+        }
         case PULSE:
         {
-            float fp = this.phase / 16777216.f;
+            double fp = this.phase / 16777216.0;
             if(this.phase > np)
             {
                 if(this.phase < this.pw && np < this.pw)
@@ -128,29 +133,29 @@ public class DigitalOSC
             if(np > this.nextPw)
             {
                 this.pw = this.nextPw;
-                this.fpw = this.pw / 16777216.f;
+                this.fpw = this.pw / 16777216.0;
                 this.nextPw = 0xffffff;
             }
-            out = 2.f * out - 1.f;
-        }
+            out = 2.0 * out - 1.0;
             break;
+        }
         case TRIANGLE:
         {
-            float fp = this.phase / 16777216.f;
+            double fp = this.phase / 16777216.0;
             if(this.phase > np)
             {
-                float a = 1 - fp;
-                out = a * (a - (a + P1) * 0.5f);
+                double a = 1 - fp;
+                out = a * (a - (a + P1) * 0.5);
                 a = this.fstep - a;
-                out = (out + (a * (a + P1) * 0.5f)) * this.invFstep;
+                out = (out + (a * (a + P1) * 0.5)) * this.invFstep;
 
             }
             else if(this.phase < 0x800000 && np >= 0x800000)
             {
-                float a = 0.5f - fp;
-                out = a * (fp + (a + P1) * 0.5f);
+                double a = 0.5 - fp;
+                out = a * (fp + (a + P1) * 0.5);
                 a = 1 - this.fstep + a;
-                out = (out + a * (0.5f - (a + P1) * 0.5f)) * this.invFstep;
+                out = (out + a * (0.5 - (a + P1) * 0.5)) * this.invFstep;
             }
             else if(this.phase < 0x800000)
             {
@@ -160,9 +165,9 @@ public class DigitalOSC
             {
                 out = 1 - fp - this.rampFstep;
             }
-            out = 4.f * out - 1.f;
-        }
+            out = 4.0 * out - 1.0;
             break;
+        }
         }
 
         this.phase = np;

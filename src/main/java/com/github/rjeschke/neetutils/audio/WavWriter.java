@@ -124,6 +124,32 @@ public final class WavWriter
         }
     }
 
+    public final static double[] normalize(double[] wave)
+    {
+        double max = 0;
+        for(int i = 0; i < wave.length; i++)
+            max = Math.max(Math.abs(wave[i]), max);
+        if(max > 0)
+        {
+            for(int i = 0; i < wave.length; i++)
+                wave[i] /= max;
+        }
+        return wave;
+    }
+    
+    public final static float[] normalize(float[] wave)
+    {
+        float max = 0;
+        for(int i = 0; i < wave.length; i++)
+            max = Math.max(Math.abs(wave[i]), max);
+        if(max > 0)
+        {
+            for(int i = 0; i < wave.length; i++)
+                wave[i] /= max;
+        }
+        return wave;
+    }
+    
     /**
      * Saves this RIFF WAVE to an output stream.
      * 
