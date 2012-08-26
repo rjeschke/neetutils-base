@@ -28,7 +28,7 @@ class RequeueWatcher<A, B> implements Runnable
     private int delayMs = 100;
     private volatile boolean running = true;
     
-    public RequeueWatcher(RequeueWatcherCallback<A, B> callback, ConcurrentLinkedQueue<A> jobs, ConcurrentLinkedQueue<B> workers)
+    private RequeueWatcher(RequeueWatcherCallback<A, B> callback, ConcurrentLinkedQueue<A> jobs, ConcurrentLinkedQueue<B> workers)
     {
         this.callback = callback;
         this.jobs = jobs;

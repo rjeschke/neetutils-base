@@ -15,7 +15,6 @@
  */
 package com.github.rjeschke.neetutils.concurrent;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
@@ -83,7 +82,7 @@ public class MapWorkerPool<A, B> implements Runnable, RequeueWatcherCallback<Map
         return jobber;
     }
 
-    public static <A, B> List<B> processCollection(MapWorker<A, B> worker, int threads, Collection<A> input)
+    public static <A, B> List<B> processCollection(MapWorker<A, B> worker, int threads, Iterable<A> input)
     {
         final int usedThreads = ThreadPool.defaultThreadcount(threads);
         final ProcessCollectionMapWorkerCallback<A, B> callback = new ProcessCollectionMapWorkerCallback<A, B>();

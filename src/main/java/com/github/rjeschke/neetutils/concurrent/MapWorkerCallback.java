@@ -19,7 +19,8 @@ package com.github.rjeschke.neetutils.concurrent;
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  * 
- * @param <T>
+ * @param <A>
+ * @param <B>
  */
 public interface MapWorkerCallback<A, B>
 {

@@ -153,7 +153,7 @@ public final class WavWriter
     /**
      * Saves this RIFF WAVE to an output stream.
      * 
-     * @param out
+     * @param output
      *            the output stream to write to.
      * @throws IOException
      *             if an IO error occurred.
