@@ -25,13 +25,14 @@ import com.github.rjeschke.neetutils.SysUtils;
  * @author René Jeschke (rene_jeschke@yahoo.de)
  * 
  */
-public class ThreadPool
+public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.ThreadWorker>
 {
     private final int numThreads;
     private final int queueLimit;
     private final ConcurrentLinkedQueue<ThreadWorker> workers = new ConcurrentLinkedQueue<ThreadWorker>();
     private final ConcurrentLinkedQueue<Runnable> jobs = new ConcurrentLinkedQueue<Runnable>();
     private final Thread[] threads;
+    private RequeueWatcher<Runnable, ThreadWorker> watcher;
 
     private ThreadPool(int threads, int queueLimit)
     {
@@ -64,6 +65,8 @@ public class ThreadPool
             jobber.threads[i] = t;
         }
 
+        jobber.watcher = RequeueWatcher.start(jobber, jobber.jobs, jobber.workers);
+        
         return jobber;
     }
 
@@ -117,11 +120,16 @@ public class ThreadPool
     public void stop()
     {
         final StopWorker stop = new StopWorker();
+        
+        this.join();
+        
         for(int i = 0; i < this.numThreads; i++)
             this.enqueue(stop);
 
         for(int i = 0; i < this.numThreads; i++)
             SysUtils.threadJoin(this.threads[i]);
+        
+        this.watcher.stop();
     }
 
     static class ThreadWorker implements Runnable
@@ -176,5 +184,11 @@ public class ThreadPool
         {
             // empty
         }
+    }
+
+    @Override
+    public void requeue(ThreadWorker worker, Runnable job)
+    {
+        worker.setWorkLoad(job);
     }
 }
