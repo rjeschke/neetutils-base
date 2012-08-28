@@ -15,10 +15,20 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ * A 12dB allpass filter realized using a 12dB SVF.
+ * 
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public class Allpass12dB
 {
     private final SVF12dB svf;
     
+    /**
+     * Constructor.
+     * 
+     * @param fs Sampling rate.
+     */
     public Allpass12dB(double fs)
     {
         this.svf = new SVF12dB(fs);
@@ -26,22 +36,42 @@ public class Allpass12dB
         this.setCutoff(fs * 0.1);
     }
     
+    /**
+     * Sets the cutoff of this filter in Hz.
+     * 
+     * @param cutoff The cutoff.
+     */
     public void setCutoff(double cutoff)
     {
         this.svf.setCutoff(cutoff);
     }
     
+    /**
+     * Sets the clipper of this filter.
+     * 
+     * @param clipper The clipper.
+     * @return this.
+     */
     public Allpass12dB setClipper(Clipper clipper)
     {
         this.svf.setClipper(clipper);
         return this;
     }
     
+    /**
+     * Resets this filters state.
+     */
     public void reset()
     {
         this.svf.reset();
     }
     
+    /**
+     * Processes an input sample.
+     * 
+     * @param input Input sample.
+     * @return Processed input.
+     */
     public double process(double input)
     {
         this.svf.process(input);

@@ -24,6 +24,7 @@ public class BackpropMomentumTrainer implements Trainer
     double alpha;
     Net net;
     Net oldDeltas;
+    double min, max, sum;
     
     public BackpropMomentumTrainer(Net net, double step, double alpha)
     {
@@ -31,6 +32,21 @@ public class BackpropMomentumTrainer implements Trainer
         this.step = step;
         this.alpha = alpha;
         this.oldDeltas = net.clone().clear();
+    }
+    
+    public double getDeltaChangeMinimum()
+    {
+        return this.min;
+    }
+    
+    public double getDeltaChangeMaximum()
+    {
+        return this.max;
+    }
+    
+    public double getDeltaChangeAverage()
+    {
+        return this.sum;
     }
     
     @Override
@@ -70,22 +86,40 @@ public class BackpropMomentumTrainer implements Trainer
             }
         }
 
+        this.max = this.sum = 0;
+        this.min = Double.MAX_VALUE;
+        
+        int runs = 0;
+        
         for(int i = 0; i < this.net.layers.length; i++)
         {
             final Layer l = this.net.layers[i];
             final Layer l2 = this.oldDeltas.layers[i];
+            runs += (l.numInputs + 1) * l.numOutputs;
 
             for(int y = 0; y < l.numOutputs; y++)
             {
                 final int p = y * l.width;
                 final double d = this.step * deltas[i + 1].values[y];
-                l.matrix[p + l.numInputs] += l2.matrix[p + l.numInputs] = d + this.alpha * l2.matrix[p + l.numInputs];
+                l.matrix[p + l.numInputs] += l2.matrix[p + l.numInputs] = this.updateDeltas(d + this.alpha * l2.matrix[p + l.numInputs]);
                 
                 for(int x = 0; x < l.numInputs; x++)
-                    l.matrix[p + x] += l2.matrix[p + x] = d * netState[i].values[x] + this.alpha * l2.matrix[p + x];
+                    l.matrix[p + x] += l2.matrix[p + x] = this.updateDeltas(d * netState[i].values[x] + this.alpha * l2.matrix[p + x]);
                 
             }
         }
+        
+        if(runs != 0)
+            this.sum /= runs;
+    }
+
+    private double updateDeltas(double delta)
+    {
+        final double da = Math.abs(delta);
+        this.min = Math.min(this.min, da);
+        this.max = Math.max(this.max, da);
+        this.sum += da;
+        return delta;
     }
     
     public void setStep(double v)

@@ -25,27 +25,37 @@ import java.util.ListIterator;
 
 public class SortedList<E extends Comparable<? super E>> implements List<E>, Cloneable
 {
-    private final ArrayList<E> list = new ArrayList<E>();
+    private final ArrayList<E> list;
     private final Comparator<? super E> comparator;
 
     public SortedList()
     {
+        this.list = new ArrayList<E>();
         this.comparator = null;
     }
 
+    public SortedList(int initialSize)
+    {
+        this.list = new ArrayList<E>(initialSize);
+        this.comparator = null;
+    }
+    
     public SortedList(Comparator<? super E> comparator)
     {
+        this.list = new ArrayList<E>();
         this.comparator = comparator;
     }
 
     public SortedList(Collection<? extends E> c)
     {
+        this.list = new ArrayList<E>();
         this.comparator = null;
         this.addAll(c);
     }
 
     public SortedList(Collection<? extends E> c, Comparator<? super E> comparator)
     {
+        this.list = new ArrayList<E>();
         this.comparator = comparator;
         this.addAll(c);
     }
