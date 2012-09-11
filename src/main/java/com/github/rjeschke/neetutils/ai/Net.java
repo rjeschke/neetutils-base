@@ -23,6 +23,7 @@ import com.github.rjeschke.neetutils.SysUtils;
 import com.github.rjeschke.neetutils.ai.Layer.State;
 import com.github.rjeschke.neetutils.io.NInputStream;
 import com.github.rjeschke.neetutils.io.NOutputStream;
+import com.github.rjeschke.neetutils.rng.RNG;
 
 public class Net
 {
@@ -52,6 +53,16 @@ public class Net
         {
             for(int i = 0; i < l.matrix.length; i++)
                 l.matrix[i] = SysUtils.rndDoubleBipolar();
+        }
+        return this;
+    }
+    
+    public Net randomize(RNG rng)
+    {
+        for(Layer l : this.layers)
+        {
+            for(int i = 0; i < l.matrix.length; i++)
+                l.matrix[i] = rng.nextDoubleBipolar();
         }
         return this;
     }

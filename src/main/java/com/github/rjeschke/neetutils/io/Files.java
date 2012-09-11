@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -185,12 +186,12 @@ public final class Files implements Runnable
         }
     }
 
-    public final static byte[] readBytes(String filename) throws IOException
+    public final static byte[] asBytes(String filename) throws IOException
     {
-        return readBytes(new File(filename));
+        return asBytes(new File(filename));
     }
     
-    public final static byte[] readBytes(File file) throws IOException
+    public final static byte[] asBytes(File file) throws IOException
     {
         final FileInputStream fis = new FileInputStream(file);
         final byte[] buffer = new byte[(int)file.length()];
@@ -212,6 +213,44 @@ public final class Files implements Runnable
         {
             fis.close();
         }
+    }
+    
+    public final static byte[] asBytes(InputStream in) throws IOException
+    {
+        byte[] buffer = new byte[65536];
+        try
+        {
+            int p = 0;
+            for(;;)
+            {
+                final int r = in.read(buffer, p, buffer.length - p);
+                if(r < 0)
+                    break;
+                p += r;
+                if(p >= buffer.length)
+                    buffer = Arrays.copyOf(buffer, buffer.length + 65536); 
+            }
+            return p != buffer.length ? Arrays.copyOf(buffer, p) : buffer;
+        }
+        finally
+        {
+            in.close();
+        }
+    }
+
+    public final static String asString(String filename, String charsetName) throws IOException
+    {
+        return new String(asBytes(filename), charsetName);
+    }
+    
+    public final static String asString(File file, String charsetName) throws IOException
+    {
+        return new String(asBytes(file), charsetName);
+    }
+    
+    public final static String asString(InputStream in, String charsetName) throws IOException
+    {
+        return new String(asBytes(in), charsetName);
     }
     
     /**
