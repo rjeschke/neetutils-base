@@ -203,6 +203,62 @@ public final class FIRUtils
     }
 
     /**
+     * Calculated the transition width in Hz for a Kaiser windowed FIR filter.
+     * 
+     * @param m
+     *            Size of the FIR filter.
+     * @param attenuation
+     *            Attenuation in dB.
+     * @param fs
+     *            Sampling frequency.
+     * @return The transition width in Hz.
+     */
+    public final static double kaiserTransitionWidth(int m, double attenuation, double fs)
+    {
+        final double tw;
+        if(attenuation <= 21)
+            tw = 5.79 / m;
+        else
+            tw = (attenuation - 7.95) / (2.285 * m);
+        return tw * fs / (2.0 * Math.PI);
+    }
+
+    /**
+     * Applies a Kaiser window with given size and attenuation to the given FIR
+     * filter.
+     * 
+     * @param fir
+     *            The FIR filter.
+     * @param attenuation
+     *            Attenuation in dB.
+     * @param fs
+     *            Sampling frequency.
+     * @return The windowed FIR filter.
+     */
+    public final static double[] windowKaiserFromAttenuation(double[] fir, double attenuation, double fs)
+    {
+        final int m = fir.length;
+        final double beta;
+
+        if(attenuation <= 21)
+            beta = 0;
+        else if(attenuation <= 50)
+            beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
+        else
+            beta = 0.1102 * (attenuation - 8.7);
+
+        final double i0b = NMath.i0(beta);
+
+        for(int n = 0; n < m; n++)
+        {
+            final double v = beta * Math.sqrt(1.0 - Math.pow(2.0 * n / (m - 1) - 1.0, 2));
+            fir[n] *= NMath.i0(v) / i0b;
+        }
+
+        return fir;
+    }
+
+    /**
      * Applies a Bartlett window to the given FIR.
      * 
      * @param fir

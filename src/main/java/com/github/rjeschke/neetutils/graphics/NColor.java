@@ -47,6 +47,14 @@ public class NColor
         this.b = c.getBlue() / 255.f;
     }
 
+    public NColor(NColor c, float a)
+    {
+        this.a = a;
+        this.r = c.r;
+        this.g = c.g;
+        this.b = c.b;
+    }
+    
     public NColor(int argb, double exp)
     {
         this.a = (argb >>> 24) / 255.f;

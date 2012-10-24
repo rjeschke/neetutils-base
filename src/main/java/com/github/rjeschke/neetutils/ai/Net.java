@@ -51,8 +51,12 @@ public class Net
     {
         for(Layer l : this.layers)
         {
+            Arrays.fill(l.matrix, 0);
             for(int i = 0; i < l.matrix.length; i++)
-                l.matrix[i] = SysUtils.rndDoubleBipolar();
+            {
+                while(l.matrix[i] == 0)
+                    l.matrix[i] = SysUtils.rndDoubleBipolar();
+            }
         }
         return this;
     }
@@ -61,8 +65,12 @@ public class Net
     {
         for(Layer l : this.layers)
         {
+            Arrays.fill(l.matrix, 0);
             for(int i = 0; i < l.matrix.length; i++)
-                l.matrix[i] = rng.nextDoubleBipolar();
+            {
+                while(l.matrix[i] == 0)
+                    l.matrix[i] = rng.nextDoubleBipolar();
+            }
         }
         return this;
     }
