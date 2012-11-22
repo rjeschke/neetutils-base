@@ -253,6 +253,34 @@ public final class Files implements Runnable
         return new String(asBytes(in), charsetName);
     }
     
+    public final static void saveBytes(String filename, byte[] bytes) throws IOException
+    {
+        saveBytes(filename, bytes, 0, bytes.length);
+    }
+    
+    public final static void saveBytes(String filename, byte[] bytes, int offs, int len) throws IOException
+    {
+        saveBytes(new File(filename), bytes, offs, len);
+    }
+    
+    public final static void saveBytes(File file, byte[] bytes) throws IOException
+    {
+        saveBytes(file, bytes, 0, bytes.length);
+    }
+    
+    public final static void saveBytes(File file, byte[] bytes, int offs, int len) throws IOException
+    {
+        final FileOutputStream fos = new FileOutputStream(file);
+        try
+        {
+            fos.write(bytes, offs, len);
+        }
+        finally
+        {
+            fos.close();
+        }
+    }
+    
     /**
      * Lists all resources in the given package.
      * 
