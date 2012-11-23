@@ -27,6 +27,9 @@ public final class NMath
     }
 
     public final static double INV_LOG_2 = 1.0 / Math.log(2);
+    public final static double LOG_2 = Math.log(2);
+    public final static float INV_LOG_2f = (float)(1.0 / Math.log(2));
+    public final static float LOG_2f = (float)Math.log(2);
     
     /** yotta */
     public final static double U_Y = 1e24;
@@ -389,4 +392,25 @@ public final class NMath
     {
         return -2.0 * Math.cos((2.0 * k + n - 1) / (2 * n) * Math.PI);
     }
+    
+    public final static double log2(double x)
+    {
+        return Math.log(x) * INV_LOG_2;
+    }
+
+    public final static double exp2(double x)
+    {
+        return Math.pow(2, x);
+    }
+    
+    public final static float log2(float x)
+    {
+        return (float)(Math.log(x) * INV_LOG_2);
+    }
+    
+    public final static float exp2(float x)
+    {
+        return (float)Math.pow(2, x);
+    }
+    
 }

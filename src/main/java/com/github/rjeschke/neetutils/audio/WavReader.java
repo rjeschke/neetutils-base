@@ -28,12 +28,14 @@ public final class WavReader
     private int sampleRate;
     private int channels;
     private float[] data;
+    private int[] originalData;
 
-    private WavReader(final int sampleRate, final int channels, final float[] data)
+    private WavReader(final int sampleRate, final int channels, final float[] data, final int[] originalData)
     {
         this.sampleRate = sampleRate;
         this.channels = channels;
         this.data = data;
+        this.originalData = originalData;
     }
 
     public int getSamplerate()
@@ -49,6 +51,11 @@ public final class WavReader
     public float[] getData()
     {
         return this.data;
+    }
+    
+    public int[] getOriginalData()
+    {
+        return this.originalData;
     }
     
     public static WavReader load(final String filename) throws IOException
@@ -102,22 +109,23 @@ public final class WavReader
             tmp = in.readString(4, 0);
         }
         final int length = in.readI32() / ((bits * channels) >> 3);
-        float[] ret = new float[length * channels];
+        final float[] ret = new float[length * channels];
+        final int[] iret = new int[length * channels];
         
         for(int i = 0; i < ret.length; i++)
         {
             int v = 0;
             if(bits == 8)
-                v = (in.readU8() - 128) << 16;
+                v = (iret[i] = (in.readU8() - 128)) << 16;
             else if(bits == 16)
-                v = in.readI16() << 8;
+                v = (iret[i] = in.readI16()) << 8;
             else if(bits == 24)
-                v = in.readI24();
+                iret[i] = v = in.readI24();
             else
                 throw new IOException("Unsupported bit depth: " + bits);
             ret[i] = v / 8388608.0f;
         }
         
-        return new WavReader(samplerate, channels, ret);
+        return new WavReader(samplerate, channels, ret, iret);
     }
 }
