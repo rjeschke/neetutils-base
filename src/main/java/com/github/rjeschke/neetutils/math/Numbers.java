@@ -15,59 +15,60 @@
  */
 package com.github.rjeschke.neetutils.math;
 
+import com.github.rjeschke.neetutils.fn.FnCombine;
+import com.github.rjeschke.neetutils.fn.FnFoldStep;
+
 public final class Numbers
 {
     private Numbers()
     {
         //
     }
-    
+
     private final static Integer[] integerCache;
     private final static int maxIntCache;
 
     static
     {
         if(System.getProperty("com.github.rjeschke.neetutils.smallIntegerCache") != null)
+        {
             maxIntCache = 256;
+        }
         else
+        {
             maxIntCache = 65536;
-        
+        }
+
         integerCache = new Integer[128 + maxIntCache];
         for(int i = -128; i < maxIntCache; i++)
+        {
             integerCache[i + 128] = Integer.valueOf(i);
+        }
     }
-    
+
     public final static Integer integerOf(int value)
     {
-        if(value > -129 && value < maxIntCache)
-            return integerCache[value + 128];
-        return Integer.valueOf(value);
+        return (value > -129 && value < maxIntCache) ? integerCache[value + 128] : Integer.valueOf(value);
     }
-    
+
     public final static Type getType(Number a)
     {
-        if(a instanceof Byte)
-            return Type.BYTE;
-        if(a instanceof Short)
-            return Type.SHORT;
-        if(a instanceof Integer)
-            return Type.INT;
-        if(a instanceof Long)
-            return Type.LONG;
-        if(a instanceof Float)
-            return Type.FLOAT;
-        if(a instanceof Double)
-            return Type.DOUBLE;
+        if(a instanceof Byte) return Type.BYTE;
+        if(a instanceof Short) return Type.SHORT;
+        if(a instanceof Integer) return Type.INT;
+        if(a instanceof Long) return Type.LONG;
+        if(a instanceof Float) return Type.FLOAT;
+        if(a instanceof Double) return Type.DOUBLE;
         throw new ArithmeticException("Unsupported number type: " + a);
     }
-    
+
     private final static Type getLargerType(Number a, Number b)
     {
         final Type ta = getType(a);
         final Type tb = getType(b);
         return tb.size > ta.size ? tb : ta;
     }
-    
+
     public final static Number add(Number a, Number b)
     {
         switch(getLargerType(a, b))
@@ -87,7 +88,31 @@ public final class Numbers
         }
         return null;
     }
-    
+
+    public final static FnCombine<Number, Number, Number> add()
+    {
+        return new FnCombine<Number, Number, Number>()
+        {
+            @Override
+            public Number applyCombine(Number a, Number b)
+            {
+                return Numbers.add(a, b);
+            }
+        };
+    }
+
+    public final static FnFoldStep<Number, Number> addFold()
+    {
+        return new FnFoldStep<Number, Number>()
+        {
+            @Override
+            public Number applyFoldStep(Number a, Number b)
+            {
+                return Numbers.add(a, b);
+            }
+        };
+    }
+
     public final static Number sub(Number a, Number b)
     {
         switch(getLargerType(a, b))
@@ -107,7 +132,31 @@ public final class Numbers
         }
         return null;
     }
-    
+
+    public final static FnCombine<Number, Number, Number> sub()
+    {
+        return new FnCombine<Number, Number, Number>()
+        {
+            @Override
+            public Number applyCombine(Number a, Number b)
+            {
+                return Numbers.sub(a, b);
+            }
+        };
+    }
+
+    public final static FnFoldStep<Number, Number> subFold()
+    {
+        return new FnFoldStep<Number, Number>()
+        {
+            @Override
+            public Number applyFoldStep(Number a, Number b)
+            {
+                return Numbers.sub(a, b);
+            }
+        };
+    }
+
     public final static Number mul(Number a, Number b)
     {
         switch(getLargerType(a, b))
@@ -127,7 +176,31 @@ public final class Numbers
         }
         return null;
     }
-    
+
+    public final static FnCombine<Number, Number, Number> mul()
+    {
+        return new FnCombine<Number, Number, Number>()
+        {
+            @Override
+            public Number applyCombine(Number a, Number b)
+            {
+                return Numbers.mul(a, b);
+            }
+        };
+    }
+
+    public final static FnFoldStep<Number, Number> mulFold()
+    {
+        return new FnFoldStep<Number, Number>()
+        {
+            @Override
+            public Number applyFoldStep(Number a, Number b)
+            {
+                return Numbers.mul(a, b);
+            }
+        };
+    }
+
     public final static Number div(Number a, Number b)
     {
         switch(getLargerType(a, b))
@@ -147,18 +220,37 @@ public final class Numbers
         }
         return null;
     }
-    
+
+    public final static FnCombine<Number, Number, Number> div()
+    {
+        return new FnCombine<Number, Number, Number>()
+        {
+            @Override
+            public Number applyCombine(Number a, Number b)
+            {
+                return Numbers.div(a, b);
+            }
+        };
+    }
+
+    public final static FnFoldStep<Number, Number> divFold()
+    {
+        return new FnFoldStep<Number, Number>()
+        {
+            @Override
+            public Number applyFoldStep(Number a, Number b)
+            {
+                return Numbers.div(a, b);
+            }
+        };
+    }
+
     public enum Type
     {
-        BYTE(0),
-        SHORT(1),
-        INT(2),
-        LONG(3),
-        FLOAT(4),
-        DOUBLE(5);
-        
+        BYTE(0), SHORT(1), INT(2), LONG(3), FLOAT(4), DOUBLE(5);
+
         public final int size;
-        
+
         private Type(final int size)
         {
             this.size = size;
