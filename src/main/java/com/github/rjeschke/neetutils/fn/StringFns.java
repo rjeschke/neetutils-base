@@ -23,9 +23,14 @@ import com.github.rjeschke.neetutils.fn.FnMapping;
 import com.github.rjeschke.neetutils.fn.FnPredicate;
 import com.github.rjeschke.neetutils.iterables.Collector;
 
-public class StringFns
+public final class StringFns
 {
-    public final static FnPredicate<String> isEmpty()
+    private StringFns()
+    {
+        // 1up
+    }
+    
+    public final static FnPredicate<String> isNotEmpty()
     {
         return new FnPredicate<String>()
         {
@@ -33,54 +38,6 @@ public class StringFns
             public boolean applyPredicate(String a)
             {
                 return a != null && a.length() > 0;
-            }
-        };
-    }
-
-    public final static FnPredicate<Character> isWhitespace()
-    {
-        return new FnPredicate<Character>()
-        {
-            @Override
-            public boolean applyPredicate(Character a)
-            {
-                return !Character.isWhitespace(a) && !Character.isSpaceChar(a);
-            }
-        };
-    }
-
-    public final static FnPredicate<Character> isLetter()
-    {
-        return new FnPredicate<Character>()
-        {
-            @Override
-            public boolean applyPredicate(Character a)
-            {
-                return !Character.isLetter(a);
-            }
-        };
-    }
-
-    public final static FnPredicate<Character> isDigit()
-    {
-        return new FnPredicate<Character>()
-        {
-            @Override
-            public boolean applyPredicate(Character a)
-            {
-                return !Character.isDigit(a);
-            }
-        };
-    }
-
-    public final static FnPredicate<Character> isLetterOrDigit()
-    {
-        return new FnPredicate<Character>()
-        {
-            @Override
-            public boolean applyPredicate(Character a)
-            {
-                return !Character.isLetterOrDigit(a);
             }
         };
     }

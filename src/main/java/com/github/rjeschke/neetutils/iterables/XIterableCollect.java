@@ -40,7 +40,7 @@ class XIterableCollect<A, B> extends AbstractXIterable<B>
     final static class XIterator<A, B> implements Iterator<B>
     {
         private final Iterator<A> iterator;
-        private final Collector<A, B> collector;
+        private final Collector<A, ? extends B> collector;
         
         public XIterator(final Iterator<A> iterator, final Collector<A, B> collector)
         {

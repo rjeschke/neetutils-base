@@ -23,9 +23,9 @@ import com.github.rjeschke.neetutils.fn.FnPredicate;
 class XIterableFilter<A> extends AbstractXIterable<A>
 {
     private final Iterable<A> iterable;
-    private final FnPredicate<A> predicate;
+    private final FnPredicate<? super A> predicate;
 
-    public XIterableFilter(final Iterable<A> iterable, final FnPredicate<A> predicate)
+    public XIterableFilter(final Iterable<A> iterable, final FnPredicate<? super A> predicate)
     {
         this.iterable = iterable;
         this.predicate = predicate;
@@ -40,11 +40,11 @@ class XIterableFilter<A> extends AbstractXIterable<A>
     private final static class XIterator<A> implements Iterator<A>
     {
         private final Iterator<A> iterator;
-        private final FnPredicate<A> predicate;
+        private final FnPredicate<? super A> predicate;
         private boolean hasElement = false;
         private A element = null;
 
-        public XIterator(final Iterator<A> iterator, final FnPredicate<A> predicate)
+        public XIterator(final Iterator<A> iterator, final FnPredicate<? super A> predicate)
         {
             this.iterator = iterator;
             this.predicate = predicate;

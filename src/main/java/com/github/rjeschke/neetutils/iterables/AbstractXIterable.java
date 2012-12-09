@@ -28,7 +28,7 @@ import com.github.rjeschke.neetutils.fn.FnPredicate;
 public abstract class AbstractXIterable<A> implements XIterable<A>
 {
     @Override
-    public XIterable<A> filter(FnPredicate<A> predicate)
+    public XIterable<A> filter(FnPredicate<? super A> predicate)
     {
         return Iterables.filter(this, predicate);
     }
@@ -40,7 +40,7 @@ public abstract class AbstractXIterable<A> implements XIterable<A>
     }
 
     @Override
-    public <B> B reduce(FnFoldStep<A, B> foldStep, B initialValue)
+    public <B> B reduce(FnFoldStep<? super A, ? super B> foldStep, B initialValue)
     {
         return Iterables.reduce(this, foldStep, initialValue);
     }

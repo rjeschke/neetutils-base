@@ -27,11 +27,11 @@ import com.github.rjeschke.neetutils.fn.FnPredicate;
 
 public interface XIterable<A> extends Iterable<A>
 {
-    public XIterable<A> filter(FnPredicate<A> predicate);
+    public XIterable<A> filter(FnPredicate<? super A> predicate);
 
     public <B> XIterable<B> map(FnMapping<A, B> mapping);
 
-    public <B> B reduce(FnFoldStep<A, B> foldStep, B initialValue);
+    public <B> B reduce(FnFoldStep<? super A, ? super B> foldStep, B initialValue);
 
     public <B> XIterable<Tuple<A, B>> zip(Iterable<B> iterable);
 

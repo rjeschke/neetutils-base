@@ -17,8 +17,6 @@ package com.github.rjeschke.neetutils.fn;
 
 import java.util.Map;
 
-import com.github.rjeschke.neetutils.Objects;
-import com.github.rjeschke.neetutils.WrappedCheckedException;
 import com.github.rjeschke.neetutils.math.Numbers;
 
 public final class Fns
@@ -64,29 +62,6 @@ public final class Fns
                 if(a == null)
                     return b == null;
                 return a.equals(b);
-            }
-        };
-    }
-    
-    public final static <A> FnInstance<A> defaultInstanceFn(final A object)
-    {
-        return new FnInstance<A>()
-        {
-            @Override
-            public A newInstance()
-            {
-                try
-                {
-                    return Objects.<A>uncheckedCast(object.getClass().newInstance());
-                }
-                catch (InstantiationException e)
-                {
-                    throw new WrappedCheckedException(e);
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw new WrappedCheckedException(e);
-                }
             }
         };
     }

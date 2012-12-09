@@ -30,13 +30,8 @@ import java.util.Vector;
 import com.github.rjeschke.neetutils.fn.FnCombine;
 import com.github.rjeschke.neetutils.fn.FnEquals;
 import com.github.rjeschke.neetutils.fn.FnPredicate;
-import com.github.rjeschke.neetutils.fn.FnPredicateWithIndex;
-import com.github.rjeschke.neetutils.fn.FnInstance;
-import com.github.rjeschke.neetutils.fn.FnInstanceWithIndex;
 import com.github.rjeschke.neetutils.fn.FnMapping;
-import com.github.rjeschke.neetutils.fn.FnMappingWithIndex;
 import com.github.rjeschke.neetutils.fn.FnFoldStep;
-import com.github.rjeschke.neetutils.fn.FnFoldStepWithIndex;
 import com.github.rjeschke.neetutils.fn.Fns;
 
 /**
@@ -353,44 +348,6 @@ public final class Colls
     }
 
     /**
-     * Creates a new default List instance initialized with 'init' objects
-     * created by an FnInstance.
-     * 
-     * @param fn
-     *            Instance creation function.
-     * @param size
-     *            NUmber of entries.
-     * @return The List.
-     * @see FnInstance
-     */
-    public final static <A> List<A> init(final FnInstance<A> fn, final int size)
-    {
-        final List<A> l = list(size);
-        for(int i = 0; i < size; i++)
-            l.add(fn.newInstance());
-        return l;
-    }
-
-    /**
-     * Creates a new default List instance initialized with 'init' objects
-     * created by an FnInstance.
-     * 
-     * @param fn
-     *            Instance creation function.
-     * @param size
-     *            NUmber of entries.
-     * @return The List.
-     * @see FnInstanceWithIndex
-     */
-    public final static <A> List<A> init(final FnInstanceWithIndex<A> fn, final int size)
-    {
-        final List<A> l = list(size);
-        for(int i = 0; i < size; i++)
-            l.add(fn.newInstance(i));
-        return l;
-    }
-
-    /**
      * Returns the first element of the given collection.
      * 
      * @param coll
@@ -559,30 +516,6 @@ public final class Colls
         return l;
     }
 
-    public final static <A, B> List<B> map(final Collection<A> coll, final FnMappingWithIndex<A, B> fn)
-    {
-        final List<B> l = list(coll.size());
-        int i = 0;
-        for(final A a : coll)
-        {
-            l.add(fn.applyMapping(a, i));
-            ++i;
-        }
-        return l;
-    }
-
-    public final static <A, B> List<B> map(final Iterable<A> coll, final FnMappingWithIndex<A, B> fn)
-    {
-        final List<B> l = list();
-        int i = 0;
-        for(final A a : coll)
-        {
-            l.add(fn.applyMapping(a, i));
-            ++i;
-        }
-        return l;
-    }
-
     public final static <A> List<A> filter(final Iterable<A> coll, final FnPredicate<A> fn)
     {
         final List<A> l = list();
@@ -590,19 +523,6 @@ public final class Colls
         {
             if(fn.applyPredicate(a))
                 l.add(a);
-        }
-        return l;
-    }
-
-    public final static <A> List<A> filter(final Iterable<A> coll, final FnPredicateWithIndex<A> fn)
-    {
-        final List<A> l = list();
-        int i = 0;
-        for(final A a : coll)
-        {
-            if(fn.applyPredicate(a, i))
-                l.add(a);
-            ++i;
         }
         return l;
     }
@@ -615,20 +535,6 @@ public final class Colls
         {
             if(fnPredicate.applyPredicate(a))
                 l.add(fnMap.applyMapping(a));
-        }
-        return l;
-    }
-
-    public final static <A, B> List<B> filterMap(final Iterable<A> coll, final FnPredicateWithIndex<A> fnPredicate,
-            final FnMappingWithIndex<A, B> fnMap)
-    {
-        final List<B> l = list();
-        int i = 0;
-        for(final A a : coll)
-        {
-            if(fnPredicate.applyPredicate(a, i))
-                l.add(fnMap.applyMapping(a, i));
-            ++i;
         }
         return l;
     }
@@ -646,40 +552,12 @@ public final class Colls
         return l;
     }
 
-    public final static <A, B> List<B> mapFilter(final Iterable<A> coll, final FnMappingWithIndex<A, B> fnMap,
-            final FnPredicateWithIndex<B> fnPredicate)
-    {
-        final List<B> l = list();
-        int i = 0;
-        for(final A a : coll)
-        {
-            final B b = fnMap.applyMapping(a, i);
-            if(fnPredicate.applyPredicate(b, i))
-                l.add(b);
-            ++i;
-        }
-        return l;
-    }
-
     public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMapping<A, B> fnMap,
             final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
         for(final A a : coll)
             c = fnReduce.applyFoldStep(fnMap.applyMapping(a), c);
-        return c;
-    }
-
-    public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMappingWithIndex<A, B> fnMap,
-            final FnFoldStepWithIndex<B, C> fnReduce, final C initial)
-    {
-        C c = initial;
-        int i = 0;
-        for(final A a : coll)
-        {
-            c = fnReduce.applyFoldStep(fnMap.applyMapping(a, i), c, i);
-            ++i;
-        }
         return c;
     }
 
@@ -691,20 +569,6 @@ public final class Colls
         {
             if(fnPredicate.applyPredicate(a))
                 c = fnReduce.applyFoldStep(fnMap.applyMapping(a), c);
-        }
-        return c;
-    }
-
-    public final static <A, B, C> C filterMapReduce(final Iterable<A> coll, final FnPredicateWithIndex<A> fnPredicate,
-            final FnMappingWithIndex<A, B> fnMap, final FnFoldStepWithIndex<B, C> fnReduce, final C initial)
-    {
-        C c = initial;
-        int i = 0;
-        for(final A a : coll)
-        {
-            if(fnPredicate.applyPredicate(a, i))
-                c = fnReduce.applyFoldStep(fnMap.applyMapping(a, i), c, i);
-            ++i;
         }
         return c;
     }
@@ -722,21 +586,6 @@ public final class Colls
         return c;
     }
 
-    public final static <A, B, C> C mapFilterReduce(final Iterable<A> coll, final FnMappingWithIndex<A, B> fnMap,
-            final FnPredicateWithIndex<B> fnPredicate, final FnFoldStepWithIndex<B, C> fnReduce, final C initial)
-    {
-        C c = initial;
-        int i = 0;
-        for(final A a : coll)
-        {
-            final B b = fnMap.applyMapping(a, i);
-            if(fnPredicate.applyPredicate(b, i))
-                c = fnReduce.applyFoldStep(b, c, i);
-            ++i;
-        }
-        return c;
-    }
-
     public final static <A, B> B reduce(final List<A> coll, final FnFoldStep<A, B> fn, final B initial)
     {
         if(coll instanceof RandomAccess)
@@ -750,33 +599,11 @@ public final class Colls
         return reduce((Iterable<A>)coll, fn, initial);
     }
 
-    public final static <A, B> B reduce(final List<A> coll, final FnFoldStepWithIndex<A, B> fn, final B initial)
-    {
-        if(coll instanceof RandomAccess)
-        {
-            final int sz = coll.size();
-            B b = initial;
-            for(int i = 0; i < sz; i++)
-                b = fn.applyFoldStep(coll.get(i), b, i);
-            return b;
-        }
-        return reduce((Iterable<A>)coll, fn, initial);
-    }
-    
     public final static <A, B> B reduce(final Iterable<A> coll, final FnFoldStep<A, B> fn, final B initial)
     {
         B b = initial;
         for(final A a : coll)
             b = fn.applyFoldStep(a, b);
-        return b;
-    }
-
-    public final static <A, B> B reduce(final Iterable<A> coll, final FnFoldStepWithIndex<A, B> fn, final B initial)
-    {
-        B b = initial;
-        int i = 0;
-        for(final A a : coll)
-            b = fn.applyFoldStep(a, b, i++);
         return b;
     }
 
@@ -788,20 +615,6 @@ public final class Colls
         {
             if(fnPredicate.applyPredicate(a))
                 b = fnReduce.applyFoldStep(a, b);
-        }
-        return b;
-    }
-
-    public final static <A, B> B filterReduce(final Iterable<A> coll, final FnPredicateWithIndex<A> fnPredicate,
-            final FnFoldStepWithIndex<A, B> fnReduce, final B initial)
-    {
-        B b = initial;
-        int i = 0;
-        for(final A a : coll)
-        {
-            if(fnPredicate.applyPredicate(a, i))
-                b = fnReduce.applyFoldStep(a, b, i);
-            ++i;
         }
         return b;
     }
@@ -935,22 +748,6 @@ public final class Colls
                 l0.add(a);
             else
                 l1.add(a);
-        }
-        return Tuple.of(l0, l1);
-    }
-
-    public final static <A> Tuple<List<A>, List<A>> partition(final Iterable<A> coll, final FnPredicateWithIndex<A> fn)
-    {
-        final List<A> l0 = list();
-        final List<A> l1 = list();
-        int i = 0;
-        for(final A a : coll)
-        {
-            if(fn.applyPredicate(a, i))
-                l0.add(a);
-            else
-                l1.add(a);
-            ++i;
         }
         return Tuple.of(l0, l1);
     }

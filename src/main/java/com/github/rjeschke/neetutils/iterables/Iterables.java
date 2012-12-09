@@ -158,7 +158,7 @@ public final class Iterables
         return new XIterableConcat2<A>(iterable);
     }
     
-    public final static <A> XIterable<A> filter(final Iterable<A> iterable, final FnPredicate<A> predicate)
+    public final static <A> XIterable<A> filter(final Iterable<A> iterable, final FnPredicate<? super A> predicate)
     {
         return new XIterableFilter<A>(iterable, predicate);
     }
@@ -168,13 +168,14 @@ public final class Iterables
         return new XIterableMap<A, B>(iterable, mapping);
     }
 
-    public final static <A, B> B reduce(final Iterable<A> iterable, final FnFoldStep<A, B> foldStep,
+    @SuppressWarnings("unchecked")
+    public final static <A, B> B reduce(final Iterable<A> iterable, final FnFoldStep<? super A, ? super B> foldStep,
             final B initialValue)
     {
         B b = initialValue;
         for(final A a : iterable)
         {
-            b = foldStep.applyFoldStep(a, b);
+            b = (B)foldStep.applyFoldStep(a, b);
         }
         return b;
     }

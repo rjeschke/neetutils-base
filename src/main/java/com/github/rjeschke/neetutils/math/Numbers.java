@@ -15,9 +15,6 @@
  */
 package com.github.rjeschke.neetutils.math;
 
-import com.github.rjeschke.neetutils.fn.FnCombine;
-import com.github.rjeschke.neetutils.fn.FnFoldStep;
-
 public final class Numbers
 {
     private Numbers()
@@ -103,30 +100,6 @@ public final class Numbers
         return null;
     }
 
-    public final static FnCombine<Number, Number, Number> add()
-    {
-        return new FnCombine<Number, Number, Number>()
-        {
-            @Override
-            public Number applyCombine(Number a, Number b)
-            {
-                return Numbers.add(a, b);
-            }
-        };
-    }
-
-    public final static FnFoldStep<Number, Number> addFold()
-    {
-        return new FnFoldStep<Number, Number>()
-        {
-            @Override
-            public Number applyFoldStep(Number a, Number b)
-            {
-                return Numbers.add(a, b);
-            }
-        };
-    }
-
     public final static Number sub(Number a, Number b)
     {
         switch(getLargerType(a, b))
@@ -145,30 +118,6 @@ public final class Numbers
             return Double.valueOf(a.doubleValue() - b.doubleValue());
         }
         return null;
-    }
-
-    public final static FnCombine<Number, Number, Number> sub()
-    {
-        return new FnCombine<Number, Number, Number>()
-        {
-            @Override
-            public Number applyCombine(Number a, Number b)
-            {
-                return Numbers.sub(a, b);
-            }
-        };
-    }
-
-    public final static FnFoldStep<Number, Number> subFold()
-    {
-        return new FnFoldStep<Number, Number>()
-        {
-            @Override
-            public Number applyFoldStep(Number a, Number b)
-            {
-                return Numbers.sub(a, b);
-            }
-        };
     }
 
     public final static Number mul(Number a, Number b)
@@ -191,30 +140,6 @@ public final class Numbers
         return null;
     }
 
-    public final static FnCombine<Number, Number, Number> mul()
-    {
-        return new FnCombine<Number, Number, Number>()
-        {
-            @Override
-            public Number applyCombine(Number a, Number b)
-            {
-                return Numbers.mul(a, b);
-            }
-        };
-    }
-
-    public final static FnFoldStep<Number, Number> mulFold()
-    {
-        return new FnFoldStep<Number, Number>()
-        {
-            @Override
-            public Number applyFoldStep(Number a, Number b)
-            {
-                return Numbers.mul(a, b);
-            }
-        };
-    }
-
     public final static Number div(Number a, Number b)
     {
         switch(getLargerType(a, b))
@@ -233,30 +158,6 @@ public final class Numbers
             return Double.valueOf(a.doubleValue() / b.doubleValue());
         }
         return null;
-    }
-
-    public final static FnCombine<Number, Number, Number> div()
-    {
-        return new FnCombine<Number, Number, Number>()
-        {
-            @Override
-            public Number applyCombine(Number a, Number b)
-            {
-                return Numbers.div(a, b);
-            }
-        };
-    }
-
-    public final static FnFoldStep<Number, Number> divFold()
-    {
-        return new FnFoldStep<Number, Number>()
-        {
-            @Override
-            public Number applyFoldStep(Number a, Number b)
-            {
-                return Numbers.div(a, b);
-            }
-        };
     }
 
     public enum Type
