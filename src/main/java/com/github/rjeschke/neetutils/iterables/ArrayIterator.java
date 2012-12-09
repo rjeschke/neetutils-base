@@ -15,55 +15,65 @@
  */
 package com.github.rjeschke.neetutils.iterables;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Iterator;
 
-class XIterableConcat2<A> extends AbstractXIterable<A>
+public class ArrayIterator<A> extends AbstractXIterable<A>
 {
-    private final Iterable<? extends Iterable<? extends A>> iterable;
-
-    public XIterableConcat2(final Iterable<? extends Iterable<? extends A>> iterable)
+    private final A[] values;
+    
+    public ArrayIterator(final boolean defensiveCopy, final A ... values)
     {
-        this.iterable = iterable;
+        this.values = defensiveCopy ? Arrays.copyOf(values, values.length) : values;
     }
-
+    
+    public ArrayIterator(final A ... values)
+    {
+        this(true, values);
+    }
+    
+    public final static <A> ArrayIterator<A> of(final A ... values)
+    {
+        return new ArrayIterator<A>(values);
+    }
+    
+    public final static <A> ArrayIterator<A> unsafeOf(final A ... values)
+    {
+        return new ArrayIterator<A>(false, values);
+    }
+    
     @Override
     public Iterator<A> iterator()
     {
-        return new XIterableConcat2.XIterator<A>(this.iterable.iterator());
+        return new XIterator<A>(this.values);
     }
 
     private final static class XIterator<A> implements Iterator<A>
     {
-        private final Iterator<? extends Iterable<? extends A>> iterator;
-        private Iterator<? extends A> innerIterator = Collections.<A>emptyList().iterator();
-
-        public XIterator(final Iterator<? extends Iterable<? extends A>> iterator)
+        private final A[] values;
+        private int position = 0;
+        
+        public XIterator(final A ... values)
         {
-            this.iterator = iterator;
+            this.values = values;
         }
-
+        
         @Override
         public boolean hasNext()
         {
-            while(!this.innerIterator.hasNext() && this.iterator.hasNext())
-            {
-                this.innerIterator = this.iterator.next().iterator();
-            }
-            
-            return this.innerIterator.hasNext();
+            return this.position < this.values.length;
         }
 
         @Override
         public A next()
         {
-            return this.innerIterator.next();
+            return this.values[this.position++];
         }
 
         @Override
         public void remove()
         {
-            throw new IllegalStateException("XIterators are read-only.");
+            throw new IllegalStateException("ArrayIterator is read-only.");
         }
     }
 }

@@ -143,6 +143,16 @@ public final class Iterables
         return new XIterableConcat<A>(iterableA, iterableB);
     }
 
+    public final static <A> XIterable<A> concat(final Iterable<? extends A> ... iterables)
+    {
+        return new XIterableConcat2<A>(ArrayIterator.unsafeOf(iterables));
+    }
+    
+    public final static <A> XIterable<A> concat(final Iterable<? extends A> iterable, final Iterable<? extends A> ... iterables)
+    {
+        return new XIterableConcat<A>(iterable, new XIterableConcat2<A>(ArrayIterator.unsafeOf(iterables)));
+    }
+    
     public final static <A> XIterable<A> concat(final Iterable<? extends Iterable<? extends A>> iterable)
     {
         return new XIterableConcat2<A>(iterable);

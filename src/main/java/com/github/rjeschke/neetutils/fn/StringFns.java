@@ -37,6 +37,54 @@ public class StringFns
         };
     }
 
+    public final static FnPredicate<Character> isWhitespace()
+    {
+        return new FnPredicate<Character>()
+        {
+            @Override
+            public boolean applyPredicate(Character a)
+            {
+                return !Character.isWhitespace(a) && !Character.isSpaceChar(a);
+            }
+        };
+    }
+
+    public final static FnPredicate<Character> isLetter()
+    {
+        return new FnPredicate<Character>()
+        {
+            @Override
+            public boolean applyPredicate(Character a)
+            {
+                return !Character.isLetter(a);
+            }
+        };
+    }
+
+    public final static FnPredicate<Character> isDigit()
+    {
+        return new FnPredicate<Character>()
+        {
+            @Override
+            public boolean applyPredicate(Character a)
+            {
+                return !Character.isDigit(a);
+            }
+        };
+    }
+
+    public final static FnPredicate<Character> isLetterOrDigit()
+    {
+        return new FnPredicate<Character>()
+        {
+            @Override
+            public boolean applyPredicate(Character a)
+            {
+                return !Character.isLetterOrDigit(a);
+            }
+        };
+    }
+
     public final static Collector<Character, String> splitCollector(final char splitCharacter)
     {
         return new Collector<Character, String>()
@@ -86,7 +134,7 @@ public class StringFns
         };
     }
 
-    public final static <A> FnMapping<A, String> toStrings()
+    public final static <A> FnMapping<A, String> asString()
     {
         return new FnMapping<A, String>()
         {

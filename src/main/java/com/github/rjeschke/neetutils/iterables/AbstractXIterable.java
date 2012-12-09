@@ -88,6 +88,12 @@ public abstract class AbstractXIterable<A> implements XIterable<A>
     }
     
     @Override
+    public XIterable<A> concat(Iterable<? extends A>... iterables)
+    {
+        return Iterables.concat(this, iterables);
+    }
+    
+    @Override
     public XIterable<A> interleave(Iterable<A> iterable)
     {
         return Iterables.interleave(this, iterable);

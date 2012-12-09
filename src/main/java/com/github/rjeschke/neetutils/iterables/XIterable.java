@@ -45,6 +45,8 @@ public interface XIterable<A> extends Iterable<A>
 
     public XIterable<A> concat(Iterable<? extends A> iterable);
     
+    public XIterable<A> concat(final Iterable<? extends A> ... iterables);
+    
     public <B> XIterable<B> collect(Collector<A, B> collector);
     
     public List<A> asList();
