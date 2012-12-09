@@ -16,13 +16,52 @@
 package com.github.rjeschke.neetutils.fn;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 import com.github.rjeschke.neetutils.fn.FnFoldStep;
 import com.github.rjeschke.neetutils.fn.FnMapping;
 import com.github.rjeschke.neetutils.fn.FnPredicate;
+import com.github.rjeschke.neetutils.iterables.Collector;
 
 public class StringFns
 {
+    public final static FnPredicate<String> isEmpty()
+    {
+        return new FnPredicate<String>()
+        {
+            @Override
+            public boolean applyPredicate(String a)
+            {
+                return a != null && a.length() > 0;
+            }
+        };
+    }
+
+    public final static Collector<Character, String> splitCollector(final char splitCharacter)
+    {
+        return new Collector<Character, String>()
+        {
+            @Override
+            public void collect(Iterator<Character> iterator)
+            {
+                if(iterator.hasNext())
+                {
+                    final StringBuilder sb = new StringBuilder();
+                    while(iterator.hasNext())
+                    {
+                        final char c = iterator.next();
+                        if(c == splitCharacter)
+                        {
+                            break;
+                        }
+                        sb.append(c);
+                    }
+                    this.emit(sb.toString());
+                }
+            }
+        };
+    }
+
     public final static FnMapping<String, String> toUpperCase()
     {
         return new FnMapping<String, String>()
@@ -31,6 +70,18 @@ public class StringFns
             public String applyMapping(String value)
             {
                 return value.toUpperCase();
+            }
+        };
+    }
+
+    public final static FnMapping<String, String> trim()
+    {
+        return new FnMapping<String, String>()
+        {
+            @Override
+            public String applyMapping(String value)
+            {
+                return value.trim();
             }
         };
     }

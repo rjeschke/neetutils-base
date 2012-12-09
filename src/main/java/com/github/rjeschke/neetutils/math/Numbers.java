@@ -26,23 +26,32 @@ public final class Numbers
     }
 
     private final static Integer[] integerCache;
+    private final static Character[] characterCache;
     private final static int maxIntCache;
-
+    private final static boolean hasCharacterCache;
+    
     static
     {
-        if(System.getProperty("com.github.rjeschke.neetutils.smallIntegerCache") != null)
-        {
-            maxIntCache = 256;
-        }
-        else
-        {
-            maxIntCache = 65536;
-        }
-
+        maxIntCache = System.getProperty("com.github.rjeschke.neetutils.smallIntegerCache") != null ? 256 : 65536;
+        hasCharacterCache = System.getProperty("com.github.rjeschke.neetutils.noCharacterCache") == null;
+        
         integerCache = new Integer[128 + maxIntCache];
         for(int i = -128; i < maxIntCache; i++)
         {
             integerCache[i + 128] = Integer.valueOf(i);
+        }
+        
+        if(hasCharacterCache)
+        {
+            characterCache = new Character[65536];
+            for(int i = 0; i < 65536; i++)
+            {
+                characterCache[i] = Character.valueOf((char)i);
+            }
+        }
+        else
+        {
+            characterCache = null;
         }
     }
 
@@ -51,6 +60,11 @@ public final class Numbers
         return (value > -129 && value < maxIntCache) ? integerCache[value + 128] : Integer.valueOf(value);
     }
 
+    public final static Character characterOf(char value)
+    {
+        return hasCharacterCache ? characterCache[value] : Character.valueOf(value);
+    }
+    
     public final static Type getType(Number a)
     {
         if(a instanceof Byte) return Type.BYTE;

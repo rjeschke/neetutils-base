@@ -58,11 +58,23 @@ public abstract class AbstractXIterable<A> implements XIterable<A>
     }
 
     @Override
+    public <B> XIterable<B> collect(Collector<A, B> collector)
+    {
+        return Iterables.collect(this, collector);
+    }
+    
+    @Override
     public XIterable<A> take(int amount)
     {
         return Iterables.take(this, amount);
     }
 
+    @Override
+    public void consume()
+    {
+        Iterables.consume(this);
+    }
+    
     @Override
     public XIterable<A> drop(int amount)
     {
@@ -70,7 +82,7 @@ public abstract class AbstractXIterable<A> implements XIterable<A>
     }
 
     @Override
-    public XIterable<A> concat(Iterable<A> iterable)
+    public XIterable<A> concat(Iterable<? extends A> iterable)
     {
         return Iterables.concat(this, iterable);
     }

@@ -17,53 +17,57 @@ package com.github.rjeschke.neetutils.iterables;
 
 import java.util.Iterator;
 
-class XIterableConcat<A> extends AbstractXIterable<A>
+class XIterableConcat2<A> extends AbstractXIterable<A>
 {
-    private final Iterable<? extends A> iterableA;
-    private final Iterable<? extends A> iterableB;
+    private final Iterable<? extends Iterable<? extends A>> iterable;
 
-    public XIterableConcat(final Iterable<? extends A> iterableA, final Iterable<? extends A> iterableB)
+    public XIterableConcat2(final Iterable<? extends Iterable<? extends A>> iterable)
     {
-        this.iterableA = iterableA;
-        this.iterableB = iterableB;
+        this.iterable = iterable;
     }
 
     @Override
     public Iterator<A> iterator()
     {
-        return new XIterableConcat.XIterator<A>(this.iterableA.iterator(), this.iterableB.iterator());
+        return new XIterableConcat2.XIterator<A>(this.iterable.iterator());
     }
 
     private final static class XIterator<A> implements Iterator<A>
     {
-        private final Iterator<? extends A> iteratorA;
-        private final Iterator<? extends A> iteratorB;
-        private boolean first = true;
+        private final Iterator<? extends Iterable<? extends A>> iterator;
+        private Iterator<? extends A> innerIterator;
 
-        public XIterator(final Iterator<? extends A> iteratorA, final Iterator<? extends A> iteratorB)
+        public XIterator(final Iterator<? extends Iterable<? extends A>> iterator)
         {
-            this.iteratorA = iteratorA;
-            this.iteratorB = iteratorB;
+            this.iterator = iterator;
         }
 
         @Override
         public boolean hasNext()
         {
-            if(this.first)
+            if(this.innerIterator == null || !this.innerIterator.hasNext())
             {
-                if(this.iteratorA.hasNext())
+                while(this.iterator.hasNext())
                 {
-                    return true;
+                    this.innerIterator = this.iterator.next().iterator();
+                    if(this.innerIterator.hasNext())
+                    {
+                        break;
+                    }
                 }
-                this.first = false;
+                if(this.innerIterator == null)
+                {
+                    return false;
+                }
             }
-            return this.iteratorB.hasNext();
+            
+            return this.innerIterator.hasNext();
         }
 
         @Override
         public A next()
         {
-            return this.first ? this.iteratorA.next() : this.iteratorB.next();
+            return this.innerIterator.next();
         }
 
         @Override

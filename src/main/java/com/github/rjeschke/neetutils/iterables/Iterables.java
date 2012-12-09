@@ -114,21 +114,40 @@ public final class Iterables
         return map;
     }
 
+    public final static <A, B> XIterable<B> collect(final Iterable<A> iterable, final Collector<A, B> collector)
+    {
+        return new XIterableCollect<A, B>(iterable, collector);
+    }
+    
     public final static <A> XIterable<A> take(final Iterable<A> iterable, final int amount)
     {
         return new XIterableTake<A>(iterable, amount);
     }
 
+    public final static <A> void consume(final Iterable<A> iterable)
+    {
+        final Iterator<A> i = iterable.iterator();
+        while(i.hasNext())
+        {
+            i.next();
+        }
+    }
+    
     public final static <A> XIterable<A> drop(final Iterable<A> iterable, final int amount)
     {
         return new XIterableDrop<A>(iterable, amount);
     }
 
-    public final static <A> XIterable<A> concat(final Iterable<A> iterableA, final Iterable<A> iterableB)
+    public final static <A> XIterable<A> concat(final Iterable<? extends A> iterableA, final Iterable<? extends A> iterableB)
     {
         return new XIterableConcat<A>(iterableA, iterableB);
     }
 
+    public final static <A> XIterable<A> concat(final Iterable<? extends Iterable<? extends A>> iterable)
+    {
+        return new XIterableConcat2<A>(iterable);
+    }
+    
     public final static <A> XIterable<A> filter(final Iterable<A> iterable, final FnPredicate<A> predicate)
     {
         return new XIterableFilter<A>(iterable, predicate);

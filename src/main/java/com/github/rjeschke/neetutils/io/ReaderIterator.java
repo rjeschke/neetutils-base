@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 import com.github.rjeschke.neetutils.WrappedCheckedException;
 import com.github.rjeschke.neetutils.math.Numbers;
 
-public class ReaderIterator implements Iterable<Integer>, Closeable
+public class ReaderIterator implements Iterable<Character>, Closeable
 {
     final Reader in;
     boolean closed = false;
@@ -67,14 +67,14 @@ public class ReaderIterator implements Iterable<Integer>, Closeable
     }
     
     @Override
-    public synchronized Iterator<Integer> iterator()
+    public synchronized Iterator<Character> iterator()
     {
         if(this.iteratorInUse)
             throw new IllegalStateException("An iterator is already in use");
         return new StreamIterator(this);
     }
 
-    private class StreamIterator implements Iterator<Integer>
+    private class StreamIterator implements Iterator<Character>
     {
         final ReaderIterator ri;
         
@@ -90,11 +90,11 @@ public class ReaderIterator implements Iterable<Integer>, Closeable
         }
 
         @Override
-        public Integer next()
+        public Character next()
         {
             if(!this.hasNext())
                 throw new NoSuchElementException("Trying to read past end of stream");
-            final Integer ret = Numbers.integerOf(this.ri.current);
+            final Character ret = Numbers.characterOf((char)this.ri.current);
             this.ri.read();
             return ret;
         }

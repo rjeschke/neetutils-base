@@ -39,9 +39,13 @@ public interface XIterable<A> extends Iterable<A>
 
     public XIterable<A> take(int amount);
 
+    public void consume();
+
     public XIterable<A> drop(int amount);
 
-    public XIterable<A> concat(Iterable<A> iterable);
+    public XIterable<A> concat(Iterable<? extends A> iterable);
+    
+    public <B> XIterable<B> collect(Collector<A, B> collector);
     
     public List<A> asList();
 
