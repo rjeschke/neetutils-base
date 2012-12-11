@@ -23,9 +23,9 @@ class XIterableZipWith<A, B, C> extends AbstractXIterable<C>
 {
     private final Iterable<A> iterableA;
     private final Iterable<B> iterableB;
-    private final FnCombine<A, B, C> combine;
+    private final FnCombine<? super A, ? super B, C> combine;
 
-    public XIterableZipWith(final Iterable<A> iterableA, final Iterable<B> iterableB, final FnCombine<A, B, C> combine)
+    public XIterableZipWith(final Iterable<A> iterableA, final Iterable<B> iterableB, final FnCombine<? super A, ? super B, C> combine)
     {
         this.iterableA = iterableA;
         this.iterableB = iterableB;
@@ -42,9 +42,9 @@ class XIterableZipWith<A, B, C> extends AbstractXIterable<C>
     {
         private final Iterator<A> iteratorA;
         private final Iterator<B> iteratorB;
-        private final FnCombine<A, B, C> combine;
+        private final FnCombine<? super A, ? super B, C> combine;
 
-        public XIterator(final Iterator<A> iteratorA, final Iterator<B> iteratorB, final FnCombine<A, B, C> combine)
+        public XIterator(final Iterator<A> iteratorA, final Iterator<B> iteratorB, final FnCombine<? super A, ? super B, C> combine)
         {
             this.iteratorA = iteratorA;
             this.iteratorB = iteratorB;

@@ -19,10 +19,10 @@ import java.util.Iterator;
 
 class XIterableInterleave<A> extends AbstractXIterable<A>
 {
-    private final Iterable<A> iterableA;
-    private final Iterable<A> iterableB;
+    private final Iterable<? extends A> iterableA;
+    private final Iterable<? extends A> iterableB;
 
-    public XIterableInterleave(final Iterable<A> iterableA, final Iterable<A> iterableB)
+    public XIterableInterleave(final Iterable<? extends A> iterableA, final Iterable<? extends A> iterableB)
     {
         this.iterableA = iterableA;
         this.iterableB = iterableB;
@@ -36,11 +36,11 @@ class XIterableInterleave<A> extends AbstractXIterable<A>
 
     private final static class XIterator<A> implements Iterator<A>
     {
-        private final Iterator<A> iteratorA;
-        private final Iterator<A> iteratorB;
+        private final Iterator<? extends A> iteratorA;
+        private final Iterator<? extends A> iteratorB;
         private boolean first = true;
 
-        public XIterator(final Iterator<A> iteratorA, final Iterator<A> iteratorB)
+        public XIterator(final Iterator<? extends A> iteratorA, final Iterator<? extends A> iteratorB)
         {
             this.iteratorA = iteratorA;
             this.iteratorB = iteratorB;

@@ -29,13 +29,19 @@ public interface XIterable<A> extends Iterable<A>
 {
     public XIterable<A> filter(FnPredicate<? super A> predicate);
 
-    public <B> XIterable<B> map(FnMapping<A, B> mapping);
+    public <B> XIterable<B> map(FnMapping<? super A, B> mapping);
 
-    public <B> B reduce(FnFoldStep<? super A, ? super B> foldStep, B initialValue);
+    public <B> B reduce(FnFoldStep<? super A, B> foldStep, B initialValue);
 
+    public A reduce(FnFoldStep<? super A, A> foldStep);
+
+    public <B> XIterable<B> reductions(FnFoldStep<? super A, B> foldStep, B initialValue);
+    
+    public XIterable<A> reductions(FnFoldStep<? super A, A> foldStep);
+    
     public <B> XIterable<Tuple<A, B>> zip(Iterable<B> iterable);
 
-    public <B, C> XIterable<C> zipWith(Iterable<B> iterable, FnCombine<A, B, C> combine);
+    public <B, C> XIterable<C> zipWith(Iterable<B> iterable, FnCombine<? super A, ? super B, C> combine);
 
     public XIterable<A> take(int amount);
 
@@ -43,11 +49,13 @@ public interface XIterable<A> extends Iterable<A>
 
     public XIterable<A> drop(int amount);
 
+    public XIterable<A> tail();
+
     public XIterable<A> concat(Iterable<? extends A> iterable);
     
     public XIterable<A> concat(final Iterable<? extends A> ... iterables);
     
-    public <B> XIterable<B> collect(Collector<A, B> collector);
+    public <B> XIterable<B> collect(Collector<? super A, B> collector);
     
     public List<A> asList();
 
@@ -57,15 +65,15 @@ public interface XIterable<A> extends Iterable<A>
 
     public Set<A> asSet(Set<A> set);
 
-    public XIterable<A> interleave(Iterable<A> iterable);
+    public XIterable<A> interleave(Iterable<? extends A> iterable);
     
-    public <B> Map<A, B> asMapKV(Iterable<B> iterable);
+    public <B> Map<? super A, ? super B> asMapKV(Iterable<? extends B> iterable);
 
-    public <B> Map<A, B> asMapKV(Iterable<B> iterable, Map<A, B> list);
+    public <B> Map<? super A, ? super B> asMapKV(Iterable<? extends B> iterable, Map<? super A, ? super B> list);
 
-    public <B> Map<B, A> asMapVK(Iterable<B> iterable);
+    public <B> Map<? super B, ? super A> asMapVK(Iterable<? extends B> iterable);
 
-    public <B> Map<B, A> asMapVK(Iterable<B> iterable, Map<B, A> list);
+    public <B> Map<? super B, ? super A> asMapVK(Iterable<? extends B> iterable, Map<? super B, ? super A> list);
     
     public String asString();
 }

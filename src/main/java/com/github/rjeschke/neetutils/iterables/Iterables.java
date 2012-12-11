@@ -55,12 +55,12 @@ public final class Iterables
         return sb.toString();
     }
 
-    public final static <A> List<A> asList(final Iterable<A> iterable)
+    public final static <A> List<A> asList(final Iterable<? extends A> iterable)
     {
         return asList(iterable, new ArrayList<A>());
     }
 
-    public final static <A> List<A> asList(final Iterable<A> iterable, final List<A> list)
+    public final static <A> List<A> asList(final Iterable<? extends A> iterable, final List<A> list)
     {
         for(final A a : iterable)
         {
@@ -69,12 +69,12 @@ public final class Iterables
         return list;
     }
 
-    public final static <A> Set<A> asSet(final Iterable<A> iterable)
+    public final static <A> Set<A> asSet(final Iterable<? extends A> iterable)
     {
         return asSet(iterable, new HashSet<A>());
     }
 
-    public final static <A> Set<A> asSet(final Iterable<A> iterable, final Set<A> set)
+    public final static <A> Set<A> asSet(final Iterable<? extends A> iterable, final Set<A> set)
     {
         for(final A a : iterable)
         {
@@ -83,30 +83,32 @@ public final class Iterables
         return set;
     }
 
-    public final static <A, B> Map<A, B> asMap(final Iterable<Tuple<A, B>> iterable)
+    public final static <A, B> Map<A, B> asMap(final Iterable<? extends Tuple<? extends A, ? extends B>> iterable)
     {
         return asMap(iterable, new HashMap<A, B>());
     }
 
-    public final static <A, B> Map<A, B> asMap(final Iterable<Tuple<A, B>> iterable, final Map<A, B> map)
+    public final static <A, B> Map<A, B> asMap(final Iterable<? extends Tuple<? extends A, ? extends B>> iterable,
+            final Map<A, B> map)
     {
-        for(final Tuple<A, B> t : iterable)
+        for(final Tuple<? extends A, ? extends B> t : iterable)
         {
             map.put(t.a, t.b);
         }
         return map;
     }
 
-    public final static <A, B> Map<A, B> asMap(final Iterable<A> iterableA, final Iterable<B> iterableB)
+    public final static <A, B> Map<? super A, ? super B> asMap(final Iterable<? extends A> iterableA,
+            final Iterable<? extends B> iterableB)
     {
         return asMap(iterableA, iterableB, new HashMap<A, B>());
     }
 
-    public final static <A, B> Map<A, B> asMap(final Iterable<A> iterableA, final Iterable<B> iterableB,
-            final Map<A, B> map)
+    public final static <A, B> Map<? super A, ? super B> asMap(final Iterable<? extends A> iterableA,
+            final Iterable<? extends B> iterableB, final Map<? super A, ? super B> map)
     {
-        final Iterator<A> ai = iterableA.iterator();
-        final Iterator<B> bi = iterableB.iterator();
+        final Iterator<? extends A> ai = iterableA.iterator();
+        final Iterator<? extends B> bi = iterableB.iterator();
         while(ai.hasNext() && bi.hasNext())
         {
             map.put(ai.next(), bi.next());
@@ -114,11 +116,12 @@ public final class Iterables
         return map;
     }
 
-    public final static <A, B> XIterable<B> collect(final Iterable<A> iterable, final Collector<A, B> collector)
+    public final static <A, B> XIterable<B> collect(final Iterable<A> iterable,
+            final Collector<? super A, B> collector)
     {
         return new XIterableCollect<A, B>(iterable, collector);
     }
-    
+
     public final static <A> XIterable<A> take(final Iterable<A> iterable, final int amount)
     {
         return new XIterableTake<A>(iterable, amount);
@@ -132,55 +135,84 @@ public final class Iterables
             i.next();
         }
     }
-    
+
     public final static <A> XIterable<A> drop(final Iterable<A> iterable, final int amount)
     {
         return new XIterableDrop<A>(iterable, amount);
     }
 
-    public final static <A> XIterable<A> concat(final Iterable<? extends A> iterableA, final Iterable<? extends A> iterableB)
+    public final static <A> XIterable<A> concat(final Iterable<? extends A> iterableA,
+            final Iterable<? extends A> iterableB)
     {
         return new XIterableConcat<A>(iterableA, iterableB);
     }
 
-    public final static <A> XIterable<A> concat(final Iterable<? extends A> ... iterables)
+    public final static <A> XIterable<A> concat(final Iterable<? extends A>... iterables)
     {
         return new XIterableConcat2<A>(ArrayIterator.unsafeOf(iterables));
     }
-    
-    public final static <A> XIterable<A> concat(final Iterable<? extends A> iterable, final Iterable<? extends A> ... iterables)
+
+    public final static <A> XIterable<A> concat(final Iterable<? extends A> iterable,
+            final Iterable<? extends A>... iterables)
     {
         return new XIterableConcat<A>(iterable, new XIterableConcat2<A>(ArrayIterator.unsafeOf(iterables)));
     }
-    
+
     public final static <A> XIterable<A> concat(final Iterable<? extends Iterable<? extends A>> iterable)
     {
         return new XIterableConcat2<A>(iterable);
     }
-    
-    public final static <A> XIterable<A> filter(final Iterable<A> iterable, final FnPredicate<? super A> predicate)
+
+    public final static <A> XIterable<A> filter(final Iterable<? extends A> iterable, final FnPredicate<? super A> predicate)
     {
         return new XIterableFilter<A>(iterable, predicate);
     }
 
-    public final static <A, B> XIterable<B> map(final Iterable<A> iterable, final FnMapping<A, B> mapping)
+    public final static <A, B> XIterable<B> map(final Iterable<? extends A> iterable, final FnMapping<A, B> mapping)
     {
         return new XIterableMap<A, B>(iterable, mapping);
     }
 
-    @SuppressWarnings("unchecked")
-    public final static <A, B> B reduce(final Iterable<A> iterable, final FnFoldStep<? super A, ? super B> foldStep,
+    public final static <A, B> B reduce(final Iterable<A> iterable, final FnFoldStep<? super A, B> foldStep,
             final B initialValue)
     {
         B b = initialValue;
         for(final A a : iterable)
         {
-            b = (B)foldStep.applyFoldStep(a, b);
+            b = foldStep.applyFoldStep(a, b);
         }
         return b;
     }
 
-    public final static <A> XIterable<A> interleave(final Iterable<A> iterableA, final Iterable<A> iterableB)
+    public final static <A, B> XIterable<B> reductions(final Iterable<A> iterable,
+            final FnFoldStep<? super A, B> foldStep, final B initialValue)
+    {
+        return new XIterableReductions<A, B>(iterable, foldStep, initialValue);
+    }
+
+    public final static <A> A reduce(final Iterable<A> iterable, final FnFoldStep<? super A, A> foldStep)
+    {
+        A a = null;
+        final Iterator<A> iterator = iterable.iterator();
+        if(iterator.hasNext())
+        {
+            a = iterator.next();
+            while(iterator.hasNext())
+            {
+                a = foldStep.applyFoldStep(iterator.next(), a);
+            }
+        }
+        return a;
+    }
+
+    public final static <A> XIterable<A> reductions(final Iterable<? extends A> iterable,
+            final FnFoldStep<? super A, A> foldStep)
+    {
+        return new XIterableReductions2<A>(iterable, foldStep);
+    }
+
+    public final static <A> XIterable<A> interleave(final Iterable<? extends A> iterableA,
+            final Iterable<? extends A> iterableB)
     {
         return new XIterableInterleave<A>(iterableA, iterableB);
     }
@@ -191,7 +223,7 @@ public final class Iterables
     }
 
     public final static <A, B, C> XIterable<C> zipWith(final Iterable<A> iterableA, final Iterable<B> iterableB,
-            final FnCombine<A, B, C> combine)
+            final FnCombine<? super A, ? super B, C> combine)
     {
         return new XIterableZipWith<A, B, C>(iterableA, iterableB, combine);
     }

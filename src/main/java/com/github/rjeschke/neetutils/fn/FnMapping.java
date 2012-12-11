@@ -15,7 +15,21 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
-public interface FnMapping<A, B>
+public abstract class FnMapping<A, B>
 {
-    public B applyMapping(A value);
+    public abstract B applyMapping(A value);
+    
+    public final <C> FnMapping<A, C> concat(final FnMapping<B, C> mapping)
+    {
+        final FnMapping<A, B> me = this;
+        
+        return new FnMapping<A, C>()
+        {
+            @Override
+            public C applyMapping(A value)
+            {
+                return mapping.applyMapping(me.applyMapping(value));
+            }
+        };
+    }
 }

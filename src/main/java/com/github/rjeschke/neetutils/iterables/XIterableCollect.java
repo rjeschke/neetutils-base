@@ -22,10 +22,10 @@ import com.github.rjeschke.neetutils.iterables.AbstractXIterable;
 
 class XIterableCollect<A, B> extends AbstractXIterable<B>
 {
-    private final Iterable<A> iterable;
-    private final Collector<A, B> collector;
+    private final Iterable<? extends A> iterable;
+    private final Collector<? super A, B> collector;
 
-    public XIterableCollect(final Iterable<A> iterable, final Collector<A, B> collector)
+    public XIterableCollect(final Iterable<? extends A> iterable, final Collector<? super A, B> collector)
     {
         this.iterable = iterable;
         this.collector = collector;
@@ -39,10 +39,10 @@ class XIterableCollect<A, B> extends AbstractXIterable<B>
 
     final static class XIterator<A, B> implements Iterator<B>
     {
-        private final Iterator<A> iterator;
-        private final Collector<A, ? extends B> collector;
+        private final Iterator<? extends A> iterator;
+        private final Collector<? super A, B> collector;
         
-        public XIterator(final Iterator<A> iterator, final Collector<A, B> collector)
+        public XIterator(final Iterator<? extends A> iterator, final Collector<? super A, B> collector)
         {
             this.iterator = iterator;
             this.collector = collector;

@@ -22,7 +22,7 @@ public abstract class Collector<A, B>
     boolean hasElement;
     B value;
     
-    public abstract void collect(Iterator<A> iterator);
+    public abstract void collect(Iterator<? extends A> iterator);
     
     final void init()
     {

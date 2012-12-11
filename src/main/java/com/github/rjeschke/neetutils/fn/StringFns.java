@@ -29,8 +29,8 @@ public final class StringFns
     {
         // 1up
     }
-    
-    public final static FnPredicate<String> isNotEmpty()
+
+    public final static FnPredicate<String> notEmpty()
     {
         return new FnPredicate<String>()
         {
@@ -47,7 +47,7 @@ public final class StringFns
         return new Collector<Character, String>()
         {
             @Override
-            public void collect(Iterator<Character> iterator)
+            public void collect(Iterator<? extends Character> iterator)
             {
                 if(iterator.hasNext())
                 {
@@ -124,8 +124,7 @@ public final class StringFns
             @Override
             public boolean applyPredicate(String a)
             {
-                if(needles.length == 0)
-                    return true;
+                if(needles.length == 0) return true;
 
                 for(int i = 0; i < needles.length; i++)
                 {
@@ -148,8 +147,7 @@ public final class StringFns
             @Override
             public boolean applyPredicate(String a)
             {
-                if(needles.length == 0)
-                    return true;
+                if(needles.length == 0) return true;
 
                 for(int i = 0; i < needles.length; i++)
                 {
@@ -176,8 +174,7 @@ public final class StringFns
             @Override
             public boolean applyPredicate(String a)
             {
-                if(needles.length == 0)
-                    return true;
+                if(needles.length == 0) return true;
 
                 for(int i = 0; i < needles.length; i++)
                 {
@@ -204,8 +201,7 @@ public final class StringFns
             @Override
             public boolean applyPredicate(String a)
             {
-                if(needles.length == 0)
-                    return true;
+                if(needles.length == 0) return true;
 
                 for(int i = 0; i < needles.length; i++)
                 {

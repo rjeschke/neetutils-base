@@ -17,34 +17,36 @@ package com.github.rjeschke.neetutils.iterables;
 
 import java.util.Iterator;
 
-import com.github.rjeschke.neetutils.fn.FnMapping;
+import com.github.rjeschke.neetutils.fn.FnFoldStep;
 
-class XIterableMap<A, B> extends AbstractXIterable<B>
+class XIterableReductions2<A> extends AbstractXIterable<A>
 {
     private final Iterable<? extends A> iterable;
-    private final FnMapping<A, B> mapping;
+    private final FnFoldStep<? super A, ? super A> foldStep;
 
-    public XIterableMap(final Iterable<? extends A> iterable, final FnMapping<A, B> mapping)
+    public XIterableReductions2(final Iterable<? extends A> iterable, final FnFoldStep<? super A, ? super A> foldStep)
     {
         this.iterable = iterable;
-        this.mapping = mapping;
+        this.foldStep = foldStep;
     }
 
     @Override
-    public Iterator<B> iterator()
+    public Iterator<A> iterator()
     {
-        return new XIterableMap.XIterator<A, B>(this.iterable.iterator(), this.mapping);
+        return new XIterableReductions2.XIterator<A>(this.iterable.iterator(), this.foldStep);
     }
 
-    private final static class XIterator<A, B> implements Iterator<B>
+    private final static class XIterator<A> implements Iterator<A>
     {
         private final Iterator<? extends A> iterator;
-        private final FnMapping<A, B> mapping;
+        private final FnFoldStep<? super A, ? super A> foldStep;
+        private A initialValue;
+        private boolean isInitialValue = true;
 
-        public XIterator(final Iterator<? extends A> iterator, final FnMapping<A, B> mapping)
+        public XIterator(final Iterator<? extends A> iterator, final FnFoldStep<? super A, ? super A> foldStep)
         {
             this.iterator = iterator;
-            this.mapping = mapping;
+            this.foldStep = foldStep;
         }
 
         @Override
@@ -53,10 +55,20 @@ class XIterableMap<A, B> extends AbstractXIterable<B>
             return this.iterator.hasNext();
         }
 
+        @SuppressWarnings("unchecked")
         @Override
-        public B next()
+        public A next()
         {
-            return this.mapping.applyMapping(this.iterator.next());
+            if(this.isInitialValue)
+            {
+                this.isInitialValue = false;
+                this.initialValue = this.iterator.next();
+            }
+            else
+            {
+                this.initialValue = (A)this.foldStep.applyFoldStep(this.iterator.next(), this.initialValue);
+            }
+            return this.initialValue;
         }
 
         @Override

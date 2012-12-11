@@ -22,7 +22,7 @@ public final class CharacterFns
         // 1up
     }
 
-    public final static FnPredicate<Character> isNotWhitespace()
+    public final static FnPredicate<Character> notWhitespace()
     {
         return new FnPredicate<Character>()
         {
@@ -30,6 +30,18 @@ public final class CharacterFns
             public boolean applyPredicate(Character a)
             {
                 return !Character.isWhitespace(a) && !Character.isSpaceChar(a);
+            }
+        };
+    }
+
+    public final static FnPredicate<Character> isWhitespace()
+    {
+        return new FnPredicate<Character>()
+        {
+            @Override
+            public boolean applyPredicate(Character a)
+            {
+                return Character.isWhitespace(a) || Character.isSpaceChar(a);
             }
         };
     }
@@ -46,6 +58,18 @@ public final class CharacterFns
         };
     }
 
+    public final static FnPredicate<Character> notLetter()
+    {
+        return new FnPredicate<Character>()
+        {
+            @Override
+            public boolean applyPredicate(Character a)
+            {
+                return !Character.isLetter(a);
+            }
+        };
+    }
+
     public final static FnPredicate<Character> isDigit()
     {
         return new FnPredicate<Character>()
@@ -58,6 +82,18 @@ public final class CharacterFns
         };
     }
 
+    public final static FnPredicate<Character> notDigit()
+    {
+        return new FnPredicate<Character>()
+        {
+            @Override
+            public boolean applyPredicate(Character a)
+            {
+                return !Character.isDigit(a);
+            }
+        };
+    }
+
     public final static FnPredicate<Character> isLetterOrDigit()
     {
         return new FnPredicate<Character>()
@@ -66,6 +102,18 @@ public final class CharacterFns
             public boolean applyPredicate(Character a)
             {
                 return Character.isLetterOrDigit(a);
+            }
+        };
+    }
+
+    public final static FnPredicate<Character> notLetterOrDigit()
+    {
+        return new FnPredicate<Character>()
+        {
+            @Override
+            public boolean applyPredicate(Character a)
+            {
+                return !Character.isLetterOrDigit(a);
             }
         };
     }
