@@ -133,7 +133,7 @@ public final class LibraryLoader
             // Ignore
         }
 
-        final String osLib = isNative ? libname : System.mapLibraryName(libname);
+        final String osLib = isNative ? libname : SysUtils.mapLibraryName(libname);
 
         loadLibrary(caller, pkg + osLib);
     }

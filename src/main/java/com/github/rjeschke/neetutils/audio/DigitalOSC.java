@@ -73,7 +73,7 @@ public class DigitalOSC
     {
         double x = (p & 0x3fffff) / 4194304.0;
         if((p & 0x400000) != 0)
-            x = 1.0f - x;
+            x = 1.0 - x;
         x *= F0PI5;
         final double x2 = x * x;
         final double asin = ((((SIN9 * x2 + SIN7) * x2 + SIN5) * x2 + SIN3) * x2 + 1.0) * x;

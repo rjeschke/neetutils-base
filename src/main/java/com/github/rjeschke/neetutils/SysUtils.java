@@ -193,12 +193,24 @@ public final class SysUtils
         return Runtime.getRuntime().totalMemory();
     }
 
-    /*
-    public final static Unsafe getUnsafe()
+    public final static double getJavaVersion()
     {
-        final Field f = Unsafe.class.getDeclaredField("theUnsafe");
-        f.setAccessible(true);
-        return (Unsafe)f.get(null);
+        return Double.parseDouble(System.getProperty("java.specification.version"));
     }
-    */
+
+    public final static String mapLibraryName(final String name)
+    {
+        final String lib = System.mapLibraryName(name);
+        if(getJavaVersion() >= 1.7 && lib.endsWith(".dylib"))
+        {
+            return lib.substring(0, lib.length() - 5) + "jnilib";
+        }
+        return lib;
+    }
+
+    /*
+     * public final static Unsafe getUnsafe() { final Field f =
+     * Unsafe.class.getDeclaredField("theUnsafe"); f.setAccessible(true); return
+     * (Unsafe)f.get(null); }
+     */
 }
