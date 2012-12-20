@@ -18,7 +18,7 @@ package com.github.rjeschke.neetutils.audio;
 public class HPF6dB
 {
     private final double fs;
-    private double f, f2, f3, b = 0;
+    private double f, f2, b = 0;
     private Clipper clipper = new DefaultClipper();
 
     public HPF6dB(final double fs)
@@ -31,7 +31,6 @@ public class HPF6dB
     {
         this.f = Math.tan(Math.PI * freq / this.fs);
         this.f2 = 1.0 / (1 + this.f);
-        this.f3 = 1.0 - this.f2 * this.f;
     }
 
     public void reset()
@@ -41,12 +40,12 @@ public class HPF6dB
     
     public double coef(double previous)
     {
-        return previous * this.f3;
+        return previous * this.f2;
     }
 
     public double output(final double input)
     {
-        return this.f3 * input - this.f2 * this.b;
+        return (input - this.b) * this.f2;
     }
 
     public double tick(final double input)

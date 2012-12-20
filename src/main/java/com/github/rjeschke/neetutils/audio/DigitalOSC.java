@@ -34,6 +34,7 @@ public class DigitalOSC
     private final static double SIN7 = -1.0 / 5040.0;
     private final static double SIN9 = 1.0 / 362880.0;
     private final static double F0PI5 = Math.PI / 2;
+    private final static double F0PI5_2 = F0PI5 / 4194304.0;
     private final static double P1 = 1. / 16777216.0;
 
     public DigitalOSC(final double fs)
@@ -71,13 +72,9 @@ public class DigitalOSC
 
     public static double fastSin(final int p)
     {
-        double x = (p & 0x3fffff) / 4194304.0;
-        if((p & 0x400000) != 0)
-            x = 1.0 - x;
-        x *= F0PI5;
+        final double x = (1 - (((p & 0x800000) >> 22) & 2)) * ((p ^ (0x400000 - ((p >> 22) & 1))) & 0x3fffff) * F0PI5_2;
         final double x2 = x * x;
-        final double asin = ((((SIN9 * x2 + SIN7) * x2 + SIN5) * x2 + SIN3) * x2 + 1.0) * x;
-        return p > 0x7fffff ? -asin : asin;
+        return ((((SIN9 * x2 + SIN7) * x2 + SIN5) * x2 + SIN3) * x2 + 1.0) * x;
     }
 
     public double tick()
