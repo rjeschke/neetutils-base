@@ -18,7 +18,7 @@ package com.github.rjeschke.neetutils.audio;
 public class LPF24dBConfLadder
 {
     private LPF6dBVar l0, l1, l2, l3;
-    private double coef, q = 0;
+    private double    coef, q = 0;
 
     public LPF24dBConfLadder(double fs)
     {

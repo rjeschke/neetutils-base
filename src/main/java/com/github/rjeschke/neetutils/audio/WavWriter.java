@@ -36,29 +36,25 @@ import com.github.rjeschke.neetutils.math.NMath;
 public final class WavWriter
 {
     /** The sample rate. */
-    private final int sampleRate;
+    private final int           sampleRate;
     /** Bits per sample. */
-    private final int bitsPerSample;
+    private final int           bitsPerSample;
     /** Number of channels. */
-    private final int channels;
+    private final int           channels;
 
     /** Temporary file for wave data. */
-    private File tempFile = null;
+    private File                tempFile   = null;
     /** Output stream for writing temporary wave data. */
-    private NOutputStream tempStream = null;
+    private NOutputStream       tempStream = null;
 
     /** RIFF. */
-    private final static byte[] RIFF =
-        { 'R', 'I', 'F', 'F' };
+    private final static byte[] RIFF       = {'R', 'I', 'F', 'F'};
     /** WAVE. */
-    private final static byte[] WAVE =
-        { 'W', 'A', 'V', 'E' };
+    private final static byte[] WAVE       = {'W', 'A', 'V', 'E'};
     /** fmt . */
-    private final static byte[] FMT_ =
-        { 'f', 'm', 't', ' ' };
+    private final static byte[] FMT_       = {'f', 'm', 't', ' '};
     /** data. */
-    private final static byte[] DATA =
-        { 'd', 'a', 't', 'a' };
+    private final static byte[] DATA       = {'d', 'a', 't', 'a'};
 
     /**
      * Constructor.
@@ -127,29 +123,29 @@ public final class WavWriter
     public final static double[] normalize(double[] wave)
     {
         double max = 0;
-        for(int i = 0; i < wave.length; i++)
+        for (int i = 0; i < wave.length; i++)
             max = Math.max(Math.abs(wave[i]), max);
-        if(max > 0)
+        if (max > 0)
         {
-            for(int i = 0; i < wave.length; i++)
+            for (int i = 0; i < wave.length; i++)
                 wave[i] /= max;
         }
         return wave;
     }
-    
+
     public final static float[] normalize(float[] wave)
     {
         float max = 0;
-        for(int i = 0; i < wave.length; i++)
+        for (int i = 0; i < wave.length; i++)
             max = Math.max(Math.abs(wave[i]), max);
-        if(max > 0)
+        if (max > 0)
         {
-            for(int i = 0; i < wave.length; i++)
+            for (int i = 0; i < wave.length; i++)
                 wave[i] /= max;
         }
         return wave;
     }
-    
+
     /**
      * Saves this RIFF WAVE to an output stream.
      * 
@@ -163,34 +159,29 @@ public final class WavWriter
         final NOutputStreamLE out = new NOutputStreamLE(output);
         try
         {
-            if(this.tempFile == null)
-                throw new IOException("No data supplied.");
+            if (this.tempFile == null) throw new IOException("No data supplied.");
 
-            if(this.tempStream != null)
+            if (this.tempStream != null)
             {
                 // close also flushes ...
                 this.tempStream.close();
                 this.tempStream = null;
             }
 
-            if(this.channels < 1)
-                throw new IOException("Illegal channel count: " + this.channels);
+            if (this.channels < 1) throw new IOException("Illegal channel count: " + this.channels);
 
-            if(this.sampleRate < 1)
-                throw new IOException("Illegal sample rate: " + this.sampleRate);
+            if (this.sampleRate < 1) throw new IOException("Illegal sample rate: " + this.sampleRate);
 
             // dLen ... somehow reminds me of Babylon 5 ... hmmm
             final int dLen = (int)this.tempFile.length();
 
-            if(dLen <= 0 || (dLen + 36) <= 0)
-                throw new IOException("Too much wave data. RIFF WAVE is only 32 bits.");
+            if (dLen <= 0 || (dLen + 36) <= 0) throw new IOException("Too much wave data. RIFF WAVE is only 32 bits.");
 
             final int samples = dLen / (this.bitsPerSample >> 3);
             final int frames = samples / this.channels;
             final int blockAlign = this.channels * (this.bitsPerSample >> 3);
 
-            if(dLen != frames * this.channels * (this.bitsPerSample >> 3))
-                throw new IOException("Unfinished frame.");
+            if (dLen != frames * this.channels * (this.bitsPerSample >> 3)) throw new IOException("Unfinished frame.");
 
             out.write(RIFF);
             out.write32(dLen + 36);
@@ -215,7 +206,7 @@ public final class WavWriter
             {
                 final byte[] b = new byte[8192];
                 int todo = dLen;
-                while(todo > 0)
+                while (todo > 0)
                 {
                     final int read = in.read(b);
                     out.write(b, 0, read);
@@ -238,7 +229,7 @@ public final class WavWriter
      */
     public void dispose()
     {
-        if(this.tempStream != null)
+        if (this.tempStream != null)
         {
             try
             {
@@ -254,7 +245,7 @@ public final class WavWriter
                 this.tempStream = null;
             }
         }
-        if(this.tempFile != null)
+        if (this.tempFile != null)
         {
             this.tempFile.delete();
             this.tempFile = null;
@@ -278,21 +269,20 @@ public final class WavWriter
      */
     public void write(int... samples) throws IOException
     {
-        if(this.tempStream == null)
-            this.openTemp();
+        if (this.tempStream == null) this.openTemp();
 
-        switch(this.bitsPerSample)
+        switch (this.bitsPerSample)
         {
         case 8:
-            for(int i = 0; i < samples.length; i++)
+            for (int i = 0; i < samples.length; i++)
                 this.tempStream.write(NMath.clamp(samples[i], -0x80, 0x7f) + 0x80);
             break;
         case 16:
-            for(int i = 0; i < samples.length; i++)
+            for (int i = 0; i < samples.length; i++)
                 this.tempStream.write16(NMath.clamp(samples[i], -0x8000, 0x7fff));
             break;
         case 24:
-            for(int i = 0; i < samples.length; i++)
+            for (int i = 0; i < samples.length; i++)
                 this.tempStream.write24(NMath.clamp(samples[i], -0x800000, 0x7fffff));
             break;
         default:
@@ -316,21 +306,20 @@ public final class WavWriter
      */
     public void write(float... samples) throws IOException
     {
-        if(this.tempStream == null)
-            this.openTemp();
+        if (this.tempStream == null) this.openTemp();
 
-        switch(this.bitsPerSample)
+        switch (this.bitsPerSample)
         {
         case 8:
-            for(int i = 0; i < samples.length; i++)
+            for (int i = 0; i < samples.length; i++)
                 this.tempStream.write8(NMath.clamp((int)(samples[i] * 128.0f), -0x80, 0x7f) + 0x80);
             break;
         case 16:
-            for(int i = 0; i < samples.length; i++)
+            for (int i = 0; i < samples.length; i++)
                 this.tempStream.write16(NMath.clamp((int)(samples[i] * 32768.0f), -0x8000, 0x7fff));
             break;
         case 24:
-            for(int i = 0; i < samples.length; i++)
+            for (int i = 0; i < samples.length; i++)
                 this.tempStream.write24(NMath.clamp((int)(samples[i] * 8388608.0f), -0x800000, 0x7fffff));
             break;
         default:
@@ -354,21 +343,20 @@ public final class WavWriter
      */
     public void write(double... samples) throws IOException
     {
-        if(this.tempStream == null)
-            this.openTemp();
+        if (this.tempStream == null) this.openTemp();
 
-        switch(this.bitsPerSample)
+        switch (this.bitsPerSample)
         {
         case 8:
-            for(int i = 0; i < samples.length; i++)
+            for (int i = 0; i < samples.length; i++)
                 this.tempStream.write8(NMath.clamp((int)(samples[i] * 128.0), -0x80, 0x7f) + 0x80);
             break;
         case 16:
-            for(int i = 0; i < samples.length; i++)
+            for (int i = 0; i < samples.length; i++)
                 this.tempStream.write16(NMath.clamp((int)(samples[i] * 32768.0), -0x8000, 0x7fff));
             break;
         case 24:
-            for(int i = 0; i < samples.length; i++)
+            for (int i = 0; i < samples.length; i++)
                 this.tempStream.write24(NMath.clamp((int)(samples[i] * 8388608.0), -0x800000, 0x7fffff));
             break;
         default:

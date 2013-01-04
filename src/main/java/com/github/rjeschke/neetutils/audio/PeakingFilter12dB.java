@@ -18,8 +18,8 @@ package com.github.rjeschke.neetutils.audio;
 public class PeakingFilter12dB
 {
     private final SVF12dB svf;
-    private double fc, bg, gain, bandwidth;
-    
+    private double        fc, bg, gain, bandwidth;
+
     public PeakingFilter12dB(double fs)
     {
         this.svf = new SVF12dB(fs);
@@ -33,24 +33,24 @@ public class PeakingFilter12dB
         this.svf.setCutoff(this.fc = cutoff);
         this.recalc();
     }
-    
+
     public void setGain(double db)
     {
         this.gain = db;
         this.recalc();
     }
-    
+
     public void setBandwidth(double bw)
     {
         this.bandwidth = bw;
         this.recalc();
     }
-    
+
     public void reset()
     {
         this.svf.reset();
     }
-    
+
     private void recalc()
     {
         final double b = this.bandwidth / this.fc;
@@ -58,13 +58,13 @@ public class PeakingFilter12dB
         this.bg = b * g;
         this.svf.setRawQ(b);
     }
-    
+
     public PeakingFilter12dB setClipper(Clipper clipper)
     {
         this.svf.setClipper(clipper);
         return this;
     }
-    
+
     public double process(double input)
     {
         this.svf.process(input);

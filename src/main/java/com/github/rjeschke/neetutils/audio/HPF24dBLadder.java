@@ -17,10 +17,10 @@ package com.github.rjeschke.neetutils.audio;
 
 public class HPF24dBLadder
 {
-    private double b0, b1, b2, b3;
-    private double q, f, f2, f3, fr;
+    private double       b0, b1, b2, b3;
+    private double       q, f, f2, f3, fr;
     private final double fs;
-    private Clipper clipper = new DefaultClipper();
+    private Clipper      clipper = new DefaultClipper();
 
     public HPF24dBLadder(double fs)
     {

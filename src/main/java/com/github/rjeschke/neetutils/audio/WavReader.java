@@ -25,10 +25,10 @@ import com.github.rjeschke.neetutils.io.NInputStreamLE;
 
 public final class WavReader
 {
-    private int sampleRate;
-    private int channels;
+    private int     sampleRate;
+    private int     channels;
     private float[] data;
-    private int[] originalData;
+    private int[]   originalData;
 
     private WavReader(final int sampleRate, final int channels, final float[] data, final int[] originalData)
     {
@@ -42,27 +42,27 @@ public final class WavReader
     {
         return this.sampleRate;
     }
-    
+
     public int getChannelCount()
     {
         return this.channels;
     }
-    
+
     public float[] getData()
     {
         return this.data;
     }
-    
+
     public int[] getOriginalData()
     {
         return this.originalData;
     }
-    
+
     public static WavReader load(final String filename) throws IOException
     {
         return load(new File(filename));
     }
-    
+
     public static WavReader load(final File file) throws IOException
     {
         final FileInputStream fis = new FileInputStream(file);
@@ -70,7 +70,7 @@ public final class WavReader
         {
             return load(new BufferedInputStream(fis));
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             throw e;
         }
@@ -79,21 +79,17 @@ public final class WavReader
             fis.close();
         }
     }
-    
+
     public static WavReader load(final InputStream input) throws IOException
     {
         final NInputStreamLE in = new NInputStreamLE(input);
-        if(!in.readString(4, 0).equals("RIFF"))
-            throw new IOException("Not a WAV file.");
+        if (!in.readString(4, 0).equals("RIFF")) throw new IOException("Not a WAV file.");
         in.readI32();
-        if(!in.readString(4, 0).equals("WAVE"))
-            throw new IOException("Not a WAV file.");
-        if(!in.readString(4, 0).equals("fmt "))
-            throw new IOException("Not a WAV file.");
+        if (!in.readString(4, 0).equals("WAVE")) throw new IOException("Not a WAV file.");
+        if (!in.readString(4, 0).equals("fmt ")) throw new IOException("Not a WAV file.");
         final int fmtSz = in.readI32();
         final int fmt = in.readU16();
-        if(fmt != 1 || fmtSz != 16)
-            throw new IOException("Unsupported WAV format");
+        if (fmt != 1 || fmtSz != 16) throw new IOException("Unsupported WAV format");
 
         final int channels = in.readU16();
         final int samplerate = in.readI32();
@@ -101,31 +97,26 @@ public final class WavReader
         in.readU16();
         final int bits = in.readU16();
         String tmp = in.readString(4, 0);
-        while(!tmp.equals("data"))
+        while (!tmp.equals("data"))
         {
             final int toskip = in.readI32();
-            if(in.skip(toskip) != toskip)
-                throw new IOException("Unsupported WAV format");
+            if (in.skip(toskip) != toskip) throw new IOException("Unsupported WAV format");
             tmp = in.readString(4, 0);
         }
         final int length = in.readI32() / ((bits * channels) >> 3);
         final float[] ret = new float[length * channels];
         final int[] iret = new int[length * channels];
-        
-        for(int i = 0; i < ret.length; i++)
+
+        for (int i = 0; i < ret.length; i++)
         {
             int v = 0;
-            if(bits == 8)
-                v = (iret[i] = (in.readU8() - 128)) << 16;
-            else if(bits == 16)
-                v = (iret[i] = in.readI16()) << 8;
-            else if(bits == 24)
-                iret[i] = v = in.readI24();
-            else
-                throw new IOException("Unsupported bit depth: " + bits);
+            if (bits == 8) v = (iret[i] = (in.readU8() - 128)) << 16;
+            else if (bits == 16) v = (iret[i] = in.readI16()) << 8;
+            else if (bits == 24) iret[i] = v = in.readI24();
+            else throw new IOException("Unsupported bit depth: " + bits);
             ret[i] = v / 8388608.0f;
         }
-        
+
         return new WavReader(samplerate, channels, ret, iret);
     }
 }

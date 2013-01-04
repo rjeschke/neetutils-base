@@ -146,8 +146,8 @@ public class WaveMipMap
             final int p = phase >> this.shift;
             final double f = (phase & this.shiftMask) * this.frac;
 
-            return CatmullRomSpline.get(this.wave[(p - 1) & this.mask], this.wave[p & this.mask], this.wave[(p + 1)
-                    & this.mask], this.wave[(p + 2) & this.mask], f);
+            return CatmullRomSpline.get(this.wave[(p - 1) & this.mask], this.wave[p & this.mask], this.wave[(p + 1) & this.mask],
+                    this.wave[(p + 2) & this.mask], f);
         }
 
         public MipWave half(final double[] fir)

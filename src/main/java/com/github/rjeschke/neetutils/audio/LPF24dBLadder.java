@@ -17,10 +17,10 @@ package com.github.rjeschke.neetutils.audio;
 
 public class LPF24dBLadder
 {
-    private double b0, b1, b2, b3;
-    private double q, f, f2, f3, fr;
+    private double       b0, b1, b2, b3;
+    private double       q, f, f2, f3, fr;
     private final double fs;
-    private Clipper clipper = new DefaultClipper(); 
+    private Clipper      clipper = new DefaultClipper();
 
     public LPF24dBLadder(double fs)
     {
@@ -41,24 +41,24 @@ public class LPF24dBLadder
         final double t = this.f3 * this.f3;
         this.fr = this.f2 / (1 + this.q * t * t);
     }
-    
+
     public void setQ(double q)
     {
         this.q = q;
         this.recalc();
     }
-    
+
     public void reset()
     {
         this.b0 = this.b1 = this.b2 = this.b3 = 0;
     }
-    
+
     public LPF24dBLadder setClipper(Clipper clipper)
     {
         this.clipper = clipper;
         return this;
     }
-    
+
     public double process(double input)
     {
         final double out = (this.b3 + this.f3 * (this.b2 + this.f3 * (this.b1 + this.f3 * (this.b0 + this.f * input)))) * this.fr;
@@ -72,7 +72,7 @@ public class LPF24dBLadder
         this.b1 = o1 + this.f * (o0 - o1);
         this.b2 = o2 + this.f * (o1 - o2);
         this.b3 = o3 + this.f * (o2 - o3);
-        
+
         return out;
     }
 }

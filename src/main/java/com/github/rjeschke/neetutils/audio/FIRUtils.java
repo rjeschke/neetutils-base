@@ -56,7 +56,7 @@ public final class FIRUtils
         final double[] fir = new double[order + 1];
         final double factor = 2.0 * cutoff;
         final int half = order >> 1;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
         {
             fir[i] = factor * NMath.sinc(factor * (i - half));
         }
@@ -80,7 +80,7 @@ public final class FIRUtils
         final double[] fir = new double[order + 1];
         final double factor = 2.0 * cutoff;
         final int half = order >> 1;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
         {
             fir[i] = (i == half ? 1.0 : 0.0) - factor * NMath.sinc(factor * (i - half));
         }
@@ -104,7 +104,7 @@ public final class FIRUtils
     {
         final double[] low = createLowpass(order, fcl, fs);
         final double[] high = createHighpass(order, fch, fs);
-        for(int i = 0; i < low.length; i++)
+        for (int i = 0; i < low.length; i++)
         {
             low[i] += high[i];
         }
@@ -128,7 +128,7 @@ public final class FIRUtils
     {
         final double[] fir = createBandstop(order, fcl, fch, fs);
         final int half = order >> 1;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
         {
             fir[i] = (i == half ? 1.0 : 0.0) - fir[i];
         }
@@ -145,13 +145,13 @@ public final class FIRUtils
     public final static double[] normalize(final double[] fir)
     {
         double sum = 0;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
         {
             sum += fir[i];
         }
-        if(sum != 0)
+        if (sum != 0)
         {
-            for(int i = 0; i < fir.length; i++)
+            for (int i = 0; i < fir.length; i++)
             {
                 fir[i] /= sum;
             }
@@ -174,26 +174,20 @@ public final class FIRUtils
     {
         final double tw = 2.0 * Math.PI * transitionWidth / fs;
         int m;
-        if(attenuation <= 21)
-            m = (int)Math.ceil(5.79 / tw);
-        else
-            m = (int)Math.ceil((attenuation - 7.95) / (2.285 * tw));
-        if((m & 1) == 0)
-            m++;
+        if (attenuation <= 21) m = (int)Math.ceil(5.79 / tw);
+        else m = (int)Math.ceil((attenuation - 7.95) / (2.285 * tw));
+        if ((m & 1) == 0) m++;
         final double[] win = new double[m];
 
         final double beta;
 
-        if(attenuation <= 21)
-            beta = 0;
-        else if(attenuation <= 50)
-            beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
-        else
-            beta = 0.1102 * (attenuation - 8.7);
+        if (attenuation <= 21) beta = 0;
+        else if (attenuation <= 50) beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
+        else beta = 0.1102 * (attenuation - 8.7);
 
         final double i0b = NMath.i0(beta);
 
-        for(int n = 0; n < m; n++)
+        for (int n = 0; n < m; n++)
         {
             final double v = beta * Math.sqrt(1.0 - Math.pow(2.0 * n / (m - 1) - 1.0, 2));
             win[n] = NMath.i0(v) / i0b;
@@ -216,10 +210,8 @@ public final class FIRUtils
     public final static double kaiserTransitionWidth(int m, double attenuation, double fs)
     {
         final double tw;
-        if(attenuation <= 21)
-            tw = 5.79 / m;
-        else
-            tw = (attenuation - 7.95) / (2.285 * m);
+        if (attenuation <= 21) tw = 5.79 / m;
+        else tw = (attenuation - 7.95) / (2.285 * m);
         return tw * fs / (2.0 * Math.PI);
     }
 
@@ -240,16 +232,13 @@ public final class FIRUtils
         final int m = fir.length;
         final double beta;
 
-        if(attenuation <= 21)
-            beta = 0;
-        else if(attenuation <= 50)
-            beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
-        else
-            beta = 0.1102 * (attenuation - 8.7);
+        if (attenuation <= 21) beta = 0;
+        else if (attenuation <= 50) beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
+        else beta = 0.1102 * (attenuation - 8.7);
 
         final double i0b = NMath.i0(beta);
 
-        for(int n = 0; n < m; n++)
+        for (int n = 0; n < m; n++)
         {
             final double v = beta * Math.sqrt(1.0 - Math.pow(2.0 * n / (m - 1) - 1.0, 2));
             fir[n] *= NMath.i0(v) / i0b;
@@ -269,7 +258,7 @@ public final class FIRUtils
     {
         final int m = fir.length - 1;
         final int m2 = m >> 1;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
         {
             fir[i] *= 1.0 - 2.0 * (i - m2) / m;
         }
@@ -286,7 +275,7 @@ public final class FIRUtils
     public final static double[] windowSinc(final double[] fir)
     {
         final int m = fir.length - 1;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
         {
             fir[i] *= NMath.sinc(2.0 * i / m - 1.0);
         }
@@ -303,7 +292,7 @@ public final class FIRUtils
     public final static double[] windowHanning(final double[] fir)
     {
         final int m = fir.length - 1;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
         {
             fir[i] *= 0.5 - 0.5 * Math.cos(2.0 * Math.PI * i / m);
         }
@@ -320,7 +309,7 @@ public final class FIRUtils
     public final static double[] windowHamming(final double[] fir)
     {
         final int m = fir.length - 1;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
         {
             fir[i] *= 0.54 - 0.46 * Math.cos(2.0 * Math.PI * i / m);
         }
@@ -337,7 +326,7 @@ public final class FIRUtils
     public final static double[] windowBlackman(final double[] fir)
     {
         final int m = fir.length - 1;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
         {
             fir[i] *= 0.42 - 0.5 * Math.cos(2.0 * Math.PI * i / m) + 0.08 * Math.cos(4.0 * Math.PI * i / m);
         }
@@ -354,23 +343,21 @@ public final class FIRUtils
     public final static float[] toFloats(final double[] array)
     {
         final float[] ret = new float[array.length];
-        for(int i = 0; i < ret.length; i++)
+        for (int i = 0; i < ret.length; i++)
         {
             ret[i] = (float)array[i];
         }
         return ret;
     }
 
-    private final static String[] PRES =
-        { "1", "10", "100" };
-    private final static String[] POSTS =
-        { "", "k", "M", "G", "T", "P" };
+    private final static String[] PRES  = {"1", "10", "100"};
+    private final static String[] POSTS = {"", "k", "M", "G", "T", "P"};
 
     private final static String engVal(int val)
     {
         int v = 1;
         int z = 0;
-        while(v < val)
+        while (v < val)
         {
             z++;
             v *= 10;
@@ -391,8 +378,7 @@ public final class FIRUtils
      */
     public final static BufferedImage freqResponse(double[] fir, final double fs)
     {
-        final int[] dbs = new int[]
-            { 12, 6, 0, -6, -12, -24, -48, -72, -96, -120 };
+        final int[] dbs = new int[] {12, 6, 0, -6, -12, -24, -48, -72, -96, -120};
         final BufferedImage ret = new BufferedImage(1024, 512, BufferedImage.TYPE_INT_RGB);
         final Graphics2D g = ret.createGraphics();
         g.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -401,15 +387,14 @@ public final class FIRUtils
         g.fillRect(0, 0, 1024, 512);
         g.setColor(Color.GRAY);
 
-        for(int i = 0, n = 0; i < 500; i += 6)
+        for (int i = 0, n = 0; i < 500; i += 6)
         {
             final int db = 12 - i;
             final int dy = 511 - (db + 144) * 512 / 156;
-            if(dy > 511)
-                break;
+            if (dy > 511) break;
             g.drawLine(0, dy, 1024, dy);
 
-            if(n < dbs.length && dbs[n] == db)
+            if (n < dbs.length && dbs[n] == db)
             {
                 g.setColor(Color.WHITE);
                 final String value = Integer.toString(db);
@@ -427,14 +412,13 @@ public final class FIRUtils
             int st = v;
             int next = v * 10;
             boolean wasNext = false;
-            for(;;)
+            for (;;)
             {
                 final int x = (int)(1024.0 * Math.log10(v) / logFs);
-                if(x >= 1024)
-                    break;
+                if (x >= 1024) break;
                 g.drawLine(x, 0, x, 512);
 
-                if(wasNext)
+                if (wasNext)
                 {
                     g.setColor(Color.WHITE);
                     final String value = engVal(next / 10);
@@ -445,7 +429,7 @@ public final class FIRUtils
                 }
 
                 v += st;
-                if(v == next)
+                if (v == next)
                 {
                     next *= 10;
                     st *= 10;
@@ -455,17 +439,17 @@ public final class FIRUtils
         }
 
         double max = 0;
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
             max = Math.max(Math.abs(fir[i]), max);
         max = 255 / max;
 
         int oldy2 = 0;
         int oldy = 0;
-        for(int x = 0; x < 1024; x++)
+        for (int x = 0; x < 1024; x++)
         {
             final double w = (Math.pow(10, logFs * x / 1024.0) / (fs * 0.5)) * Math.PI;
             double re = 0, im = 0;
-            for(int i = 0; i < fir.length; i++)
+            for (int i = 0; i < fir.length; i++)
             {
                 re += fir[i] * Math.cos(i * w);
                 im -= fir[i] * Math.sin(i * w);
@@ -482,7 +466,7 @@ public final class FIRUtils
                     * (fir[NMath.clamp(pi + 1, 0, fir.length - 1)] - fir[NMath.clamp(pi, 0, fir.length - 1)]);
             final int y2 = 256 - (int)(fv * max);
 
-            if(x > 0)
+            if (x > 0)
             {
                 g.setColor(Color.BLUE);
                 g.drawLine(x - 1, oldy2, x, y2);
@@ -506,9 +490,8 @@ public final class FIRUtils
      */
     public final static double[] multiply(final double[] inout, final double[] in)
     {
-        if(inout.length != in.length)
-            throw new RuntimeException("Filter lengths do not match!");
-        for(int i = 0; i < inout.length; i++)
+        if (inout.length != in.length) throw new RuntimeException("Filter lengths do not match!");
+        for (int i = 0; i < inout.length; i++)
             inout[i] *= in[i];
         return inout;
     }
@@ -524,9 +507,8 @@ public final class FIRUtils
      */
     public final static double[] add(final double[] inout, final double[] in)
     {
-        if(inout.length != in.length)
-            throw new RuntimeException("Filter lengths do not match!");
-        for(int i = 0; i < inout.length; i++)
+        if (inout.length != in.length) throw new RuntimeException("Filter lengths do not match!");
+        for (int i = 0; i < inout.length; i++)
             inout[i] += in[i];
         return inout;
     }
@@ -542,7 +524,7 @@ public final class FIRUtils
      */
     public final static double[] scale(final double[] fir, final double f)
     {
-        for(int i = 0; i < fir.length; i++)
+        for (int i = 0; i < fir.length; i++)
             fir[i] *= f;
         return fir;
     }

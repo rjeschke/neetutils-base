@@ -19,9 +19,9 @@ import com.github.rjeschke.neetutils.math.NMath;
 
 public class LPF24dB
 {
-    private double fs, q, qfu0;
-    private double f, bl0, bb0, r0, t0, tf0, u0, f0u1;
-    private double bl1, bb1, r1, t1, tf1, u1;
+    private double  fs, q, qfu0;
+    private double  f, bl0, bb0, r0, t0, tf0, u0, f0u1;
+    private double  bl1, bb1, r1, t1, tf1, u1;
     private Clipper clipper = new DefaultClipper();
 
     public LPF24dB(final double fs)
@@ -62,19 +62,19 @@ public class LPF24dB
         this.setRawQs(NMath.getButterworthFactor(4, 1), NMath.getButterworthFactor(4, 2));
         return this;
     }
-    
+
     public LPF24dB setMoogLadderResponse()
     {
         this.setRawQs(2, 2);
         return this;
     }
-    
+
     public void reset()
     {
         this.bl0 = this.bl1 = 0;
         this.bb0 = this.bb1 = 0;
     }
-    
+
     public LPF24dB setRawQs(double r0, double r1)
     {
         this.r0 = r0;
@@ -92,8 +92,7 @@ public class LPF24dB
     public double process(double input)
     {
         // Precalculate output
-        final double out = this.qfu0
-                * (this.bl0 + this.tf0 * (this.bb0 + this.f0u1 * (this.bl1 + this.tf1 * (this.bb1 + this.f * input))));
+        final double out = this.qfu0 * (this.bl0 + this.tf0 * (this.bb0 + this.f0u1 * (this.bl1 + this.tf1 * (this.bb1 + this.f * input))));
         final double qin = input - this.q * out;
 
         // Tick chained SVFs

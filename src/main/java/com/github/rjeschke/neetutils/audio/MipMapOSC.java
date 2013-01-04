@@ -55,8 +55,7 @@ public class MipMapOSC
 
     public void setPitch(final int cents)
     {
-        final double freq = 440.0 * NMath
-                .exp2(((this.lastPitch = NMath.clamp(cents, 0, this.maxPitch)) - 6900) / 1200.0);
+        final double freq = 440.0 * NMath.exp2(((this.lastPitch = NMath.clamp(cents, 0, this.maxPitch)) - 6900) / 1200.0);
         final int harmonics = (int)Math.ceil(this.fs2 / freq);
         final int mi = this.mipMap.getMipMapIndex(harmonics);
         this.wave0 = this.mipMap.getMipMap(mi);

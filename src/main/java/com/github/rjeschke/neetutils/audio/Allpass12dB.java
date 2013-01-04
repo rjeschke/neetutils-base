@@ -23,11 +23,12 @@ package com.github.rjeschke.neetutils.audio;
 public class Allpass12dB
 {
     private final SVF12dB svf;
-    
+
     /**
      * Constructor.
      * 
-     * @param fs Sampling rate.
+     * @param fs
+     *            Sampling rate.
      */
     public Allpass12dB(double fs)
     {
@@ -35,21 +36,23 @@ public class Allpass12dB
         this.svf.setRawQ(1);
         this.setCutoff(fs * 0.1);
     }
-    
+
     /**
      * Sets the cutoff of this filter in Hz.
      * 
-     * @param cutoff The cutoff.
+     * @param cutoff
+     *            The cutoff.
      */
     public void setCutoff(double cutoff)
     {
         this.svf.setCutoff(cutoff);
     }
-    
+
     /**
      * Sets the clipper of this filter.
      * 
-     * @param clipper The clipper.
+     * @param clipper
+     *            The clipper.
      * @return this.
      */
     public Allpass12dB setClipper(Clipper clipper)
@@ -57,7 +60,7 @@ public class Allpass12dB
         this.svf.setClipper(clipper);
         return this;
     }
-    
+
     /**
      * Resets this filters state.
      */
@@ -65,11 +68,12 @@ public class Allpass12dB
     {
         this.svf.reset();
     }
-    
+
     /**
      * Processes an input sample.
      * 
-     * @param input Input sample.
+     * @param input
+     *            Input sample.
      * @return Processed input.
      */
     public double process(double input)

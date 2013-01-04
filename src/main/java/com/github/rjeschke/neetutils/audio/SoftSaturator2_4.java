@@ -16,20 +16,20 @@
 package com.github.rjeschke.neetutils.audio;
 
 /**
- * A soft clipper with linear transfer characteristics from -1.0 to 1.0 and
- * a maximum output level of +/- 2.0.
+ * A soft clipper with linear transfer characteristics from -1.0 to 1.0 and a
+ * maximum output level of +/- 2.0.
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public class SoftSaturator2_4 implements Clipper
 {
     private final TubeCompress tube;
-    
+
     public SoftSaturator2_4()
     {
         this.tube = new TubeCompress(0, 1, 2.1, 0.2, 0.25, 1);
     }
-    
+
     @Override
     public double clip(double value)
     {

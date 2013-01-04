@@ -23,7 +23,7 @@ public class NopClipper implements Clipper
     {
         //
     }
-    
+
     @Override
     public double clip(double value)
     {

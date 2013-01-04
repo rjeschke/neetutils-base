@@ -19,39 +19,39 @@ public class LowShelf6dB
 {
     private final LPF6dB lp;
     private final HPF6dB hp;
-    private double gain = 1;
-    
+    private double       gain = 1;
+
     public LowShelf6dB(double fs)
     {
         this.lp = new LPF6dB(fs);
         this.hp = new HPF6dB(fs);
         this.setCutoff(fs * 0.1);
     }
-    
+
     public void setCutoff(double cutoff)
     {
         this.lp.setCutoff(cutoff);
         this.hp.setCutoff(cutoff);
     }
-    
+
     public void setGain(double db)
     {
         this.gain = Math.pow(10.0, db / 20.0);
     }
-    
+
     public LowShelf6dB setClipper(Clipper clipper)
     {
         this.lp.setClipper(clipper);
         this.hp.setClipper(clipper);
         return this;
     }
-    
+
     public void reset()
     {
         this.lp.reset();
         this.hp.reset();
     }
-    
+
     public double process(double input)
     {
         return this.hp.tick(input) + this.lp.tick(input) * this.gain;

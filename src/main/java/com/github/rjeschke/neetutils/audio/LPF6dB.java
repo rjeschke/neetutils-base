@@ -18,8 +18,8 @@ package com.github.rjeschke.neetutils.audio;
 public class LPF6dB
 {
     private final double fs;
-    private double f, f2, b = 0;
-    private Clipper clipper = new DefaultClipper();
+    private double       f, f2, b = 0;
+    private Clipper      clipper = new DefaultClipper();
 
     public LPF6dB(final double fs)
     {
@@ -31,7 +31,7 @@ public class LPF6dB
     {
         this.b = 0;
     }
-    
+
     public void setCutoff(final double freq)
     {
         this.f = Math.tan(Math.PI * freq / this.fs);

@@ -19,9 +19,9 @@ import com.github.rjeschke.neetutils.math.NMath;
 
 public class HPF24dB
 {
-    private double fs, q, qf;
-    private double f, bl0, bb0, r0, t0, tf0, u0, r0t0;
-    private double bl1, bb1, r1, t1, tf1, u1, r1t1;
+    private double  fs, q, qf;
+    private double  f, bl0, bb0, r0, t0, tf0, u0, r0t0;
+    private double  bl1, bb1, r1, t1, tf1, u1, r1t1;
     private Clipper clipper = new DefaultClipper();
 
     public HPF24dB(final double fs)
@@ -43,7 +43,7 @@ public class HPF24dB
         this.tf0 = this.t0 * this.f;
         this.u0 = 1.0 / (1.0 + this.t0 * this.f * this.f);
         this.r0t0 = this.r0 * this.t0;
-        
+
         this.t1 = 1.0 / (1.0 + this.r1 * this.f);
         this.tf1 = this.t1 * this.f;
         this.u1 = 1.0 / (1.0 + this.t1 * this.f * this.f);
@@ -66,13 +66,13 @@ public class HPF24dB
         this.setRawQs(NMath.getButterworthFactor(4, 1), NMath.getButterworthFactor(4, 2));
         return this;
     }
-    
+
     public HPF24dB setMoogLadderResponse()
     {
         this.setRawQs(2, 2);
         return this;
     }
-    
+
     public HPF24dB setRawQs(double r0, double r1)
     {
         this.r0 = r0;
@@ -86,7 +86,7 @@ public class HPF24dB
         this.bl0 = this.bl1 = 0;
         this.bb0 = this.bb1 = 0;
     }
-    
+
     public HPF24dB setClipper(Clipper clipper)
     {
         this.clipper = clipper;

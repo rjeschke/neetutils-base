@@ -20,11 +20,11 @@ import com.github.rjeschke.neetutils.math.NMath;
 public class SVF24dB
 {
     private final double fs;
-    private double b0, b1, b2, b3;
-    private double f, fB0, fB1, fC0, fC1, fD0, fD1, fE0;
-    private double a, b, c, d, r, dr;
-    private double A, B, C, D, E;
-    private Clipper clipper = new DefaultClipper();
+    private double       b0, b1, b2, b3;
+    private double       f, fB0, fB1, fC0, fC1, fD0, fD1, fE0;
+    private double       a, b, c, d, r, dr;
+    private double       A, B, C, D, E;
+    private Clipper      clipper = new DefaultClipper();
 
     public SVF24dB(double fs)
     {
@@ -41,34 +41,34 @@ public class SVF24dB
         this.recalc();
         return this;
     }
-    
+
     public SVF24dB setButterworthResponse()
     {
         final double a = NMath.getButterworthFactor(4, 1);
         final double b = NMath.getButterworthFactor(4, 2);
         return this.setCoefficients(a + b, 2 * a + b, a + b, 1);
     }
-    
+
     public SVF24dB setLadderResponse()
     {
         return this.setCoefficients(4, 6, 4, 1);
     }
-    
+
     public SVF24dB setTBResponse()
     {
         return this.setCoefficients(6.727171322029717, 14.142135623730951, 9.513656920021768, 1);
     }
-    
+
     public SVF24dB setEMSResponse()
     {
         return this.setCoefficients(8.335135415365786, 20.207259421636902, 13.677042341728665, 1);
     }
-    
+
     public SVF24dB setDResponse()
     {
         return this.setCoefficients(8.115667411135693, 19.595917942265423, 13.554030054147672, 1);
     }
-    
+
     public void setCutoff(double freq)
     {
         this.f = Math.tan(Math.PI * freq / this.fs);
@@ -85,13 +85,13 @@ public class SVF24dB
     {
         this.b0 = this.b1 = this.b2 = this.b3 = 0;
     }
-    
+
     public SVF24dB setClipper(Clipper clipper)
     {
         this.clipper = clipper;
         return this;
     }
-    
+
     private void recalc()
     {
         this.dr = this.d + this.r;

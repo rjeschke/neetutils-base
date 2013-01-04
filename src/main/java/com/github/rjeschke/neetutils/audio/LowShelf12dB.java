@@ -18,33 +18,33 @@ package com.github.rjeschke.neetutils.audio;
 public class LowShelf12dB
 {
     private final SVF12dB svf;
-    private double gain = 1;
-    private double gain2 = Math.sqrt(2);
-    
+    private double        gain  = 1;
+    private double        gain2 = Math.sqrt(2);
+
     public LowShelf12dB(double fs)
     {
         this.svf = new SVF12dB(fs);
         this.svf.setRawQ(Math.sqrt(2));
         this.setCutoff(fs * 0.1);
     }
-    
+
     public void setCutoff(double cutoff)
     {
         this.svf.setCutoff(cutoff);
     }
-    
+
     public void setGain(double db)
     {
         this.gain = Math.pow(10.0, db / 20.0);
         this.gain2 = Math.sqrt(2 * this.gain);
     }
-    
+
     public LowShelf12dB setClipper(Clipper clipper)
     {
         this.svf.setClipper(clipper);
         return this;
     }
-    
+
     public double process(double input)
     {
         this.svf.process(input);

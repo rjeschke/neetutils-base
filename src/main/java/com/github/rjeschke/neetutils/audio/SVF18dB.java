@@ -18,11 +18,11 @@ package com.github.rjeschke.neetutils.audio;
 public class SVF18dB
 {
     private final double fs;
-    private double b0, b1, b2;
-    private double f, fB0, fB1, fC0, fC1, fD0;
-    private double a, b, c, r, ar, br;
-    private double A, B, C, D;
-    private Clipper clipper = new DefaultClipper();
+    private double       b0, b1, b2;
+    private double       f, fB0, fB1, fC0, fC1, fD0;
+    private double       a, b, c, r, ar, br;
+    private double       A, B, C, D;
+    private Clipper      clipper = new DefaultClipper();
 
     public SVF18dB(double fs)
     {
@@ -38,17 +38,17 @@ public class SVF18dB
         this.recalc();
         return this;
     }
-    
+
     public SVF18dB setButterworthResponse()
     {
         return this.setCoefficients(2, 2, 1);
     }
-    
+
     public SVF18dB setLadderResponse()
     {
         return this.setCoefficients(3, 3, 1);
     }
-    
+
     public void setCutoff(double freq)
     {
         this.f = Math.tan(Math.PI * freq / this.fs);
@@ -65,13 +65,13 @@ public class SVF18dB
     {
         this.b0 = this.b1 = this.b2 = 0;
     }
-    
+
     public SVF18dB setClipper(Clipper clipper)
     {
         this.clipper = clipper;
         return this;
     }
-    
+
     private void recalc()
     {
         final double rq = 1 + this.r;

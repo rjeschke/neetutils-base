@@ -16,20 +16,20 @@
 package com.github.rjeschke.neetutils.audio;
 
 /**
- * A 6dB allpass filter realized using 6dB low- and highpass
- * filters.
- *  
+ * A 6dB allpass filter realized using 6dB low- and highpass filters.
+ * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public class Allpass6dB
 {
     private final LPF6dB lp;
     private final HPF6dB hp;
-    
+
     /**
      * Constructor.
      * 
-     * @param fs Sampling rate.
+     * @param fs
+     *            Sampling rate.
      */
     public Allpass6dB(double fs)
     {
@@ -37,22 +37,24 @@ public class Allpass6dB
         this.hp = new HPF6dB(fs);
         this.setCutoff(fs * 0.1);
     }
-    
+
     /**
      * Sets the cutoff of this filter in Hz.
      * 
-     * @param cutoff The cutoff.
+     * @param cutoff
+     *            The cutoff.
      */
     public void setCutoff(double cutoff)
     {
         this.lp.setCutoff(cutoff);
         this.hp.setCutoff(cutoff);
     }
-    
+
     /**
      * Sets the clipper of this filter.
      * 
-     * @param clipper The clipper.
+     * @param clipper
+     *            The clipper.
      * @return this.
      */
     public Allpass6dB setClipper(Clipper clipper)
@@ -61,7 +63,7 @@ public class Allpass6dB
         this.hp.setClipper(clipper);
         return this;
     }
-    
+
     /**
      * Resets this filters state.
      */
@@ -70,11 +72,12 @@ public class Allpass6dB
         this.lp.reset();
         this.hp.reset();
     }
-    
+
     /**
      * Processes an input sample.
      * 
-     * @param input Input sample.
+     * @param input
+     *            Input sample.
      * @return Processed input.
      */
     public double process(double input)

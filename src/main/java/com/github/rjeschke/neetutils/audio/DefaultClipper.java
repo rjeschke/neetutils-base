@@ -21,7 +21,7 @@ public class DefaultClipper implements Clipper
     {
         // empty
     }
-    
+
     @Override
     public double clip(double value)
     {

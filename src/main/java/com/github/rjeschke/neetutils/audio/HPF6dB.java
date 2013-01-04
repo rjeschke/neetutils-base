@@ -18,8 +18,8 @@ package com.github.rjeschke.neetutils.audio;
 public class HPF6dB
 {
     private final double fs;
-    private double f, f2, b = 0;
-    private Clipper clipper = new DefaultClipper();
+    private double       f, f2, b = 0;
+    private Clipper      clipper = new DefaultClipper();
 
     public HPF6dB(final double fs)
     {
@@ -37,7 +37,7 @@ public class HPF6dB
     {
         this.b = 0;
     }
-    
+
     public double coef(double previous)
     {
         return previous * this.f2;
