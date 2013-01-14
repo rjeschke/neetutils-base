@@ -27,7 +27,7 @@ public class SoftSaturator2_4 implements Clipper
 
     public SoftSaturator2_4()
     {
-        this.tube = new TubeCompress(0, 1, 2.1, 0.2, 0.25, 1);
+        this.tube = new TubeCompress(2.1, 0.2, 0.25);
     }
 
     @Override
