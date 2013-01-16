@@ -408,6 +408,16 @@ public final class Files implements Runnable
         return classes;
     }
 
+    public final static String home(String path)
+    {
+        return new File(System.getProperty("user.home"), path).getAbsolutePath();
+    }
+    
+    public final static File home(File path)
+    {
+        return new File(new File(System.getProperty("user.home")), path.toString());
+    }
+    
     @Override
     public void run()
     {
