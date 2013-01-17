@@ -55,8 +55,9 @@ public class LPF6dB
         return o;
     }
 
-    public void setClipper(Clipper clipper)
+    public LPF6dB setClipper(Clipper clipper)
     {
         this.clipper = clipper;
+        return this;
     }
 }

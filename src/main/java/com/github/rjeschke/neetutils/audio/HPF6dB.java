@@ -55,8 +55,9 @@ public class HPF6dB
         return input - o;
     }
 
-    public void setClipper(Clipper clipper)
+    public HPF6dB setClipper(Clipper clipper)
     {
         this.clipper = clipper;
+        return this;
     }
 }
