@@ -363,4 +363,30 @@ public final class WavWriter
             throw new IOException("Unsupported bit depth: " + this.bitsPerSample);
         }
     }
+
+    public final static void write(final String filename, final int sampleRate, final int bitsPerSample,
+            final int channels, final double[] samples, boolean normalize) throws IOException
+    {
+        final WavWriter wav = new WavWriter(sampleRate, bitsPerSample, channels);
+
+        if (normalize)
+        {
+            double max = 0;
+            for (int i = 0; i < samples.length; i++)
+            {
+                max = Math.max(max, Math.abs(samples[i]));
+            }
+
+            if (max != 0)
+            {
+                for (int i = 0; i < samples.length; i++)
+                {
+                    samples[i] = (samples[i] / max) * 0.985;
+                }
+            }
+        }
+
+        wav.write(samples);
+        wav.save(filename);
+    }
 }
