@@ -26,52 +26,52 @@ public final class NMath
     { /* forbidden */
     }
 
-    public final static double INV_LOG_2 = 1.0 / Math.log(2);
-    public final static double LOG_2 = Math.log(2);
-    public final static float INV_LOG_2f = (float)(1.0 / Math.log(2));
-    public final static float LOG_2f = (float)Math.log(2);
-    
+    public final static double INV_LOG_2  = 1.0 / Math.log(2);
+    public final static double LOG_2      = Math.log(2);
+    public final static float  INV_LOG_2f = (float)(1.0 / Math.log(2));
+    public final static float  LOG_2f     = (float)Math.log(2);
+
     /** yotta */
-    public final static double U_Y = 1e24;
+    public final static double U_Y        = 1e24;
     /** zetta */
-    public final static double U_Z = 1e21;
+    public final static double U_Z        = 1e21;
     /** exa */
-    public final static double U_E = 1e18;
+    public final static double U_E        = 1e18;
     /** peta */
-    public final static double U_P = 1e15;
+    public final static double U_P        = 1e15;
     /** tera */
-    public final static double U_T = 1e12;
+    public final static double U_T        = 1e12;
     /** giga */
-    public final static double U_G = 1e9;
+    public final static double U_G        = 1e9;
     /** mega */
-    public final static double U_M = 1e6;
+    public final static double U_M        = 1e6;
     /** kilo */
-    public final static double U_k = 1e3;
+    public final static double U_k        = 1e3;
     /** hecto */
-    public final static double U_h = 1e2;
+    public final static double U_h        = 1e2;
     /** deca */
-    public final static double U_da = 1e1;
+    public final static double U_da       = 1e1;
     /** deci */
-    public final static double U_d = 1e-1;
+    public final static double U_d        = 1e-1;
     /** centi */
-    public final static double U_c = 1e-2;
+    public final static double U_c        = 1e-2;
     /** milli */
-    public final static double U_m = 1e-3;
+    public final static double U_m        = 1e-3;
     /** micro */
-    public final static double U_u = 1e-6;
+    public final static double U_u        = 1e-6;
     /** nano */
-    public final static double U_n = 1e-9;
+    public final static double U_n        = 1e-9;
     /** pico */
-    public final static double U_p = 1e-12;
+    public final static double U_p        = 1e-12;
     /** femto */
-    public final static double U_f = 1e-15;
+    public final static double U_f        = 1e-15;
     /** atto */
-    public final static double U_a = 1e-18;
+    public final static double U_a        = 1e-18;
     /** zepto */
-    public final static double U_z = 1e-21;
+    public final static double U_z        = 1e-21;
     /** yocto */
-    public final static double U_y = 1e-24;
-    
+    public final static double U_y        = 1e-24;
+
     /**
      * Returns <code>min</code> if <code>x</code> is less than <code>min</code>,
      * <code>max</code> if <code>x</code> is greater than <code>max</code> and
@@ -224,13 +224,13 @@ public final class NMath
     // TODO verify
     public final static float fract(float x)
     {
-        return  x < 0 ? x - (float)Math.ceil(x) : x - (float)Math.floor(x);
+        return x < 0 ? x - (float)Math.ceil(x) : x - (float)Math.floor(x);
     }
 
     // TODO verify
     public final static double fract(double x)
     {
-        return  x < 0 ? x - Math.ceil(x) : x - Math.floor(x);
+        return x < 0 ? x - Math.ceil(x) : x - Math.floor(x);
     }
 
     /**
@@ -242,7 +242,7 @@ public final class NMath
      */
     public final static float sinc(final float x)
     {
-        if(x != 0)
+        if (x != 0)
         {
             final float xpi = (float)Math.PI * x;
             return (float)Math.sin(xpi) / xpi;
@@ -263,14 +263,13 @@ public final class NMath
         final double x2 = x * x * 0.25;
         double xc = x2;
         double v = 1 + x2;
-        for(int i = 2; i < 100; i++)
+        for (int i = 2; i < 100; i++)
         {
             f *= i;
             xc *= x2;
             final double a = xc / (f * f);
             v += a;
-            if(a < 1e-20)
-                break;
+            if (a < 1e-20) break;
         }
         return v;
     }
@@ -284,7 +283,7 @@ public final class NMath
      */
     public final static double sinc(final double x)
     {
-        if(x != 0)
+        if (x != 0)
         {
             final double xpi = Math.PI * x;
             return Math.sin(xpi) / xpi;
@@ -295,95 +294,85 @@ public final class NMath
     public final static long rol64(long value, int bits)
     {
         final int b = bits & 63;
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         return (value << b) | (value >>> (64 - b));
     }
 
     public final static long ror64(long value, int bits)
     {
         final int b = bits & 63;
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         return (value >>> b) | (value << (64 - b));
     }
-    
+
     public final static int rol32(int value, int bits)
     {
         final int b = bits & 31;
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         return (value << b) | (value >>> (32 - b));
     }
-    
+
     public final static int ror32(int value, int bits)
     {
         final int b = bits & 31;
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         return (value >>> b) | (value << (32 - b));
     }
-    
+
     public final static int rol24(int value, int bits)
     {
         final int b = Math.abs(bits % 24);
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         final int v = value & 0xffffff;
         return ((v >> b) | (v << (24 - b))) & 0xffffff;
     }
-    
+
     public final static int ror24(int value, int bits)
     {
         final int b = Math.abs(bits % 24);
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         final int v = value & 0xffffff;
         return ((v >> b) | (v << (24 - b))) & 0xffffff;
     }
-    
+
     public final static int rol16(int value, int bits)
     {
         final int b = bits & 15;
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         final int v = value & 65535;
         return ((v << b) | (v >> (16 - b))) & 65535;
     }
-    
+
     public final static int ror16(int value, int bits)
     {
         final int b = bits & 15;
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         final int v = value & 65535;
         return ((v >> b) | (v << (16 - b))) & 65535;
     }
-    
+
     public final static int rol8(int value, int bits)
     {
         final int b = bits & 7;
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         final int v = value & 255;
         return ((v << b) | (v >> (8 - b))) & 255;
     }
-    
+
     public final static int ror8(int value, int bits)
     {
         final int b = bits & 7;
-        if(b == 0)
-            return value;
-        
+        if (b == 0) return value;
+
         final int v = value & 255;
         return ((v >> b) | (v << (8 - b))) & 255;
     }
@@ -392,7 +381,7 @@ public final class NMath
     {
         return -2.0 * Math.cos((2.0 * k + n - 1) / (2 * n) * Math.PI);
     }
-    
+
     public final static double log2(double x)
     {
         return Math.log(x) * INV_LOG_2;
@@ -402,15 +391,24 @@ public final class NMath
     {
         return Math.pow(2, x);
     }
-    
+
     public final static float log2(float x)
     {
         return (float)(Math.log(x) * INV_LOG_2);
     }
-    
+
     public final static float exp2(float x)
     {
         return (float)Math.pow(2, x);
     }
+
+    public final static boolean doubleEquals(final double a, final double b, final double epsilon)
+    {
+        return Math.abs(a - b) <= epsilon;
+    }
     
+    public final static boolean floatEquals(final float a, final float b, final float epsilon)
+    {
+        return Math.abs(a - b) <= epsilon;
+    }
 }
