@@ -27,35 +27,35 @@ public class Vector3d
     {
         // 0
     }
-    
+
     public Vector3d(double x, double y, double z)
     {
         this.x = x;
         this.y = y;
         this.z = z;
     }
-    
+
     public Vector3d(double xyz)
     {
         this.x = xyz;
         this.y = xyz;
         this.z = xyz;
     }
-    
+
     public Vector3d(Vector3d v, double z)
     {
         this.x = v.x;
         this.y = v.y;
         this.z = z;
     }
-    
+
     public Vector3d(NColor color)
     {
         this.x = color.r;
         this.y = color.g;
         this.z = color.b;
     }
-    
+
     public Vector3d scale(double f)
     {
         this.x *= f;
@@ -63,7 +63,7 @@ public class Vector3d
         this.z *= f;
         return this;
     }
-    
+
     public Vector3d add(Vector3d v)
     {
         this.x += v.x;
@@ -71,7 +71,7 @@ public class Vector3d
         this.z += v.z;
         return this;
     }
-    
+
     public Vector3d add(Vector3d v, double scale)
     {
         this.x += v.x * scale;
@@ -79,7 +79,7 @@ public class Vector3d
         this.z += v.z * scale;
         return this;
     }
-    
+
     public Vector3d sub(Vector3d v)
     {
         this.x -= v.x;
@@ -87,7 +87,7 @@ public class Vector3d
         this.z -= v.z;
         return this;
     }
-    
+
     public Vector3d sub(Vector3d v, double scale)
     {
         this.x -= v.x * scale;
@@ -95,7 +95,7 @@ public class Vector3d
         this.z -= v.z * scale;
         return this;
     }
-    
+
     public Vector3d mul(Vector3d v)
     {
         this.x *= v.x;
@@ -103,7 +103,7 @@ public class Vector3d
         this.z *= v.z;
         return this;
     }
-    
+
     public Vector3d mul(Vector3d v, double scale)
     {
         this.x *= v.x * scale;
@@ -111,7 +111,7 @@ public class Vector3d
         this.z *= v.z * scale;
         return this;
     }
-    
+
     public Vector3d lerp(Vector3d v, double f)
     {
         this.x += (v.x - this.x) * f;
@@ -119,29 +119,29 @@ public class Vector3d
         this.z += (v.z - this.z) * f;
         return this;
     }
-    
+
     public double dot(Vector3d v)
     {
         return this.x * v.x + this.y * v.y + this.z * v.z;
     }
-    
+
     public Vector3d cross(Vector3d v)
     {
         final double x = this.y * v.z - this.z * v.y;
         final double z = this.x * v.y - this.y * v.x;
         final double y = this.z * v.x - this.x * v.z;
-        
+
         this.x = x;
         this.y = y;
         this.z = z;
-        
+
         return this;
     }
 
     public Vector3d normalize()
     {
         double len = this.x * this.x + this.y * this.y + this.z * this.z;
-        if(len != 0)
+        if (len != 0)
         {
             len = 1.0 / Math.sqrt(len);
             this.x *= len;
@@ -150,7 +150,7 @@ public class Vector3d
         }
         return this;
     }
-    
+
     public Vector3d negate()
     {
         this.x = -this.x;
@@ -158,7 +158,7 @@ public class Vector3d
         this.z = -this.z;
         return this;
     }
-    
+
     public double length()
     {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
@@ -175,12 +175,12 @@ public class Vector3d
     {
         return new NColor((float)this.x, (float)this.y, (float)this.z);
     }
-    
+
     public NColor toNColor(float alpha)
     {
         return new NColor(alpha, (float)this.x, (float)this.y, (float)this.z);
     }
-    
+
     @Override
     public Vector3d clone()
     {
@@ -191,5 +191,12 @@ public class Vector3d
     public String toString()
     {
         return "(" + this.x + ", " + this.y + ", " + this.z + ")";
+    }
+
+    public void set(final double x, final double y, final double z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 }

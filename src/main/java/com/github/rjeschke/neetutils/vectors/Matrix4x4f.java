@@ -18,23 +18,23 @@ package com.github.rjeschke.neetutils.vectors;
 public class Matrix4x4f
 {
     // column major order
-    public final static int M00 = 0 * 4 + 0;
-    public final static int M01 = 1 * 4 + 0;
-    public final static int M02 = 2 * 4 + 0;
-    public final static int M03 = 3 * 4 + 0;
-    public final static int M10 = 0 * 4 + 1;
-    public final static int M11 = 1 * 4 + 1;
-    public final static int M12 = 2 * 4 + 1;
-    public final static int M13 = 3 * 4 + 1;
-    public final static int M20 = 0 * 4 + 2;
-    public final static int M21 = 1 * 4 + 2;
-    public final static int M22 = 2 * 4 + 2;
-    public final static int M23 = 3 * 4 + 2;
-    public final static int M30 = 0 * 4 + 3;
-    public final static int M31 = 1 * 4 + 3;
-    public final static int M32 = 2 * 4 + 3;
-    public final static int M33 = 3 * 4 + 3;
-    protected final float[] data = new float[16];
+    public final static int        M00      = 0 * 4 + 0;
+    public final static int        M01      = 1 * 4 + 0;
+    public final static int        M02      = 2 * 4 + 0;
+    public final static int        M03      = 3 * 4 + 0;
+    public final static int        M10      = 0 * 4 + 1;
+    public final static int        M11      = 1 * 4 + 1;
+    public final static int        M12      = 2 * 4 + 1;
+    public final static int        M13      = 3 * 4 + 1;
+    public final static int        M20      = 0 * 4 + 2;
+    public final static int        M21      = 1 * 4 + 2;
+    public final static int        M22      = 2 * 4 + 2;
+    public final static int        M23      = 3 * 4 + 2;
+    public final static int        M30      = 0 * 4 + 3;
+    public final static int        M31      = 1 * 4 + 3;
+    public final static int        M32      = 2 * 4 + 3;
+    public final static int        M33      = 3 * 4 + 3;
+    protected final float[]        data     = new float[16];
 
     public final static Matrix4x4f IDENTITY = Matrix4x4f.identity();
 
@@ -71,7 +71,15 @@ public class Matrix4x4f
     {
         System.arraycopy(m, offset, this.data, 0, 16);
     }
-    
+
+    public Matrix4x4d toDoubleMatrix()
+    {
+        final double[] a = new double[16];
+        for (int i = 0; i < 16; i++)
+            a[i] = this.data[i];
+        return new Matrix4x4d(a);
+    }
+
     private static Matrix4x4f identity()
     {
         final Matrix4x4f mat = new Matrix4x4f();
@@ -201,25 +209,41 @@ public class Matrix4x4f
     {
         final Matrix4x4f r = new Matrix4x4f();
 
-        r.data[M00] = this.data[M00] * mat.data[M00] + this.data[M01] * mat.data[M10] + this.data[M02] * mat.data[M20] + this.data[M03] * mat.data[M30];
-        r.data[M01] = this.data[M00] * mat.data[M01] + this.data[M01] * mat.data[M11] + this.data[M02] * mat.data[M21] + this.data[M03] * mat.data[M31];
-        r.data[M02] = this.data[M00] * mat.data[M02] + this.data[M01] * mat.data[M12] + this.data[M02] * mat.data[M22] + this.data[M03] * mat.data[M32];
-        r.data[M03] = this.data[M00] * mat.data[M03] + this.data[M01] * mat.data[M13] + this.data[M02] * mat.data[M23] + this.data[M03] * mat.data[M33];
-        
-        r.data[M10] = this.data[M10] * mat.data[M00] + this.data[M11] * mat.data[M10] + this.data[M12] * mat.data[M20] + this.data[M13] * mat.data[M30];
-        r.data[M11] = this.data[M10] * mat.data[M01] + this.data[M11] * mat.data[M11] + this.data[M12] * mat.data[M21] + this.data[M13] * mat.data[M31];
-        r.data[M12] = this.data[M10] * mat.data[M02] + this.data[M11] * mat.data[M12] + this.data[M12] * mat.data[M22] + this.data[M13] * mat.data[M32];
-        r.data[M13] = this.data[M10] * mat.data[M03] + this.data[M11] * mat.data[M13] + this.data[M12] * mat.data[M23] + this.data[M13] * mat.data[M33];
+        r.data[M00] = this.data[M00] * mat.data[M00] + this.data[M01] * mat.data[M10] + this.data[M02] * mat.data[M20]
+                + this.data[M03] * mat.data[M30];
+        r.data[M01] = this.data[M00] * mat.data[M01] + this.data[M01] * mat.data[M11] + this.data[M02] * mat.data[M21]
+                + this.data[M03] * mat.data[M31];
+        r.data[M02] = this.data[M00] * mat.data[M02] + this.data[M01] * mat.data[M12] + this.data[M02] * mat.data[M22]
+                + this.data[M03] * mat.data[M32];
+        r.data[M03] = this.data[M00] * mat.data[M03] + this.data[M01] * mat.data[M13] + this.data[M02] * mat.data[M23]
+                + this.data[M03] * mat.data[M33];
 
-        r.data[M20] = this.data[M20] * mat.data[M00] + this.data[M21] * mat.data[M10] + this.data[M22] * mat.data[M20] + this.data[M23] * mat.data[M30];
-        r.data[M21] = this.data[M20] * mat.data[M01] + this.data[M21] * mat.data[M11] + this.data[M22] * mat.data[M21] + this.data[M23] * mat.data[M31];
-        r.data[M22] = this.data[M20] * mat.data[M02] + this.data[M21] * mat.data[M12] + this.data[M22] * mat.data[M22] + this.data[M23] * mat.data[M32];
-        r.data[M23] = this.data[M20] * mat.data[M03] + this.data[M21] * mat.data[M13] + this.data[M22] * mat.data[M23] + this.data[M23] * mat.data[M33];
+        r.data[M10] = this.data[M10] * mat.data[M00] + this.data[M11] * mat.data[M10] + this.data[M12] * mat.data[M20]
+                + this.data[M13] * mat.data[M30];
+        r.data[M11] = this.data[M10] * mat.data[M01] + this.data[M11] * mat.data[M11] + this.data[M12] * mat.data[M21]
+                + this.data[M13] * mat.data[M31];
+        r.data[M12] = this.data[M10] * mat.data[M02] + this.data[M11] * mat.data[M12] + this.data[M12] * mat.data[M22]
+                + this.data[M13] * mat.data[M32];
+        r.data[M13] = this.data[M10] * mat.data[M03] + this.data[M11] * mat.data[M13] + this.data[M12] * mat.data[M23]
+                + this.data[M13] * mat.data[M33];
 
-        r.data[M30] = this.data[M30] * mat.data[M00] + this.data[M31] * mat.data[M10] + this.data[M32] * mat.data[M20] + this.data[M33] * mat.data[M30];
-        r.data[M31] = this.data[M30] * mat.data[M01] + this.data[M31] * mat.data[M11] + this.data[M32] * mat.data[M21] + this.data[M33] * mat.data[M31];
-        r.data[M32] = this.data[M30] * mat.data[M02] + this.data[M31] * mat.data[M12] + this.data[M32] * mat.data[M22] + this.data[M33] * mat.data[M32];
-        r.data[M33] = this.data[M30] * mat.data[M03] + this.data[M31] * mat.data[M13] + this.data[M32] * mat.data[M23] + this.data[M33] * mat.data[M33];
+        r.data[M20] = this.data[M20] * mat.data[M00] + this.data[M21] * mat.data[M10] + this.data[M22] * mat.data[M20]
+                + this.data[M23] * mat.data[M30];
+        r.data[M21] = this.data[M20] * mat.data[M01] + this.data[M21] * mat.data[M11] + this.data[M22] * mat.data[M21]
+                + this.data[M23] * mat.data[M31];
+        r.data[M22] = this.data[M20] * mat.data[M02] + this.data[M21] * mat.data[M12] + this.data[M22] * mat.data[M22]
+                + this.data[M23] * mat.data[M32];
+        r.data[M23] = this.data[M20] * mat.data[M03] + this.data[M21] * mat.data[M13] + this.data[M22] * mat.data[M23]
+                + this.data[M23] * mat.data[M33];
+
+        r.data[M30] = this.data[M30] * mat.data[M00] + this.data[M31] * mat.data[M10] + this.data[M32] * mat.data[M20]
+                + this.data[M33] * mat.data[M30];
+        r.data[M31] = this.data[M30] * mat.data[M01] + this.data[M31] * mat.data[M11] + this.data[M32] * mat.data[M21]
+                + this.data[M33] * mat.data[M31];
+        r.data[M32] = this.data[M30] * mat.data[M02] + this.data[M31] * mat.data[M12] + this.data[M32] * mat.data[M22]
+                + this.data[M33] * mat.data[M32];
+        r.data[M33] = this.data[M30] * mat.data[M03] + this.data[M31] * mat.data[M13] + this.data[M32] * mat.data[M23]
+                + this.data[M33] * mat.data[M33];
 
         return r;
     }
@@ -293,13 +317,13 @@ public class Matrix4x4f
     {
         System.arraycopy(this.data, 0, array, offset, 16);
     }
-    
+
     @Override
     public String toString()
     {
-        return "{" + this.data[M00] + ", " + this.data[M01] + ", " + this.data[M02] + ", " + this.data[M03] + "\n" + this.data[M10] + ", "
-                + this.data[M11] + ", " + this.data[M12] + ", " + this.data[M13] + "\n" + this.data[M20] + ", " + this.data[M21] + ", "
-                + this.data[M22] + ", " + this.data[M23] + "\n" + this.data[M30] + ", " + this.data[M31] + ", " + this.data[M32] + ", "
-                + this.data[M33] + "}";
+        return "{" + this.data[M00] + ", " + this.data[M01] + ", " + this.data[M02] + ", " + this.data[M03] + "\n"
+                + this.data[M10] + ", " + this.data[M11] + ", " + this.data[M12] + ", " + this.data[M13] + "\n"
+                + this.data[M20] + ", " + this.data[M21] + ", " + this.data[M22] + ", " + this.data[M23] + "\n"
+                + this.data[M30] + ", " + this.data[M31] + ", " + this.data[M32] + ", " + this.data[M33] + "}";
     }
 }

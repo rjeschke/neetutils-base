@@ -45,7 +45,7 @@ public class Vector4d
         this.w = xyzw;
     }
     
-    public Vector4d(Vector2f v, double z, double w)
+    public Vector4d(Vector2d v, double z, double w)
     {
         this.x = v.x;
         this.y = v.y;
@@ -53,7 +53,7 @@ public class Vector4d
         this.w = w;
     }
     
-    public Vector4d(Vector3f v, double w)
+    public Vector4d(Vector3d v, double w)
     {
         this.x = v.x;
         this.y = v.y;
