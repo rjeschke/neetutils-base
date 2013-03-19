@@ -31,7 +31,7 @@ public class LPF6dBGVar
         this.f = Math.tan(Math.PI * freq / this.fs);
         this.fb = this.f * this.feedback;
     }
-    
+
     public void setFeedback(final double fb)
     {
         this.feedback = fb;

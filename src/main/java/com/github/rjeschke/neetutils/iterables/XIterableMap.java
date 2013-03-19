@@ -22,7 +22,7 @@ import com.github.rjeschke.neetutils.fn.FnMapping;
 class XIterableMap<A, B> extends AbstractXIterable<B>
 {
     private final Iterable<? extends A> iterable;
-    private final FnMapping<A, B> mapping;
+    private final FnMapping<A, B>       mapping;
 
     public XIterableMap(final Iterable<? extends A> iterable, final FnMapping<A, B> mapping)
     {
@@ -33,13 +33,13 @@ class XIterableMap<A, B> extends AbstractXIterable<B>
     @Override
     public Iterator<B> iterator()
     {
-        return new XIterableMap.XIterator<A, B>(this.iterable.iterator(), this.mapping);
+        return new XIterableMap.XIterator<>(this.iterable.iterator(), this.mapping);
     }
 
     private final static class XIterator<A, B> implements Iterator<B>
     {
         private final Iterator<? extends A> iterator;
-        private final FnMapping<A, B> mapping;
+        private final FnMapping<A, B>       mapping;
 
         public XIterator(final Iterator<? extends A> iterator, final FnMapping<A, B> mapping)
         {

@@ -22,7 +22,7 @@ import com.github.rjeschke.neetutils.fn.FnPredicate;
 
 class XIterableFilter<A> extends AbstractXIterable<A>
 {
-    private final Iterable<? extends A> iterable;
+    private final Iterable<? extends A>  iterable;
     private final FnPredicate<? super A> predicate;
 
     public XIterableFilter(final Iterable<? extends A> iterable, final FnPredicate<? super A> predicate)
@@ -34,15 +34,15 @@ class XIterableFilter<A> extends AbstractXIterable<A>
     @Override
     public Iterator<A> iterator()
     {
-        return new XIterableFilter.XIterator<A>(this.iterable.iterator(), this.predicate);
+        return new XIterableFilter.XIterator<>(this.iterable.iterator(), this.predicate);
     }
 
     private final static class XIterator<A> implements Iterator<A>
     {
-        private final Iterator<? extends A> iterator;
+        private final Iterator<? extends A>  iterator;
         private final FnPredicate<? super A> predicate;
-        private boolean hasElement = false;
-        private A element = null;
+        private boolean                      hasElement = false;
+        private A                            element    = null;
 
         public XIterator(final Iterator<? extends A> iterator, final FnPredicate<? super A> predicate)
         {
@@ -53,15 +53,15 @@ class XIterableFilter<A> extends AbstractXIterable<A>
         @Override
         public boolean hasNext()
         {
-            if(this.hasElement)
+            if (this.hasElement)
             {
                 return true;
             }
 
-            while(this.iterator.hasNext())
+            while (this.iterator.hasNext())
             {
                 final A a = this.iterator.next();
-                if(this.predicate.applyPredicate(a))
+                if (this.predicate.applyPredicate(a))
                 {
                     this.element = a;
                     this.hasElement = true;
@@ -75,7 +75,7 @@ class XIterableFilter<A> extends AbstractXIterable<A>
         @Override
         public A next()
         {
-            if(!this.hasElement)
+            if (!this.hasElement)
             {
                 throw new NoSuchElementException();
             }

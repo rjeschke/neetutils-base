@@ -32,7 +32,7 @@ public class Triplet<A, B, C>
 
     public final static <A, B, C> Triplet<A, B, C> of(A a, B b, C c)
     {
-        return new Triplet<A, B, C>(a, b, c);
+        return new Triplet<>(a, b, c);
     }
 
     @Override
@@ -45,11 +45,9 @@ public class Triplet<A, B, C>
     @Override
     public boolean equals(Object obj)
     {
-        if(obj == this)
-            return true;
+        if (obj == this) return true;
 
-        if(!(obj instanceof Triplet))
-            return false;
+        if (!(obj instanceof Triplet)) return false;
 
         final Triplet<?, ?, ?> p = (Triplet<?, ?, ?>)obj;
 
@@ -59,6 +57,6 @@ public class Triplet<A, B, C>
     @Override
     public String toString()
     {
-        return "(" + this.a.toString() + ", " + this.b.toString() +  ", " + this.c.toString() + ")";
+        return "(" + this.a.toString() + ", " + this.b.toString() + ", " + this.c.toString() + ")";
     }
 }

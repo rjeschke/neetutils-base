@@ -26,31 +26,30 @@ import com.github.rjeschke.neetutils.WrappedCheckedException;
 public class LineReaderIterator implements Iterable<String>, Closeable
 {
     final BufferedReader in;
-    boolean closed = false;
-    volatile boolean iteratorInUse = false;
-    String current;
-    
+    boolean              closed        = false;
+    volatile boolean     iteratorInUse = false;
+    String               current;
+
     public LineReaderIterator(BufferedReader in)
     {
         this.in = in;
         this.current = this.read();
     }
-    
+
     String read()
     {
-        if(this.closed)
-            return this.current = null;
+        if (this.closed) return this.current = null;
         try
         {
             this.current = this.in.readLine();
-            
-            if(this.current == null)
+
+            if (this.current == null)
             {
                 this.in.close();
                 this.closed = true;
             }
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             this.current = null;
             try
@@ -65,22 +64,21 @@ public class LineReaderIterator implements Iterable<String>, Closeable
         }
         return this.current;
     }
-    
+
     @Override
     public synchronized Iterator<String> iterator()
     {
-        if(this.iteratorInUse)
-            throw new IllegalStateException("An iterator is already in use");
+        if (this.iteratorInUse) throw new IllegalStateException("An iterator is already in use");
         return new StreamIterator(this);
     }
 
     private class StreamIterator implements Iterator<String>
     {
         final LineReaderIterator lri;
-        
+
         public StreamIterator(LineReaderIterator lri)
         {
-            this.lri = lri; 
+            this.lri = lri;
         }
 
         @Override
@@ -92,8 +90,7 @@ public class LineReaderIterator implements Iterable<String>, Closeable
         @Override
         public String next()
         {
-            if(!this.hasNext())
-                throw new NoSuchElementException("Trying to read past end of stream");
+            if (!this.hasNext()) throw new NoSuchElementException("Trying to read past end of stream");
             final String ret = this.lri.current;
             this.lri.read();
             return ret;

@@ -16,57 +16,57 @@
 package com.github.rjeschke.neetutils.rng;
 
 /**
- * Complementary Multiply-With-Carry 
+ * Complementary Multiply-With-Carry
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public class RndCMWC implements RNG
 {
-	private int pos = 4095;
-	private int accu;
-	private final int[] history = new int[4096];
-	
-	public RndCMWC()
-	{
+    private int         pos     = 4095;
+    private int         accu;
+    private final int[] history = new int[4096];
+
+    public RndCMWC()
+    {
         this(RNGFactory.defaultSeed());
-	}
-	
-	public RndCMWC(long seed)
-	{
+    }
+
+    public RndCMWC(long seed)
+    {
         final RndLCG rnd = new RndLCG(seed);
-		this.accu = rnd.nextInt();
-		while(this.accu < 0)
-			this.accu += 809430660L;
-		while(this.accu > 809430660L)
-			this.accu -= 809430660L;
-		
-		for(int i = 0; i < 4096; i++)
-		{
-			this.history[i] = rnd.nextInt();
-		}
-	}
-	
-	@Override
-	public int nextInt()
-	{
-		final int p = this.pos = (this.pos + 1) & 4095;
-		final long t = 18782L * (this.history[p] & 0xffffffffL) + this.accu;
-		this.accu = (int)(t >> 32);
-		int x = (int)t + this.accu;
-		if(x < this.accu)
-		{
-			x++;
-			this.accu++;
-		}
-		return this.history[p] = 0xfffffffe - x;
-	}
-	
+        this.accu = rnd.nextInt();
+        while (this.accu < 0)
+            this.accu += 809430660L;
+        while (this.accu > 809430660L)
+            this.accu -= 809430660L;
+
+        for (int i = 0; i < 4096; i++)
+        {
+            this.history[i] = rnd.nextInt();
+        }
+    }
+
+    @Override
+    public int nextInt()
+    {
+        final int p = this.pos = (this.pos + 1) & 4095;
+        final long t = 18782L * (this.history[p] & 0xffffffffL) + this.accu;
+        this.accu = (int)(t >> 32);
+        int x = (int)t + this.accu;
+        if (x < this.accu)
+        {
+            x++;
+            this.accu++;
+        }
+        return this.history[p] = 0xfffffffe - x;
+    }
+
     @Override
     public int nextInt(int max)
     {
         return (int)(nextDoubleUnipolar() * max);
     }
-    
+
     @Override
     public float nextFloatUnipolar()
     {
@@ -78,7 +78,7 @@ public class RndCMWC implements RNG
     {
         return this.nextInt() / 2147483648.f;
     }
-    
+
     @Override
     public double nextDoubleUnipolar()
     {

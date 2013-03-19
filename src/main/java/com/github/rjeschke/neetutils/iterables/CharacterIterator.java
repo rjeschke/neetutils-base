@@ -22,17 +22,17 @@ import com.github.rjeschke.neetutils.math.Numbers;
 public class CharacterIterator extends AbstractXIterable<Character>
 {
     private final String value;
-    
+
     public CharacterIterator(final String value)
     {
         this.value = value;
     }
-    
+
     public final static CharacterIterator of(final String value)
     {
         return new CharacterIterator(value);
     }
-    
+
     @Override
     public Iterator<Character> iterator()
     {
@@ -42,13 +42,13 @@ public class CharacterIterator extends AbstractXIterable<Character>
     private final static class XIterator implements Iterator<Character>
     {
         private final String value;
-        private int position = 0;
-        
+        private int          position = 0;
+
         public XIterator(final String value)
         {
             this.value = value;
         }
-        
+
         @Override
         public boolean hasNext()
         {

@@ -21,11 +21,12 @@ import com.github.rjeschke.neetutils.fn.FnCombine;
 
 class XIterableZipWith<A, B, C> extends AbstractXIterable<C>
 {
-    private final Iterable<A> iterableA;
-    private final Iterable<B> iterableB;
+    private final Iterable<A>                        iterableA;
+    private final Iterable<B>                        iterableB;
     private final FnCombine<? super A, ? super B, C> combine;
 
-    public XIterableZipWith(final Iterable<A> iterableA, final Iterable<B> iterableB, final FnCombine<? super A, ? super B, C> combine)
+    public XIterableZipWith(final Iterable<A> iterableA, final Iterable<B> iterableB,
+            final FnCombine<? super A, ? super B, C> combine)
     {
         this.iterableA = iterableA;
         this.iterableB = iterableB;
@@ -35,16 +36,17 @@ class XIterableZipWith<A, B, C> extends AbstractXIterable<C>
     @Override
     public Iterator<C> iterator()
     {
-        return new XIterableZipWith.XIterator<A, B, C>(this.iterableA.iterator(), this.iterableB.iterator(), this.combine);
+        return new XIterableZipWith.XIterator<>(this.iterableA.iterator(), this.iterableB.iterator(), this.combine);
     }
 
     private final static class XIterator<A, B, C> implements Iterator<C>
     {
-        private final Iterator<A> iteratorA;
-        private final Iterator<B> iteratorB;
+        private final Iterator<A>                        iteratorA;
+        private final Iterator<B>                        iteratorB;
         private final FnCombine<? super A, ? super B, C> combine;
 
-        public XIterator(final Iterator<A> iteratorA, final Iterator<B> iteratorB, final FnCombine<? super A, ? super B, C> combine)
+        public XIterator(final Iterator<A> iteratorA, final Iterator<B> iteratorB,
+                final FnCombine<? super A, ? super B, C> combine)
         {
             this.iteratorA = iteratorA;
             this.iteratorB = iteratorB;

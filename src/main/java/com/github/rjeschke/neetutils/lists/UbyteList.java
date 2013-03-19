@@ -30,15 +30,15 @@ import java.util.RandomAccess;
 public class UbyteList implements RandomAccess, Cloneable, Serializable
 {
     /** serialVersionUID */
-    private static final long serialVersionUID = 430333713526192458L;
+    private static final long          serialVersionUID = 430333713526192458L;
     /** Initial size. */
-    private transient final static int INIT_SIZE = 16;
+    private transient final static int INIT_SIZE        = 16;
     /** Our backing array. */
-    private transient byte[] data;
+    private transient byte[]           data;
     /** Number of data elements. */
-    private int size;
+    private int                        size;
     /** Maximum size. */
-    private transient int maxSize;
+    private transient int              maxSize;
 
     /**
      * Creates a list with default initial capacity.
@@ -56,8 +56,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
      */
     public UbyteList(final int initialCapacity)
     {
-        if(initialCapacity < 0)
-            throw new IllegalArgumentException("Initial capacity must not be less than 0");
+        if (initialCapacity < 0) throw new IllegalArgumentException("Initial capacity must not be less than 0");
 
         this.maxSize = initialCapacity;
         this.size = 0;
@@ -74,7 +73,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
     public static UbyteList fromArray(final int... values)
     {
         final UbyteList list = new UbyteList(values.length);
-        for(int i = 0; i < values.length; i++)
+        for (int i = 0; i < values.length; i++)
         {
             list.data[i] = (byte)values[i];
         }
@@ -130,7 +129,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
      */
     public void trimToSize()
     {
-        if(this.maxSize > this.size)
+        if (this.maxSize > this.size)
         {
             this.maxSize = this.size;
             this.data = Arrays.copyOf(this.data, this.size);
@@ -162,11 +161,9 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
      */
     public int add(final int index, final int v)
     {
-        if(index == this.size)
-            return this.add(v);
+        if (index == this.size) return this.add(v);
 
-        if(index < 0 || index > this.size)
-            throw new ArrayIndexOutOfBoundsException(index);
+        if (index < 0 || index > this.size) throw new ArrayIndexOutOfBoundsException(index);
 
         this.grow(this.size + 1);
 
@@ -186,11 +183,10 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
      */
     public int remove(final int index)
     {
-        if(index >= this.size)
-            throw new ArrayIndexOutOfBoundsException(index);
+        if (index >= this.size) throw new ArrayIndexOutOfBoundsException(index);
         final int old = this.data[index];
         this.size--;
-        if(index != this.size)
+        if (index != this.size)
         {
             System.arraycopy(this.data, index + 1, this.data, index, this.size - index);
         }
@@ -208,8 +204,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
      */
     public int set(final int index, final int v)
     {
-        if(index >= this.size)
-            throw new ArrayIndexOutOfBoundsException(index);
+        if (index >= this.size) throw new ArrayIndexOutOfBoundsException(index);
         this.data[index] = (byte)v;
         return v;
     }
@@ -223,8 +218,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
      */
     public int get(final int index)
     {
-        if(index >= this.size)
-            throw new ArrayIndexOutOfBoundsException(index);
+        if (index >= this.size) throw new ArrayIndexOutOfBoundsException(index);
         return this.data[index] & 255;
     }
 
@@ -236,14 +230,6 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
     public byte[] toArray()
     {
         return Arrays.copyOf(this.data, this.size);
-    }
-
-    /**
-     * @see Arrays#sort(int[])
-     */
-    public void sort()
-    {
-        throw new UnsupportedOperationException("Sorting is currently not supported for unsigned lists");
     }
 
     /**
@@ -268,9 +254,9 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
     public int indexOf(final int v)
     {
         final byte c = (byte)v;
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
-            if(c == this.data[i])
+            if (c == this.data[i])
             {
                 return i;
             }
@@ -288,9 +274,9 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
     public int lastIndexOf(final int v)
     {
         final byte c = (byte)v;
-        for(int i = this.size - 1; i >= 0; i--)
+        for (int i = this.size - 1; i >= 0; i--)
         {
-            if(c == this.data[i])
+            if (c == this.data[i])
             {
                 return i;
             }
@@ -306,10 +292,10 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
     {
         final StringBuilder sb = new StringBuilder();
         sb.append('{');
-        if(this.size > 0)
+        if (this.size > 0)
         {
             sb.append(this.data[0] & 255);
-            for(int i = 1; i < this.size; i++)
+            for (int i = 1; i < this.size; i++)
             {
                 sb.append(',');
                 sb.append(this.data[i] & 255);
@@ -326,7 +312,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
     public int hashCode()
     {
         int hash = 1;
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
             hash = hash * 31 + this.data[i];
         }
@@ -339,26 +325,26 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
     @Override
     public boolean equals(final Object other)
     {
-        if(other == this)
+        if (other == this)
         {
             return true;
         }
 
-        if(!(other instanceof UbyteList))
+        if (!(other instanceof UbyteList))
         {
             return false;
         }
 
         final UbyteList list = (UbyteList)other;
 
-        if(list.size != this.size)
+        if (list.size != this.size)
         {
             return false;
         }
 
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
-            if(this.data[i] != list.data[i])
+            if (this.data[i] != list.data[i])
             {
                 return false;
             }
@@ -390,7 +376,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
     private void writeObject(ObjectOutputStream out) throws IOException
     {
         out.defaultWriteObject();
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
             out.write(this.data[i]);
         }
@@ -410,7 +396,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
     {
         in.defaultReadObject();
         this.data = new byte[this.maxSize = this.size];
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
             this.data[i] = (byte)in.read();
         }
@@ -424,7 +410,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
      */
     private void grow(final int required)
     {
-        if(required > this.maxSize)
+        if (required > this.maxSize)
         {
             this.maxSize = ((this.maxSize * 3) >>> 1) + 1;
             this.data = Arrays.copyOf(this.data, this.maxSize);

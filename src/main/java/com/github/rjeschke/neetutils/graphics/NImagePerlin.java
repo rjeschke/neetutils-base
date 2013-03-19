@@ -26,18 +26,18 @@ import com.github.rjeschke.neetutils.rng.RNGType;
 class NImagePerlin implements Worker<NImagePBlock>
 {
     final NImage image;
-    final int[] perm = new int[256];
+    final int[]  perm = new int[256];
     final float[] gradx = new float[256], grady = new float[256];
-    final float scalex;
-    final float scaley;
-    final int octaves;
-    final float fallOff;
-    final float amp;
-    final NColor color0;
-    final NColor color1;
+    final float   scalex;
+    final float   scaley;
+    final int     octaves;
+    final float   fallOff;
+    final float   amp;
+    final NColor  color0;
+    final NColor  color1;
 
-    NImagePerlin(NImage image, final int seed, final float scalex, final float scaley, final int octaves,
-            final float fallOff, final float amp, final NColor color0, final NColor color1)
+    NImagePerlin(NImage image, final int seed, final float scalex, final float scaley, final int octaves, final float fallOff,
+            final float amp, final NColor color0, final NColor color1)
     {
         this.image = image;
         this.scalex = scalex;
@@ -50,10 +50,10 @@ class NImagePerlin implements Worker<NImagePBlock>
         final RNG rnd = RNGFactory.create(RNGType.LCG, seed);
 
         Arrays.fill(this.perm, -1);
-        for(int i = 0; i < 256; i++)
+        for (int i = 0; i < 256; i++)
         {
             int p = rnd.nextInt() >>> 24;
-            while(this.perm[p] != -1)
+            while (this.perm[p] != -1)
                 p = rnd.nextInt() >>> 24;
             this.perm[p] = i;
             final float x = rnd.nextFloatUnipolar() * 2.f - 1.f;
@@ -72,10 +72,10 @@ class NImagePerlin implements Worker<NImagePBlock>
     @Override
     public void run(NImagePBlock p)
     {
-        for(int y = 0; y < p.h; y++)
+        for (int y = 0; y < p.h; y++)
         {
             final float fy = (float)(p.y + y) / (float)this.image.height;
-            for(int x = 0; x < p.w; x++)
+            for (int x = 0; x < p.w; x++)
             {
                 final float fx = (float)(p.x + x) / (float)this.image.width;
 
@@ -83,7 +83,7 @@ class NImagePerlin implements Worker<NImagePBlock>
                 float ty = fy * this.scaley;
                 float noise = 0, am = this.amp;
 
-                for(int oct = 0; oct < this.octaves; oct++)
+                for (int oct = 0; oct < this.octaves; oct++)
                 {
                     float px0 = tx * 256.f;
                     int ix = (int)px0;

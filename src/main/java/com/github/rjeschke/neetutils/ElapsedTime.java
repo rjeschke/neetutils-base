@@ -21,14 +21,14 @@ import java.util.ArrayList;
  * Simple benchmark helper.
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
- *
+ * 
  */
 public class ElapsedTime
 {
-    private long min = Long.MAX_VALUE;
-    private long max = Long.MIN_VALUE;
-    private ArrayList<Long> runs = new ArrayList<Long>();
-    
+    private long            min  = Long.MAX_VALUE;
+    private long            max  = Long.MIN_VALUE;
+    private ArrayList<Long> runs = new ArrayList<>();
+
     /**
      * Constructor.
      */
@@ -36,9 +36,9 @@ public class ElapsedTime
     {
         //
     }
-    
+
     /**
-     * Resets all runs, minimum and maximum durations. 
+     * Resets all runs, minimum and maximum durations.
      * 
      * @return this
      */
@@ -49,47 +49,50 @@ public class ElapsedTime
         this.runs.clear();
         return this;
     }
-    
+
     /**
      * Executes the given Runnable once.
      * 
-     * @param r Runnable to measure.
+     * @param r
+     *            Runnable to measure.
      * @return this
      */
     public ElapsedTime measure(Runnable r)
     {
         return this.measure(r, 1);
     }
-    
+
     /**
      * Executes the given Runnable 'runs' times.
      * 
-     * @param r The Runnable to measure.
-     * @param runs Number of runs.
+     * @param r
+     *            The Runnable to measure.
+     * @param runs
+     *            Number of runs.
      * @return this
      */
     public ElapsedTime measure(Runnable r, int runs)
     {
-        for(int i = 0; i < runs; i++)
+        for (int i = 0; i < runs; i++)
         {
             final long t0, t1, t;
 
             System.gc();
-            
+
             t0 = System.nanoTime();
             r.run();
             t1 = System.nanoTime();
-            
+
             t = t1 - t0;
-            
+
             this.min = Math.min(this.min, t);
             this.max = Math.max(this.max, t);
             this.runs.add(t);
         }
-        
+
         return this;
     }
-    
+
     /**
      * Returns a String representation of all benchmark results.
      * 
@@ -99,9 +102,10 @@ public class ElapsedTime
     public String toString()
     {
         long sum = 0;
-        for(long l : this.runs)
+        for (long l : this.runs)
             sum += l;
-        
-        return String.format("Min: %g, max: %g, avg: %g, tot: %g", this.min * 1e-9, this.max * 1e-9, sum * 1e-9 / this.runs.size(), sum * 1e-9);
+
+        return String.format("Min: %g, max: %g, avg: %g, tot: %g", this.min * 1e-9, this.max * 1e-9,
+                sum * 1e-9 / this.runs.size(), sum * 1e-9);
     }
 }

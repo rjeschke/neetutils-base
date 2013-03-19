@@ -21,13 +21,13 @@ import com.github.rjeschke.neetutils.math.NMath;
 
 public class NColor
 {
-    public final float a, r, g, b;
+    public final float         a, r, g, b;
 
-    public final static NColor WHITE = new NColor(0xffffffff);
-    public final static NColor BLACK = new NColor(0xff000000);
-    public final static NColor RED = new NColor(0xffff0000);
-    public final static NColor GREEN = new NColor(0xff00ff00);
-    public final static NColor BLUE = new NColor(0xff0000ff);
+    public final static NColor WHITE       = new NColor(0xffffffff);
+    public final static NColor BLACK       = new NColor(0xff000000);
+    public final static NColor RED         = new NColor(0xffff0000);
+    public final static NColor GREEN       = new NColor(0xff00ff00);
+    public final static NColor BLUE        = new NColor(0xff0000ff);
     public final static NColor WHITE_TRANS = new NColor(0x00ffffff);
     public final static NColor BLACK_TRANS = new NColor(0x00000000);
 
@@ -54,7 +54,7 @@ public class NColor
         this.g = c.g;
         this.b = c.b;
     }
-    
+
     public NColor(int argb, double exp)
     {
         this.a = (argb >>> 24) / 255.f;
@@ -253,7 +253,7 @@ public class NColor
         final float da = NMath.clamp(dst.a, 0.f, 1.f);
         final float sa = NMath.clamp(src.a, 0.f, 1.f);
 
-        if(da == 1.f)
+        if (da == 1.f)
         {
             final float a = 1.f - sa;
             final float r = sa * src.r + dst.r * a;
@@ -262,7 +262,7 @@ public class NColor
             return new NColor(1, r, g, b);
         }
 
-        if(da == 0.f)
+        if (da == 0.f)
         {
             final float r = sa * src.r;
             final float g = sa * src.g;
@@ -272,8 +272,7 @@ public class NColor
 
         final float a = 1.f - sa;
         final float outa = sa + da * a;
-        if(outa <= 0)
-            return BLACK_TRANS;
+        if (outa <= 0) return BLACK_TRANS;
 
         final float outar = 1.f / outa;
         final float r = (sa * src.r + da * dst.r * a) * outar;
@@ -290,8 +289,7 @@ public class NColor
 
     public static NColor saturate(NColor c)
     {
-        return new NColor(NMath.clamp(c.a, 0, 1), NMath.clamp(c.r, 0, 1), NMath.clamp(c.g, 0, 1),
-                NMath.clamp(c.b, 0, 1));
+        return new NColor(NMath.clamp(c.a, 0, 1), NMath.clamp(c.r, 0, 1), NMath.clamp(c.g, 0, 1), NMath.clamp(c.b, 0, 1));
     }
 
     public NColor powRGB(double exp)
@@ -360,9 +358,8 @@ public class NColor
 
     public static NColor transform(NColor c, NColorMatrix m)
     {
-        return new NColor(c.a, c.r * m.m[0 + 0 * 3] + c.g * m.m[1 + 0 * 3] + c.b * m.m[2 + 0 * 3], c.r * m.m[0 + 1 * 3]
-                + c.g * m.m[1 + 1 * 3] + c.b * m.m[2 + 1 * 3], c.r * m.m[0 + 2 * 3] + c.g * m.m[1 + 2 * 3] + c.b
-                * m.m[2 + 2 * 3]);
+        return new NColor(c.a, c.r * m.m[0 + 0 * 3] + c.g * m.m[1 + 0 * 3] + c.b * m.m[2 + 0 * 3], c.r * m.m[0 + 1 * 3] + c.g
+                * m.m[1 + 1 * 3] + c.b * m.m[2 + 1 * 3], c.r * m.m[0 + 2 * 3] + c.g * m.m[1 + 2 * 3] + c.b * m.m[2 + 2 * 3]);
     }
 
     @Override

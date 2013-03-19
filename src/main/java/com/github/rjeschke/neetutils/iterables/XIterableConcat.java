@@ -31,14 +31,14 @@ class XIterableConcat<A> extends AbstractXIterable<A>
     @Override
     public Iterator<A> iterator()
     {
-        return new XIterableConcat.XIterator<A>(this.iterableA.iterator(), this.iterableB.iterator());
+        return new XIterableConcat.XIterator<>(this.iterableA.iterator(), this.iterableB.iterator());
     }
 
     private final static class XIterator<A> implements Iterator<A>
     {
         private final Iterator<? extends A> iteratorA;
         private final Iterator<? extends A> iteratorB;
-        private boolean first = true;
+        private boolean                     first = true;
 
         public XIterator(final Iterator<? extends A> iteratorA, final Iterator<? extends A> iteratorB)
         {
@@ -49,9 +49,9 @@ class XIterableConcat<A> extends AbstractXIterable<A>
         @Override
         public boolean hasNext()
         {
-            if(this.first)
+            if (this.first)
             {
-                if(this.iteratorA.hasNext())
+                if (this.iteratorA.hasNext())
                 {
                     return true;
                 }

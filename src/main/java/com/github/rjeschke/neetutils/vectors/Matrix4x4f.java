@@ -322,8 +322,8 @@ public class Matrix4x4f
     public String toString()
     {
         return "{" + this.data[M00] + ", " + this.data[M01] + ", " + this.data[M02] + ", " + this.data[M03] + "\n"
-                + this.data[M10] + ", " + this.data[M11] + ", " + this.data[M12] + ", " + this.data[M13] + "\n"
-                + this.data[M20] + ", " + this.data[M21] + ", " + this.data[M22] + ", " + this.data[M23] + "\n"
-                + this.data[M30] + ", " + this.data[M31] + ", " + this.data[M32] + ", " + this.data[M33] + "}";
+                + this.data[M10] + ", " + this.data[M11] + ", " + this.data[M12] + ", " + this.data[M13] + "\n" + this.data[M20]
+                + ", " + this.data[M21] + ", " + this.data[M22] + ", " + this.data[M23] + "\n" + this.data[M30] + ", "
+                + this.data[M31] + ", " + this.data[M32] + ", " + this.data[M33] + "}";
     }
 }

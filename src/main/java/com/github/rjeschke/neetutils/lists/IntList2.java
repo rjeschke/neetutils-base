@@ -35,9 +35,9 @@ public class IntList2
      */
     public final static int DEFAULT_BLOCK_SIZE = 32768;
 
-    private Block[] blkmap = new Block[1];
-    private int bpos = 0, spos = 0, size = 0;
-    private final int blkSize, blkMask, shift;
+    private Block[]         blkmap             = new Block[1];
+    private int             bpos               = 0, spos = 0, size = 0;
+    private final int       blkSize, blkMask, shift;
 
     /**
      * Uses DEFAULT_BLOCK_SIZE.
@@ -77,12 +77,11 @@ public class IntList2
      */
     public void add(final int value)
     {
-        if(this.spos == this.blkSize)
+        if (this.spos == this.blkSize)
         {
             this.spos = 0;
             this.bpos++;
-            if(this.bpos == this.blkmap.length)
-                this.blkmap = Arrays.copyOf(this.blkmap, this.blkmap.length << 1);
+            if (this.bpos == this.blkmap.length) this.blkmap = Arrays.copyOf(this.blkmap, this.blkmap.length << 1);
             this.blkmap[this.bpos] = new Block(this.blkSize);
         }
         this.size++;
@@ -101,7 +100,7 @@ public class IntList2
      */
     public void set(final int index, final int value)
     {
-        if(index < 0 || index >= this.size)
+        if (index < 0 || index >= this.size)
             throw new ArrayIndexOutOfBoundsException("Got " + index + ", range is [0, " + this.size + "[");
         this.blkmap[index >>> this.shift].d[index & this.blkMask] = value;
     }
@@ -119,7 +118,7 @@ public class IntList2
      */
     public int getAndSet(final int index, final int value)
     {
-        if(index < 0 || index >= this.size)
+        if (index < 0 || index >= this.size)
             throw new ArrayIndexOutOfBoundsException("Got " + index + ", range is [0, " + this.size + "[");
         final int ret = this.blkmap[index >>> this.shift].d[index & this.blkMask];
         this.blkmap[index >>> this.shift].d[index & this.blkMask] = value;
@@ -137,7 +136,7 @@ public class IntList2
      */
     public int get(final int index)
     {
-        if(index < 0 || index >= this.size)
+        if (index < 0 || index >= this.size)
             throw new ArrayIndexOutOfBoundsException("Got " + index + ", range is [0, " + this.size + "[");
         return this.blkmap[index >>> this.shift].d[index & this.blkMask];
     }
@@ -150,7 +149,7 @@ public class IntList2
     public int[] toArray()
     {
         final int[] arr = new int[this.size];
-        for(int left = this.size, n = 0; left > 0; n++)
+        for (int left = this.size, n = 0; left > 0; n++)
         {
             final int todo = Math.min(left, this.blkSize);
             System.arraycopy(this.blkmap[n].d, 0, arr, this.size - left, todo);

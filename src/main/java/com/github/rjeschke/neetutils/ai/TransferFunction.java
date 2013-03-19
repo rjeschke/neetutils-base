@@ -22,5 +22,6 @@ import com.github.rjeschke.neetutils.io.NOutputStream;
 public interface TransferFunction
 {
     public double map(double input);
+
     public void toStream(NOutputStream out) throws IOException;
 }

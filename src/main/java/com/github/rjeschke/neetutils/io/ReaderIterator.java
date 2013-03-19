@@ -26,31 +26,30 @@ import com.github.rjeschke.neetutils.math.Numbers;
 
 public class ReaderIterator implements Iterable<Character>, Closeable
 {
-    final Reader in;
-    boolean closed = false;
+    final Reader     in;
+    boolean          closed        = false;
     volatile boolean iteratorInUse = false;
-    int current;
-    
+    int              current;
+
     public ReaderIterator(Reader in)
     {
         this.in = in;
         this.current = this.read();
     }
-    
+
     int read()
     {
-        if(this.closed)
-            return this.current = -1;
+        if (this.closed) return this.current = -1;
         try
         {
             this.current = this.in.read();
-            if(this.current == -1)
+            if (this.current == -1)
             {
                 this.in.close();
                 this.closed = true;
             }
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             this.current = -1;
             try
@@ -65,22 +64,21 @@ public class ReaderIterator implements Iterable<Character>, Closeable
         }
         return this.current;
     }
-    
+
     @Override
     public synchronized Iterator<Character> iterator()
     {
-        if(this.iteratorInUse)
-            throw new IllegalStateException("An iterator is already in use");
+        if (this.iteratorInUse) throw new IllegalStateException("An iterator is already in use");
         return new StreamIterator(this);
     }
 
     private class StreamIterator implements Iterator<Character>
     {
         final ReaderIterator ri;
-        
+
         public StreamIterator(ReaderIterator ri)
         {
-            this.ri = ri; 
+            this.ri = ri;
         }
 
         @Override
@@ -92,8 +90,7 @@ public class ReaderIterator implements Iterable<Character>, Closeable
         @Override
         public Character next()
         {
-            if(!this.hasNext())
-                throw new NoSuchElementException("Trying to read past end of stream");
+            if (!this.hasNext()) throw new NoSuchElementException("Trying to read past end of stream");
             final Character ret = Numbers.characterOf((char)this.ri.current);
             this.ri.read();
             return ret;
@@ -105,7 +102,7 @@ public class ReaderIterator implements Iterable<Character>, Closeable
             throw new UnsupportedOperationException("Can not remove characters from an InputStream");
         }
     }
-    
+
     @Override
     public void close() throws IOException
     {

@@ -23,12 +23,12 @@ import com.github.rjeschke.neetutils.math.NMath;
 public class LinearTransferFunction implements TransferFunction
 {
     private final double factor;
-    
+
     public LinearTransferFunction(double factor)
     {
         this.factor = factor;
     }
-    
+
     @Override
     public double map(double input)
     {

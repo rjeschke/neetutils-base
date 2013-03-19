@@ -21,18 +21,15 @@ public final class Objects
     {
         //
     }
-    
+
     public final static boolean equals(Object a, Object b)
     {
-        if(a == b)
-            return true;
-        
-        if(a == null)
-            return b == null;
-        
-        if(a.getClass() != b.getClass())
-            return false;
-        
+        if (a == b) return true;
+
+        if (a == null) return b == null;
+
+        if (a.getClass() != b.getClass()) return false;
+
         return a.equals(b);
     }
 

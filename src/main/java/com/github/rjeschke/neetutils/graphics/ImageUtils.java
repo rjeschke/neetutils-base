@@ -24,14 +24,13 @@ public class ImageUtils
 {
     public static BufferedImage toGrayscale(BufferedImage image)
     {
-        if(image.getType() == BufferedImage.TYPE_BYTE_GRAY)
-            return image;
+        if (image.getType() == BufferedImage.TYPE_BYTE_GRAY) return image;
 
         final int w = image.getWidth();
         final int h = image.getHeight();
         final BufferedImage work;
 
-        if(image.getType() == BufferedImage.TYPE_INT_RGB)
+        if (image.getType() == BufferedImage.TYPE_INT_RGB)
         {
             work = image;
         }
@@ -47,9 +46,9 @@ public class ImageUtils
         final int[] ip = ((DataBufferInt)work.getRaster().getDataBuffer()).getData();
         final byte[] op = ((DataBufferByte)out.getRaster().getDataBuffer()).getData();
 
-        for(int y = 0; y < h; y++)
+        for (int y = 0; y < h; y++)
         {
-            for(int x = 0; x < w; x++)
+            for (int x = 0; x < w; x++)
             {
                 final int p = x + y * w;
                 final int c = ip[p];

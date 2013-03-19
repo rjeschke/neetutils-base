@@ -48,13 +48,17 @@ public final class WavWriter
     private NOutputStream       tempStream = null;
 
     /** RIFF. */
-    private final static byte[] RIFF       = {'R', 'I', 'F', 'F'};
+    private final static byte[] RIFF       =
+                                           { 'R', 'I', 'F', 'F' };
     /** WAVE. */
-    private final static byte[] WAVE       = {'W', 'A', 'V', 'E'};
+    private final static byte[] WAVE       =
+                                           { 'W', 'A', 'V', 'E' };
     /** fmt . */
-    private final static byte[] FMT_       = {'f', 'm', 't', ' '};
+    private final static byte[] FMT_       =
+                                           { 'f', 'm', 't', ' ' };
     /** data. */
-    private final static byte[] DATA       = {'d', 'a', 't', 'a'};
+    private final static byte[] DATA       =
+                                           { 'd', 'a', 't', 'a' };
 
     /**
      * Constructor.
@@ -79,6 +83,7 @@ public final class WavWriter
      * @throws IOException
      *             if an IO error occurred.
      */
+    @SuppressWarnings("resource")
     private void openTemp() throws IOException
     {
         this.tempFile = File.createTempFile("wavwrite", "bin");
@@ -109,14 +114,9 @@ public final class WavWriter
      */
     public void save(final File file) throws IOException
     {
-        OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
-        try
+        try (final OutputStream out = new BufferedOutputStream(new FileOutputStream(file)))
         {
             this.save(out);
-        }
-        finally
-        {
-            out.close();
         }
     }
 
@@ -154,6 +154,7 @@ public final class WavWriter
      * @throws IOException
      *             if an IO error occurred.
      */
+    @SuppressWarnings("resource")
     public void save(final OutputStream output) throws IOException
     {
         final NOutputStreamLE out = new NOutputStreamLE(output);
@@ -201,8 +202,7 @@ public final class WavWriter
             out.write(DATA);
             out.write32(dLen);
 
-            final FileInputStream in = new FileInputStream(this.tempFile);
-            try
+            try (final FileInputStream in = new FileInputStream(this.tempFile))
             {
                 final byte[] b = new byte[8192];
                 int todo = dLen;
@@ -212,10 +212,6 @@ public final class WavWriter
                     out.write(b, 0, read);
                     todo -= read;
                 }
-            }
-            finally
-            {
-                in.close();
             }
         }
         finally
@@ -364,8 +360,8 @@ public final class WavWriter
         }
     }
 
-    public final static void write(final String filename, final int sampleRate, final int bitsPerSample,
-            final int channels, final double[] samples, boolean normalize) throws IOException
+    public final static void write(final String filename, final int sampleRate, final int bitsPerSample, final int channels,
+            final double[] samples, boolean normalize) throws IOException
     {
         final WavWriter wav = new WavWriter(sampleRate, bitsPerSample, channels);
 

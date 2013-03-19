@@ -92,7 +92,8 @@ public class LPF24dB
     public double process(double input)
     {
         // Precalculate output
-        final double out = this.qfu0 * (this.bl0 + this.tf0 * (this.bb0 + this.f0u1 * (this.bl1 + this.tf1 * (this.bb1 + this.f * input))));
+        final double out = this.qfu0
+                * (this.bl0 + this.tf0 * (this.bb0 + this.f0u1 * (this.bl1 + this.tf1 * (this.bb1 + this.f * input))));
         final double qin = input - this.q * out;
 
         // Tick chained SVFs

@@ -26,7 +26,7 @@ public class UnityTransferFunction implements TransferFunction
     {
         //
     }
-    
+
     @Override
     public double map(double input)
     {

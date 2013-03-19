@@ -21,12 +21,12 @@ import java.util.NoSuchElementException;
 public class BinaryHeap<T extends Comparable<T>>
 {
     public final static double DEFAULT_GROWTH_FACTOR = 0.5;
-    public final static int DEFAULT_INITIAL_SIZE = 16;
+    public final static int    DEFAULT_INITIAL_SIZE  = 16;
 
-    private Object[] data;
-    private int size;
-    private final int compMod;
-    private final double growthFactor;
+    private Object[]           data;
+    private int                size;
+    private final int          compMod;
+    private final double       growthFactor;
 
     public BinaryHeap(final Type type)
     {
@@ -63,7 +63,7 @@ public class BinaryHeap<T extends Comparable<T>>
 
     public void shrinkToFit()
     {
-        if(this.size != this.data.length)
+        if (this.size != this.data.length)
         {
             this.data = Arrays.copyOf(this.data, this.size);
         }
@@ -71,7 +71,7 @@ public class BinaryHeap<T extends Comparable<T>>
 
     void ensureCapacity()
     {
-        if(this.size >= this.data.length)
+        if (this.size >= this.data.length)
         {
             final int newLen = this.data.length + Math.max(1, (int)(this.data.length * this.growthFactor));
             this.data = Arrays.copyOf(this.data, newLen);
@@ -87,8 +87,7 @@ public class BinaryHeap<T extends Comparable<T>>
     @SuppressWarnings("unchecked")
     public T remove()
     {
-        if(this.size == 0)
-            throw new NoSuchElementException("Heap is empty");
+        if (this.size == 0) throw new NoSuchElementException("Heap is empty");
 
         final T removed = (T)this.data[0];
 
@@ -96,15 +95,13 @@ public class BinaryHeap<T extends Comparable<T>>
         this.data[this.size] = null;
 
         int child, pos = 0;
-        while((child = 2 * pos + 1) < this.size)
+        while ((child = 2 * pos + 1) < this.size)
         {
-            if(child + 1 < this.size && ((T)this.data[child]).compareTo((T)this.data[child + 1]) * this.compMod < 0)
-                child++;
+            if (child + 1 < this.size && ((T)this.data[child]).compareTo((T)this.data[child + 1]) * this.compMod < 0) child++;
 
             final T a = (T)this.data[pos];
             final T b = (T)this.data[child];
-            if(a.compareTo(b) * this.compMod >= 0)
-                break;
+            if (a.compareTo(b) * this.compMod >= 0) break;
 
             this.data[pos] = b;
             this.data[child] = a;
@@ -120,12 +117,11 @@ public class BinaryHeap<T extends Comparable<T>>
         this.ensureCapacity();
         this.data[this.size] = e;
         int parent, pos = this.size++;
-        while((parent = (pos - 1) >> 1) >= 0)
+        while ((parent = (pos - 1) >> 1) >= 0)
         {
             final T a = (T)this.data[pos];
             final T b = (T)this.data[parent];
-            if(a.compareTo(b) * this.compMod <= 0)
-                break;
+            if (a.compareTo(b) * this.compMod <= 0) break;
             this.data[pos] = b;
             this.data[parent] = a;
             pos = parent;
@@ -137,10 +133,9 @@ public class BinaryHeap<T extends Comparable<T>>
     {
         final StringBuilder sb = new StringBuilder();
         sb.append('[');
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
-            if(i > 0)
-                sb.append(", ");
+            if (i > 0) sb.append(", ");
             sb.append(this.data[i]);
         }
         sb.append(']');

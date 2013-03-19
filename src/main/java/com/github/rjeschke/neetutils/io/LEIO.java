@@ -78,8 +78,8 @@ public final class LEIO
         write64(out, Double.doubleToLongBits(value));
     }
 
-    public final static void writeString(final OutputStream out, final String value, final int length,
-            final int padding, final String charsetName) throws IOException
+    public final static void writeString(final OutputStream out, final String value, final int length, final int padding,
+            final String charsetName) throws IOException
     {
         BEIO.writeString(out, value, length, padding, charsetName);
     }
@@ -98,8 +98,7 @@ public final class LEIO
     public final static void writeString16(final OutputStream out, final String value) throws IOException
     {
         final byte[] bytes = value.getBytes("UTF-8");
-        if(bytes.length > 65535)
-            throw new IOException("String too long (" + bytes.length + ")");
+        if (bytes.length > 65535) throw new IOException("String too long (" + bytes.length + ")");
         write16(out, bytes.length);
         out.write(bytes);
     }
@@ -136,8 +135,7 @@ public final class LEIO
     public final static int readI24(final InputStream in) throws IOException
     {
         int v = readU24(in);
-        if(v >= 0x800000)
-            return v - 0x1000000;
+        if (v >= 0x800000) return v - 0x1000000;
         return v;
     }
 
@@ -201,8 +199,8 @@ public final class LEIO
         return BEIO.readStringN(in, readI32(in));
     }
 
-    public final static String readString(final InputStream in, final int length, final int padding,
-            final String charsetName) throws IOException
+    public final static String readString(final InputStream in, final int length, final int padding, final String charsetName)
+            throws IOException
     {
         return BEIO.readString(in, length, padding, charsetName);
     }
@@ -217,8 +215,7 @@ public final class LEIO
         return BEIO.readBytes(in, b, 0, b.length);
     }
 
-    public final static int readBytes(final InputStream in, final byte[] b, final int offs, final int len)
-            throws IOException
+    public final static int readBytes(final InputStream in, final byte[] b, final int offs, final int len) throws IOException
     {
         return BEIO.readBytes(in, b, offs, len);
     }

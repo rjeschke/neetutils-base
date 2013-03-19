@@ -65,58 +65,54 @@ public final class WavReader
 
     public static WavReader load(final File file) throws IOException
     {
-        final FileInputStream fis = new FileInputStream(file);
-        try
+        try (final FileInputStream fis = new FileInputStream(file))
         {
             return load(new BufferedInputStream(fis));
-        }
-        catch (IOException e)
-        {
-            throw e;
-        }
-        finally
-        {
-            fis.close();
         }
     }
 
     public static WavReader load(final InputStream input) throws IOException
     {
-        final NInputStreamLE in = new NInputStreamLE(input);
-        if (!in.readString(4, 0).equals("RIFF")) throw new IOException("Not a WAV file.");
-        in.readI32();
-        if (!in.readString(4, 0).equals("WAVE")) throw new IOException("Not a WAV file.");
-        if (!in.readString(4, 0).equals("fmt ")) throw new IOException("Not a WAV file.");
-        final int fmtSz = in.readI32();
-        final int fmt = in.readU16();
-        if (fmt != 1 || fmtSz != 16) throw new IOException("Unsupported WAV format");
-
-        final int channels = in.readU16();
-        final int samplerate = in.readI32();
-        in.readI32();
-        in.readU16();
-        final int bits = in.readU16();
-        String tmp = in.readString(4, 0);
-        while (!tmp.equals("data"))
+        try (final NInputStreamLE in = new NInputStreamLE(input))
         {
-            final int toskip = in.readI32();
-            if (in.skip(toskip) != toskip) throw new IOException("Unsupported WAV format");
-            tmp = in.readString(4, 0);
-        }
-        final int length = in.readI32() / ((bits * channels) >> 3);
-        final float[] ret = new float[length * channels];
-        final int[] iret = new int[length * channels];
+            if (!in.readString(4, 0).equals("RIFF")) throw new IOException("Not a WAV file.");
+            in.readI32();
+            if (!in.readString(4, 0).equals("WAVE")) throw new IOException("Not a WAV file.");
+            if (!in.readString(4, 0).equals("fmt ")) throw new IOException("Not a WAV file.");
+            final int fmtSz = in.readI32();
+            final int fmt = in.readU16();
+            if (fmt != 1 || fmtSz != 16) throw new IOException("Unsupported WAV format");
 
-        for (int i = 0; i < ret.length; i++)
-        {
-            int v = 0;
-            if (bits == 8) v = (iret[i] = (in.readU8() - 128)) << 16;
-            else if (bits == 16) v = (iret[i] = in.readI16()) << 8;
-            else if (bits == 24) iret[i] = v = in.readI24();
-            else throw new IOException("Unsupported bit depth: " + bits);
-            ret[i] = v / 8388608.0f;
-        }
+            final int channels = in.readU16();
+            final int samplerate = in.readI32();
+            in.readI32();
+            in.readU16();
+            final int bits = in.readU16();
+            String tmp = in.readString(4, 0);
+            while (!tmp.equals("data"))
+            {
+                final int toskip = in.readI32();
+                if (in.skip(toskip) != toskip) throw new IOException("Unsupported WAV format");
+                tmp = in.readString(4, 0);
+            }
+            final int length = in.readI32() / ((bits * channels) >> 3);
+            final float[] ret = new float[length * channels];
+            final int[] iret = new int[length * channels];
 
-        return new WavReader(samplerate, channels, ret, iret);
+            for (int i = 0; i < ret.length; i++)
+            {
+                int v = 0;
+                if (bits == 8)
+                    v = (iret[i] = (in.readU8() - 128)) << 16;
+                else if (bits == 16)
+                    v = (iret[i] = in.readI16()) << 8;
+                else if (bits == 24)
+                    iret[i] = v = in.readI24();
+                else throw new IOException("Unsupported bit depth: " + bits);
+                ret[i] = v / 8388608.0f;
+            }
+
+            return new WavReader(samplerate, channels, ret, iret);
+        }
     }
 }

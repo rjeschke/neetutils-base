@@ -25,7 +25,7 @@ import java.util.Arrays;
 public class String32
 {
     private int[] chars;
-    private int length;
+    private int   length;
 
     public String32(final int initialSize)
     {
@@ -50,7 +50,7 @@ public class String32
 
     public int charAt(final int index)
     {
-        if(index >= this.length)
+        if (index >= this.length)
         {
             throw new ArrayIndexOutOfBoundsException(index);
         }
@@ -59,7 +59,7 @@ public class String32
 
     private void growIfNeeded()
     {
-        if(this.length >= this.chars.length)
+        if (this.length >= this.chars.length)
         {
             final int newLength = (int)Math.ceil(this.chars.length * 1.3);
             this.chars = Arrays.copyOf(this.chars, Math.max(this.chars.length + 1, newLength));
@@ -68,27 +68,26 @@ public class String32
 
     public String32 shrinkToFit()
     {
-        if(this.length != this.chars.length)
-            this.chars = Arrays.copyOf(this.chars, this.length);
-        
+        if (this.length != this.chars.length) this.chars = Arrays.copyOf(this.chars, this.length);
+
         return this;
     }
 
     public void append(final String str)
     {
-        for(int i = 0; i < str.length(); i++)
+        for (int i = 0; i < str.length(); i++)
         {
             final char c = str.charAt(i);
-            if(c >= 0xd800 && c < 0xe000)
+            if (c >= 0xd800 && c < 0xe000)
             {
                 final char d = str.charAt(++i);
-                if(c < 0xdc00 && d >= 0xdc00 && d < 0xe000)
+                if (c < 0xdc00 && d >= 0xdc00 && d < 0xe000)
                 {
                     this.appendCodepoint((((c & 0x3ff) << 10) | (d & 0x3ff)) + 0x10000);
                 }
                 else
                 {
-                    if(d < 0xd800 || d > 0xdfff)
+                    if (d < 0xd800 || d > 0xdfff)
                     {
                         i--;
                     }
@@ -132,7 +131,7 @@ public class String32
     public int hashCode()
     {
         int h = 0;
-        for(int i = 0; i < this.length; i++)
+        for (int i = 0; i < this.length; i++)
         {
             h = (h * 31) + this.chars[i];
         }
@@ -142,17 +141,14 @@ public class String32
     @Override
     public boolean equals(Object obj)
     {
-        if(!(obj instanceof String32))
-            return false;
+        if (!(obj instanceof String32)) return false;
 
         final String32 s = (String32)obj;
-        if(this.length != s.length)
-            return false;
+        if (this.length != s.length) return false;
 
-        for(int i = 0; i < this.length; i++)
+        for (int i = 0; i < this.length; i++)
         {
-            if(this.chars[i] != s.chars[i])
-                return false;
+            if (this.chars[i] != s.chars[i]) return false;
         }
 
         return true;
@@ -162,7 +158,7 @@ public class String32
     public String toString()
     {
         final StringBuilder sb = new StringBuilder(this.length);
-        for(int i = 0; i < this.length; i++)
+        for (int i = 0; i < this.length; i++)
         {
             sb.appendCodePoint(this.chars[i]);
         }

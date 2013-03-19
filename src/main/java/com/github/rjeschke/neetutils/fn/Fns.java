@@ -28,7 +28,7 @@ public final class Fns
 
     public final static <A> FnFoldStep<A, Map<A, Integer>> objectFrequencies()
     {
-        return new FnFoldStep<A, Map<A,Integer>>()
+        return new FnFoldStep<A, Map<A, Integer>>()
         {
             @Override
             public Map<A, Integer> applyFoldStep(A a, Map<A, Integer> b)
@@ -39,7 +39,7 @@ public final class Fns
             }
         };
     }
-    
+
     public final static <A> FnPredicate<A> invert(final FnPredicate<A> predicate)
     {
         return new FnPredicate<A>()
@@ -51,16 +51,15 @@ public final class Fns
             }
         };
     }
-    
+
     public final static <A> FnEquals<A> examineEquals()
     {
         return new FnEquals<A>()
         {
             @Override
-            public boolean applyEquals(A a, A b) 
+            public boolean applyEquals(A a, A b)
             {
-                if(a == null)
-                    return b == null;
+                if (a == null) return b == null;
                 return a.equals(b);
             }
         };

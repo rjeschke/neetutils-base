@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 class XIterableDrop<A> extends AbstractXIterable<A>
 {
     private final Iterable<A> iterable;
-    private final int amount;
+    private final int         amount;
 
     public XIterableDrop(final Iterable<A> iterable, final int amount)
     {
@@ -32,16 +32,16 @@ class XIterableDrop<A> extends AbstractXIterable<A>
     @Override
     public Iterator<A> iterator()
     {
-        return new XIterableDrop.XIterator<A>(this.iterable.iterator(), this.amount);
+        return new XIterableDrop.XIterator<>(this.iterable.iterator(), this.amount);
     }
 
     private final static class XIterator<A> implements Iterator<A>
     {
         private final Iterator<A> iterator;
-        private final int amount;
-        private int count;
-        private A element;
-        private boolean hasElement;
+        private final int         amount;
+        private int               count;
+        private A                 element;
+        private boolean           hasElement;
 
         public XIterator(final Iterator<A> iterator, final int amount)
         {
@@ -52,21 +52,21 @@ class XIterableDrop<A> extends AbstractXIterable<A>
         @Override
         public boolean hasNext()
         {
-            if(this.hasElement)
+            if (this.hasElement)
             {
                 return true;
             }
 
-            if(this.count < this.amount)
+            if (this.count < this.amount)
             {
-                while(this.iterator.hasNext() && this.count < this.amount)
+                while (this.iterator.hasNext() && this.count < this.amount)
                 {
                     this.count++;
                     this.iterator.next();
                 }
             }
 
-            if(this.iterator.hasNext())
+            if (this.iterator.hasNext())
             {
                 this.element = this.iterator.next();
                 this.hasElement = true;
@@ -78,7 +78,7 @@ class XIterableDrop<A> extends AbstractXIterable<A>
         @Override
         public A next()
         {
-            if(!this.hasElement)
+            if (!this.hasElement)
             {
                 throw new NoSuchElementException();
             }

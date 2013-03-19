@@ -30,15 +30,15 @@ import java.util.RandomAccess;
 public class LongList implements RandomAccess, Cloneable, Serializable
 {
     /** serialVersionUID */
-    private static final long serialVersionUID = -8643397744209556004L;
+    private static final long          serialVersionUID = -8643397744209556004L;
     /** Initial size. */
-    private transient final static int INIT_SIZE = 16;
+    private transient final static int INIT_SIZE        = 16;
     /** Our backing array. */
-    private transient long[] data;
+    private transient long[]           data;
     /** Number of data elements. */
-    private int size;
+    private int                        size;
     /** Maximum size. */
-    private transient int maxSize;
+    private transient int              maxSize;
 
     /**
      * Creates a list with default initial capacity.
@@ -56,8 +56,7 @@ public class LongList implements RandomAccess, Cloneable, Serializable
      */
     public LongList(final int initialCapacity)
     {
-        if(initialCapacity < 0)
-            throw new IllegalArgumentException("Initial capacity must not be less than 0");
+        if (initialCapacity < 0) throw new IllegalArgumentException("Initial capacity must not be less than 0");
 
         this.maxSize = initialCapacity;
         this.size = 0;
@@ -112,7 +111,7 @@ public class LongList implements RandomAccess, Cloneable, Serializable
      */
     public void trimToSize()
     {
-        if(this.maxSize > this.size)
+        if (this.maxSize > this.size)
         {
             this.maxSize = this.size;
             this.data = Arrays.copyOf(this.data, this.size);
@@ -143,11 +142,9 @@ public class LongList implements RandomAccess, Cloneable, Serializable
      */
     public long add(final int index, final long v)
     {
-        if(index == this.size)
-            return this.add(v);
+        if (index == this.size) return this.add(v);
 
-        if(index < 0 || index > this.size)
-            throw new ArrayIndexOutOfBoundsException(index);
+        if (index < 0 || index > this.size) throw new ArrayIndexOutOfBoundsException(index);
 
         this.grow(this.size + 1);
 
@@ -167,11 +164,10 @@ public class LongList implements RandomAccess, Cloneable, Serializable
      */
     public long remove(final int index)
     {
-        if(index >= this.size)
-            throw new ArrayIndexOutOfBoundsException(index);
+        if (index >= this.size) throw new ArrayIndexOutOfBoundsException(index);
         final long old = this.data[index];
         this.size--;
-        if(index != this.size)
+        if (index != this.size)
         {
             System.arraycopy(this.data, index + 1, this.data, index, this.size - index);
         }
@@ -189,8 +185,7 @@ public class LongList implements RandomAccess, Cloneable, Serializable
      */
     public long set(final int index, final long v)
     {
-        if(index >= this.size)
-            throw new ArrayIndexOutOfBoundsException(index);
+        if (index >= this.size) throw new ArrayIndexOutOfBoundsException(index);
         return this.data[index] = v;
     }
 
@@ -203,8 +198,7 @@ public class LongList implements RandomAccess, Cloneable, Serializable
      */
     public long get(final int index)
     {
-        if(index >= this.size)
-            throw new ArrayIndexOutOfBoundsException(index);
+        if (index >= this.size) throw new ArrayIndexOutOfBoundsException(index);
         return this.data[index];
     }
 
@@ -247,9 +241,9 @@ public class LongList implements RandomAccess, Cloneable, Serializable
      */
     public int indexOf(final long v)
     {
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
-            if(v == this.data[i])
+            if (v == this.data[i])
             {
                 return i;
             }
@@ -266,9 +260,9 @@ public class LongList implements RandomAccess, Cloneable, Serializable
      */
     public int lastIndexOf(final long v)
     {
-        for(int i = this.size - 1; i >= 0; i--)
+        for (int i = this.size - 1; i >= 0; i--)
         {
-            if(v == this.data[i])
+            if (v == this.data[i])
             {
                 return i;
             }
@@ -284,10 +278,10 @@ public class LongList implements RandomAccess, Cloneable, Serializable
     {
         final StringBuilder sb = new StringBuilder();
         sb.append('{');
-        if(this.size > 0)
+        if (this.size > 0)
         {
             sb.append(this.data[0]);
-            for(int i = 1; i < this.size; i++)
+            for (int i = 1; i < this.size; i++)
             {
                 sb.append(',');
                 sb.append(this.data[i]);
@@ -304,7 +298,7 @@ public class LongList implements RandomAccess, Cloneable, Serializable
     public int hashCode()
     {
         int hash = 1;
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
             hash = (hash * 31 + (int)(this.data[i] >>> 32)) * 31 + (int)this.data[i];
         }
@@ -317,26 +311,26 @@ public class LongList implements RandomAccess, Cloneable, Serializable
     @Override
     public boolean equals(final Object other)
     {
-        if(other == this)
+        if (other == this)
         {
             return true;
         }
 
-        if(!(other instanceof LongList))
+        if (!(other instanceof LongList))
         {
             return false;
         }
 
         final LongList list = (LongList)other;
 
-        if(list.size != this.size)
+        if (list.size != this.size)
         {
             return false;
         }
 
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
-            if(this.data[i] != list.data[i])
+            if (this.data[i] != list.data[i])
             {
                 return false;
             }
@@ -368,7 +362,7 @@ public class LongList implements RandomAccess, Cloneable, Serializable
     private void writeObject(ObjectOutputStream out) throws IOException
     {
         out.defaultWriteObject();
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
             out.writeLong(this.data[i]);
         }
@@ -388,7 +382,7 @@ public class LongList implements RandomAccess, Cloneable, Serializable
     {
         in.defaultReadObject();
         this.data = new long[this.maxSize = this.size];
-        for(int i = 0; i < this.size; i++)
+        for (int i = 0; i < this.size; i++)
         {
             this.data[i] = in.readLong();
         }
@@ -402,7 +396,7 @@ public class LongList implements RandomAccess, Cloneable, Serializable
      */
     private void grow(final int required)
     {
-        if(required > this.maxSize)
+        if (required > this.maxSize)
         {
             this.maxSize = ((this.maxSize * 3) >>> 1) + 1;
             this.data = Arrays.copyOf(this.data, this.maxSize);

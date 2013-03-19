@@ -174,15 +174,18 @@ public final class FIRUtils
     {
         final double tw = 2.0 * Math.PI * transitionWidth / fs;
         int m;
-        if (attenuation <= 21) m = (int)Math.ceil(5.79 / tw);
+        if (attenuation <= 21)
+            m = (int)Math.ceil(5.79 / tw);
         else m = (int)Math.ceil((attenuation - 7.95) / (2.285 * tw));
         if ((m & 1) == 0) m++;
         final double[] win = new double[m];
 
         final double beta;
 
-        if (attenuation <= 21) beta = 0;
-        else if (attenuation <= 50) beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
+        if (attenuation <= 21)
+            beta = 0;
+        else if (attenuation <= 50)
+            beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
         else beta = 0.1102 * (attenuation - 8.7);
 
         final double i0b = NMath.i0(beta);
@@ -210,7 +213,8 @@ public final class FIRUtils
     public final static double kaiserTransitionWidth(int m, double attenuation, double fs)
     {
         final double tw;
-        if (attenuation <= 21) tw = 5.79 / m;
+        if (attenuation <= 21)
+            tw = 5.79 / m;
         else tw = (attenuation - 7.95) / (2.285 * m);
         return tw * fs / (2.0 * Math.PI);
     }
@@ -232,8 +236,10 @@ public final class FIRUtils
         final int m = fir.length;
         final double beta;
 
-        if (attenuation <= 21) beta = 0;
-        else if (attenuation <= 50) beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
+        if (attenuation <= 21)
+            beta = 0;
+        else if (attenuation <= 50)
+            beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
         else beta = 0.1102 * (attenuation - 8.7);
 
         final double i0b = NMath.i0(beta);
@@ -350,8 +356,10 @@ public final class FIRUtils
         return ret;
     }
 
-    private final static String[] PRES  = {"1", "10", "100"};
-    private final static String[] POSTS = {"", "k", "M", "G", "T", "P"};
+    private final static String[] PRES  =
+                                        { "1", "10", "100" };
+    private final static String[] POSTS =
+                                        { "", "k", "M", "G", "T", "P" };
 
     private final static String engVal(int val)
     {
@@ -378,7 +386,8 @@ public final class FIRUtils
      */
     public final static BufferedImage freqResponse(double[] fir, final double fs)
     {
-        final int[] dbs = new int[] {12, 6, 0, -6, -12, -24, -48, -72, -96, -120};
+        final int[] dbs = new int[]
+        { 12, 6, 0, -6, -12, -24, -48, -72, -96, -120 };
         final BufferedImage ret = new BufferedImage(1024, 512, BufferedImage.TYPE_INT_RGB);
         final Graphics2D g = ret.createGraphics();
         g.setFont(new Font("Arial", Font.PLAIN, 12));

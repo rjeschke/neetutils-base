@@ -148,13 +148,12 @@ public final class BEIO
         write64(out, Double.doubleToLongBits(value));
     }
 
-    public final static void writeString(final OutputStream out, final String value, final int length,
-            final int padding, final String charsetName) throws IOException
+    public final static void writeString(final OutputStream out, final String value, final int length, final int padding,
+            final String charsetName) throws IOException
     {
         final byte[] bytes = value.getBytes(charsetName);
-        if(bytes.length > length)
-            throw new IOException("String too long, expected max. " + length + ", got " + bytes.length);
-        for(int i = 0; i < length; i++)
+        if (bytes.length > length) throw new IOException("String too long, expected max. " + length + ", got " + bytes.length);
+        for (int i = 0; i < length; i++)
             out.write(i < bytes.length ? bytes[i] : padding);
     }
 
@@ -167,8 +166,7 @@ public final class BEIO
     public final static void writeString8(final OutputStream out, final String value) throws IOException
     {
         final byte[] bytes = value.getBytes("UTF-8");
-        if(bytes.length > 255)
-            throw new IOException("String too long (" + bytes.length + ")");
+        if (bytes.length > 255) throw new IOException("String too long (" + bytes.length + ")");
         write8(out, bytes.length);
         out.write(bytes);
     }
@@ -176,8 +174,7 @@ public final class BEIO
     public final static void writeString16(final OutputStream out, final String value) throws IOException
     {
         final byte[] bytes = value.getBytes("UTF-8");
-        if(bytes.length > 65535)
-            throw new IOException("String too long (" + bytes.length + ")");
+        if (bytes.length > 65535) throw new IOException("String too long (" + bytes.length + ")");
         write16(out, bytes.length);
         out.write(bytes);
     }
@@ -214,8 +211,7 @@ public final class BEIO
     public final static int readI24(final InputStream in) throws IOException
     {
         int v = readU24(in);
-        if(v >= 0x800000)
-            return v - 0x1000000;
+        if (v >= 0x800000) return v - 0x1000000;
         return v;
     }
 
@@ -268,9 +264,9 @@ public final class BEIO
     {
         final byte[] bytes = new byte[length];
         final int r = readBytes(in, bytes);
-        if(r != bytes.length)
-            throw new IOException("Unexpected end of stream while reading string, expected " + bytes.length + ", got "
-                    + r + " bytes");
+        if (r != bytes.length)
+            throw new IOException("Unexpected end of stream while reading string, expected " + bytes.length + ", got " + r
+                    + " bytes");
         return new String(bytes, "UTF-8");
     }
 
@@ -289,16 +285,15 @@ public final class BEIO
         return readStringN(in, readI32(in));
     }
 
-    public final static String readString(final InputStream in, final int length, final int padding,
-            final String charsetName) throws IOException
+    public final static String readString(final InputStream in, final int length, final int padding, final String charsetName)
+            throws IOException
     {
         final byte[] bytes = new byte[length];
         final int r = readBytes(in, bytes);
-        if(r != length)
-            throw new IOException("Unexpected end of stream while reading string, expected " + length + ", got " + r
-                    + " bytes");
+        if (r != length)
+            throw new IOException("Unexpected end of stream while reading string, expected " + length + ", got " + r + " bytes");
         int n = length - 1;
-        while(n >= 0 && bytes[n] == padding)
+        while (n >= 0 && bytes[n] == padding)
             n--;
         return new String(bytes, 0, n + 1, charsetName);
     }
@@ -313,15 +308,13 @@ public final class BEIO
         return readBytes(in, b, 0, b.length);
     }
 
-    public final static int readBytes(final InputStream in, final byte[] b, final int offs, final int len)
-            throws IOException
+    public final static int readBytes(final InputStream in, final byte[] b, final int offs, final int len) throws IOException
     {
         int todo = len, got = 0;
-        while(todo > 0)
+        while (todo > 0)
         {
             final int r = in.read(b, offs + got, todo);
-            if(r == -1)
-                break;
+            if (r == -1) break;
             todo -= r;
             got += r;
         }
@@ -331,11 +324,10 @@ public final class BEIO
     public final static long skipBytes(final InputStream in, final long bytes) throws IOException
     {
         long todo = bytes, done = 0;
-        while(todo > 0)
+        while (todo > 0)
         {
             final long r = in.skip(todo);
-            if(r == -1)
-                break;
+            if (r == -1) break;
             todo -= r;
             done += r;
         }

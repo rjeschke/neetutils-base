@@ -111,6 +111,7 @@ public abstract class AbstractXIterable<A> implements XIterable<A>
         return Iterables.concat(this, iterable);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public XIterable<A> concat(Iterable<? extends A>... iterables)
     {

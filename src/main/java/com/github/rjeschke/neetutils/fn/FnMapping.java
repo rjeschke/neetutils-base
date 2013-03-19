@@ -18,11 +18,11 @@ package com.github.rjeschke.neetutils.fn;
 public abstract class FnMapping<A, B>
 {
     public abstract B applyMapping(A value);
-    
+
     public final <C> FnMapping<A, C> concat(final FnMapping<B, C> mapping)
     {
         final FnMapping<A, B> me = this;
-        
+
         return new FnMapping<A, C>()
         {
             @Override

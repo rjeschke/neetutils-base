@@ -61,7 +61,8 @@ public class HPF24dBLadder
 
     public double process(double input)
     {
-        final double out = (this.f3 * (this.f3 * (this.f3 * (this.f3 * input - this.f2 * this.b0) - this.f2 * this.b1) - this.f2 * this.b2) - this.f2
+        final double out = (this.f3
+                * (this.f3 * (this.f3 * (this.f3 * input - this.f2 * this.b0) - this.f2 * this.b1) - this.f2 * this.b2) - this.f2
                 * this.b3)
                 * this.fr;
         final double in = input - this.q * out;

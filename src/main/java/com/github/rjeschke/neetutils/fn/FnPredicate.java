@@ -18,12 +18,12 @@ package com.github.rjeschke.neetutils.fn;
 public abstract class FnPredicate<A>
 {
     public abstract boolean applyPredicate(A a);
-    
+
     public final FnPredicate<A> invert()
     {
         return Predicates.not(this);
     }
-    
+
     public final FnPredicate<A> and(final FnPredicate<? super A> predicate)
     {
         return Predicates.and(this, predicate);
@@ -38,7 +38,7 @@ public abstract class FnPredicate<A>
     {
         return Predicates.or(this, predicate);
     }
-    
+
     public final FnPredicate<A> or(final FnPredicate<? super A> predicateA, final FnPredicate<? super A> predicateB)
     {
         return Predicates.or(this, predicateA, predicateB);

@@ -20,10 +20,10 @@ import java.util.Arrays;
 public class NImagePBlock
 {
     public final NColor[] pixels;
-    public final int x;
-    public final int y;
-    public final int w;
-    public final int h;
+    public final int      x;
+    public final int      y;
+    public final int      w;
+    public final int      h;
 
     public NImagePBlock(int x, int y, int w, int h)
     {

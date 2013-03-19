@@ -33,7 +33,7 @@ class XIterableZip<A, B> extends AbstractXIterable<Tuple<A, B>>
     @Override
     public Iterator<Tuple<A, B>> iterator()
     {
-        return new XIterableZip.XIterator<A, B>(this.iterableA.iterator(), this.iterableB.iterator());
+        return new XIterableZip.XIterator<>(this.iterableA.iterator(), this.iterableB.iterator());
     }
 
     private final static class XIterator<A, B> implements Iterator<Tuple<A, B>>

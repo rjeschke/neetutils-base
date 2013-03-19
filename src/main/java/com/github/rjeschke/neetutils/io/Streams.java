@@ -31,17 +31,19 @@ public final class Streams
     {
         //
     }
-    
+
     public final static BufferedReader newBufferedReader(InputStream in, String charsetName) throws IOException
     {
         return new BufferedReader(new InputStreamReader(in, charsetName));
     }
 
+    @SuppressWarnings("resource")
     public final static BufferedReader newBufferedReader(String filename, String charsetName) throws IOException
     {
         return newBufferedReader(new FileInputStream(filename), charsetName);
     }
-    
+
+    @SuppressWarnings("resource")
     public final static BufferedReader newBufferedReader(File file, String charsetName) throws IOException
     {
         return newBufferedReader(new FileInputStream(file), charsetName);
@@ -51,20 +53,19 @@ public final class Streams
     {
         return new BufferedInputStream(new FileInputStream(filename));
     }
-    
+
     public final static BufferedInputStream newBufferedInputStream(File file) throws IOException
     {
         return new BufferedInputStream(new FileInputStream(file));
     }
-    
+
     public final static BufferedOutputStream newBufferedOutputStream(String filename) throws IOException
     {
         return new BufferedOutputStream(new FileOutputStream(filename));
     }
-    
+
     public final static BufferedOutputStream newBufferedOutputStream(File file) throws IOException
     {
         return new BufferedOutputStream(new FileOutputStream(file));
     }
-    
 }

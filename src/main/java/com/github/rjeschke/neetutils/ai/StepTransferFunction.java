@@ -22,12 +22,12 @@ import com.github.rjeschke.neetutils.io.NOutputStream;
 public class StepTransferFunction implements TransferFunction
 {
     private final double threshold;
-    
+
     public StepTransferFunction(double threshold)
     {
         this.threshold = threshold;
     }
-    
+
     @Override
     public double map(double input)
     {

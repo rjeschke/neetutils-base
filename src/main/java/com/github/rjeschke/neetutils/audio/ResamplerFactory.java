@@ -24,12 +24,12 @@ public final class ResamplerFactory
 
         if (srcFs < targetFs)
         {
-            return new ResamplerUp(srcFs, targetFs, FIRUtils.windowBlackman(FIRUtils.createLowpass(firOrder,
-                    srcFs * 0.45, targetFs)));
+            return new ResamplerUp(srcFs, targetFs, FIRUtils.windowBlackman(FIRUtils.createLowpass(firOrder, srcFs * 0.45,
+                    targetFs)));
         }
 
-        return new ResamplerDown(srcFs, targetFs, FIRUtils.windowBlackman(FIRUtils.createLowpass(firOrder,
-                targetFs * 0.45, srcFs)));
+        return new ResamplerDown(srcFs, targetFs, FIRUtils.windowBlackman(FIRUtils
+                .createLowpass(firOrder, targetFs * 0.45, srcFs)));
     }
 
     public final static Resampler create(final double srcFs, final double targetFs, final double transitionWidth,

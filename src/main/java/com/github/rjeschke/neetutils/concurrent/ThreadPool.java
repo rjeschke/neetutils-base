@@ -27,12 +27,12 @@ import com.github.rjeschke.neetutils.SysUtils;
  */
 public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.ThreadWorker>
 {
-    private final int numThreads;
-    private final int queueLimit;
-    private final ConcurrentLinkedQueue<ThreadWorker> workers = new ConcurrentLinkedQueue<ThreadWorker>();
-    private final ConcurrentLinkedQueue<Runnable> jobs = new ConcurrentLinkedQueue<Runnable>();
-    private final Thread[] threads;
-    private RequeueWatcher<Runnable, ThreadWorker> watcher;
+    private final int                                 numThreads;
+    private final int                                 queueLimit;
+    private final ConcurrentLinkedQueue<ThreadWorker> workers = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Runnable>     jobs    = new ConcurrentLinkedQueue<>();
+    private final Thread[]                            threads;
+    private RequeueWatcher<Runnable, ThreadWorker>    watcher;
 
     private ThreadPool(int threads, int queueLimit)
     {
@@ -45,17 +45,17 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
     {
         return Runtime.getRuntime().availableProcessors();
     }
-    
+
     final static int defaultThreadcount(int threads)
     {
         return threads < 1 ? Runtime.getRuntime().availableProcessors() : threads;
     }
-    
+
     public static ThreadPool start(int threads, int queueLimit)
     {
         final ThreadPool jobber = new ThreadPool(defaultThreadcount(threads), queueLimit);
 
-        for(int i = 0; i < jobber.threads.length; i++)
+        for (int i = 0; i < jobber.threads.length; i++)
         {
             final ThreadWorker w = new ThreadWorker(jobber);
             final Thread t = new Thread(w);
@@ -66,7 +66,7 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
         }
 
         jobber.watcher = RequeueWatcher.start(jobber, jobber.jobs, jobber.workers);
-        
+
         return jobber;
     }
 
@@ -77,20 +77,19 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
 
     public void enqueue(Runnable job)
     {
-        if(job == null)
-            throw new NullPointerException("A null Runnable is not permitted");
+        if (job == null) throw new NullPointerException("A null Runnable is not permitted");
 
         final ThreadWorker w = this.workers.poll();
-        if(w != null)
+        if (w != null)
         {
             w.setWorkLoad(job);
         }
         else
         {
-            if(this.queueLimit != 0 && this.jobs.size() >= this.queueLimit)
+            if (this.queueLimit != 0 && this.jobs.size() >= this.queueLimit)
             {
                 final int ql = Math.max(this.queueLimit >> 1, 1);
-                while(this.jobs.size() > ql)
+                while (this.jobs.size() > ql)
                     SysUtils.fineSleep(5);
             }
             this.jobs.offer(job);
@@ -100,10 +99,9 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
     void reuseOrEnqueue(ThreadWorker w)
     {
         final Runnable job = this.jobs.poll();
-        if(job != null)
+        if (job != null)
             w.setWorkLoad(job);
-        else
-            this.workers.offer(w);
+        else this.workers.offer(w);
     }
 
     public boolean hasWork()
@@ -113,29 +111,29 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
 
     public void join()
     {
-        while(!this.jobs.isEmpty())
+        while (!this.jobs.isEmpty())
             SysUtils.sleep(10);
     }
 
     public void stop()
     {
         final StopWorker stop = new StopWorker();
-        
+
         this.join();
-        
-        for(int i = 0; i < this.numThreads; i++)
+
+        for (int i = 0; i < this.numThreads; i++)
             this.enqueue(stop);
 
-        for(int i = 0; i < this.numThreads; i++)
+        for (int i = 0; i < this.numThreads; i++)
             SysUtils.threadJoin(this.threads[i]);
-        
+
         this.watcher.stop();
     }
 
     static class ThreadWorker implements Runnable
     {
-        private final Semaphore sync = new Semaphore(1);
-        private final ThreadPool pool;
+        private final Semaphore   sync     = new Semaphore(1);
+        private final ThreadPool  pool;
         private volatile Runnable workload = null;
 
         public ThreadWorker(ThreadPool pool)
@@ -153,20 +151,19 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
         @Override
         public void run()
         {
-            for(;;)
+            for (;;)
             {
                 try
                 {
                     this.sync.acquireUninterruptibly();
-                    if(this.workload instanceof StopWorker)
-                        break;
+                    if (this.workload instanceof StopWorker) break;
                     this.workload.run();
                 }
                 catch (Throwable t)
                 {
                     t.printStackTrace();
                 }
-                
+
                 this.pool.reuseOrEnqueue(this);
             }
         }

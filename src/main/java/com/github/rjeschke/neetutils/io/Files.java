@@ -40,8 +40,8 @@ import com.github.rjeschke.neetutils.rng.RNGType;
 
 public final class Files implements Runnable
 {
-    private final static ConcurrentLinkedQueue<File> TEMP_FOLDERS = new ConcurrentLinkedQueue<File>();
-    
+    private final static ConcurrentLinkedQueue<File> TEMP_FOLDERS = new ConcurrentLinkedQueue<>();
+
     private Files()
     {
         //
@@ -51,11 +51,12 @@ public final class Files implements Runnable
     {
         Runtime.getRuntime().addShutdownHook(new Thread(new Files()));
     }
-    
+
     /**
      * Recursively lists all files at the given path.
      * 
-     * @param parent Path.
+     * @param parent
+     *            Path.
      * @return List of files.
      */
     public final static List<File> listFiles(File parent)
@@ -64,24 +65,23 @@ public final class Files implements Runnable
         listFiles(parent, files);
         return files;
     }
-    
+
     private final static void listFiles(File parent, List<File> files)
     {
-        if(parent.isFile())
+        if (parent.isFile())
             files.add(parent);
         else
         {
             final File[] fs = parent.listFiles();
-            for(final File f : fs)
+            for (final File f : fs)
             {
-                if(f.isFile())
+                if (f.isFile())
                     files.add(f);
-                else
-                    listFiles(f, files);
+                else listFiles(f, files);
             }
         }
     }
-    
+
     public final static File createUniqueTempFolder()
     {
         return createUniqueTempFolder("neetutils", true);
@@ -91,85 +91,62 @@ public final class Files implements Runnable
     {
         final String tmp = System.getProperty("java.io.tmpdir");
         final RNG rnd = RNGFactory.create(RNGType.LCG);
-        for(int i = 0; i < 0x40000000; i++)
+        for (int i = 0; i < 0x40000000; i++)
         {
             final File t = new File(tmp, String.format("%s-tmp-%08x", prefix, rnd.nextInt()));
-            if(!t.exists())
+            if (!t.exists())
             {
-                if(t.mkdir())
+                if (t.mkdir())
                 {
-                    if(autoCleanup)
-                        TEMP_FOLDERS.offer(t);
+                    if (autoCleanup) TEMP_FOLDERS.offer(t);
                     return t;
                 }
             }
         }
-        
+
         throw new RuntimeException("Could not create unique temp folder, please clean up your /tmp.");
     }
-    
+
     public final static void recurseDeleteFolder(File path)
     {
-        if(path.isDirectory())
+        if (path.isDirectory())
         {
             final File[] files = path.listFiles();
-            for(final File f : files)
+            for (final File f : files)
             {
-                if(f.isDirectory())
+                if (f.isDirectory())
                     recurseDeleteFolder(f);
-                else
-                    f.delete();
+                else f.delete();
             }
             path.delete();
         }
-        else
-            path.delete();
+        else path.delete();
     }
-    
+
     public final static void copy(File input, File output) throws IOException
     {
-        final InputStream in = new FileInputStream(input);
-        try
+        try (final InputStream in = new FileInputStream(input))
         {
-            final OutputStream out = new FileOutputStream(output);
-            try
+            try (final OutputStream out = new FileOutputStream(output))
             {
                 copy(in, out);
             }
-            finally
-            {
-                out.close();
-            }
-        }
-        finally
-        {
-            in.close();
         }
     }
 
     public final static void copy(InputStream in, File output) throws IOException
     {
-        final OutputStream out = new FileOutputStream(output);
-        try
+        try (final OutputStream out = new FileOutputStream(output))
         {
             copy(in, out);
-        }
-        finally
-        {
-            out.close();
         }
     }
 
     public final static void copy(File input, OutputStream out) throws IOException
     {
-        final InputStream in = new FileInputStream(input);
-        try
+        try (final InputStream in = new FileInputStream(input))
         {
             copy(in, out);
-        }
-        finally
-        {
-            in.close();
         }
     }
 
@@ -177,11 +154,10 @@ public final class Files implements Runnable
     {
         final byte[] buffer = new byte[65536];
 
-        for(;;)
+        for (;;)
         {
             final int read = input.read(buffer);
-            if(read == -1)
-                break;
+            if (read == -1) break;
             output.write(buffer, 0, read);
         }
     }
@@ -190,45 +166,37 @@ public final class Files implements Runnable
     {
         return asBytes(new File(filename));
     }
-    
+
     public final static byte[] asBytes(File file) throws IOException
     {
-        final FileInputStream fis = new FileInputStream(file);
-        final byte[] buffer = new byte[(int)file.length()];
-        try
+        try (final FileInputStream fis = new FileInputStream(file))
         {
+            final byte[] buffer = new byte[(int)file.length()];
             int p = 0;
-            while(p < buffer.length)
+            while (p < buffer.length)
             {
                 final int r = fis.read(buffer, p, buffer.length - p);
-                if(r == -1)
-                    break;
+                if (r == -1) break;
                 p += r;
             }
-            if(p != buffer.length)
+            if (p != buffer.length)
                 throw new IOException("Unexpected end of stream, expected " + buffer.length + ", got " + p + " bytes");
             return buffer;
         }
-        finally
-        {
-            fis.close();
-        }
     }
-    
+
     public final static byte[] asBytes(InputStream in) throws IOException
     {
         byte[] buffer = new byte[65536];
         try
         {
             int p = 0;
-            for(;;)
+            for (;;)
             {
                 final int r = in.read(buffer, p, buffer.length - p);
-                if(r < 0)
-                    break;
+                if (r < 0) break;
                 p += r;
-                if(p >= buffer.length)
-                    buffer = Arrays.copyOf(buffer, buffer.length + 65536); 
+                if (p >= buffer.length) buffer = Arrays.copyOf(buffer, buffer.length + 65536);
             }
             return p != buffer.length ? Arrays.copyOf(buffer, p) : buffer;
         }
@@ -242,45 +210,40 @@ public final class Files implements Runnable
     {
         return new String(asBytes(filename), charsetName);
     }
-    
+
     public final static String asString(File file, String charsetName) throws IOException
     {
         return new String(asBytes(file), charsetName);
     }
-    
+
     public final static String asString(InputStream in, String charsetName) throws IOException
     {
         return new String(asBytes(in), charsetName);
     }
-    
+
     public final static void saveBytes(String filename, byte[] bytes) throws IOException
     {
         saveBytes(filename, bytes, 0, bytes.length);
     }
-    
+
     public final static void saveBytes(String filename, byte[] bytes, int offs, int len) throws IOException
     {
         saveBytes(new File(filename), bytes, offs, len);
     }
-    
+
     public final static void saveBytes(File file, byte[] bytes) throws IOException
     {
         saveBytes(file, bytes, 0, bytes.length);
     }
-    
+
     public final static void saveBytes(File file, byte[] bytes, int offs, int len) throws IOException
     {
-        final FileOutputStream fos = new FileOutputStream(file);
-        try
+        try (final FileOutputStream fos = new FileOutputStream(file))
         {
             fos.write(bytes, offs, len);
         }
-        finally
-        {
-            fos.close();
-        }
     }
-    
+
     /**
      * Lists all resources in the given package.
      * 
@@ -291,11 +254,9 @@ public final class Files implements Runnable
     public final static List<String> list(final String pkgName)
     {
         final URL url = SysUtils.class.getResource("/" + pkgName.replace('.', '/'));
-        if(url == null)
-            return null;
+        if (url == null) return null;
 
-        if(url.getProtocol().equals("jar"))
-            return getJars(url, pkgName.replace('.', '/'));
+        if (url.getProtocol().equals("jar")) return getJars(url, pkgName.replace('.', '/'));
 
         return getFiles(url.getPath(), pkgName);
     }
@@ -307,44 +268,44 @@ public final class Files implements Runnable
      */
     public final static List<String> getFilesOnClasspath()
     {
-        final ArrayList<String> ret = new ArrayList<String>();
+        final ArrayList<String> ret = new ArrayList<>();
         final char sep = System.getProperty("path.separator").charAt(0);
         final List<String> paths = Strings.split(System.getProperty("java.class.path"), sep);
 
-        for(final String path : paths)
+        for (final String path : paths)
         {
             final File file = new File(path);
-            if(file.isDirectory())
+            if (file.isDirectory())
             {
                 final List<File> files = listFiles(file);
                 final int cut = file.toString().length();
-                for(final File f : files)
+                for (final File f : files)
                 {
                     ret.add(f.toString().substring(cut).replace('\\', '/'));
                 }
             }
-            else if(file.isFile() && file.getName().toLowerCase().endsWith(".jar"))
+            else if (file.isFile() && file.getName().toLowerCase().endsWith(".jar"))
             {
                 ret.addAll(getJarFiles(file));
             }
         }
         return ret;
     }
-    
+
     private final static List<String> getFiles(final String path, String basePackage)
     {
-        final ArrayList<String> classes = new ArrayList<String>();
+        final ArrayList<String> classes = new ArrayList<>();
         final String basePath = "/" + basePackage.replace('.', '/') + "/";
         final File dir = new File(path).getAbsoluteFile();
         final File[] files = dir.listFiles();
-        for(File f : files)
+        for (File f : files)
         {
             final String fn = f.getName();
-            if(f.isDirectory())
+            if (f.isDirectory())
             {
                 classes.addAll(getFiles(new File(dir, fn).getAbsolutePath(), basePackage + "." + fn));
             }
-            else if(f.isFile())
+            else if (f.isFile())
             {
                 classes.add(basePath + fn);
             }
@@ -354,20 +315,21 @@ public final class Files implements Runnable
 
     private final static List<String> getJarFiles(File file)
     {
-        final ArrayList<String> classes = new ArrayList<String>();
+        final ArrayList<String> classes = new ArrayList<>();
         try
         {
-            final JarFile jar = new JarFile(file);
-            final Enumeration<JarEntry> j = jar.entries();
-            while(j.hasMoreElements())
+            try (final JarFile jar = new JarFile(file))
             {
-                final JarEntry je = j.nextElement();
-                if(!je.isDirectory())
+                final Enumeration<JarEntry> j = jar.entries();
+                while (j.hasMoreElements())
                 {
-                    classes.add("/" + je.getName());
+                    final JarEntry je = j.nextElement();
+                    if (!je.isDirectory())
+                    {
+                        classes.add("/" + je.getName());
+                    }
                 }
             }
-            jar.close();
         }
         catch (Exception e)
         {
@@ -379,26 +341,27 @@ public final class Files implements Runnable
 
     private final static List<String> getJars(URL furl, String pkgname)
     {
-        final ArrayList<String> classes = new ArrayList<String>();
+        final ArrayList<String> classes = new ArrayList<>();
         try
         {
             final URL url = new URL(furl.getPath());
             final String f = URLDecoder.decode(url.getFile(), System.getProperty("file.encoding"));
             final File dir = new File(f.substring(0, f.lastIndexOf('!')));
-            final JarFile jar = new JarFile(dir);
-            final Enumeration<JarEntry> j = jar.entries();
-            while(j.hasMoreElements())
+            try (final JarFile jar = new JarFile(dir))
             {
-                final JarEntry je = j.nextElement();
-                if(!je.isDirectory())
+                final Enumeration<JarEntry> j = jar.entries();
+                while (j.hasMoreElements())
                 {
-                    if(je.getName().startsWith(pkgname))
+                    final JarEntry je = j.nextElement();
+                    if (!je.isDirectory())
                     {
-                        classes.add("/" + je.getName());
+                        if (je.getName().startsWith(pkgname))
+                        {
+                            classes.add("/" + je.getName());
+                        }
                     }
                 }
             }
-            jar.close();
         }
         catch (Exception e)
         {
@@ -412,17 +375,17 @@ public final class Files implements Runnable
     {
         return new File(System.getProperty("user.home"), path).getAbsolutePath();
     }
-    
+
     public final static File home(File path)
     {
         return new File(new File(System.getProperty("user.home")), path.toString());
     }
-    
+
     @Override
     public void run()
     {
         File file;
-        while((file = TEMP_FOLDERS.poll()) != null)
+        while ((file = TEMP_FOLDERS.poll()) != null)
             recurseDeleteFolder(file);
     }
 

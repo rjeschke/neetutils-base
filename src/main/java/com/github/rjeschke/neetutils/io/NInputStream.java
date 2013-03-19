@@ -29,8 +29,7 @@ public abstract class NInputStream extends FilterInputStream
 
     public static NInputStream fromStream(InputStream in, ByteOrder byteOrder)
     {
-        if(byteOrder == ByteOrder.BIG_ENDIAN)
-            return new NInputStreamBE(in);
+        if (byteOrder == ByteOrder.BIG_ENDIAN) return new NInputStreamBE(in);
         return new NInputStreamLE(in);
     }
 
