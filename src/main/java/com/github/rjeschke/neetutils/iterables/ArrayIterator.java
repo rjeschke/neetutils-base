@@ -21,43 +21,48 @@ import java.util.Iterator;
 public class ArrayIterator<A> extends AbstractXIterable<A>
 {
     private final A[] values;
-    
-    public ArrayIterator(final boolean defensiveCopy, final A ... values)
+
+    @SafeVarargs
+    public ArrayIterator(final boolean defensiveCopy, final A... values)
     {
         this.values = defensiveCopy ? Arrays.copyOf(values, values.length) : values;
     }
-    
-    public ArrayIterator(final A ... values)
+
+    @SafeVarargs
+    public ArrayIterator(final A... values)
     {
         this(true, values);
     }
-    
-    public final static <A> ArrayIterator<A> of(final A ... values)
+
+    @SafeVarargs
+    public final static <A> ArrayIterator<A> of(final A... values)
     {
-        return new ArrayIterator<A>(values);
+        return new ArrayIterator<>(values);
     }
-    
-    public final static <A> ArrayIterator<A> unsafeOf(final A ... values)
+
+    @SafeVarargs
+    public final static <A> ArrayIterator<A> unsafeOf(final A... values)
     {
-        return new ArrayIterator<A>(false, values);
+        return new ArrayIterator<>(false, values);
     }
-    
+
     @Override
     public Iterator<A> iterator()
     {
-        return new XIterator<A>(this.values);
+        return new XIterator<>(this.values);
     }
 
     private final static class XIterator<A> implements Iterator<A>
     {
         private final A[] values;
-        private int position = 0;
-        
-        public XIterator(final A ... values)
+        private int       position = 0;
+
+        @SafeVarargs
+        public XIterator(final A... values)
         {
             this.values = values;
         }
-        
+
         @Override
         public boolean hasNext()
         {

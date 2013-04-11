@@ -406,7 +406,7 @@ public final class NMath
     {
         return Math.abs(a - b) <= epsilon;
     }
-    
+
     public final static boolean floatEquals(final float a, final float b, final float epsilon)
     {
         return Math.abs(a - b) <= epsilon;

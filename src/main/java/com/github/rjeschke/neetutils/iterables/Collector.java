@@ -20,16 +20,16 @@ import java.util.Iterator;
 public abstract class Collector<A, B>
 {
     boolean hasElement;
-    B value;
-    
+    B       value;
+
     public abstract void collect(Iterator<? extends A> iterator);
-    
+
     final void init()
     {
         this.hasElement = false;
         this.value = null;
     }
-    
+
     protected final void emit(final B value)
     {
         this.value = value;

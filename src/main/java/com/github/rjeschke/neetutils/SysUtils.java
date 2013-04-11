@@ -29,22 +29,22 @@ import com.github.rjeschke.neetutils.rng.RNGType;
 public final class SysUtils
 {
     private final static ThreadLocal<Object> sleepObject = new ThreadLocal<Object>()
-    {
-        @Override
-        protected Object initialValue()
-        {
-            return new Object();
-        }
-    };
+                                                         {
+                                                             @Override
+                                                             protected Object initialValue()
+                                                             {
+                                                                 return new Object();
+                                                             }
+                                                         };
 
-    private final static ThreadLocal<RNG> RNG = new ThreadLocal<RNG>()
-    {
-        @Override
-        protected RNG initialValue()
-        {
-            return RNGFactory.create(RNGType.LCG);
-        }
-    };
+    private final static ThreadLocal<RNG>    RNG         = new ThreadLocal<RNG>()
+                                                         {
+                                                             @Override
+                                                             protected RNG initialValue()
+                                                             {
+                                                                 return RNGFactory.create(RNGType.LCG);
+                                                             }
+                                                         };
 
     private SysUtils()
     {
@@ -201,7 +201,7 @@ public final class SysUtils
     public final static String mapLibraryName(final String name)
     {
         final String lib = System.mapLibraryName(name);
-        if(getJavaVersion() >= 1.7 && lib.endsWith(".dylib"))
+        if (getJavaVersion() >= 1.7 && lib.endsWith(".dylib"))
         {
             return lib.substring(0, lib.length() - 5) + "jnilib";
         }

@@ -22,10 +22,10 @@ public class BackpropMomentumTrainer implements Trainer
 {
     double step;
     double alpha;
-    Net net;
-    Net oldDeltas;
+    Net    net;
+    Net    oldDeltas;
     double min, max, sum;
-    
+
     public BackpropMomentumTrainer(Net net, double step, double alpha)
     {
         this.net = net;
@@ -33,22 +33,22 @@ public class BackpropMomentumTrainer implements Trainer
         this.alpha = alpha;
         this.oldDeltas = net.clone().clear();
     }
-    
+
     public double getDeltaChangeMinimum()
     {
         return this.min;
     }
-    
+
     public double getDeltaChangeMaximum()
     {
         return this.max;
     }
-    
+
     public double getDeltaChangeAverage()
     {
         return this.sum;
     }
-    
+
     @Override
     public void train(double[] input, double[] expectedOutput)
     {
@@ -57,27 +57,27 @@ public class BackpropMomentumTrainer implements Trainer
         this.net.run(netState);
 
         double[] os, ds, dso;
-        
+
         os = netState[netState.length - 1].values;
         ds = deltas[netState.length - 1].values;
-        for(int i = 0; i < os.length; i++)
+        for (int i = 0; i < os.length; i++)
         {
             final double o = os[i];
             ds[i] = o * (1.0 - o) * (expectedOutput[i] - o);
         }
 
-        for(int i = this.net.layers.length - 1; i >= 0; i--)
+        for (int i = this.net.layers.length - 1; i >= 0; i--)
         {
             final Layer l = this.net.layers[i];
-            
+
             os = netState[i].values;
             ds = deltas[i + 1].values;
             dso = deltas[i].values;
-            
-            for(int x = 0; x < l.numInputs; x++)
+
+            for (int x = 0; x < l.numInputs; x++)
             {
                 double e = 0;
-                for(int y = 0; y < l.numOutputs; y++)
+                for (int y = 0; y < l.numOutputs; y++)
                 {
                     e += ds[y] * l.matrix[y * l.width + x];
                 }
@@ -88,29 +88,30 @@ public class BackpropMomentumTrainer implements Trainer
 
         this.max = this.sum = 0;
         this.min = Double.MAX_VALUE;
-        
+
         int runs = 0;
-        
-        for(int i = 0; i < this.net.layers.length; i++)
+
+        for (int i = 0; i < this.net.layers.length; i++)
         {
             final Layer l = this.net.layers[i];
             final Layer l2 = this.oldDeltas.layers[i];
             runs += (l.numInputs + 1) * l.numOutputs;
 
-            for(int y = 0; y < l.numOutputs; y++)
+            for (int y = 0; y < l.numOutputs; y++)
             {
                 final int p = y * l.width;
                 final double d = this.step * deltas[i + 1].values[y];
-                l.matrix[p + l.numInputs] += l2.matrix[p + l.numInputs] = this.updateDeltas(d + this.alpha * l2.matrix[p + l.numInputs]);
-                
-                for(int x = 0; x < l.numInputs; x++)
-                    l.matrix[p + x] += l2.matrix[p + x] = this.updateDeltas(d * netState[i].values[x] + this.alpha * l2.matrix[p + x]);
-                
+                l.matrix[p + l.numInputs] += l2.matrix[p + l.numInputs] = this.updateDeltas(d + this.alpha
+                        * l2.matrix[p + l.numInputs]);
+
+                for (int x = 0; x < l.numInputs; x++)
+                    l.matrix[p + x] += l2.matrix[p + x] = this.updateDeltas(d * netState[i].values[x] + this.alpha
+                            * l2.matrix[p + x]);
+
             }
         }
-        
-        if(runs != 0)
-            this.sum /= runs;
+
+        if (runs != 0) this.sum /= runs;
     }
 
     private double updateDeltas(double delta)
@@ -121,12 +122,12 @@ public class BackpropMomentumTrainer implements Trainer
         this.sum += da;
         return delta;
     }
-    
+
     public void setStep(double v)
     {
         this.step = v;
     }
-    
+
     public void setAlpha(double v)
     {
         this.alpha = v;

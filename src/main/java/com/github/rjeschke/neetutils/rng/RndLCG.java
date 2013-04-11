@@ -24,31 +24,31 @@ public class RndLCG implements RNG
 {
     private final static long A = 6364136223846793005L;
     private final static long C = 1442695040888963407L;
-    private long value;
-    
+    private long              value;
+
     public RndLCG()
     {
         this(RNGFactory.defaultSeed());
     }
-    
+
     public RndLCG(final long seed)
     {
         this.value = seed;
     }
-    
+
     @Override
     public int nextInt()
     {
         this.value = this.value * A + C;
         return (int)(this.value >> 32);
     }
-    
+
     @Override
     public int nextInt(int max)
     {
         return (int)(nextDoubleUnipolar() * max);
     }
-    
+
     @Override
     public float nextFloatUnipolar()
     {
@@ -60,7 +60,7 @@ public class RndLCG implements RNG
     {
         return this.nextInt() / 2147483648.f;
     }
-    
+
     @Override
     public double nextDoubleUnipolar()
     {

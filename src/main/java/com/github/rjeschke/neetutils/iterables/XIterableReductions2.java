@@ -21,7 +21,7 @@ import com.github.rjeschke.neetutils.fn.FnFoldStep;
 
 class XIterableReductions2<A> extends AbstractXIterable<A>
 {
-    private final Iterable<? extends A> iterable;
+    private final Iterable<? extends A>            iterable;
     private final FnFoldStep<? super A, ? super A> foldStep;
 
     public XIterableReductions2(final Iterable<? extends A> iterable, final FnFoldStep<? super A, ? super A> foldStep)
@@ -33,15 +33,15 @@ class XIterableReductions2<A> extends AbstractXIterable<A>
     @Override
     public Iterator<A> iterator()
     {
-        return new XIterableReductions2.XIterator<A>(this.iterable.iterator(), this.foldStep);
+        return new XIterableReductions2.XIterator<>(this.iterable.iterator(), this.foldStep);
     }
 
     private final static class XIterator<A> implements Iterator<A>
     {
-        private final Iterator<? extends A> iterator;
+        private final Iterator<? extends A>            iterator;
         private final FnFoldStep<? super A, ? super A> foldStep;
-        private A initialValue;
-        private boolean isInitialValue = true;
+        private A                                      initialValue;
+        private boolean                                isInitialValue = true;
 
         public XIterator(final Iterator<? extends A> iterator, final FnFoldStep<? super A, ? super A> foldStep)
         {
@@ -55,11 +55,10 @@ class XIterableReductions2<A> extends AbstractXIterable<A>
             return this.iterator.hasNext();
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public A next()
         {
-            if(this.isInitialValue)
+            if (this.isInitialValue)
             {
                 this.isInitialValue = false;
                 this.initialValue = this.iterator.next();

@@ -23,11 +23,11 @@ import com.github.rjeschke.neetutils.io.NOutputStream;
 class Layer
 {
     final TransferFunction tf;
-    final int numInputs;
-    final int numOutputs;
-    final int width;
-    final double[] matrix;
-    
+    final int              numInputs;
+    final int              numOutputs;
+    final int              width;
+    final double[]         matrix;
+
     Layer(final TransferFunction tf, int numInputs, int numOutputs)
     {
         this.tf = tf;
@@ -36,7 +36,7 @@ class Layer
         this.width = numInputs + 1;
         this.matrix = new double[this.width * this.numOutputs];
     }
-    
+
     @Override
     public Layer clone()
     {
@@ -44,25 +44,26 @@ class Layer
         System.arraycopy(this.matrix, 0, l.matrix, 0, this.matrix.length);
         return l;
     }
-    
+
     double[] eval(double[] inputs, double[] outputs)
     {
-        for(int y = 0; y < this.numOutputs; y++)
+        for (int y = 0; y < this.numOutputs; y++)
         {
             double o = 0;
             final int p = y * this.width;
-            for(int x = 0; x < this.numInputs; x++)
+            for (int x = 0; x < this.numInputs; x++)
                 o += inputs[x] * this.matrix[p + x];
             outputs[y] = this.tf.map(o + this.matrix[p + this.numInputs]);
         }
         return outputs;
     }
-    
+
     State createState()
     {
         return new State(this.numOutputs);
     }
 
+    @SuppressWarnings("static-method")
     State createState(double[] outputs)
     {
         return new State(outputs);
@@ -73,35 +74,34 @@ class Layer
         out.write32(this.numInputs);
         out.write32(this.numOutputs);
         this.tf.toStream(out);
-        for(int i = 0; i < this.matrix.length; i++)
+        for (int i = 0; i < this.matrix.length; i++)
             out.writeDouble(this.matrix[i]);
     }
-    
+
     public void zeroNaNsAndInfs()
     {
-        for(int i = 0; i < this.matrix.length; i++)
+        for (int i = 0; i < this.matrix.length; i++)
         {
             final double d = this.matrix[i];
-            if(Double.isNaN(d) || Double.isInfinite(d))
-                this.matrix[i] = 0;
+            if (Double.isNaN(d) || Double.isInfinite(d)) this.matrix[i] = 0;
         }
     }
-    
+
     static Layer fromStream(NInputStream in) throws IOException
     {
         final int a = in.readI32();
         final int b = in.readI32();
         final TransferFunction tf = TransferFunctions.fromStream(in);
         final Layer l = new Layer(tf, a, b);
-        for(int i = 0; i < l.matrix.length; i++)
+        for (int i = 0; i < l.matrix.length; i++)
             l.matrix[i] = in.readDouble();
         return l;
     }
-    
+
     static class State
     {
         public final double[] values;
-        
+
         State(int values)
         {
             this.values = new double[values];

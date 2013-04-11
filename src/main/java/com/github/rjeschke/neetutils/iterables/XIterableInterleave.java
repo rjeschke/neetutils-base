@@ -31,14 +31,14 @@ class XIterableInterleave<A> extends AbstractXIterable<A>
     @Override
     public Iterator<A> iterator()
     {
-        return new XIterableInterleave.XIterator<A>(this.iterableA.iterator(), this.iterableB.iterator());
+        return new XIterableInterleave.XIterator<>(this.iterableA.iterator(), this.iterableB.iterator());
     }
 
     private final static class XIterator<A> implements Iterator<A>
     {
         private final Iterator<? extends A> iteratorA;
         private final Iterator<? extends A> iteratorB;
-        private boolean first = true;
+        private boolean                     first = true;
 
         public XIterator(final Iterator<? extends A> iteratorA, final Iterator<? extends A> iteratorB)
         {

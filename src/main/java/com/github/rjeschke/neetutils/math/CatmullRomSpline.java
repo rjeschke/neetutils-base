@@ -45,14 +45,14 @@ public class CatmullRomSpline
     public void normalize()
     {
         double min = 1e9, max = -1e9;
-        for(int i = 0; i <= 65536; i++)
+        for (int i = 0; i <= 65536; i++)
         {
             final double v = this.get(i / 65536.0);
             min = Math.min(v, min);
             max = Math.max(v, max);
         }
         final double w = max - min;
-        if(w > 0)
+        if (w > 0)
         {
             final double scale = 2.0 / w;
 

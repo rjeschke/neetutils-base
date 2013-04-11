@@ -21,7 +21,7 @@ package com.github.rjeschke.neetutils.concurrent;
  */
 public class WorkerStatus
 {
-    private final Throwable t;
+    private final Throwable    t;
 
     public static WorkerStatus OK = new WorkerStatus(null);
 

@@ -24,84 +24,84 @@ public class Vector2f
     {
         // 0
     }
-    
+
     public Vector2f(float x, float y)
     {
         this.x = x;
         this.y = y;
     }
-    
+
     public Vector2f(float xy)
     {
         this.x = xy;
         this.y = xy;
     }
-    
+
     public Vector2f scale(float f)
     {
         this.x *= f;
         this.y *= f;
         return this;
     }
-    
+
     public Vector2f add(Vector2f v)
     {
         this.x += v.x;
         this.y += v.y;
         return this;
     }
-    
+
     public Vector2f add(Vector2f v, float scale)
     {
         this.x += v.x * scale;
         this.y += v.y * scale;
         return this;
     }
-    
+
     public Vector2f sub(Vector2f v)
     {
         this.x -= v.x;
         this.y -= v.y;
         return this;
     }
-    
+
     public Vector2f sub(Vector2f v, float scale)
     {
         this.x -= v.x * scale;
         this.y -= v.y * scale;
         return this;
     }
-    
+
     public Vector2f mul(Vector2f v)
     {
         this.x *= v.x;
         this.y *= v.y;
         return this;
     }
-    
+
     public Vector2f mul(Vector2f v, float scale)
     {
         this.x *= v.x * scale;
         this.y *= v.y * scale;
         return this;
     }
-    
+
     public Vector2f lerp(Vector2f v, float f)
     {
         this.x += (v.x - this.x) * f;
         this.y += (v.y - this.y) * f;
         return this;
     }
-    
+
     public float dot(Vector2f v)
     {
         return this.x * v.x + this.y * v.y;
     }
-    
+
     public Vector2f normalize()
     {
         float len = this.x * this.x + this.y * this.y;
-        if(len != 0)
+        if (len != 0)
         {
             len = 1.f / (float)Math.sqrt(len);
             this.x *= len;
@@ -109,25 +109,25 @@ public class Vector2f
         }
         return this;
     }
-    
+
     public Vector2f negate()
     {
         this.x = -this.x;
         this.y = -this.y;
         return this;
     }
-    
+
     public float length()
     {
         return (float)Math.sqrt(this.x * this.x + this.y * this.y);
     }
-    
+
     public void intoArray(float[] arr, int offset)
     {
         arr[offset] = this.x;
         arr[offset + 1] = this.y;
     }
-    
+
     @Override
     public Vector2f clone()
     {

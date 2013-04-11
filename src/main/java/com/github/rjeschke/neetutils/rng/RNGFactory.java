@@ -25,7 +25,7 @@ public final class RNGFactory
     {
         return System.nanoTime() + Thread.currentThread().getId();
     }
-    
+
     public final static RNG create(final RNGType type)
     {
         return create(type, defaultSeed());
@@ -33,7 +33,7 @@ public final class RNGFactory
 
     public final static RNG create(final RNGType type, final long seed)
     {
-        switch(type)
+        switch (type)
         {
         case LCG:
             return new RndLCG(seed);

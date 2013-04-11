@@ -22,7 +22,7 @@ import com.github.rjeschke.neetutils.io.NOutputStream;
 public class AtanTransferFunction implements TransferFunction
 {
     final static double REC_PI = 1.0 / Math.PI;
-    
+
     @Override
     public double map(double input)
     {

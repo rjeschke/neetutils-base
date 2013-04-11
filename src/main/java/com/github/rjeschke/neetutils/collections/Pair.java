@@ -20,17 +20,15 @@ public class Pair<A extends Comparable<A>, B extends Comparable<B>> extends Tupl
     public Pair(A a, B b)
     {
         super(a, b);
-        
-        if(a == null)
-            throw new IllegalArgumentException("First value of Pair is null");
-        
-        if(b == null)
-            throw new IllegalArgumentException("Second value of Pair is null");
+
+        if (a == null) throw new IllegalArgumentException("First value of Pair is null");
+
+        if (b == null) throw new IllegalArgumentException("Second value of Pair is null");
     }
-    
+
     public final static <A extends Comparable<A>, B extends Comparable<B>> Pair<A, B> of(A a, B b)
     {
-        return new Pair<A, B>(a, b);
+        return new Pair<>(a, b);
     }
 
     @Override
@@ -42,14 +40,12 @@ public class Pair<A extends Comparable<A>, B extends Comparable<B>> extends Tupl
     @Override
     public boolean equals(Object obj)
     {
-        if(obj == this)
-            return true;
+        if (obj == this) return true;
 
-        if(!(obj instanceof Pair))
-            return false;
+        if (!(obj instanceof Pair)) return false;
 
         final Pair<?, ?> p = (Pair<?, ?>)obj;
-        
+
         return this.a.equals(p.a) && this.b.equals(p.b);
     }
 
@@ -58,12 +54,10 @@ public class Pair<A extends Comparable<A>, B extends Comparable<B>> extends Tupl
     {
         final int t;
 
-        if(this == o)
-            return 0;
-        
-        if(o == null)
-            return 1;
-        
+        if (this == o) return 0;
+
+        if (o == null) return 1;
+
         return (t = this.a.compareTo(o.a)) != 0 ? t : this.b.compareTo(o.b);
     }
 }

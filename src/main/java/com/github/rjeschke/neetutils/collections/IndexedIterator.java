@@ -7,7 +7,7 @@ import com.github.rjeschke.neetutils.math.Numbers;
 class IndexedIterator<A> implements Iterator<Tuple<Integer, A>>
 {
     private final Iterator<A> iterator;
-    private int index = 0;
+    private int               index = 0;
 
     public IndexedIterator(final Iterator<A> iterator)
     {

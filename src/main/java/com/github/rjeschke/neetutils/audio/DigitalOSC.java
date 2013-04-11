@@ -112,8 +112,10 @@ public class DigitalOSC
             double fp = this.phase / 16777216.0;
             if (this.phase > np)
             {
-                if (this.phase < this.pw && np < this.pw) out = (1 - this.fpw) * this.invFstep;
-                else if (this.phase >= this.pw && np >= this.pw) out = (this.fstep - this.fpw) * this.invFstep;
+                if (this.phase < this.pw && np < this.pw)
+                    out = (1 - this.fpw) * this.invFstep;
+                else if (this.phase >= this.pw && np >= this.pw)
+                    out = (this.fstep - this.fpw) * this.invFstep;
                 else out = (1 - fp) * this.invFstep;
             }
             else if (this.phase < this.pw && np >= this.pw)

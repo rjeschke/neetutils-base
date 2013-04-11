@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 class XIterableTake<A> extends AbstractXIterable<A>
 {
     private final Iterable<A> iterable;
-    private final int amount;
+    private final int         amount;
 
     public XIterableTake(final Iterable<A> iterable, final int amount)
     {
@@ -32,16 +32,16 @@ class XIterableTake<A> extends AbstractXIterable<A>
     @Override
     public Iterator<A> iterator()
     {
-        return new XIterableTake.XIterator<A>(this.iterable.iterator(), this.amount);
+        return new XIterableTake.XIterator<>(this.iterable.iterator(), this.amount);
     }
 
     private final static class XIterator<A> implements Iterator<A>
     {
         private final Iterator<A> iterator;
-        private final int amount;
-        private int count;
-        private A element;
-        private boolean hasElement;
+        private final int         amount;
+        private int               count;
+        private A                 element;
+        private boolean           hasElement;
 
         public XIterator(final Iterator<A> iterator, final int amount)
         {
@@ -52,12 +52,12 @@ class XIterableTake<A> extends AbstractXIterable<A>
         @Override
         public boolean hasNext()
         {
-            if(this.hasElement)
+            if (this.hasElement)
             {
                 return true;
             }
 
-            if(this.iterator.hasNext() && this.count < this.amount)
+            if (this.iterator.hasNext() && this.count < this.amount)
             {
                 this.count++;
                 this.element = this.iterator.next();
@@ -70,7 +70,7 @@ class XIterableTake<A> extends AbstractXIterable<A>
         @Override
         public A next()
         {
-            if(!this.hasElement)
+            if (!this.hasElement)
             {
                 throw new NoSuchElementException();
             }

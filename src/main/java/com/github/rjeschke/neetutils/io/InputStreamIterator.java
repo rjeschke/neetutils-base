@@ -27,30 +27,29 @@ import com.github.rjeschke.neetutils.math.Numbers;
 public class InputStreamIterator implements Iterable<Integer>, Closeable
 {
     final InputStream in;
-    boolean closed = false;
-    volatile boolean iteratorInUse = false;
-    int current;
-    
+    boolean           closed        = false;
+    volatile boolean  iteratorInUse = false;
+    int               current;
+
     public InputStreamIterator(InputStream in)
     {
         this.in = in;
         this.current = this.read();
     }
-    
+
     int read()
     {
-        if(this.closed)
-            return this.current = -1;
+        if (this.closed) return this.current = -1;
         try
         {
             this.current = this.in.read();
-            if(this.current == -1)
+            if (this.current == -1)
             {
                 this.in.close();
                 this.closed = true;
             }
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             this.current = -1;
             try
@@ -65,22 +64,21 @@ public class InputStreamIterator implements Iterable<Integer>, Closeable
         }
         return this.current;
     }
-    
+
     @Override
     public synchronized Iterator<Integer> iterator()
     {
-        if(this.iteratorInUse)
-            throw new IllegalStateException("An iterator is already in use");
+        if (this.iteratorInUse) throw new IllegalStateException("An iterator is already in use");
         return new StreamIterator(this);
     }
 
     private class StreamIterator implements Iterator<Integer>
     {
         final InputStreamIterator ist;
-        
+
         public StreamIterator(InputStreamIterator ist)
         {
-            this.ist = ist; 
+            this.ist = ist;
         }
 
         @Override
@@ -92,8 +90,7 @@ public class InputStreamIterator implements Iterable<Integer>, Closeable
         @Override
         public Integer next()
         {
-            if(!this.hasNext())
-                throw new NoSuchElementException("Trying to read past end of stream");
+            if (!this.hasNext()) throw new NoSuchElementException("Trying to read past end of stream");
             final Integer ret = Numbers.integerOf(this.ist.current);
             this.ist.read();
             return ret;

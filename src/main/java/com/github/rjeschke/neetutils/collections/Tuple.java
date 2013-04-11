@@ -30,7 +30,7 @@ public class Tuple<A, B>
 
     public final static <A, B> Tuple<A, B> of(A a, B b)
     {
-        return new Tuple<A, B>(a, b);
+        return new Tuple<>(a, b);
     }
 
     @Override
@@ -42,11 +42,9 @@ public class Tuple<A, B>
     @Override
     public boolean equals(Object obj)
     {
-        if(obj == this)
-            return true;
+        if (obj == this) return true;
 
-        if(!(obj instanceof Tuple))
-            return false;
+        if (!(obj instanceof Tuple)) return false;
 
         final Tuple<?, ?> p = (Tuple<?, ?>)obj;
 

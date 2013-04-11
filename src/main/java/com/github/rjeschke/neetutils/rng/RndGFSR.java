@@ -16,48 +16,44 @@
 package com.github.rjeschke.neetutils.rng;
 
 /**
- * Generalized Feedback Shift Register 
+ * Generalized Feedback Shift Register
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public class RndGFSR implements RNG
 {
-	private final static int A = 11, B = 103, C = 307, D = 1009, E = 3001;
-	private int pos = 0;
-	private final int[] history = new int[4096];
-	
+    private final static int A       = 11, B = 103, C = 307, D = 1009, E = 3001;
+    private int              pos     = 0;
+    private final int[]      history = new int[4096];
+
     public RndGFSR()
     {
         this(RNGFactory.defaultSeed());
     }
-    
-	public RndGFSR(long seed)
-	{
-		final RndLCG rnd = new RndLCG(seed);
-		for(int i = 0; i < 4096; i++)
-		{
-			this.history[i] = rnd.nextInt();
-		}
-	}
-	
-	@Override
-	public int nextInt()
-	{
-		final int p = this.pos = (this.pos + 1) & 4095;
-		return this.history[p] = 
-			this.history[(p - A) & 4095] ^
-			this.history[(p - B) & 4095] ^
-			this.history[(p - C) & 4095] ^
-			this.history[(p - D) & 4095] ^
-			this.history[(p - E) & 4095];
-	}
+
+    public RndGFSR(long seed)
+    {
+        final RndLCG rnd = new RndLCG(seed);
+        for (int i = 0; i < 4096; i++)
+        {
+            this.history[i] = rnd.nextInt();
+        }
+    }
+
+    @Override
+    public int nextInt()
+    {
+        final int p = this.pos = (this.pos + 1) & 4095;
+        return this.history[p] = this.history[(p - A) & 4095] ^ this.history[(p - B) & 4095] ^ this.history[(p - C) & 4095]
+                ^ this.history[(p - D) & 4095] ^ this.history[(p - E) & 4095];
+    }
 
     @Override
     public int nextInt(int max)
     {
         return (int)(nextDoubleUnipolar() * max);
     }
-    
+
     @Override
     public float nextFloatUnipolar()
     {
@@ -69,7 +65,7 @@ public class RndGFSR implements RNG
     {
         return this.nextInt() / 2147483648.f;
     }
-    
+
     @Override
     public double nextDoubleUnipolar()
     {

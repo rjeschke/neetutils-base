@@ -24,7 +24,7 @@ package com.github.rjeschke.neetutils.dispose;
 public class ReferenceList<T>
 {
     private Node<T> root;
-    private int size;
+    private int     size;
 
     /**
      * Constructor.
@@ -63,9 +63,9 @@ public class ReferenceList<T>
      */
     public Node<T> add(final T value)
     {
-        final Node<T> node = new Node<T>(value);
+        final Node<T> node = new Node<>(value);
         this.size++;
-        if(this.root != null)
+        if (this.root != null)
         {
             node.next = this.root;
             this.root.previous = node;
@@ -82,13 +82,11 @@ public class ReferenceList<T>
      */
     public Node<T> removeLast()
     {
-        if(this.root == null)
-            return null;
+        if (this.root == null) return null;
 
         this.size--;
         final Node<T> node = this.root;
-        if(node.next != null)
-            node.next.previous = null;
+        if (node.next != null) node.next.previous = null;
         this.root = node.next;
 
         node.next = node.previous = null;
@@ -104,19 +102,17 @@ public class ReferenceList<T>
      */
     public void remove(Node<T> node)
     {
-        if(!node.inside)
-            return;
+        if (!node.inside) return;
 
         this.size--;
-        if(node.previous == null)
+        if (node.previous == null)
         {
             this.root = node.next;
         }
         else
         {
             node.previous.next = node.next;
-            if(node.next != null)
-                node.next.previous = node.previous;
+            if (node.next != null) node.next.previous = node.previous;
         }
 
         node.next = node.previous = null;

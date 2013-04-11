@@ -24,84 +24,84 @@ public class Vector2d
     {
         // 0
     }
-    
+
     public Vector2d(double x, double y)
     {
         this.x = x;
         this.y = y;
     }
-    
+
     public Vector2d(double xy)
     {
         this.x = xy;
         this.y = xy;
     }
-    
+
     public Vector2d scale(double f)
     {
         this.x *= f;
         this.y *= f;
         return this;
     }
-    
+
     public Vector2d add(Vector2d v)
     {
         this.x += v.x;
         this.y += v.y;
         return this;
     }
-    
+
     public Vector2d add(Vector2d v, double scale)
     {
         this.x += v.x * scale;
         this.y += v.y * scale;
         return this;
     }
-    
+
     public Vector2d sub(Vector2d v)
     {
         this.x -= v.x;
         this.y -= v.y;
         return this;
     }
-    
+
     public Vector2d sub(Vector2d v, double scale)
     {
         this.x -= v.x * scale;
         this.y -= v.y * scale;
         return this;
     }
-    
+
     public Vector2d mul(Vector2d v)
     {
         this.x *= v.x;
         this.y *= v.y;
         return this;
     }
-    
+
     public Vector2d mul(Vector2d v, double scale)
     {
         this.x *= v.x * scale;
         this.y *= v.y * scale;
         return this;
     }
-    
+
     public Vector2d lerp(Vector2d v, double f)
     {
         this.x += (v.x - this.x) * f;
         this.y += (v.y - this.y) * f;
         return this;
     }
-    
+
     public double dot(Vector2d v)
     {
         return this.x * v.x + this.y * v.y;
     }
-    
+
     public Vector2d normalize()
     {
         double len = this.x * this.x + this.y * this.y;
-        if(len != 0)
+        if (len != 0)
         {
             len = 1.0 / Math.sqrt(len);
             this.x *= len;
@@ -109,25 +109,25 @@ public class Vector2d
         }
         return this;
     }
-    
+
     public Vector2d negate()
     {
         this.x = -this.x;
         this.y = -this.y;
         return this;
     }
-    
+
     public double length()
     {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
-    
+
     public void intoArray(double[] arr, int offset)
     {
         arr[offset] = this.x;
         arr[offset + 1] = this.y;
     }
-    
+
     @Override
     public Vector2d clone()
     {

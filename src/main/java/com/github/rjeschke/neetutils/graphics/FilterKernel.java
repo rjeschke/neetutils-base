@@ -4,15 +4,15 @@ import java.util.Arrays;
 
 public class FilterKernel
 {
-    final float[] xf;
-    final float[] yf;
-    final float[] xyf;
-    public final int width; 
+    final float[]    xf;
+    final float[]    yf;
+    final float[]    xyf;
+    public final int width;
     public final int height;
-    final int offsx;
-    final int offsy;
-    final boolean isSingle;
-    
+    final int        offsx;
+    final int        offsy;
+    final boolean    isSingle;
+
     public FilterKernel(float[] kernel, int width, int height, int offsx, int offsy)
     {
         this.xf = null;
@@ -36,39 +36,39 @@ public class FilterKernel
         this.offsy = offsy;
         this.isSingle = false;
     }
-    
+
     public FilterKernel normalize()
     {
-        if(this.isSingle)
+        if (this.isSingle)
         {
             double sum = 0;
-            for(int i = 0; i < this.xyf.length; i++)
+            for (int i = 0; i < this.xyf.length; i++)
                 sum += this.xyf[i];
-            if(sum != 0)
+            if (sum != 0)
             {
-                for(int i = 0; i < this.xyf.length; i++)
+                for (int i = 0; i < this.xyf.length; i++)
                     this.xyf[i] /= sum;
             }
         }
         else
         {
             double sum = 0;
-            for(int y = 0; y < this.height; y++)
+            for (int y = 0; y < this.height; y++)
             {
-                for(int x = 0; x < this.width; x++)
+                for (int x = 0; x < this.width; x++)
                 {
                     sum += this.xf[x] * this.yf[y];
                 }
             }
-            if(sum != 0)
+            if (sum != 0)
             {
-                for(int y = 0; y < this.height; y++)
+                for (int y = 0; y < this.height; y++)
                     this.yf[y] /= sum;
-                for(int x = 0; x < this.width; x++)
+                for (int x = 0; x < this.width; x++)
                     this.xf[x] /= sum;
             }
         }
-        
+
         return this;
     }
 }

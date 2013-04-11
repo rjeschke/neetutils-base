@@ -54,7 +54,7 @@ public final class Colls
      */
     public final static <A> List<A> list()
     {
-        return new ArrayList<A>();
+        return new ArrayList<>();
     }
 
     /**
@@ -66,7 +66,7 @@ public final class Colls
      */
     public final static <A> List<A> list(final int initialSize)
     {
-        return new ArrayList<A>(initialSize);
+        return new ArrayList<>(initialSize);
     }
 
     /**
@@ -78,7 +78,7 @@ public final class Colls
      */
     public final static <A> List<A> list(final Collection<A> coll)
     {
-        return new ArrayList<A>(coll);
+        return new ArrayList<>(coll);
     }
 
     /**
@@ -91,7 +91,7 @@ public final class Colls
     public final static <A> List<A> list(final Iterable<A> coll)
     {
         final List<A> ret = list();
-        for(final A a : coll)
+        for (final A a : coll)
             ret.add(a);
         return ret;
     }
@@ -103,10 +103,11 @@ public final class Colls
      *            Array of values to populate List with.
      * @return A List instance.
      */
+    @SafeVarargs
     public final static <A> List<A> list(final A... coll)
     {
         final List<A> ret = list(coll.length);
-        for(int i = 0; i < coll.length; i++)
+        for (int i = 0; i < coll.length; i++)
             ret.add(coll[i]);
         return ret;
     }
@@ -120,7 +121,7 @@ public final class Colls
      */
     public final static <A> List<A> ilist(final Collection<A> coll)
     {
-        return new ImmutableList<A>(coll);
+        return new ImmutableList<>(coll);
     }
 
     /**
@@ -132,7 +133,7 @@ public final class Colls
      */
     public final static <A> List<A> ilist(final Iterable<A> coll)
     {
-        return new ImmutableList<A>(coll);
+        return new ImmutableList<>(coll);
     }
 
     /**
@@ -142,9 +143,10 @@ public final class Colls
      *            Array of values to populate List with.
      * @return A List instance.
      */
+    @SafeVarargs
     public final static <A> List<A> ilist(final A... coll)
     {
-        return new ImmutableList<A>(coll);
+        return new ImmutableList<>(coll);
     }
 
     public final static <A> Iterable<Tuple<Integer, A>> idxIter(final Collection<A> coll)
@@ -156,7 +158,7 @@ public final class Colls
             @Override
             public Iterator<Tuple<Integer, A>> iterator()
             {
-                return new IndexedIterator<A>(this.collection.iterator());
+                return new IndexedIterator<>(this.collection.iterator());
             }
         };
     }
@@ -170,7 +172,7 @@ public final class Colls
             @Override
             public Iterator<Tuple<Integer, A>> iterator()
             {
-                return new IndexedIterator<A>(this.iterable.iterator());
+                return new IndexedIterator<>(this.iterable.iterator());
             }
         };
     }
@@ -188,12 +190,11 @@ public final class Colls
      */
     public final static <A> List<A> trimToSize(List<A> list)
     {
-        if(list instanceof Vector)
+        if (list instanceof Vector)
             ((Vector<?>)list).trimToSize();
-        else if(list instanceof ArrayList)
+        else if (list instanceof ArrayList)
             ((ArrayList<?>)list).trimToSize();
-        else if(list instanceof SortedList)
-            ((SortedList<?>)list).trimToSize();
+        else if (list instanceof SortedList) ((SortedList<?>)list).trimToSize();
 
         return list;
     }
@@ -208,7 +209,7 @@ public final class Colls
     public final static <A, B> List<Tuple<A, B>> asList(final Map<A, B> map)
     {
         final List<Tuple<A, B>> ret = list();
-        for(final Map.Entry<A, B> e : map.entrySet())
+        for (final Map.Entry<A, B> e : map.entrySet())
             ret.add(Tuple.of(e.getKey(), e.getValue()));
         return ret;
     }
@@ -228,7 +229,7 @@ public final class Colls
     {
         final Iterator<A> a = keys.iterator();
         final Iterator<B> b = values.iterator();
-        while(a.hasNext() && b.hasNext())
+        while (a.hasNext() && b.hasNext())
             map.put(a.next(), b.next());
 
         return map;
@@ -245,7 +246,7 @@ public final class Colls
      */
     public final static <A, B> Map<A, B> intoMap(final Iterable<Tuple<A, B>> keyValues, final Map<A, B> map)
     {
-        for(final Tuple<A, B> t : keyValues)
+        for (final Tuple<A, B> t : keyValues)
             map.put(t.a, t.b);
         return map;
     }
@@ -419,12 +420,11 @@ public final class Colls
      */
     public final static <A> List<A> take(final Collection<A> coll, final int amount)
     {
-        if(amount >= coll.size())
-            return list(coll);
+        if (amount >= coll.size()) return list(coll);
 
         final List<A> ret = list(amount);
         final Iterator<A> it = coll.iterator();
-        for(int i = 0; i < amount; i++)
+        for (int i = 0; i < amount; i++)
             ret.add(it.next());
 
         return ret;
@@ -445,7 +445,7 @@ public final class Colls
         final List<A> ret = list();
         final Iterator<A> it = coll.iterator();
         int i = 0;
-        while(i++ < amount && it.hasNext())
+        while (i++ < amount && it.hasNext())
             ret.add(it.next());
 
         return ret;
@@ -463,15 +463,14 @@ public final class Colls
      */
     public final static <A> List<A> drop(final Collection<A> coll, final int amount)
     {
-        if(amount >= coll.size())
-            return list();
+        if (amount >= coll.size()) return list();
 
         final int toTake = coll.size() - amount;
         final List<A> ret = list(toTake);
         final Iterator<A> it = coll.iterator();
-        for(int i = 0; i < amount; i++)
+        for (int i = 0; i < amount; i++)
             it.next();
-        for(int i = 0; i < toTake; i++)
+        for (int i = 0; i < toTake; i++)
             ret.add(it.next());
 
         return ret;
@@ -492,9 +491,9 @@ public final class Colls
         final List<A> ret = list();
         final Iterator<A> it = coll.iterator();
         int i = 0;
-        while(i++ < amount && it.hasNext())
+        while (i++ < amount && it.hasNext())
             it.next();
-        while(it.hasNext())
+        while (it.hasNext())
             ret.add(it.next());
 
         return ret;
@@ -503,7 +502,7 @@ public final class Colls
     public final static <A, B> List<B> map(final Collection<A> coll, final FnMapping<A, B> fn)
     {
         final List<B> l = list(coll.size());
-        for(final A a : coll)
+        for (final A a : coll)
             l.add(fn.applyMapping(a));
         return l;
     }
@@ -511,7 +510,7 @@ public final class Colls
     public final static <A, B> List<B> map(final Iterable<A> coll, final FnMapping<A, B> fn)
     {
         final List<B> l = list();
-        for(final A a : coll)
+        for (final A a : coll)
             l.add(fn.applyMapping(a));
         return l;
     }
@@ -519,10 +518,9 @@ public final class Colls
     public final static <A> List<A> filter(final Iterable<A> coll, final FnPredicate<A> fn)
     {
         final List<A> l = list();
-        for(final A a : coll)
+        for (final A a : coll)
         {
-            if(fn.applyPredicate(a))
-                l.add(a);
+            if (fn.applyPredicate(a)) l.add(a);
         }
         return l;
     }
@@ -531,10 +529,9 @@ public final class Colls
             final FnMapping<A, B> fnMap)
     {
         final List<B> l = list();
-        for(final A a : coll)
+        for (final A a : coll)
         {
-            if(fnPredicate.applyPredicate(a))
-                l.add(fnMap.applyMapping(a));
+            if (fnPredicate.applyPredicate(a)) l.add(fnMap.applyMapping(a));
         }
         return l;
     }
@@ -543,11 +540,10 @@ public final class Colls
             final FnPredicate<B> fnPredicate)
     {
         final List<B> l = list();
-        for(final A a : coll)
+        for (final A a : coll)
         {
             final B b = fnMap.applyMapping(a);
-            if(fnPredicate.applyPredicate(b))
-                l.add(b);
+            if (fnPredicate.applyPredicate(b)) l.add(b);
         }
         return l;
     }
@@ -556,7 +552,7 @@ public final class Colls
             final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
-        for(final A a : coll)
+        for (final A a : coll)
             c = fnReduce.applyFoldStep(fnMap.applyMapping(a), c);
         return c;
     }
@@ -565,10 +561,9 @@ public final class Colls
             final FnMapping<A, B> fnMap, final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
-        for(final A a : coll)
+        for (final A a : coll)
         {
-            if(fnPredicate.applyPredicate(a))
-                c = fnReduce.applyFoldStep(fnMap.applyMapping(a), c);
+            if (fnPredicate.applyPredicate(a)) c = fnReduce.applyFoldStep(fnMap.applyMapping(a), c);
         }
         return c;
     }
@@ -577,22 +572,21 @@ public final class Colls
             final FnPredicate<B> fnPredicate, final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
-        for(final A a : coll)
+        for (final A a : coll)
         {
             final B b = fnMap.applyMapping(a);
-            if(fnPredicate.applyPredicate(b))
-                c = fnReduce.applyFoldStep(b, c);
+            if (fnPredicate.applyPredicate(b)) c = fnReduce.applyFoldStep(b, c);
         }
         return c;
     }
 
     public final static <A, B> B reduce(final List<A> coll, final FnFoldStep<A, B> fn, final B initial)
     {
-        if(coll instanceof RandomAccess)
+        if (coll instanceof RandomAccess)
         {
             final int sz = coll.size();
             B b = initial;
-            for(int i = 0; i < sz; i++)
+            for (int i = 0; i < sz; i++)
                 b = fn.applyFoldStep(coll.get(i), b);
             return b;
         }
@@ -602,7 +596,7 @@ public final class Colls
     public final static <A, B> B reduce(final Iterable<A> coll, final FnFoldStep<A, B> fn, final B initial)
     {
         B b = initial;
-        for(final A a : coll)
+        for (final A a : coll)
             b = fn.applyFoldStep(a, b);
         return b;
     }
@@ -611,10 +605,9 @@ public final class Colls
             final FnFoldStep<A, B> fnReduce, final B initial)
     {
         B b = initial;
-        for(final A a : coll)
+        for (final A a : coll)
         {
-            if(fnPredicate.applyPredicate(a))
-                b = fnReduce.applyFoldStep(a, b);
+            if (fnPredicate.applyPredicate(a)) b = fnReduce.applyFoldStep(a, b);
         }
         return b;
     }
@@ -622,8 +615,10 @@ public final class Colls
     /**
      * Zips the two given collections into a list of tuples.
      * 
-     * @param collA First collection.
-     * @param collB Second collection.
+     * @param collA
+     *            First collection.
+     * @param collB
+     *            Second collection.
      * @return The list of tuples.
      * @see Tuple
      */
@@ -633,7 +628,7 @@ public final class Colls
         final List<Tuple<A, B>> ret = list(todo);
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
-        for(int i = 0; i < todo; i++)
+        for (int i = 0; i < todo; i++)
             ret.add(Tuple.of(a.next(), b.next()));
         return ret;
     }
@@ -641,8 +636,10 @@ public final class Colls
     /**
      * Zips the two given collections into a list of tuples.
      * 
-     * @param collA First collection.
-     * @param collB Second collection.
+     * @param collA
+     *            First collection.
+     * @param collB
+     *            Second collection.
      * @return The list of tuples.
      * @see Tuple
      */
@@ -651,46 +648,45 @@ public final class Colls
         final List<Tuple<A, B>> ret = list();
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
-        while(a.hasNext() && b.hasNext())
+        while (a.hasNext() && b.hasNext())
             ret.add(Tuple.of(a.next(), b.next()));
         return ret;
     }
 
-    public final static <A, B, C> List<C> zip(final Collection<A> collA, final Collection<B> collB,
-            final FnCombine<A, B, C> fn)
+    public final static <A, B, C> List<C> zip(final Collection<A> collA, final Collection<B> collB, final FnCombine<A, B, C> fn)
     {
         final int todo = Math.min(collA.size(), collB.size());
         final List<C> ret = list(todo);
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
-        for(int i = 0; i < todo; i++)
+        for (int i = 0; i < todo; i++)
             ret.add(fn.applyCombine(a.next(), b.next()));
         return ret;
     }
 
-    public final static <A, B, C> List<C> zip(final Iterable<A> collA, final Iterable<B> collB,
-            final FnCombine<A, B, C> fn)
+    public final static <A, B, C> List<C> zip(final Iterable<A> collA, final Iterable<B> collB, final FnCombine<A, B, C> fn)
     {
         final List<C> ret = list();
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
-        while(a.hasNext() && b.hasNext())
+        while (a.hasNext() && b.hasNext())
             ret.add(fn.applyCombine(a.next(), b.next()));
         return ret;
     }
 
     /**
      * Unzips the given collection of tuples into two lists.
-     *
-     * @param coll The collection
+     * 
+     * @param coll
+     *            The collection
      * @return A tuple of two lists
-     * @see Tuple 
+     * @see Tuple
      */
     public final static <A, B> Tuple<List<A>, List<B>> unzip(final Collection<Tuple<A, B>> coll)
     {
         final List<A> listA = list(coll.size());
         final List<B> listB = list(coll.size());
-        for(final Tuple<A, B> t : coll)
+        for (final Tuple<A, B> t : coll)
         {
             listA.add(t.a);
             listB.add(t.b);
@@ -700,16 +696,17 @@ public final class Colls
 
     /**
      * Unzips the given collection of tuples into two lists.
-     *
-     * @param coll The collection
+     * 
+     * @param coll
+     *            The collection
      * @return A tuple of two lists
-     * @see Tuple 
+     * @see Tuple
      */
     public final static <A, B> Tuple<List<A>, List<B>> unzip(final Iterable<Tuple<A, B>> coll)
     {
         final List<A> listA = list();
         final List<B> listB = list();
-        for(final Tuple<A, B> t : coll)
+        for (final Tuple<A, B> t : coll)
         {
             listA.add(t.a);
             listB.add(t.b);
@@ -720,21 +717,19 @@ public final class Colls
     public final static <A> List<List<A>> partition(final Iterable<A> coll, int size)
     {
         final List<List<A>> ret = list();
-        if(size < 1)
-            throw new IllegalArgumentException("Partition size must be > 0");
+        if (size < 1) throw new IllegalArgumentException("Partition size must be > 0");
 
         List<A> part = list();
-        for(final A a : coll)
+        for (final A a : coll)
         {
             part.add(a);
-            if(part.size() == size)
+            if (part.size() == size)
             {
                 ret.add(part);
                 part = list();
             }
         }
-        if(part.size() > 0)
-            ret.add(part);
+        if (part.size() > 0) ret.add(part);
         return ret;
     }
 
@@ -742,12 +737,11 @@ public final class Colls
     {
         final List<A> l0 = list();
         final List<A> l1 = list();
-        for(final A a : coll)
+        for (final A a : coll)
         {
-            if(fn.applyPredicate(a))
+            if (fn.applyPredicate(a))
                 l0.add(a);
-            else
-                l1.add(a);
+            else l1.add(a);
         }
         return Tuple.of(l0, l1);
     }
@@ -762,13 +756,13 @@ public final class Colls
         final List<List<A>> ret = list();
 
         List<A> part = list();
-        for(final A a : coll)
+        for (final A a : coll)
         {
-            if(part.size() == 0)
+            if (part.size() == 0)
                 part.add(a);
             else
             {
-                if(!fn.applyEquals(last(part), a))
+                if (!fn.applyEquals(last(part), a))
                 {
                     ret.add(part);
                     part = list();
@@ -776,22 +770,22 @@ public final class Colls
                 part.add(a);
             }
         }
-        if(part.size() > 0)
-            ret.add(part);
+        if (part.size() > 0) ret.add(part);
         return ret;
     }
 
     /**
      * Returns the given collection of numbers as an array of bytes.
      * 
-     * @param coll The collection
+     * @param coll
+     *            The collection
      * @return The array
      */
     public final static byte[] asByteArray(Collection<? extends Number> coll)
     {
         final byte[] ret = new byte[coll.size()];
         int i = 0;
-        for(final Number n : coll)
+        for (final Number n : coll)
             ret[i++] = n.byteValue();
         return ret;
     }
@@ -799,14 +793,15 @@ public final class Colls
     /**
      * Returns the given collection of numbers as an array of shorts.
      * 
-     * @param coll The collection
+     * @param coll
+     *            The collection
      * @return The array
      */
     public final static short[] asShortArray(Collection<? extends Number> coll)
     {
         final short[] ret = new short[coll.size()];
         int i = 0;
-        for(final Number n : coll)
+        for (final Number n : coll)
             ret[i++] = n.shortValue();
         return ret;
     }
@@ -814,14 +809,15 @@ public final class Colls
     /**
      * Returns the given collection of numbers as an array of ints.
      * 
-     * @param coll The collection
+     * @param coll
+     *            The collection
      * @return The array
      */
     public final static int[] asIntArray(Collection<? extends Number> coll)
     {
         final int[] ret = new int[coll.size()];
         int i = 0;
-        for(final Number n : coll)
+        for (final Number n : coll)
             ret[i++] = n.intValue();
         return ret;
     }
@@ -829,14 +825,15 @@ public final class Colls
     /**
      * Returns the given collection of numbers as an array of longs.
      * 
-     * @param coll The collection
+     * @param coll
+     *            The collection
      * @return The array
      */
     public final static long[] asLongArray(Collection<? extends Number> coll)
     {
         final long[] ret = new long[coll.size()];
         int i = 0;
-        for(final Number n : coll)
+        for (final Number n : coll)
             ret[i++] = n.longValue();
         return ret;
     }
@@ -844,14 +841,15 @@ public final class Colls
     /**
      * Returns the given collection of numbers as an array of floats.
      * 
-     * @param coll The collection
+     * @param coll
+     *            The collection
      * @return The array
      */
     public final static float[] asFloatArray(Collection<? extends Number> coll)
     {
         final float[] ret = new float[coll.size()];
         int i = 0;
-        for(final Number n : coll)
+        for (final Number n : coll)
             ret[i++] = n.floatValue();
         return ret;
     }
@@ -859,14 +857,15 @@ public final class Colls
     /**
      * Returns the given collection of numbers as an array of doubles.
      * 
-     * @param coll The collection
+     * @param coll
+     *            The collection
      * @return The array
      */
     public final static double[] asDoubleArray(Collection<? extends Number> coll)
     {
         final double[] ret = new double[coll.size()];
         int i = 0;
-        for(final Number n : coll)
+        for (final Number n : coll)
             ret[i++] = n.doubleValue();
         return ret;
     }

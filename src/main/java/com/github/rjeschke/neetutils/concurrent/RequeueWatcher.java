@@ -22,29 +22,30 @@ import com.github.rjeschke.neetutils.SysUtils;
 class RequeueWatcher<A, B> implements Runnable
 {
     private final RequeueWatcherCallback<A, B> callback;
-    private final ConcurrentLinkedQueue<A> jobs;
-    private final ConcurrentLinkedQueue<B> workers;
-    private Thread thread;
-    private int delayMs = 100;
-    private volatile boolean running = true;
-    
+    private final ConcurrentLinkedQueue<A>     jobs;
+    private final ConcurrentLinkedQueue<B>     workers;
+    private Thread                             thread;
+    private int                                delayMs = 100;
+    private volatile boolean                   running = true;
+
     private RequeueWatcher(RequeueWatcherCallback<A, B> callback, ConcurrentLinkedQueue<A> jobs, ConcurrentLinkedQueue<B> workers)
     {
         this.callback = callback;
         this.jobs = jobs;
         this.workers = workers;
     }
-    
-    public static <A, B> RequeueWatcher<A, B> start(RequeueWatcherCallback<A, B> callback, ConcurrentLinkedQueue<A> jobs, ConcurrentLinkedQueue<B> workers)
+
+    public static <A, B> RequeueWatcher<A, B> start(RequeueWatcherCallback<A, B> callback, ConcurrentLinkedQueue<A> jobs,
+            ConcurrentLinkedQueue<B> workers)
     {
-        final RequeueWatcher<A, B> watcher = new RequeueWatcher<A, B>(callback, jobs, workers);
+        final RequeueWatcher<A, B> watcher = new RequeueWatcher<>(callback, jobs, workers);
         watcher.thread = new Thread(watcher);
         watcher.thread.setDaemon(true);
         watcher.thread.start();
-        
+
         return watcher;
     }
-    
+
     public void stop()
     {
         this.running = false;
@@ -57,28 +58,26 @@ class RequeueWatcher<A, B> implements Runnable
             // ignore
         }
     }
-    
+
     @Override
     public void run()
     {
-        while(this.running)
+        while (this.running)
         {
             final long t0 = System.nanoTime();
-            if(!this.jobs.isEmpty() && !this.workers.isEmpty())
+            if (!this.jobs.isEmpty() && !this.workers.isEmpty())
             {
                 final A job = this.jobs.poll();
                 final B worker = this.workers.poll();
-                
-                if(job != null && worker != null)
+
+                if (job != null && worker != null)
                 {
                     this.callback.requeue(worker, job);
                 }
                 else
                 {
-                    if(job != null)
-                        this.jobs.offer(job);
-                    if(worker != null)
-                        this.workers.offer(worker);
+                    if (job != null) this.jobs.offer(job);
+                    if (worker != null) this.workers.offer(worker);
                 }
             }
             final long t1 = System.nanoTime();

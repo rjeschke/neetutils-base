@@ -29,8 +29,7 @@ public abstract class NOutputStream extends FilterOutputStream
 
     public static NOutputStream fromStream(OutputStream in, ByteOrder byteOrder)
     {
-        if(byteOrder == ByteOrder.BIG_ENDIAN)
-            return new NOutputStreamBE(in);
+        if (byteOrder == ByteOrder.BIG_ENDIAN) return new NOutputStreamBE(in);
         return new NOutputStreamLE(in);
     }
 

@@ -78,8 +78,7 @@ public class WrappedImage
         {
             this.width = w;
             this.height = h;
-            this.image = new BufferedImage(w, h, this.hasTransparency ? BufferedImage.TYPE_INT_ARGB
-                    : BufferedImage.TYPE_INT_RGB);
+            this.image = new BufferedImage(w, h, this.hasTransparency ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
             this.pixels = ((DataBufferInt)this.image.getRaster().getDataBuffer()).getData();
         }
     }
@@ -144,21 +143,12 @@ public class WrappedImage
         return fromFile(new File(filename), hasTransparency);
     }
 
-    public static WrappedImage fromResource(final String resourcename, final boolean hasTransparency)
-            throws IOException
+    public static WrappedImage fromResource(final String resourcename, final boolean hasTransparency) throws IOException
     {
-        final InputStream in = WrappedImage.class.getResourceAsStream(resourcename);
-
-        WrappedImage img = null;
-        try
+        try (final InputStream in = WrappedImage.class.getResourceAsStream(resourcename))
         {
-            img = new WrappedImage(ImageIO.read(in), hasTransparency);
+            WrappedImage img = new WrappedImage(ImageIO.read(in), hasTransparency);
+            return img;
         }
-        finally
-        {
-            in.close();
-        }
-
-        return img;
     }
 }

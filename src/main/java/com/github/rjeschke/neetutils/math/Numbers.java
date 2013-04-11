@@ -22,26 +22,26 @@ public final class Numbers
         //
     }
 
-    private final static Integer[] integerCache;
+    private final static Integer[]   integerCache;
     private final static Character[] characterCache;
-    private final static int maxIntCache;
-    private final static boolean hasCharacterCache;
-    
+    private final static int         maxIntCache;
+    private final static boolean     hasCharacterCache;
+
     static
     {
         maxIntCache = System.getProperty("com.github.rjeschke.neetutils.smallIntegerCache") != null ? 256 : 65536;
         hasCharacterCache = System.getProperty("com.github.rjeschke.neetutils.noCharacterCache") == null;
-        
+
         integerCache = new Integer[128 + maxIntCache];
-        for(int i = -128; i < maxIntCache; i++)
+        for (int i = -128; i < maxIntCache; i++)
         {
             integerCache[i + 128] = Integer.valueOf(i);
         }
-        
-        if(hasCharacterCache)
+
+        if (hasCharacterCache)
         {
             characterCache = new Character[65536];
-            for(int i = 0; i < 65536; i++)
+            for (int i = 0; i < 65536; i++)
             {
                 characterCache[i] = Character.valueOf((char)i);
             }
@@ -61,15 +61,15 @@ public final class Numbers
     {
         return hasCharacterCache ? characterCache[value] : Character.valueOf(value);
     }
-    
+
     public final static Type getType(Number a)
     {
-        if(a instanceof Byte) return Type.BYTE;
-        if(a instanceof Short) return Type.SHORT;
-        if(a instanceof Integer) return Type.INT;
-        if(a instanceof Long) return Type.LONG;
-        if(a instanceof Float) return Type.FLOAT;
-        if(a instanceof Double) return Type.DOUBLE;
+        if (a instanceof Byte) return Type.BYTE;
+        if (a instanceof Short) return Type.SHORT;
+        if (a instanceof Integer) return Type.INT;
+        if (a instanceof Long) return Type.LONG;
+        if (a instanceof Float) return Type.FLOAT;
+        if (a instanceof Double) return Type.DOUBLE;
         throw new ArithmeticException("Unsupported number type: " + a);
     }
 
@@ -82,7 +82,7 @@ public final class Numbers
 
     public final static Number add(Number a, Number b)
     {
-        switch(getLargerType(a, b))
+        switch (getLargerType(a, b))
         {
         case BYTE:
             return Byte.valueOf((byte)(a.byteValue() + b.byteValue()));
@@ -102,7 +102,7 @@ public final class Numbers
 
     public final static Number sub(Number a, Number b)
     {
-        switch(getLargerType(a, b))
+        switch (getLargerType(a, b))
         {
         case BYTE:
             return Byte.valueOf((byte)(a.byteValue() - b.byteValue()));
@@ -122,7 +122,7 @@ public final class Numbers
 
     public final static Number mul(Number a, Number b)
     {
-        switch(getLargerType(a, b))
+        switch (getLargerType(a, b))
         {
         case BYTE:
             return Byte.valueOf((byte)(a.byteValue() * b.byteValue()));
@@ -142,7 +142,7 @@ public final class Numbers
 
     public final static Number div(Number a, Number b)
     {
-        switch(getLargerType(a, b))
+        switch (getLargerType(a, b))
         {
         case BYTE:
             return Byte.valueOf((byte)(a.byteValue() / b.byteValue()));

@@ -22,16 +22,16 @@ import com.github.rjeschke.neetutils.dispose.ReferenceList.Node;
 
 public class Disposer extends WeakReference<Object>
 {
-    private final Disposable disposable;
-    private final Node<Disposer> disposer;
-    private boolean disposed = false;
-    final static ReferenceQueue<Object> refQueue;
+    private final Disposable             disposable;
+    private final Node<Disposer>         disposer;
+    private boolean                      disposed = false;
+    final static ReferenceQueue<Object>  refQueue;
     final static ReferenceList<Disposer> disposers;
 
     static
     {
-        refQueue = new ReferenceQueue<Object>();
-        disposers = new ReferenceList<Disposer>();
+        refQueue = new ReferenceQueue<>();
+        disposers = new ReferenceList<>();
 
         final Thread thread = new Thread(new Cleaner());
         thread.setDaemon(true);
@@ -50,7 +50,7 @@ public class Disposer extends WeakReference<Object>
 
     public void dispose()
     {
-        if(!this.disposed)
+        if (!this.disposed)
         {
             synchronized (disposers)
             {
@@ -77,7 +77,7 @@ public class Disposer extends WeakReference<Object>
         public void run()
         {
             final ReferenceQueue<Object> refQueue = Disposer.refQueue;
-            for(;;)
+            for (;;)
             {
                 try
                 {

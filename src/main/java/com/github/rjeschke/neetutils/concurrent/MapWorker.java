@@ -18,7 +18,7 @@ package com.github.rjeschke.neetutils.concurrent;
 /**
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
- *
+ * 
  * @param <A>
  * @param <B>
  */

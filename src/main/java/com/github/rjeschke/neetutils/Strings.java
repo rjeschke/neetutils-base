@@ -36,16 +36,15 @@ public class Strings
      */
     public final static String escapeString(String str)
     {
-        if(str == null)
-            return "null";
+        if (str == null) return "null";
 
         final StringBuilder sb = new StringBuilder();
 
         sb.append('"');
-        for(int i = 0; i < str.length(); i++)
+        for (int i = 0; i < str.length(); i++)
         {
             final char c = str.charAt(i);
-            switch(c)
+            switch (c)
             {
             case '\b':
                 sb.append("\\b");
@@ -74,17 +73,17 @@ public class Strings
 
         return sb.toString();
     }
-    
+
     public final static List<String> split(String str, char ch)
     {
         List<String> ret = Colls.list();
-        
-        if(str != null)
+
+        if (str != null)
         {
             int s = 0, e = 0;
-            while(e < str.length())
+            while (e < str.length())
             {
-                if(str.charAt(e) == ch)
+                if (str.charAt(e) == ch)
                 {
                     ret.add(str.substring(s, e));
                     s = e + 1;
@@ -93,7 +92,7 @@ public class Strings
             }
             ret.add(str.substring(s, e));
         }
-        
+
         return ret;
     }
 }

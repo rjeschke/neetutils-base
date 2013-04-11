@@ -22,7 +22,7 @@ import com.github.rjeschke.neetutils.iterables.AbstractXIterable;
 
 class XIterableCollect<A, B> extends AbstractXIterable<B>
 {
-    private final Iterable<? extends A> iterable;
+    private final Iterable<? extends A>   iterable;
     private final Collector<? super A, B> collector;
 
     public XIterableCollect(final Iterable<? extends A> iterable, final Collector<? super A, B> collector)
@@ -34,14 +34,14 @@ class XIterableCollect<A, B> extends AbstractXIterable<B>
     @Override
     public Iterator<B> iterator()
     {
-        return new XIterableCollect.XIterator<A, B>(this.iterable.iterator(), this.collector);
+        return new XIterableCollect.XIterator<>(this.iterable.iterator(), this.collector);
     }
 
     final static class XIterator<A, B> implements Iterator<B>
     {
-        private final Iterator<? extends A> iterator;
+        private final Iterator<? extends A>   iterator;
         private final Collector<? super A, B> collector;
-        
+
         public XIterator(final Iterator<? extends A> iterator, final Collector<? super A, B> collector)
         {
             this.iterator = iterator;
@@ -52,7 +52,7 @@ class XIterableCollect<A, B> extends AbstractXIterable<B>
         @Override
         public boolean hasNext()
         {
-            if(!this.collector.hasElement)
+            if (!this.collector.hasElement)
             {
                 this.collector.collect(this.iterator);
             }
@@ -62,13 +62,13 @@ class XIterableCollect<A, B> extends AbstractXIterable<B>
         @Override
         public B next()
         {
-            if(!this.collector.hasElement)
+            if (!this.collector.hasElement)
             {
                 throw new NoSuchElementException();
             }
-            
+
             this.collector.hasElement = false;
-            
+
             return this.collector.value;
         }
 

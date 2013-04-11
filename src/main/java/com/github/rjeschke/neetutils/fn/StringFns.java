@@ -49,13 +49,13 @@ public final class StringFns
             @Override
             public void collect(Iterator<? extends Character> iterator)
             {
-                if(iterator.hasNext())
+                if (iterator.hasNext())
                 {
                     final StringBuilder sb = new StringBuilder();
-                    while(iterator.hasNext())
+                    while (iterator.hasNext())
                     {
                         final char c = iterator.next();
-                        if(c == splitCharacter)
+                        if (c == splitCharacter)
                         {
                             break;
                         }
@@ -124,11 +124,11 @@ public final class StringFns
             @Override
             public boolean applyPredicate(String a)
             {
-                if(needles.length == 0) return true;
+                if (needles.length == 0) return true;
 
-                for(int i = 0; i < needles.length; i++)
+                for (int i = 0; i < needles.length; i++)
                 {
-                    if(a.endsWith(needles[i]))
+                    if (a.endsWith(needles[i]))
                     {
                         return true;
                     }
@@ -147,11 +147,11 @@ public final class StringFns
             @Override
             public boolean applyPredicate(String a)
             {
-                if(needles.length == 0) return true;
+                if (needles.length == 0) return true;
 
-                for(int i = 0; i < needles.length; i++)
+                for (int i = 0; i < needles.length; i++)
                 {
-                    if(a.startsWith(needles[i]))
+                    if (a.startsWith(needles[i]))
                     {
                         return true;
                     }
@@ -164,7 +164,7 @@ public final class StringFns
     public final static FnPredicate<String> endsWithIgnoreCase(final String... strings)
     {
         final String[] needles = Arrays.copyOf(strings, strings.length);
-        for(int i = 0; i < needles.length; i++)
+        for (int i = 0; i < needles.length; i++)
         {
             needles[i] = needles[i].toLowerCase();
         }
@@ -174,11 +174,11 @@ public final class StringFns
             @Override
             public boolean applyPredicate(String a)
             {
-                if(needles.length == 0) return true;
+                if (needles.length == 0) return true;
 
-                for(int i = 0; i < needles.length; i++)
+                for (int i = 0; i < needles.length; i++)
                 {
-                    if(a.toLowerCase().endsWith(needles[i]))
+                    if (a.toLowerCase().endsWith(needles[i]))
                     {
                         return true;
                     }
@@ -191,7 +191,7 @@ public final class StringFns
     public final static FnPredicate<String> startsWithIgnoreCase(final String... strings)
     {
         final String[] needles = Arrays.copyOf(strings, strings.length);
-        for(int i = 0; i < needles.length; i++)
+        for (int i = 0; i < needles.length; i++)
         {
             needles[i] = needles[i].toLowerCase();
         }
@@ -201,11 +201,11 @@ public final class StringFns
             @Override
             public boolean applyPredicate(String a)
             {
-                if(needles.length == 0) return true;
+                if (needles.length == 0) return true;
 
-                for(int i = 0; i < needles.length; i++)
+                for (int i = 0; i < needles.length; i++)
                 {
-                    if(a.toLowerCase().startsWith(needles[i]))
+                    if (a.toLowerCase().startsWith(needles[i]))
                     {
                         return true;
                     }

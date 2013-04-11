@@ -23,17 +23,17 @@ import com.github.rjeschke.neetutils.rng.RNGType;
 
 class NImageVoronoi implements Worker<NImagePBlock>
 {
-    final NImage image;
+    final NImage    image;
     final float[][] points;
-    final int pointCount;
-    final float fallOff;
-    final boolean invert;
-    final boolean colorCells;
-    final NColor color0;
-    final NColor color1;
+    final int       pointCount;
+    final float     fallOff;
+    final boolean   invert;
+    final boolean   colorCells;
+    final NColor    color0;
+    final NColor    color1;
 
-    NImageVoronoi(NImage image, final int seed, final int max, final float minDist, final float fallOff,
-            final boolean invert, final boolean colorCells, final NColor color0, final NColor color1)
+    NImageVoronoi(NImage image, final int seed, final int max, final float minDist, final float fallOff, final boolean invert,
+            final boolean colorCells, final NColor color0, final NColor color1)
     {
         this.image = image;
         this.fallOff = fallOff;
@@ -47,32 +47,31 @@ class NImageVoronoi implements Worker<NImagePBlock>
         this.points = new float[todo][3];
         int count = 0;
 
-        while(count < todo)
+        while (count < todo)
         {
             int i;
             float[] point = new float[3];
-            for(i = 0; i < 500; i++)
+            for (i = 0; i < 500; i++)
             {
                 point[0] = rnd.nextFloatUnipolar();
                 point[1] = rnd.nextFloatUnipolar();
                 boolean ok = true;
-                for(int n = 0; n < count; n++)
+                for (int n = 0; n < count; n++)
                 {
-                    if(NImage.distOnTorus(point, this.points[n]) < minDist)
+                    if (NImage.distOnTorus(point, this.points[n]) < minDist)
                     {
                         ok = false;
                         break;
                     }
                 }
-                if(ok)
+                if (ok)
                 {
                     point[2] = rnd.nextFloatUnipolar();
                     this.points[count++] = point;
                     break;
                 }
             }
-            if(i >= 500)
-                break;
+            if (i >= 500) break;
         }
 
         this.pointCount = count;
@@ -81,37 +80,36 @@ class NImageVoronoi implements Worker<NImagePBlock>
     @Override
     public void run(NImagePBlock p)
     {
-        for(int y = 0; y < p.h; y++)
+        for (int y = 0; y < p.h; y++)
         {
             final float[] point = new float[2];
             point[1] = (float)(p.y + y) / (float)this.image.height;
-            for(int x = 0; x < p.w; x++)
+            for (int x = 0; x < p.w; x++)
             {
                 point[0] = (float)(p.x + x) / (float)this.image.width;
                 float d0 = Float.MAX_VALUE, d1 = Float.MAX_VALUE;
                 float c = 0;
-                for(int i = 0; i < this.pointCount; i++)
+                for (int i = 0; i < this.pointCount; i++)
                 {
                     final float d = NImage.distOnTorus(point, this.points[i]);
-                    if(d < d0)
+                    if (d < d0)
                     {
                         d1 = d0;
                         d0 = d;
                         c = this.points[i][2];
                     }
-                    else if(d < d1)
+                    else if (d < d1)
                     {
                         d1 = d;
                     }
                 }
                 float z = 1.f;
-                if(this.fallOff > 0)
+                if (this.fallOff > 0)
                 {
                     z = NMath.saturate(d0 / d1);
                     z = (float)Math.pow(this.invert ? 1.0 - z : z, this.fallOff);
                 }
-                if(this.colorCells)
-                    z *= c;
+                if (this.colorCells) z *= c;
                 p.pixels[x + y * p.w] = this.color0.lerp(this.color1, z);
             }
         }

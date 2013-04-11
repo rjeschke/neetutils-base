@@ -24,7 +24,7 @@ public class TransferFunctions
     public static TransferFunction fromStream(NInputStream in) throws IOException
     {
         TransferFunctionType tf = TransferFunctionType.fromInt(in.readI32());
-        switch(tf)
+        switch (tf)
         {
         case UNITY:
             return new UnityTransferFunction();

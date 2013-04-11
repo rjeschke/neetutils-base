@@ -25,37 +25,37 @@ import java.util.ListIterator;
 
 public class SortedList<E extends Comparable<? super E>> implements List<E>, Cloneable
 {
-    private final ArrayList<E> list;
+    private final ArrayList<E>          list;
     private final Comparator<? super E> comparator;
 
     public SortedList()
     {
-        this.list = new ArrayList<E>();
+        this.list = new ArrayList<>();
         this.comparator = null;
     }
 
     public SortedList(int initialSize)
     {
-        this.list = new ArrayList<E>(initialSize);
+        this.list = new ArrayList<>(initialSize);
         this.comparator = null;
     }
-    
+
     public SortedList(Comparator<? super E> comparator)
     {
-        this.list = new ArrayList<E>();
+        this.list = new ArrayList<>();
         this.comparator = comparator;
     }
 
     public SortedList(Collection<? extends E> c)
     {
-        this.list = new ArrayList<E>();
+        this.list = new ArrayList<>();
         this.comparator = null;
         this.addAll(c);
     }
 
     public SortedList(Collection<? extends E> c, Comparator<? super E> comparator)
     {
-        this.list = new ArrayList<E>();
+        this.list = new ArrayList<>();
         this.comparator = comparator;
         this.addAll(c);
     }
@@ -63,8 +63,8 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     @Override
     public boolean add(E e)
     {
-        final int index = this.comparator == null ? Collections.binarySearch(this.list, e) : Collections.binarySearch(this.list, e,
-                this.comparator);
+        final int index = this.comparator == null ? Collections.binarySearch(this.list, e) : Collections.binarySearch(this.list,
+                e, this.comparator);
         if (index < 0)
         {
             this.list.add(-index - 1, e);
@@ -215,7 +215,7 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     @Override
     public SortedList<E> clone()
     {
-        return this.comparator == null ? new SortedList<E>(this.list) : new SortedList<E>(this.list, this.comparator);
+        return this.comparator == null ? new SortedList<>(this.list) : new SortedList<>(this.list, this.comparator);
     }
 
     @Override
@@ -228,8 +228,7 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     @Override
     public boolean equals(Object obj)
     {
-        if (!(obj instanceof SortedList))
-            return false;
+        if (!(obj instanceof SortedList)) return false;
         return this.list.equals(((SortedList<E>)obj).list);
     }
 
@@ -238,7 +237,7 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     {
         return this.list.toString();
     }
-    
+
     public void trimToSize()
     {
         this.list.trimToSize();

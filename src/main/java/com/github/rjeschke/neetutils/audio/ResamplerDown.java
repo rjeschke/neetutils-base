@@ -30,8 +30,7 @@ public class ResamplerDown implements Resampler
     @Override
     public int available()
     {
-        return (this.readPos <= this.writePos) ? this.writePos - this.readPos : this.bufferSize - this.readPos
-                + this.writePos;
+        return (this.readPos <= this.writePos) ? this.writePos - this.readPos : this.bufferSize - this.readPos + this.writePos;
     }
 
     @Override
