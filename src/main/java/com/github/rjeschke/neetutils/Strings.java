@@ -95,4 +95,14 @@ public class Strings
 
         return ret;
     }
+
+    public final static List<String> trim(List<String> strings)
+    {
+        for (int i = 0; i < strings.size(); i++)
+        {
+            final String s = strings.get(i);
+            if (s != null) strings.set(i, s.trim());
+        }
+        return strings;
+    }
 }
