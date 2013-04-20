@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,7 +158,22 @@ public final class JSONDecoder
                 {
                     boolean isAccessible = f.isAccessible();
                     f.setAccessible(true);
-                    f.set(object, e.getValue());
+                    if (f.getType().isEnum())
+                    {
+                        try
+                        {
+                            final Method m = f.getType().getMethod("fromJSONString", String.class);
+                            f.set(object, m.invoke(null, e.getValue().toString()));
+                        }
+                        catch (NoSuchMethodException | SecurityException e1)
+                        {
+                            f.set(object, e.getValue());
+                        }
+                    }
+                    else
+                    {
+                        f.set(object, e.getValue());
+                    }
                     f.setAccessible(isAccessible);
                 }
             }
@@ -164,7 +181,7 @@ public final class JSONDecoder
             {
                 rest.put(e.getKey(), e.getValue());
             }
-            catch (IllegalArgumentException | IllegalAccessException | ClassCastException ex)
+            catch (IllegalArgumentException | IllegalAccessException | ClassCastException | InvocationTargetException ex)
             {
                 throw new IOException("Marshalling for type " + toClass + " failed for '" + e.getKey() + "'", ex);
             }
