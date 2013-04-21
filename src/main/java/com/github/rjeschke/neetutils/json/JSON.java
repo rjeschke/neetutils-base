@@ -708,7 +708,7 @@ public final class JSON
                 writeString(sb, tokenizer.getStringValue());
                 sb.append(" : ");
                 tokenizer.next();
-                if (tokenizer.getCurrentToken() != Token.COLON) throw new IOException("':' expectd" + tokenizer.getPosition());
+                if (tokenizer.getCurrentToken() != Token.COLON) throw new IOException("':' expected" + tokenizer.getPosition());
                 tokenizer.next();
                 beautify(sb, indent + 2, tokenizer);
                 if (tokenizer.getCurrentToken() == Token.COMMA)
