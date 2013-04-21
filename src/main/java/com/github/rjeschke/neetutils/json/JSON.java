@@ -680,6 +680,10 @@ public final class JSON
         {
             sb.append(((Boolean)obj).booleanValue() ? "true" : "false");
         }
+        else if(obj instanceof JSONEnum)
+        {
+            writeString(sb, ((JSONEnum)obj).toJSONString());
+        }
         else
         {
             writeString(sb, obj.toString());
