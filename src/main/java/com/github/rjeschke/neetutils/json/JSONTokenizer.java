@@ -23,7 +23,7 @@ final class JSONTokenizer
     private final Reader        reader;
     private String              stringValue;
     private double              doubleValue;
-    private long                integerValue;
+    private long                longValue;
     private int                 current          = ' ';
     private int                 column           = 1;
     private int                 row              = 0;
@@ -41,9 +41,9 @@ final class JSONTokenizer
         return this.doubleValue;
     }
 
-    public long getIntegerValue()
+    public long getLongValue()
     {
-        return this.integerValue;
+        return this.longValue;
     }
 
     public String getStringValue()
@@ -224,8 +224,8 @@ final class JSONTokenizer
                 this.doubleValue = Double.parseDouble(sb.toString());
                 return Token.DOUBLE;
             }
-            this.integerValue = Long.parseLong(sb.toString());
-            return Token.INTEGER;
+            this.longValue = Long.parseLong(sb.toString());
+            return Token.LONG;
         }
         catch (NumberFormatException e)
         {
@@ -284,6 +284,6 @@ final class JSONTokenizer
 
     public enum Token
     {
-        OBJECT_OPEN, OBJECT_CLOSE, ARRAY_OPEN, ARRAY_CLOSE, COMMA, COLON, STRING, TRUE, FALSE, NULL, DOUBLE, INTEGER, EOF
+        OBJECT_OPEN, OBJECT_CLOSE, ARRAY_OPEN, ARRAY_CLOSE, COMMA, COLON, STRING, TRUE, FALSE, NULL, DOUBLE, LONG, EOF
     }
 }

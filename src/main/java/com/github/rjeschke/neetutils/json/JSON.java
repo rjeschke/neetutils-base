@@ -45,6 +45,42 @@ public final class JSON
     }
 
     /**
+     * Beautifies the given JSON string.
+     * 
+     * @param sb
+     *            The StringBuilder to write into.
+     * @param json
+     *            The String to beautify.
+     * @return The submitted StringBuilder.
+     * @throws IOException
+     *             if an IO or parsing error occurred
+     */
+    public final static StringBuilder beautify(final StringBuilder sb, final String json) throws IOException
+    {
+        try (final Reader reader = new StringReader(json))
+        {
+            final JSONTokenizer tokenizer = new JSONTokenizer(reader);
+            tokenizer.next();
+            beautify(sb, 0, tokenizer);
+            return sb;
+        }
+    }
+
+    /**
+     * Beautifies the given JSON string.
+     * 
+     * @param json
+     *            The String to beautify.
+     * @return The beautified String.
+     * @throws IOException
+     *             if an IO or parsing error occurred
+     */
+    public final static String beautify(final String json) throws IOException
+    {
+        return beautify(new StringBuilder(json.length()), json).toString();
+    }
+
+    /**
      * Decodes the given JSON string into an object.
      * 
      * @param string
@@ -238,79 +274,193 @@ public final class JSON
         return sb;
     }
 
+    /**
+     * Returns {@code true} if the given object is of type {@code Map}.
+     * 
+     * @param obj
+     * @return
+     */
     public final static boolean isMap(final Object obj)
     {
         return obj instanceof Map;
     }
 
+    /**
+     * Returns the given object casted to {@code Map<String, Object>}.
+     * 
+     * @param obj
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public final static Map<String, Object> asMap(final Object obj)
     {
         return (Map<String, Object>)obj;
     }
 
+    /**
+     * Returns {@code true} if the given object is of type {@code List}.
+     * 
+     * @param obj
+     * @return
+     */
     public final static boolean isArray(final Object obj)
     {
         return obj instanceof List;
     }
 
+    /**
+     * Returns the given object casted to {@code List<Object>}.
+     * 
+     * @param obj
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public final static List<Object> asArray(final Object obj)
     {
         return (List<Object>)obj;
     }
 
+    /**
+     * Returns {@code true} if the given object is of type {@code Number}.
+     * 
+     * @param obj
+     * @return
+     */
     public final static boolean isNumber(final Object obj)
     {
         return obj instanceof Number;
     }
 
+    /**
+     * Returns the given object casted to {@code Number}.
+     * 
+     * @param obj
+     * @return
+     */
     public final static Number asNumber(final Object obj)
     {
         return (Number)obj;
     }
 
+    /**
+     * Returns {@code true} if the given object is of type {@code Boolean}.
+     * 
+     * @param obj
+     * @return
+     */
     public final static boolean isBoolean(final Object obj)
     {
         return obj instanceof Boolean;
     }
 
+    /**
+     * Returns the given object casted to {@code Boolean}.
+     * 
+     * @param obj
+     * @return
+     */
     public final static Boolean asBoolean(final Object obj)
     {
         return (Boolean)obj;
     }
 
-    private final static Object readObject(final JSONTokenizer tokenizer) throws IOException
+    /**
+     * Escapes the given string.
+     * 
+     * @param value
+     * @return
+     */
+    public final static String escapeString(final String value)
     {
-        switch (tokenizer.getCurrentToken())
+        return escapeString(new StringBuilder(), value).toString();
+    }
+
+    /**
+     * Escapes the given string to the given StringBuilder.
+     * 
+     * @param sb
+     * @param value
+     * @return
+     */
+    public final static StringBuilder escapeString(final StringBuilder sb, final String value)
+    {
+        for (int i = 0; i < value.length(); i++)
         {
-        case OBJECT_OPEN:
-            tokenizer.next();
-            return readMap(tokenizer);
-        case ARRAY_OPEN:
-            tokenizer.next();
-            return readArray(tokenizer);
-        case NULL:
-            tokenizer.next();
-            return null;
-        case TRUE:
-            tokenizer.next();
-            return Boolean.TRUE;
-        case FALSE:
-            tokenizer.next();
-            return Boolean.FALSE;
-        case STRING:
-            tokenizer.next();
-            return tokenizer.getStringValue();
-        case INTEGER:
-            tokenizer.next();
-            return tokenizer.getIntegerValue();
-        case DOUBLE:
-            tokenizer.next();
-            return tokenizer.getDoubleValue();
-        default:
-            throw new IOException("Unexpected token: " + tokenizer.getCurrentToken() + "," + tokenizer.getPosition());
+            final char ch = value.charAt(i);
+            switch (ch)
+            {
+            case '"':
+                sb.append("\\\"");
+                break;
+            case '/':
+                sb.append("\\/");
+                break;
+            case '\\':
+                sb.append("\\\\");
+                break;
+            case '\n':
+                sb.append("\\n");
+                break;
+            case '\r':
+                sb.append("\\r");
+                break;
+            case '\t':
+                sb.append("\\t");
+                break;
+            case '\b':
+                sb.append("\\b");
+                break;
+            case '\f':
+                sb.append("\\f");
+                break;
+            default:
+                if (ch < 32)
+                {
+                    sb.append(String.format("\\u%04x", (int)ch));
+                }
+                else
+                {
+                    sb.append(ch);
+                }
+            }
         }
+        return sb;
+    }
+
+    private final static boolean isPublicVisibility(final Field f)
+    {
+        return (f.getModifiers() & Modifier.PUBLIC) != 0;
+    }
+
+    private final static boolean isPrivateVisibility(final Field f)
+    {
+        return (f.getModifiers() & Modifier.PRIVATE) != 0;
+    }
+
+    private final static boolean isDefaultVisibility(final Field f)
+    {
+        return (f.getModifiers() & (Modifier.PUBLIC | Modifier.PRIVATE | Modifier.PROTECTED)) == 0;
+    }
+
+    private final static boolean isProtectedVisibility(final Field f)
+    {
+        return (f.getModifiers() & Modifier.PROTECTED) != 0;
+    }
+
+    private final static boolean isFieldVisible(final Field f, final int vis, final boolean read)
+    {
+        if (f.isAnnotationPresent(JSONIgnoreField.class)) return false;
+        if (f.isAnnotationPresent(JSONForceField.class)) return true;
+        if (read && f.isAnnotationPresent(JSONReadOnlyField.class)) return true;
+
+        if ((f.getModifiers() & (Modifier.STATIC | Modifier.FINAL)) != 0) return false;
+
+        if ((vis & JSONObjectVisibility.PRIVATE) != 0 && isPrivateVisibility(f)) return true;
+        if ((vis & JSONObjectVisibility.DEFAULT) != 0 && isDefaultVisibility(f)) return true;
+        if ((vis & JSONObjectVisibility.PROTECTED) != 0 && isProtectedVisibility(f)) return true;
+        if ((vis & JSONObjectVisibility.PUBLIC) != 0 && isPublicVisibility(f)) return true;
+
+        return false;
     }
 
     private final static List<Object> readArray(final JSONTokenizer tokenizer) throws IOException
@@ -358,6 +508,39 @@ public final class JSON
         return map;
     }
 
+    private final static Object readObject(final JSONTokenizer tokenizer) throws IOException
+    {
+        switch (tokenizer.getCurrentToken())
+        {
+        case OBJECT_OPEN:
+            tokenizer.next();
+            return readMap(tokenizer);
+        case ARRAY_OPEN:
+            tokenizer.next();
+            return readArray(tokenizer);
+        case NULL:
+            tokenizer.next();
+            return null;
+        case TRUE:
+            tokenizer.next();
+            return Boolean.TRUE;
+        case FALSE:
+            tokenizer.next();
+            return Boolean.FALSE;
+        case STRING:
+            tokenizer.next();
+            return tokenizer.getStringValue();
+        case LONG:
+            tokenizer.next();
+            return tokenizer.getLongValue();
+        case DOUBLE:
+            tokenizer.next();
+            return tokenizer.getDoubleValue();
+        default:
+            throw new IOException("Unexpected token: " + tokenizer.getCurrentToken() + "," + tokenizer.getPosition());
+        }
+    }
+
     private final static void writeNumber(final StringBuilder sb, final long value)
     {
         sb.append(value);
@@ -383,46 +566,7 @@ public final class JSON
     private final static void writeString(final StringBuilder sb, final String value)
     {
         sb.append('"');
-        for (int i = 0; i < value.length(); i++)
-        {
-            final char ch = value.charAt(i);
-            switch (ch)
-            {
-            case '"':
-                sb.append("\\\"");
-                break;
-            case '/':
-                sb.append("\\/");
-                break;
-            case '\\':
-                sb.append("\\\\");
-                break;
-            case '\n':
-                sb.append("\\n");
-                break;
-            case '\r':
-                sb.append("\\r");
-                break;
-            case '\t':
-                sb.append("\\t");
-                break;
-            case '\b':
-                sb.append("\\b");
-                break;
-            case '\f':
-                sb.append("\\f");
-                break;
-            default:
-                if (ch < 32)
-                {
-                    sb.append(String.format("\\u%04x", (int)ch));
-                }
-                else
-                {
-                    sb.append(ch);
-                }
-            }
-        }
+        escapeString(sb, value);
         sb.append('"');
     }
 
@@ -464,42 +608,6 @@ public final class JSON
             writeObject(sb, e.getValue());
         }
         sb.append('}');
-    }
-
-    protected final static boolean isPublicVisibility(final Field f)
-    {
-        return (f.getModifiers() & Modifier.PUBLIC) != 0;
-    }
-
-    protected final static boolean isPrivateVisibility(final Field f)
-    {
-        return (f.getModifiers() & Modifier.PRIVATE) != 0;
-    }
-
-    protected final static boolean isDefaultVisibility(final Field f)
-    {
-        return (f.getModifiers() & (Modifier.PUBLIC | Modifier.PRIVATE | Modifier.PROTECTED)) == 0;
-    }
-
-    protected final static boolean isProtectedVisibility(final Field f)
-    {
-        return (f.getModifiers() & Modifier.PROTECTED) != 0;
-    }
-
-    protected final static boolean isFieldVisible(final Field f, final int vis, final boolean read)
-    {
-        if (f.isAnnotationPresent(JSONIgnoreField.class)) return false;
-        if (f.isAnnotationPresent(JSONForceField.class)) return true;
-        if (read && f.isAnnotationPresent(JSONReadOnlyField.class)) return true;
-
-        if ((f.getModifiers() & (Modifier.STATIC | Modifier.FINAL)) != 0) return false;
-
-        if ((vis & JSONObjectVisibility.PRIVATE) != 0 && isPrivateVisibility(f)) return true;
-        if ((vis & JSONObjectVisibility.DEFAULT) != 0 && isDefaultVisibility(f)) return true;
-        if ((vis & JSONObjectVisibility.PROTECTED) != 0 && isProtectedVisibility(f)) return true;
-        if ((vis & JSONObjectVisibility.PUBLIC) != 0 && isPublicVisibility(f)) return true;
-
-        return false;
     }
 
     private final static void writeMarshallable(final StringBuilder sb, final Object obj)
@@ -575,6 +683,86 @@ public final class JSON
         else
         {
             writeString(sb, obj.toString());
+        }
+    }
+
+    private final static StringBuilder indent(final StringBuilder sb, final int indent)
+    {
+        for (int i = 0; i < indent; i++)
+            sb.append(' ');
+        return sb;
+    }
+
+    private final static void beautify(final StringBuilder sb, final int indent, final JSONTokenizer tokenizer) throws IOException
+    {
+        switch (tokenizer.getCurrentToken())
+        {
+        case OBJECT_OPEN:
+            sb.append("{\n");
+            tokenizer.next();
+            while (tokenizer.getCurrentToken() != Token.OBJECT_CLOSE)
+            {
+                if (tokenizer.getCurrentToken() != Token.STRING)
+                    throw new IOException("Object key expected, got: " + tokenizer.getCurrentToken() + "," + tokenizer.getPosition());
+                indent(sb, indent + 2);
+                writeString(sb, tokenizer.getStringValue());
+                sb.append(" : ");
+                tokenizer.next();
+                if (tokenizer.getCurrentToken() != Token.COLON) throw new IOException("':' expectd" + tokenizer.getPosition());
+                tokenizer.next();
+                beautify(sb, indent + 2, tokenizer);
+                if (tokenizer.getCurrentToken() == Token.COMMA)
+                {
+                    sb.append(',');
+                    tokenizer.next();
+                }
+                sb.append('\n');
+            }
+            indent(sb, indent).append('}');
+            tokenizer.next();
+            break;
+        case ARRAY_OPEN:
+            sb.append("[\n");
+            tokenizer.next();
+            while (tokenizer.getCurrentToken() != Token.ARRAY_CLOSE)
+            {
+                beautify(indent(sb, indent + 2), indent + 2, tokenizer);
+                if (tokenizer.getCurrentToken() == Token.COMMA)
+                {
+                    sb.append(',');
+                    tokenizer.next();
+                }
+                sb.append('\n');
+            }
+            indent(sb, indent).append(']');
+            tokenizer.next();
+            break;
+        case STRING:
+            writeString(sb, tokenizer.getStringValue());
+            tokenizer.next();
+            break;
+        case TRUE:
+            sb.append("true");
+            tokenizer.next();
+            break;
+        case FALSE:
+            sb.append("false");
+            tokenizer.next();
+            break;
+        case NULL:
+            sb.append("null");
+            tokenizer.next();
+            break;
+        case DOUBLE:
+            writeNumber(sb, tokenizer.getDoubleValue());
+            tokenizer.next();
+            break;
+        case LONG:
+            writeNumber(sb, tokenizer.getLongValue());
+            tokenizer.next();
+            break;
+        default:
+            throw new IOException("Unexpected token: " + tokenizer.getCurrentToken() + "," + tokenizer.getPosition());
         }
     }
 }
