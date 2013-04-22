@@ -13,22 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.json;
+package com.github.rjeschke.neetutils.json.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.github.rjeschke.neetutils.json.JSONMarshallable;
+import com.github.rjeschke.neetutils.json.JSONObjectVisibility;
+
 /**
- * Forces the tagged field to be visible.
+ * {@link JSONMarshallable} field visibility annotation.
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface JSONForceField
+@Target(ElementType.TYPE)
+public @interface JSONObject
 {
-    // tagging annotation
+    /**
+     * A bit-wise combination of {@link JSONObjectVisibility} values. Default is
+     * {@link JSONObjectVisibility#PUBLIC}.
+     * 
+     * @return The visibility bit mask.
+     */
+    int visibility() default JSONObjectVisibility.PUBLIC;
 }

@@ -13,28 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.json;
+package com.github.rjeschke.neetutils.json.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.github.rjeschke.neetutils.json.JSONMarshallable;
+
 /**
- * {@link JSONMarshallable} field visibility annotation.
+ * Used to tag a field of type {@code Map<String, Object>} as a catch-all field
+ * which will receive all unmapped values during a decode into a
+ * {@link JSONMarshallable}.
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface JSONObject
+@Target(ElementType.FIELD)
+public @interface JSONCatchAllField
 {
-    /**
-     * A bit-wise combination of {@link JSONObjectVisibility} values. Default is
-     * {@link JSONObjectVisibility#PUBLIC}.
-     * 
-     * @return The visibility bit mask.
-     */
-    int visibility() default JSONObjectVisibility.PUBLIC;
+    // tagging annotation
 }

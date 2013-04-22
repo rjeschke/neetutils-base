@@ -30,6 +30,11 @@ import java.util.Map.Entry;
 
 import com.github.rjeschke.neetutils.collections.Colls;
 import com.github.rjeschke.neetutils.json.JSONTokenizer.Token;
+import com.github.rjeschke.neetutils.json.annotations.JSONCatchAllField;
+import com.github.rjeschke.neetutils.json.annotations.JSONForceField;
+import com.github.rjeschke.neetutils.json.annotations.JSONIgnoreField;
+import com.github.rjeschke.neetutils.json.annotations.JSONObject;
+import com.github.rjeschke.neetutils.json.annotations.JSONReadOnlyField;
 
 /**
  * JSON encoder, decoder and utilities.

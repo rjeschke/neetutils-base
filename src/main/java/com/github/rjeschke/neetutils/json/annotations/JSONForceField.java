@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.json;
+package com.github.rjeschke.neetutils.json.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,14 +21,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Ignores the given field in JSON de- and encoding.
+ * Forces the tagged field to be visible.
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface JSONIgnoreField
+public @interface JSONForceField
 {
     // tagging annotation
 }

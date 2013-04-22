@@ -15,6 +15,8 @@
  */
 package com.github.rjeschke.neetutils.json;
 
+import com.github.rjeschke.neetutils.json.annotations.JSONObject;
+
 /**
  * A tagging interface for simple JSON objects.
  * 

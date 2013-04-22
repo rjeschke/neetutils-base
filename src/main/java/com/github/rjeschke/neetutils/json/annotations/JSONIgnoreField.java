@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.json;
+package com.github.rjeschke.neetutils.json.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,16 +21,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to tag a field of type {@code Map<String, Object>} as a catch-all field
- * which will receive all unmapped values during a decode into a
- * {@link JSONMarshallable}.
+ * Ignores the given field in JSON de- and encoding.
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface JSONCatchAllField
+public @interface JSONIgnoreField
 {
     // tagging annotation
 }
