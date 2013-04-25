@@ -119,7 +119,8 @@ public final class JSON
 
         final Object ret = readObject(tokenizer);
 
-        if (tokenizer.getCurrentToken() != Token.EOF) throw new IOException("Multiple JSON values in string" + tokenizer.getPosition());
+        if (tokenizer.getCurrentToken() != Token.EOF)
+            throw new IOException("Multiple JSON values in string" + tokenizer.getPosition());
 
         return ret;
     }
@@ -176,7 +177,8 @@ public final class JSON
      * @throws IOException
      *             if an IO or processing error occurred.
      */
-    public final static <T extends JSONMarshallable> T decodeInto(final Map<String, Object> jsonObject, final T object) throws IOException
+    public final static <T extends JSONMarshallable> T decodeInto(final Map<String, Object> jsonObject, final T object)
+            throws IOException
     {
         Field catchAll = null;
         final Map<String, Object> rest = new HashMap<>();
@@ -230,8 +232,8 @@ public final class JSON
             {
                 rest.put(e.getKey(), e.getValue());
             }
-            catch (IllegalArgumentException | IllegalAccessException | ClassCastException | InvocationTargetException | SecurityException
-                    | NoSuchMethodException ex)
+            catch (IllegalArgumentException | IllegalAccessException | ClassCastException | InvocationTargetException
+                    | SecurityException | NoSuchMethodException ex)
             {
                 throw new IOException("Marshalling for type " + toClass + " failed for '" + e.getKey() + "'", ex);
             }
@@ -458,7 +460,7 @@ public final class JSON
         if (f.isAnnotationPresent(JSONForceField.class)) return true;
         if (read && f.isAnnotationPresent(JSONReadOnlyField.class)) return true;
 
-        if ((f.getModifiers() & (Modifier.STATIC | Modifier.FINAL)) != 0) return false;
+        if (!read && (f.getModifiers() & (Modifier.STATIC | Modifier.FINAL)) != 0) return false;
 
         if ((vis & JSONObjectVisibility.PRIVATE) != 0 && isPrivateVisibility(f)) return true;
         if ((vis & JSONObjectVisibility.DEFAULT) != 0 && isDefaultVisibility(f)) return true;
@@ -615,6 +617,16 @@ public final class JSON
         sb.append('}');
     }
 
+    private final static boolean hasInterface(final Class<?> clazz, final Class<?> inter)
+    {
+        if (clazz == null) return false;
+        for (final Class<?> c : clazz.getInterfaces())
+        {
+            if (c == inter) return true;
+        }
+        return false;
+    }
+
     private final static void writeMarshallable(final StringBuilder sb, final Object obj)
     {
         boolean second = false;
@@ -622,33 +634,39 @@ public final class JSON
 
         try
         {
-            int vis = JSONObjectVisibility.PUBLIC;
-            if (obj.getClass().isAnnotationPresent(JSONObject.class))
+            Class<?> clazz = obj.getClass();
+            for (;;)
             {
-                final JSONObject v = obj.getClass().getAnnotation(JSONObject.class);
-                vis = v.visibility();
-            }
-
-            for (final Field f : obj.getClass().getDeclaredFields())
-            {
-                if (isFieldVisible(f, vis, true))
+                int vis = JSONObjectVisibility.PUBLIC;
+                if (clazz.isAnnotationPresent(JSONObject.class))
                 {
-                    if (second)
-                    {
-                        sb.append(',');
-                    }
-                    else
-                    {
-                        second = true;
-                    }
-
-                    boolean isAccessible = f.isAccessible();
-                    f.setAccessible(true);
-                    writeString(sb, f.getName());
-                    sb.append(':');
-                    writeObject(sb, f.get(obj));
-                    f.setAccessible(isAccessible);
+                    final JSONObject v = clazz.getAnnotation(JSONObject.class);
+                    vis = v.visibility();
                 }
+                for (final Field f : clazz.getDeclaredFields())
+                {
+                    if (isFieldVisible(f, vis, true))
+                    {
+                        if (second)
+                        {
+                            sb.append(',');
+                        }
+                        else
+                        {
+                            second = true;
+                        }
+
+                        boolean isAccessible = f.isAccessible();
+                        f.setAccessible(true);
+                        writeString(sb, f.getName());
+                        sb.append(':');
+                        writeObject(sb, f.get(obj));
+                        f.setAccessible(isAccessible);
+                    }
+                }
+                
+                clazz = clazz.getSuperclass();
+                if(!hasInterface(clazz, JSONMarshallable.class)) break;
             }
         }
         catch (IllegalArgumentException | IllegalAccessException e)
@@ -685,7 +703,7 @@ public final class JSON
         {
             sb.append(((Boolean)obj).booleanValue() ? "true" : "false");
         }
-        else if(obj instanceof JSONEnum)
+        else if (obj instanceof JSONEnum)
         {
             writeString(sb, ((JSONEnum)obj).toJSONString());
         }
@@ -702,7 +720,8 @@ public final class JSON
         return sb;
     }
 
-    private final static void beautify(final StringBuilder sb, final int indent, final JSONTokenizer tokenizer) throws IOException
+    private final static void beautify(final StringBuilder sb, final int indent, final JSONTokenizer tokenizer)
+            throws IOException
     {
         switch (tokenizer.getCurrentToken())
         {
@@ -712,7 +731,8 @@ public final class JSON
             while (tokenizer.getCurrentToken() != Token.OBJECT_CLOSE)
             {
                 if (tokenizer.getCurrentToken() != Token.STRING)
-                    throw new IOException("Object key expected, got: " + tokenizer.getCurrentToken() + "," + tokenizer.getPosition());
+                    throw new IOException("Object key expected, got: " + tokenizer.getCurrentToken() + ","
+                            + tokenizer.getPosition());
                 indent(sb, indent + 2);
                 writeString(sb, tokenizer.getStringValue());
                 sb.append(" : ");
