@@ -82,7 +82,7 @@ public final class JSON
      */
     public final static String beautify(final String json) throws IOException
     {
-        return beautify(new StringBuilder(json.length()), json).toString();
+        return json == null || json.isEmpty() ? "" : beautify(new StringBuilder(json.length()), json).toString();
     }
 
     /**
@@ -145,6 +145,50 @@ public final class JSON
         }
     }
 
+    public final static <T extends JSONCustomMarshallable> T decodeInto(final String string, final Class<T> baseClass)
+            throws IOException
+    {
+        try (final StringReader reader = new StringReader(string))
+        {
+            return decodeInto(reader, baseClass);
+        }
+    }
+
+    public final static <T extends JSONCustomMarshallable> T decodeInto(final JSONTokenizer tokenizer, final Class<T> baseClass)
+            throws IOException
+    {
+        Method factory;
+        try
+        {
+            factory = baseClass.getMethod("fromJSON", JSONTokenizer.class);
+            final boolean isAccessible = factory.isAccessible();
+            factory.setAccessible(true);
+            T ret = (T)factory.invoke(null, tokenizer);
+            factory.setAccessible(isAccessible);
+            return ret;
+        }
+        catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e)
+        {
+            throw new IOException("Failed decoding of " + baseClass, e);
+        }
+    }
+
+    public final static <T extends JSONCustomMarshallable> T decodeInto(final Reader reader, final Class<T> baseClass)
+            throws IOException
+    {
+        final JSONTokenizer tokenizer = new JSONTokenizer(reader);
+
+        tokenizer.next();
+
+        final T ret = decodeInto(tokenizer, baseClass);
+
+        if (tokenizer.getCurrentToken() != Token.EOF)
+            throw new IOException("Multiple JSON values in string" + tokenizer.getPosition());
+
+        return ret;
+    }
+
     /**
      * Decodes a JSON string read from the given {@link Reader} containing a
      * single object into the given {@link JSONMarshallable}.
@@ -185,11 +229,13 @@ public final class JSON
 
         final Class<?> toClass = object.getClass();
 
+        boolean ignoreNull = true;
         int vis = JSONObjectVisibility.PUBLIC;
         if (toClass.isAnnotationPresent(JSONObject.class))
         {
             final JSONObject v = toClass.getAnnotation(JSONObject.class);
             vis = v.visibility();
+            ignoreNull = v.ignoreNull();
         }
 
         for (final Entry<String, Object> e : jsonObject.entrySet())
@@ -203,6 +249,8 @@ public final class JSON
                     catchAll = f;
                     continue;
                 }
+
+                if (ignoreNull && e.getValue() == null) continue;
 
                 if (isFieldVisible(f, vis, false))
                 {
@@ -470,7 +518,16 @@ public final class JSON
         return false;
     }
 
-    private final static List<Object> readArray(final JSONTokenizer tokenizer) throws IOException
+    /**
+     * Parses a JSON array.
+     * 
+     * @param tokenizer
+     *            The tokenizer.
+     * @return The parsed array as a {@code List}
+     * @throws IOException
+     *             if an IO or parsing error occurred.
+     */
+    public final static List<Object> readArray(final JSONTokenizer tokenizer) throws IOException
     {
         final List<Object> list = Colls.list();
 
@@ -493,7 +550,16 @@ public final class JSON
         return list;
     }
 
-    private final static Map<String, Object> readMap(final JSONTokenizer tokenizer) throws IOException
+    /**
+     * Parses a JSON object.
+     * 
+     * @param tokenizer
+     *            The tokenizer.
+     * @return The parsed object as a {@code Map}
+     * @throws IOException
+     *             if an IO or parsing error occurred.
+     */
+    public final static Map<String, Object> readMap(final JSONTokenizer tokenizer) throws IOException
     {
         final Map<String, Object> map = new HashMap<>();
         for (;;)
@@ -511,11 +577,21 @@ public final class JSON
             tokenizer.next();
             map.put(key, readObject(tokenizer));
             if (tokenizer.getCurrentToken() == Token.COMMA) tokenizer.next();
+            // TODO fail on missing comma
         }
         return map;
     }
 
-    private final static Object readObject(final JSONTokenizer tokenizer) throws IOException
+    /**
+     * Parses a JSON value into a Java object.
+     * 
+     * @param tokenizer
+     *            The tokenizer.
+     * @return The parsed object.
+     * @throws IOException
+     *             * if an IO or parsing error occurred.
+     */
+    public final static Object readObject(final JSONTokenizer tokenizer) throws IOException
     {
         switch (tokenizer.getCurrentToken())
         {
@@ -548,17 +624,41 @@ public final class JSON
         }
     }
 
-    private final static void writeNumber(final StringBuilder sb, final long value)
+    /**
+     * Writes a {@code long}.
+     * 
+     * @param sb
+     *            {@code StringBuilder} to write to
+     * @param value
+     *            Value to write.
+     */
+    public final static void writeNumber(final StringBuilder sb, final long value)
     {
         sb.append(value);
     }
 
-    private final static void writeNumber(final StringBuilder sb, final double value)
+    /**
+     * Writes a {@code double}.
+     * 
+     * @param sb
+     *            {@code StringBuilder} to write to
+     * @param value
+     *            Value to write.
+     */
+    public final static void writeNumber(final StringBuilder sb, final double value)
     {
         sb.append(value);
     }
 
-    private final static void writeNumber(final StringBuilder sb, final Number value)
+    /**
+     * Writes a {@code Number}.
+     * 
+     * @param sb
+     *            {@code StringBuilder} to write to
+     * @param value
+     *            Value to write.
+     */
+    public final static void writeNumber(final StringBuilder sb, final Number value)
     {
         if (value instanceof Double || value instanceof Float)
         {
@@ -570,14 +670,30 @@ public final class JSON
         }
     }
 
-    private final static void writeString(final StringBuilder sb, final String value)
+    /**
+     * Writes a {@code String}.
+     * 
+     * @param sb
+     *            {@code StringBuilder} to write to
+     * @param value
+     *            Value to write.
+     */
+    public final static void writeString(final StringBuilder sb, final String value)
     {
         sb.append('"');
         escapeString(sb, value);
         sb.append('"');
     }
 
-    private final static void writeList(final StringBuilder sb, final Collection<?> list)
+    /**
+     * Writes a {@code Collection}.
+     * 
+     * @param sb
+     *            {@code StringBuilder} to write to
+     * @param list
+     *            Value to write.
+     */
+    public final static void writeList(final StringBuilder sb, final Collection<?> list)
     {
         boolean second = false;
         sb.append('[');
@@ -596,7 +712,15 @@ public final class JSON
         sb.append(']');
     }
 
-    private final static void writeMap(final StringBuilder sb, final Map<?, ?> map)
+    /**
+     * Writes a {@code Map} as a JSON object.
+     * 
+     * @param sb
+     *            {@code StringBuilder} to write to
+     * @param map
+     *            Value to write.
+     */
+    public final static void writeMap(final StringBuilder sb, final Map<?, ?> map)
     {
         boolean second = false;
         sb.append('{');
@@ -629,6 +753,12 @@ public final class JSON
 
     private final static void writeMarshallable(final StringBuilder sb, final Object obj)
     {
+        if (obj instanceof JSONCustomMarshallable)
+        {
+            ((JSONCustomMarshallable)obj).toJSON(sb);
+            return;
+        }
+
         boolean second = false;
         sb.append('{');
 
@@ -637,16 +767,25 @@ public final class JSON
             Class<?> clazz = obj.getClass();
             for (;;)
             {
+                boolean ignoreNull = true;
                 int vis = JSONObjectVisibility.PUBLIC;
                 if (clazz.isAnnotationPresent(JSONObject.class))
                 {
                     final JSONObject v = clazz.getAnnotation(JSONObject.class);
                     vis = v.visibility();
+                    ignoreNull = v.ignoreNull();
                 }
                 for (final Field f : clazz.getDeclaredFields())
                 {
                     if (isFieldVisible(f, vis, true))
                     {
+                        boolean isAccessible = f.isAccessible();
+                        f.setAccessible(true);
+
+                        final Object value = f.get(obj);
+
+                        if (value == null && ignoreNull) continue;
+
                         if (second)
                         {
                             sb.append(',');
@@ -656,17 +795,15 @@ public final class JSON
                             second = true;
                         }
 
-                        boolean isAccessible = f.isAccessible();
-                        f.setAccessible(true);
                         writeString(sb, f.getName());
                         sb.append(':');
-                        writeObject(sb, f.get(obj));
+                        writeObject(sb, value);
                         f.setAccessible(isAccessible);
                     }
                 }
-                
+
                 clazz = clazz.getSuperclass();
-                if(!hasInterface(clazz, JSONMarshallable.class)) break;
+                if (!hasInterface(clazz, JSONMarshallable.class)) break;
             }
         }
         catch (IllegalArgumentException | IllegalAccessException e)
@@ -677,7 +814,15 @@ public final class JSON
         sb.append('}');
     }
 
-    private final static void writeObject(final StringBuilder sb, final Object obj)
+    /**
+     * Writes an {@code Object}.
+     * 
+     * @param sb
+     *            {@code StringBuilder} to write to
+     * @param obj
+     *            Object to write.
+     */
+    public final static void writeObject(final StringBuilder sb, final Object obj)
     {
         if (obj == null)
         {

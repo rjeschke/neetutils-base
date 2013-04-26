@@ -40,4 +40,12 @@ public @interface JSONObject
      * @return The visibility bit mask.
      */
     int visibility() default JSONObjectVisibility.PUBLIC;
+
+    /**
+     * Specify if {@code null} values are ignored or not. Default is
+     * {@code true}.
+     * 
+     * @return If {@code null} should be ignored or not.
+     */
+    boolean ignoreNull() default true;
 }

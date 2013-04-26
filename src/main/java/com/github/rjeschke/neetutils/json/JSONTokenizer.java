@@ -18,7 +18,13 @@ package com.github.rjeschke.neetutils.json;
 import java.io.IOException;
 import java.io.Reader;
 
-final class JSONTokenizer
+/**
+ * JSON tokenizer.
+ * 
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ * 
+ */
+public final class JSONTokenizer
 {
     private final Reader        reader;
     private String              stringValue;
@@ -36,21 +42,35 @@ final class JSONTokenizer
         this.reader = reader;
     }
 
+    /**
+     * @return the last tokenized {@code double] value.
+
+     */
     public double getDoubleValue()
     {
         return this.doubleValue;
     }
 
+    /**
+     * @return the last tokenized {@code long} value.
+     */
     public long getLongValue()
     {
         return this.longValue;
     }
 
+    /**
+     * @return the last tokenized {@code String} value.
+     */
     public String getStringValue()
     {
         return this.stringValue;
     }
 
+    /**
+     * 
+     * @return the current {@link Token}
+     */
     public Token getCurrentToken()
     {
         return this.currentToken;
@@ -76,6 +96,11 @@ final class JSONTokenizer
         return this.current;
     }
 
+    /**
+     * @return the current parsing position as a
+     *         {@code String] suitable for error reporting.
+
+     */
     public String getPosition()
     {
         return " at row: " + this.row + ", column: " + this.column;
@@ -145,7 +170,7 @@ final class JSONTokenizer
             this.read();
         }
 
-        if (this.current != '"') throw new IOException("Unexpected end of data, open string." + this.getPosition());
+        if (this.current != '"') throw new IOException("Unexpected end of data, open string" + this.getPosition());
         this.read();
 
         this.stringValue = sb.toString();
@@ -233,6 +258,13 @@ final class JSONTokenizer
         }
     }
 
+    /**
+     * Parses the next {@link Token}.
+     * 
+     * @return The parsed {@code Token}
+     * @throws IOException
+     *             if an IO or parsing error occurred.
+     */
     public Token next() throws IOException
     {
         for (;;)
@@ -282,6 +314,11 @@ final class JSONTokenizer
         }
     }
 
+    /**
+     * JSON token enum.
+     * 
+     * @author René Jeschke (rene_jeschke@yahoo.de)
+     */
     public enum Token
     {
         OBJECT_OPEN, OBJECT_CLOSE, ARRAY_OPEN, ARRAY_CLOSE, COMMA, COLON, STRING, TRUE, FALSE, NULL, DOUBLE, LONG, EOF
