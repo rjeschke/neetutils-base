@@ -24,7 +24,7 @@ public class Disposer extends WeakReference<Object>
 {
     private final Disposable             disposable;
     private final Node<Disposer>         disposer;
-    private boolean                      disposed = false;
+    private volatile boolean             disposed = false;
     final static ReferenceQueue<Object>  refQueue;
     final static ReferenceList<Disposer> disposers;
 
@@ -34,6 +34,7 @@ public class Disposer extends WeakReference<Object>
         disposers = new ReferenceList<>();
 
         final Thread thread = new Thread(new Cleaner());
+        thread.setName("neetutils-Disposer");
         thread.setDaemon(true);
         thread.start();
     }

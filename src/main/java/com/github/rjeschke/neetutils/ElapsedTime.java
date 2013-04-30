@@ -57,7 +57,7 @@ public class ElapsedTime
      *            Runnable to measure.
      * @return this
      */
-    public ElapsedTime measure(Runnable r)
+    public ElapsedTime measure(final Runnable r)
     {
         return this.measure(r, 1);
     }
@@ -71,7 +71,7 @@ public class ElapsedTime
      *            Number of runs.
      * @return this
      */
-    public ElapsedTime measure(Runnable r, int runs)
+    public ElapsedTime measure(final Runnable r, final int runs)
     {
         for (int i = 0; i < runs; i++)
         {
