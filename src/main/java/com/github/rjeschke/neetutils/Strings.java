@@ -34,7 +34,7 @@ public class Strings
      *            The String to escape.
      * @return Escape String or &quote;null&quote; if str is <code>null</code>
      */
-    public final static String escapeString(String str)
+    public final static String escapeString(final String str)
     {
         if (str == null) return "null";
 
@@ -74,7 +74,7 @@ public class Strings
         return sb.toString();
     }
 
-    public final static List<String> split(String str, char ch)
+    public final static List<String> split(final String str, char ch)
     {
         List<String> ret = Colls.list();
 
@@ -96,7 +96,7 @@ public class Strings
         return ret;
     }
 
-    public final static List<String> trim(List<String> strings)
+    public final static List<String> trim(final List<String> strings)
     {
         for (int i = 0; i < strings.size(); i++)
         {
@@ -104,5 +104,10 @@ public class Strings
             if (s != null) strings.set(i, s.trim());
         }
         return strings;
+    }
+
+    public final static boolean isEmpty(final String str)
+    {
+        return str == null || str.isEmpty();
     }
 }

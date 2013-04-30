@@ -15,6 +15,10 @@
  */
 package com.github.rjeschke.neetutils;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 public final class Objects
 {
     private Objects()
@@ -22,7 +26,53 @@ public final class Objects
         //
     }
 
-    public final static boolean equals(Object a, Object b)
+    public final static boolean implementsInterface(final Object o, final Class<?> interfaceClass)
+    {
+        return implementsInterface(o.getClass(), interfaceClass);
+    }
+
+    public final static boolean implementsInterface(final Class<?> clazz, final Class<?> interfaceClass)
+    {
+        if (clazz.equals(interfaceClass)) return true;
+        final Class<?>[] is = clazz.getInterfaces();
+        for (int i = 0; i < is.length; i++)
+        {
+            if (is[i].equals(interfaceClass)) return true;
+        }
+        return false;
+    }
+
+    public final static boolean isString(final Object o)
+    {
+        return o instanceof String;
+    }
+
+    public final static boolean isBoolean(final Object o)
+    {
+        return o instanceof Boolean;
+    }
+
+    public final static boolean isNumber(final Object o)
+    {
+        return o instanceof Number;
+    }
+
+    public final static boolean isMap(final Object o)
+    {
+        return o instanceof Map;
+    }
+
+    public final static boolean isList(final Object o)
+    {
+        return o instanceof List;
+    }
+
+    public final static boolean isCollection(final Object o)
+    {
+        return o instanceof Collection;
+    }
+
+    public final static boolean equals(final Object a, final Object b)
     {
         if (a == b) return true;
 
@@ -33,8 +83,19 @@ public final class Objects
         return a.equals(b);
     }
 
+    public final static boolean isNullOrEmpty(final Object obj)
+    {
+        if (obj == null) return true;
+
+        if (obj instanceof Collection) return ((Collection<?>)obj).isEmpty();
+        if (obj instanceof Map) return ((Map<?, ?>)obj).isEmpty();
+        if (obj instanceof String) return ((String)obj).isEmpty();
+
+        return false;
+    }
+
     @SuppressWarnings("unchecked")
-    public final static <A> A uncheckedCast(Object a)
+    public final static <A> A uncheckedCast(final Object a)
     {
         return (A)a;
     }

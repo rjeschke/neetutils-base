@@ -13,28 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.rjeschke.neetutils.json;
+package com.github.rjeschke.neetutils.json.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Interface for custom JSON en-/decoding of objects.
- * <p>
- * When a class implements this interface, a method with the following signature
- * must also be implemented:
- * {@code public static <Object> fromJSON(JSONTokenizer) throws IOException} .
- * </p>
+ * Specifies the type of a {@code List<?>} or {@code Map<String, ?>}.
  * 
- * @see JSONMarshallable
- * @see JSONTokenizer
  * @author René Jeschke (rene_jeschke@yahoo.de)
  * 
  */
-public interface JSONCustomMarshallable extends JSONMarshallable
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface JSONGenericType
 {
-    /**
-     * JSON encoding method.
-     * 
-     * @param sb
-     *            The {@code StringBuilder} to append to.
-     */
-    public void toJSON(final StringBuilder sb);
+    Class<?> type();
 }

@@ -18,6 +18,7 @@ package com.github.rjeschke.neetutils.json;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,10 +29,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.github.rjeschke.neetutils.Objects;
 import com.github.rjeschke.neetutils.collections.Colls;
 import com.github.rjeschke.neetutils.json.JSONTokenizer.Token;
 import com.github.rjeschke.neetutils.json.annotations.JSONCatchAllField;
 import com.github.rjeschke.neetutils.json.annotations.JSONForceField;
+import com.github.rjeschke.neetutils.json.annotations.JSONGenericType;
 import com.github.rjeschke.neetutils.json.annotations.JSONIgnoreField;
 import com.github.rjeschke.neetutils.json.annotations.JSONObject;
 import com.github.rjeschke.neetutils.json.annotations.JSONReadOnlyField;
@@ -66,7 +69,14 @@ public final class JSON
         {
             final JSONTokenizer tokenizer = new JSONTokenizer(reader);
             tokenizer.next();
-            beautify(sb, 0, tokenizer);
+            while (tokenizer.getCurrentToken() != Token.EOF)
+            {
+                beautify(sb, 0, tokenizer);
+                if (tokenizer.getCurrentToken() != Token.EOF)
+                {
+                    sb.append('\n');
+                }
+            }
             return sb;
         }
     }
@@ -119,8 +129,7 @@ public final class JSON
 
         final Object ret = readObject(tokenizer);
 
-        if (tokenizer.getCurrentToken() != Token.EOF)
-            throw new IOException("Multiple JSON values in string" + tokenizer.getPosition());
+        if (tokenizer.getCurrentToken() != Token.EOF) throw new IOException("Multiple JSON values in string" + tokenizer.getPosition());
 
         return ret;
     }
@@ -145,50 +154,6 @@ public final class JSON
         }
     }
 
-    public final static <T extends JSONCustomMarshallable> T decodeInto(final String string, final Class<T> baseClass)
-            throws IOException
-    {
-        try (final StringReader reader = new StringReader(string))
-        {
-            return decodeInto(reader, baseClass);
-        }
-    }
-
-    public final static <T extends JSONCustomMarshallable> T decodeInto(final JSONTokenizer tokenizer, final Class<T> baseClass)
-            throws IOException
-    {
-        Method factory;
-        try
-        {
-            factory = baseClass.getMethod("fromJSON", JSONTokenizer.class);
-            final boolean isAccessible = factory.isAccessible();
-            factory.setAccessible(true);
-            T ret = (T)factory.invoke(null, tokenizer);
-            factory.setAccessible(isAccessible);
-            return ret;
-        }
-        catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e)
-        {
-            throw new IOException("Failed decoding of " + baseClass, e);
-        }
-    }
-
-    public final static <T extends JSONCustomMarshallable> T decodeInto(final Reader reader, final Class<T> baseClass)
-            throws IOException
-    {
-        final JSONTokenizer tokenizer = new JSONTokenizer(reader);
-
-        tokenizer.next();
-
-        final T ret = decodeInto(tokenizer, baseClass);
-
-        if (tokenizer.getCurrentToken() != Token.EOF)
-            throw new IOException("Multiple JSON values in string" + tokenizer.getPosition());
-
-        return ret;
-    }
-
     /**
      * Decodes a JSON string read from the given {@link Reader} containing a
      * single object into the given {@link JSONMarshallable}.
@@ -205,7 +170,7 @@ public final class JSON
     {
         final Object obj = decode(reader);
 
-        if (!isMap(obj)) throw new IOException("JSON value ist not of type 'object'.");
+        if (!Objects.isMap(obj)) throw new IOException("JSON value ist not of type 'object'.");
 
         return decodeInto(asMap(obj), object);
     }
@@ -221,8 +186,7 @@ public final class JSON
      * @throws IOException
      *             if an IO or processing error occurred.
      */
-    public final static <T extends JSONMarshallable> T decodeInto(final Map<String, Object> jsonObject, final T object)
-            throws IOException
+    public final static <T extends JSONMarshallable> T decodeInto(final Map<String, Object> jsonObject, final T object) throws IOException
     {
         Field catchAll = null;
         final Map<String, Object> rest = new HashMap<>();
@@ -238,17 +202,20 @@ public final class JSON
             ignoreNull = v.ignoreNull();
         }
 
+        for (final Field f : toClass.getDeclaredFields())
+        {
+            if (f.isAnnotationPresent(JSONCatchAllField.class))
+            {
+                catchAll = f;
+                break;
+            }
+        }
+
         for (final Entry<String, Object> e : jsonObject.entrySet())
         {
             try
             {
                 final Field f = toClass.getDeclaredField(e.getKey());
-
-                if (f.isAnnotationPresent(JSONCatchAllField.class))
-                {
-                    catchAll = f;
-                    continue;
-                }
 
                 if (ignoreNull && e.getValue() == null) continue;
 
@@ -271,17 +238,101 @@ public final class JSON
                     }
                     else
                     {
-                        f.set(object, e.getValue());
+                        if (Objects.implementsInterface(f.getType(), JSONMarshallable.class))
+                        {
+                            f.set(object, decodeInto(asMap(e.getValue()), newJSONInstance(f.getType())));
+                        }
+                        else
+                        {
+                            if (f.isAnnotationPresent(JSONGenericType.class))
+                            {
+                                final Class<?> t = f.getAnnotation(JSONGenericType.class).type();
+
+                                if (Objects.implementsInterface(f.getType(), Map.class))
+                                {
+                                    final Map<String, Object> in = asMap(e.getValue());
+                                    final Map<String, Object> out = new HashMap<>();
+
+                                    if (t.isEnum())
+                                    {
+                                        Method m;
+                                        try
+                                        {
+                                            m = t.getMethod("fromJSONString", String.class);
+                                        }
+                                        catch (NoSuchMethodException ex)
+                                        {
+                                            m = t.getMethod("valueOf", String.class);
+                                        }
+                                        for (final Entry<String, Object> e2 : in.entrySet())
+                                        {
+                                            out.put(e2.getKey(), m.invoke(null, e2.getValue().toString()));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (final Entry<String, Object> e2 : in.entrySet())
+                                        {
+                                            out.put(e2.getKey(), decodeInto(asMap(e2.getValue()), newJSONInstance(t)));
+                                        }
+                                    }
+
+                                    f.set(object, out);
+                                }
+                                else if (Objects.implementsInterface(f.getType(), List.class))
+                                {
+                                    final List<Object> in = asArray(e.getValue());
+                                    final List<Object> out = Colls.list();
+
+                                    if (t.isEnum())
+                                    {
+                                        Method m;
+                                        try
+                                        {
+                                            m = t.getMethod("fromJSONString", String.class);
+                                        }
+                                        catch (NoSuchMethodException ex)
+                                        {
+                                            m = t.getMethod("valueOf", String.class);
+                                        }
+                                        for (final Object o : in)
+                                        {
+                                            out.add(m.invoke(null, o.toString()));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (final Object o : in)
+                                        {
+                                            out.add(decodeInto(asMap(o), newJSONInstance(t)));
+                                        }
+                                    }
+                                    f.set(object, out);
+                                }
+                                else
+                                {
+                                    throw new IOException("Marshalling for type " + toClass + " failed for '" + e.getKey() + "'");
+                                }
+                            }
+                            else
+                            {
+                                f.set(object, e.getValue());
+                            }
+                        }
                     }
                     f.setAccessible(isAccessible);
+                }
+                else
+                {
+                    rest.put(e.getKey(), e.getValue());
                 }
             }
             catch (NoSuchFieldException ex)
             {
                 rest.put(e.getKey(), e.getValue());
             }
-            catch (IllegalArgumentException | IllegalAccessException | ClassCastException | InvocationTargetException
-                    | SecurityException | NoSuchMethodException ex)
+            catch (IllegalArgumentException | IllegalAccessException | ClassCastException | InvocationTargetException | SecurityException
+                    | NoSuchMethodException ex)
             {
                 throw new IOException("Marshalling for type " + toClass + " failed for '" + e.getKey() + "'", ex);
             }
@@ -291,7 +342,10 @@ public final class JSON
         {
             try
             {
+                boolean isAccessible = catchAll.isAccessible();
+                catchAll.setAccessible(true);
                 catchAll.set(object, rest);
+                catchAll.setAccessible(isAccessible);
             }
             catch (IllegalArgumentException | IllegalAccessException ex)
             {
@@ -330,17 +384,6 @@ public final class JSON
     }
 
     /**
-     * Returns {@code true} if the given object is of type {@code Map}.
-     * 
-     * @param obj
-     * @return
-     */
-    public final static boolean isMap(final Object obj)
-    {
-        return obj instanceof Map;
-    }
-
-    /**
      * Returns the given object casted to {@code Map<String, Object>}.
      * 
      * @param obj
@@ -350,17 +393,6 @@ public final class JSON
     public final static Map<String, Object> asMap(final Object obj)
     {
         return (Map<String, Object>)obj;
-    }
-
-    /**
-     * Returns {@code true} if the given object is of type {@code List}.
-     * 
-     * @param obj
-     * @return
-     */
-    public final static boolean isArray(final Object obj)
-    {
-        return obj instanceof List;
     }
 
     /**
@@ -376,17 +408,6 @@ public final class JSON
     }
 
     /**
-     * Returns {@code true} if the given object is of type {@code Number}.
-     * 
-     * @param obj
-     * @return
-     */
-    public final static boolean isNumber(final Object obj)
-    {
-        return obj instanceof Number;
-    }
-
-    /**
      * Returns the given object casted to {@code Number}.
      * 
      * @param obj
@@ -395,17 +416,6 @@ public final class JSON
     public final static Number asNumber(final Object obj)
     {
         return (Number)obj;
-    }
-
-    /**
-     * Returns {@code true} if the given object is of type {@code Boolean}.
-     * 
-     * @param obj
-     * @return
-     */
-    public final static boolean isBoolean(final Object obj)
-    {
-        return obj instanceof Boolean;
     }
 
     /**
@@ -506,7 +516,7 @@ public final class JSON
     {
         if (f.isAnnotationPresent(JSONIgnoreField.class)) return false;
         if (f.isAnnotationPresent(JSONForceField.class)) return true;
-        if (read && f.isAnnotationPresent(JSONReadOnlyField.class)) return true;
+        if (!read && f.isAnnotationPresent(JSONReadOnlyField.class)) return false;
 
         if (!read && (f.getModifiers() & (Modifier.STATIC | Modifier.FINAL)) != 0) return false;
 
@@ -544,6 +554,10 @@ public final class JSON
 
             list.add(readObject(tokenizer));
 
+            if (tokenizer.getCurrentToken() != Token.COMMA && tokenizer.getCurrentToken() != Token.ARRAY_CLOSE)
+            {
+                throw new IOException("',' or ']' expected" + tokenizer.getPosition());
+            }
             if (tokenizer.getCurrentToken() == Token.COMMA) tokenizer.next();
         }
 
@@ -576,8 +590,11 @@ public final class JSON
             if (Token.COLON != tokenizer.next()) throw new IOException("':' expected" + tokenizer.getPosition());
             tokenizer.next();
             map.put(key, readObject(tokenizer));
+            if (tokenizer.getCurrentToken() != Token.COMMA && tokenizer.getCurrentToken() != Token.OBJECT_CLOSE)
+            {
+                throw new IOException("',' or '}' expected" + tokenizer.getPosition());
+            }
             if (tokenizer.getCurrentToken() == Token.COMMA) tokenizer.next();
-            // TODO fail on missing comma
         }
         return map;
     }
@@ -753,12 +770,6 @@ public final class JSON
 
     private final static void writeMarshallable(final StringBuilder sb, final Object obj)
     {
-        if (obj instanceof JSONCustomMarshallable)
-        {
-            ((JSONCustomMarshallable)obj).toJSON(sb);
-            return;
-        }
-
         boolean second = false;
         sb.append('{');
 
@@ -865,8 +876,7 @@ public final class JSON
         return sb;
     }
 
-    private final static void beautify(final StringBuilder sb, final int indent, final JSONTokenizer tokenizer)
-            throws IOException
+    private final static void beautify(final StringBuilder sb, final int indent, final JSONTokenizer tokenizer) throws IOException
     {
         switch (tokenizer.getCurrentToken())
         {
@@ -876,8 +886,7 @@ public final class JSON
             while (tokenizer.getCurrentToken() != Token.OBJECT_CLOSE)
             {
                 if (tokenizer.getCurrentToken() != Token.STRING)
-                    throw new IOException("Object key expected, got: " + tokenizer.getCurrentToken() + ","
-                            + tokenizer.getPosition());
+                    throw new IOException("Object key expected, got: " + tokenizer.getCurrentToken() + "," + tokenizer.getPosition());
                 indent(sb, indent + 2);
                 writeString(sb, tokenizer.getStringValue());
                 sb.append(" : ");
@@ -937,6 +946,36 @@ public final class JSON
             break;
         default:
             throw new IOException("Unexpected token: " + tokenizer.getCurrentToken() + "," + tokenizer.getPosition());
+        }
+    }
+
+    private final static <T extends JSONMarshallable> T newJSONInstance(final Class<?> clazz) throws IOException
+    {
+        try
+        {
+            try
+            {
+                final Method m = clazz.getMethod("createJSONInstance");
+                final boolean isAccessible = m.isAccessible();
+                m.setAccessible(true);
+                final Object ret = m.invoke(null);
+                m.setAccessible(isAccessible);
+                return Objects.uncheckedCast(ret);
+            }
+            catch (NoSuchMethodException e)
+            {
+                final Constructor<?> ctor = clazz.getConstructor();
+                final boolean isAccessible = ctor.isAccessible();
+                ctor.setAccessible(true);
+                final Object ret = ctor.newInstance();
+                ctor.setAccessible(isAccessible);
+                return Objects.uncheckedCast(ret);
+            }
+        }
+        catch (InstantiationException | IllegalAccessException | SecurityException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException e)
+        {
+            throw new IOException("Marshalling for type " + clazz + " failed", e);
         }
     }
 }

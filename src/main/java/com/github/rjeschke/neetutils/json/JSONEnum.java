@@ -20,8 +20,8 @@ package com.github.rjeschke.neetutils.json;
  * {@code enums}.
  * <p>
  * If you implement this interface then you also have to implement a
- * {@code public final static <enum> fromJSONString(final String string)} method
- * with transforms the given String into an enum.
+ * {@code static <enum> fromJSONString(final String string)} method with
+ * transforms the given String into an enum.
  * </p>
  * <p>
  * If you don't use this interface on enums, enums will be serialized by

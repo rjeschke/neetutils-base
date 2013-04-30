@@ -22,8 +22,9 @@ import com.github.rjeschke.neetutils.json.annotations.JSONObject;
  * 
  * <p>
  * Fields with visibility specified by {@link JSONObject} get automatically
- * encoded to JSON or decoded from. {@code JSONMarshallable} must not contain
- * fields of {@code JSONMarshallable} type.
+ * encoded to JSON or decoded from. You may specify a
+ * {@code static <T> createJSONInstance()} method for automatic JSON decoding,
+ * otherwise the default constructor is used.
  * </p>
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
