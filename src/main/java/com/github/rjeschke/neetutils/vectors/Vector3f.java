@@ -28,35 +28,40 @@ public class Vector3f
         // 0
     }
 
-    public Vector3f(float x, float y, float z)
+    public Vector3f(final float x, final float y, final float z)
     {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public Vector3f(float xyz)
+    public Vector3f(final float xyz)
     {
         this.x = xyz;
         this.y = xyz;
         this.z = xyz;
     }
 
-    public Vector3f(Vector3f v, float z)
+    public Vector3f(final Vector3f v, final float z)
     {
         this.x = v.x;
         this.y = v.y;
         this.z = z;
     }
 
-    public Vector3f(NColor color)
+    public Vector3f(final NColor color)
     {
         this.x = color.r;
         this.y = color.g;
         this.z = color.b;
     }
 
-    public Vector3f scale(float f)
+    public static Vector3f of(final float x, final float y, final float z)
+    {
+        return new Vector3f(x, y, z);
+    }
+
+    public Vector3f scale(final float f)
     {
         this.x *= f;
         this.y *= f;
@@ -64,7 +69,23 @@ public class Vector3f
         return this;
     }
 
-    public Vector3f add(Vector3f v)
+    public Vector3f set(final float x, final float y, final float z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this;
+    }
+
+    public Vector3f set(final Vector3f v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
+        return this;
+    }
+
+    public Vector3f add(final Vector3f v)
     {
         this.x += v.x;
         this.y += v.y;
@@ -72,7 +93,7 @@ public class Vector3f
         return this;
     }
 
-    public Vector3f add(Vector3f v, float scale)
+    public Vector3f add(final Vector3f v, final float scale)
     {
         this.x += v.x * scale;
         this.y += v.y * scale;
@@ -80,7 +101,7 @@ public class Vector3f
         return this;
     }
 
-    public Vector3f sub(Vector3f v)
+    public Vector3f sub(final Vector3f v)
     {
         this.x -= v.x;
         this.y -= v.y;
@@ -88,7 +109,7 @@ public class Vector3f
         return this;
     }
 
-    public Vector3f sub(Vector3f v, float scale)
+    public Vector3f sub(final Vector3f v, final float scale)
     {
         this.x -= v.x * scale;
         this.y -= v.y * scale;
@@ -96,7 +117,7 @@ public class Vector3f
         return this;
     }
 
-    public Vector3f mul(Vector3f v)
+    public Vector3f mul(final Vector3f v)
     {
         this.x *= v.x;
         this.y *= v.y;
@@ -104,7 +125,7 @@ public class Vector3f
         return this;
     }
 
-    public Vector3f mul(Vector3f v, float scale)
+    public Vector3f mul(final Vector3f v, final float scale)
     {
         this.x *= v.x * scale;
         this.y *= v.y * scale;
@@ -112,7 +133,7 @@ public class Vector3f
         return this;
     }
 
-    public Vector3f lerp(Vector3f v, float f)
+    public Vector3f lerp(final Vector3f v, final float f)
     {
         this.x += (v.x - this.x) * f;
         this.y += (v.y - this.y) * f;
@@ -120,12 +141,12 @@ public class Vector3f
         return this;
     }
 
-    public float dot(Vector3f v)
+    public float dot(final Vector3f v)
     {
         return this.x * v.x + this.y * v.y + this.z * v.z;
     }
 
-    public Vector3f cross(Vector3f v)
+    public Vector3f cross(final Vector3f v)
     {
         final float x = this.y * v.z - this.z * v.y;
         final float z = this.x * v.y - this.y * v.x;
@@ -164,7 +185,7 @@ public class Vector3f
         return (float)Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
-    public void intoArray(float[] arr, int offset)
+    public void intoArray(final float[] arr, final int offset)
     {
         arr[offset] = this.x;
         arr[offset + 1] = this.y;
@@ -176,7 +197,7 @@ public class Vector3f
         return new NColor(this.x, this.y, this.z);
     }
 
-    public NColor toNColor(float alpha)
+    public NColor toNColor(final float alpha)
     {
         return new NColor(alpha, this.x, this.y, this.z);
     }

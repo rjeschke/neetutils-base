@@ -25,75 +25,94 @@ public class Vector2f
         // 0
     }
 
-    public Vector2f(float x, float y)
+    public Vector2f(final float x, final float y)
     {
         this.x = x;
         this.y = y;
     }
 
-    public Vector2f(float xy)
+    public Vector2f(final float xy)
     {
         this.x = xy;
         this.y = xy;
     }
 
-    public Vector2f scale(float f)
+    public static Vector2f of(final float x, final float y)
+    {
+        return new Vector2f(x, y);
+    }
+
+    public Vector2f scale(final float f)
     {
         this.x *= f;
         this.y *= f;
         return this;
     }
 
-    public Vector2f add(Vector2f v)
+    public Vector2f set(final float x, final float y)
+    {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
+
+    public Vector2f set(final Vector2f v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        return this;
+    }
+
+    public Vector2f add(final Vector2f v)
     {
         this.x += v.x;
         this.y += v.y;
         return this;
     }
 
-    public Vector2f add(Vector2f v, float scale)
+    public Vector2f add(final Vector2f v, final float scale)
     {
         this.x += v.x * scale;
         this.y += v.y * scale;
         return this;
     }
 
-    public Vector2f sub(Vector2f v)
+    public Vector2f sub(final Vector2f v)
     {
         this.x -= v.x;
         this.y -= v.y;
         return this;
     }
 
-    public Vector2f sub(Vector2f v, float scale)
+    public Vector2f sub(final Vector2f v, final float scale)
     {
         this.x -= v.x * scale;
         this.y -= v.y * scale;
         return this;
     }
 
-    public Vector2f mul(Vector2f v)
+    public Vector2f mul(final Vector2f v)
     {
         this.x *= v.x;
         this.y *= v.y;
         return this;
     }
 
-    public Vector2f mul(Vector2f v, float scale)
+    public Vector2f mul(final Vector2f v, final float scale)
     {
         this.x *= v.x * scale;
         this.y *= v.y * scale;
         return this;
     }
 
-    public Vector2f lerp(Vector2f v, float f)
+    public Vector2f lerp(final Vector2f v, final float f)
     {
         this.x += (v.x - this.x) * f;
         this.y += (v.y - this.y) * f;
         return this;
     }
 
-    public float dot(Vector2f v)
+    public float dot(final Vector2f v)
     {
         return this.x * v.x + this.y * v.y;
     }
@@ -122,7 +141,7 @@ public class Vector2f
         return (float)Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
-    public void intoArray(float[] arr, int offset)
+    public void intoArray(final float[] arr, final int offset)
     {
         arr[offset] = this.x;
         arr[offset + 1] = this.y;

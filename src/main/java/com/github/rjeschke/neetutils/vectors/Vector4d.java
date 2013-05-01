@@ -29,7 +29,7 @@ public class Vector4d
         // 0
     }
 
-    public Vector4d(double x, double y, double z, double w)
+    public Vector4d(final double x, final double y, final double z, final double w)
     {
         this.x = x;
         this.y = y;
@@ -37,7 +37,7 @@ public class Vector4d
         this.w = w;
     }
 
-    public Vector4d(double xyzw)
+    public Vector4d(final double xyzw)
     {
         this.x = xyzw;
         this.y = xyzw;
@@ -45,7 +45,7 @@ public class Vector4d
         this.w = xyzw;
     }
 
-    public Vector4d(Vector2d v, double z, double w)
+    public Vector4d(final Vector2d v, final double z, final double w)
     {
         this.x = v.x;
         this.y = v.y;
@@ -53,7 +53,7 @@ public class Vector4d
         this.w = w;
     }
 
-    public Vector4d(Vector3d v, double w)
+    public Vector4d(final Vector3d v, final double w)
     {
         this.x = v.x;
         this.y = v.y;
@@ -61,7 +61,7 @@ public class Vector4d
         this.w = w;
     }
 
-    public Vector4d(NColor color)
+    public Vector4d(final NColor color)
     {
         this.x = color.r;
         this.y = color.g;
@@ -69,7 +69,30 @@ public class Vector4d
         this.w = color.a;
     }
 
-    public Vector4d scale(double f)
+    public static Vector4d of(final double x, final double y, final double z, final double w)
+    {
+        return new Vector4d(x, y, z, w);
+    }
+
+    public Vector4d set(final double x, final double y, final double z, final double w)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+        return this;
+    }
+
+    public Vector4d set(final Vector4d v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
+        this.w = v.w;
+        return this;
+    }
+
+    public Vector4d scale(final double f)
     {
         this.w *= f;
         this.x *= f;
@@ -78,7 +101,7 @@ public class Vector4d
         return this;
     }
 
-    public Vector4d add(Vector4d v)
+    public Vector4d add(final Vector4d v)
     {
         this.w += v.w;
         this.x += v.x;
@@ -87,7 +110,7 @@ public class Vector4d
         return this;
     }
 
-    public Vector4d add(Vector4d v, double scale)
+    public Vector4d add(final Vector4d v, final double scale)
     {
         this.w += v.w * scale;
         this.x += v.x * scale;
@@ -96,7 +119,7 @@ public class Vector4d
         return this;
     }
 
-    public Vector4d sub(Vector4d v)
+    public Vector4d sub(final Vector4d v)
     {
         this.w -= v.w;
         this.x -= v.x;
@@ -105,7 +128,7 @@ public class Vector4d
         return this;
     }
 
-    public Vector4d sub(Vector4d v, double scale)
+    public Vector4d sub(final Vector4d v, final double scale)
     {
         this.w -= v.w * scale;
         this.x -= v.x * scale;
@@ -114,7 +137,7 @@ public class Vector4d
         return this;
     }
 
-    public Vector4d mul(Vector4d v)
+    public Vector4d mul(final Vector4d v)
     {
         this.w *= v.w;
         this.x *= v.x;
@@ -123,7 +146,7 @@ public class Vector4d
         return this;
     }
 
-    public Vector4d mul(Vector4d v, double scale)
+    public Vector4d mul(final Vector4d v, final double scale)
     {
         this.w *= v.w * scale;
         this.x *= v.x * scale;
@@ -132,7 +155,7 @@ public class Vector4d
         return this;
     }
 
-    public Vector4d lerp(Vector4d v, double f)
+    public Vector4d lerp(final Vector4d v, final double f)
     {
         this.x += (v.x - this.x) * f;
         this.y += (v.y - this.y) * f;
@@ -141,7 +164,7 @@ public class Vector4d
         return this;
     }
 
-    public double dot(Vector4d v)
+    public double dot(final Vector4d v)
     {
         return this.w * v.w + this.x * v.x + this.y * v.y + this.z * v.z;
     }
@@ -174,7 +197,7 @@ public class Vector4d
         return Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
-    public void intoArray(double[] arr, int offset)
+    public void intoArray(final double[] arr, final int offset)
     {
         arr[offset] = this.x;
         arr[offset + 1] = this.y;
@@ -182,7 +205,7 @@ public class Vector4d
         arr[offset + 3] = this.w;
     }
 
-    public Vector3d toVector3d(Vector3d v)
+    public Vector3d toVector3d(final Vector3d v)
     {
         v.x = this.x;
         v.y = this.y;
@@ -195,7 +218,7 @@ public class Vector4d
         return toVector3d(new Vector3d());
     }
 
-    public Vector3d toVector3dN(Vector3d v)
+    public Vector3d toVector3dN(final Vector3d v)
     {
         v.x = this.x / this.w;
         v.y = this.y / this.w;

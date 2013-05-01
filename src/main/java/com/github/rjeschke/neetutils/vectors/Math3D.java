@@ -136,12 +136,25 @@ public final class Math3D
         return i.clone().sub(n, 2.0f * n.dot(i));
     }
 
+    public final static Vector3d reflect(final Vector3d i, final Vector3d n)
+    {
+        return i.clone().sub(n, 2.0 * n.dot(i));
+    }
+
     public final static Vector3f refract(final Vector3f i, final Vector3f n, final float eta)
     {
         final float d = n.dot(i);
         final float k = 1.0f - eta * eta * (1.0f - d * d);
         if (k < 0) return new Vector3f(0, 0, 0);
         return i.clone().scale(eta).sub(n, eta * d + Math3D.sqrt(k));
+    }
+
+    public final static Vector3d refract(final Vector3d i, final Vector3d n, final double eta)
+    {
+        final double d = n.dot(i);
+        final double k = 1.0 - eta * eta * (1.0 - d * d);
+        if (k < 0) return new Vector3d(0, 0, 0);
+        return i.clone().scale(eta).sub(n, eta * d + Math.sqrt(k));
     }
 
     public final static Matrix4x4f matrixLookAtLH(final Vector3f pos, final Vector3f lookat, final Vector3f up)
