@@ -169,6 +169,22 @@ public class Vector3d
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
+    public Vector3d min(final Vector3d other)
+    {
+        this.x = Math.min(this.x, other.x);
+        this.y = Math.min(this.y, other.y);
+        this.z = Math.min(this.z, other.z);
+        return this;
+    }
+    
+    public Vector3d max(final Vector3d other)
+    {
+        this.x = Math.max(this.x, other.x);
+        this.y = Math.max(this.y, other.y);
+        this.z = Math.max(this.z, other.z);
+        return this;
+    }
+    
     public void intoArray(final double[] arr, final int offset)
     {
         arr[offset] = this.x;
