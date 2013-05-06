@@ -29,9 +29,9 @@ import java.util.Vector;
 
 import com.github.rjeschke.neetutils.fn.FnCombine;
 import com.github.rjeschke.neetutils.fn.FnEquals;
-import com.github.rjeschke.neetutils.fn.FnPredicate;
-import com.github.rjeschke.neetutils.fn.FnMapping;
 import com.github.rjeschke.neetutils.fn.FnFoldStep;
+import com.github.rjeschke.neetutils.fn.FnMapping;
+import com.github.rjeschke.neetutils.fn.FnPredicate;
 import com.github.rjeschke.neetutils.fn.Fns;
 
 /**
@@ -188,7 +188,7 @@ public final class Colls
      * @see ArrayList
      * @see SortedList
      */
-    public final static <A> List<A> trimToSize(List<A> list)
+    public final static <A> List<A> trimToSize(final List<A> list)
     {
         if (list instanceof Vector)
             ((Vector<?>)list).trimToSize();
@@ -525,8 +525,7 @@ public final class Colls
         return l;
     }
 
-    public final static <A, B> List<B> filterMap(final Iterable<A> coll, final FnPredicate<A> fnPredicate,
-            final FnMapping<A, B> fnMap)
+    public final static <A, B> List<B> filterMap(final Iterable<A> coll, final FnPredicate<A> fnPredicate, final FnMapping<A, B> fnMap)
     {
         final List<B> l = list();
         for (final A a : coll)
@@ -536,8 +535,7 @@ public final class Colls
         return l;
     }
 
-    public final static <A, B> List<B> mapFilter(final Iterable<A> coll, final FnMapping<A, B> fnMap,
-            final FnPredicate<B> fnPredicate)
+    public final static <A, B> List<B> mapFilter(final Iterable<A> coll, final FnMapping<A, B> fnMap, final FnPredicate<B> fnPredicate)
     {
         final List<B> l = list();
         for (final A a : coll)
@@ -548,8 +546,7 @@ public final class Colls
         return l;
     }
 
-    public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMapping<A, B> fnMap,
-            final FnFoldStep<B, C> fnReduce, final C initial)
+    public final static <A, B, C> C mapReduce(final Iterable<A> coll, final FnMapping<A, B> fnMap, final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
         for (final A a : coll)
@@ -557,8 +554,8 @@ public final class Colls
         return c;
     }
 
-    public final static <A, B, C> C filterMapReduce(final Iterable<A> coll, final FnPredicate<A> fnPredicate,
-            final FnMapping<A, B> fnMap, final FnFoldStep<B, C> fnReduce, final C initial)
+    public final static <A, B, C> C filterMapReduce(final Iterable<A> coll, final FnPredicate<A> fnPredicate, final FnMapping<A, B> fnMap,
+            final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
         for (final A a : coll)
@@ -568,8 +565,8 @@ public final class Colls
         return c;
     }
 
-    public final static <A, B, C> C mapFilterReduce(final Iterable<A> coll, final FnMapping<A, B> fnMap,
-            final FnPredicate<B> fnPredicate, final FnFoldStep<B, C> fnReduce, final C initial)
+    public final static <A, B, C> C mapFilterReduce(final Iterable<A> coll, final FnMapping<A, B> fnMap, final FnPredicate<B> fnPredicate,
+            final FnFoldStep<B, C> fnReduce, final C initial)
     {
         C c = initial;
         for (final A a : coll)
@@ -601,8 +598,7 @@ public final class Colls
         return b;
     }
 
-    public final static <A, B> B filterReduce(final Iterable<A> coll, final FnPredicate<A> fnPredicate,
-            final FnFoldStep<A, B> fnReduce, final B initial)
+    public final static <A, B> B filterReduce(final Iterable<A> coll, final FnPredicate<A> fnPredicate, final FnFoldStep<A, B> fnReduce, final B initial)
     {
         B b = initial;
         for (final A a : coll)
@@ -714,7 +710,7 @@ public final class Colls
         return Tuple.of(listA, listB);
     }
 
-    public final static <A> List<List<A>> partition(final Iterable<A> coll, int size)
+    public final static <A> List<List<A>> partition(final Iterable<A> coll, final int size)
     {
         final List<List<A>> ret = list();
         if (size < 1) throw new IllegalArgumentException("Partition size must be > 0");
@@ -781,7 +777,7 @@ public final class Colls
      *            The collection
      * @return The array
      */
-    public final static byte[] asByteArray(Collection<? extends Number> coll)
+    public final static byte[] asByteArray(final Collection<? extends Number> coll)
     {
         final byte[] ret = new byte[coll.size()];
         int i = 0;
@@ -797,7 +793,7 @@ public final class Colls
      *            The collection
      * @return The array
      */
-    public final static short[] asShortArray(Collection<? extends Number> coll)
+    public final static short[] asShortArray(final Collection<? extends Number> coll)
     {
         final short[] ret = new short[coll.size()];
         int i = 0;
@@ -813,7 +809,7 @@ public final class Colls
      *            The collection
      * @return The array
      */
-    public final static int[] asIntArray(Collection<? extends Number> coll)
+    public final static int[] asIntArray(final Collection<? extends Number> coll)
     {
         final int[] ret = new int[coll.size()];
         int i = 0;
@@ -829,7 +825,7 @@ public final class Colls
      *            The collection
      * @return The array
      */
-    public final static long[] asLongArray(Collection<? extends Number> coll)
+    public final static long[] asLongArray(final Collection<? extends Number> coll)
     {
         final long[] ret = new long[coll.size()];
         int i = 0;
@@ -845,7 +841,7 @@ public final class Colls
      *            The collection
      * @return The array
      */
-    public final static float[] asFloatArray(Collection<? extends Number> coll)
+    public final static float[] asFloatArray(final Collection<? extends Number> coll)
     {
         final float[] ret = new float[coll.size()];
         int i = 0;
@@ -861,12 +857,53 @@ public final class Colls
      *            The collection
      * @return The array
      */
-    public final static double[] asDoubleArray(Collection<? extends Number> coll)
+    public final static double[] asDoubleArray(final Collection<? extends Number> coll)
     {
         final double[] ret = new double[coll.size()];
         int i = 0;
         for (final Number n : coll)
             ret[i++] = n.doubleValue();
         return ret;
+    }
+
+    @SafeVarargs
+    public static <T> T[] objArray(final T... ts)
+    {
+        return ts;
+    }
+
+    public static byte[] array(final byte... bytes)
+    {
+        return bytes;
+    }
+
+    public static short[] array(final short... shorts)
+    {
+        return shorts;
+    }
+
+    public static char[] array(final char... chars)
+    {
+        return chars;
+    }
+
+    public static int[] array(final int... ints)
+    {
+        return ints;
+    }
+
+    public static long[] array(final long... longs)
+    {
+        return longs;
+    }
+
+    public static float[] array(final float... floats)
+    {
+        return floats;
+    }
+
+    public static double[] array(final double... doubles)
+    {
+        return doubles;
     }
 }
