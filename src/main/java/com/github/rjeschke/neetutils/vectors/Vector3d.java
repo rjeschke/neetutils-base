@@ -61,6 +61,24 @@ public class Vector3d
         return new Vector3d(x, y, z);
     }
 
+    public double get(final int index)
+    {
+        if (index == 0) return this.x;
+        if (index == 1) return this.y;
+        return this.z;
+    }
+
+    public Vector3d set(final int index, final double value)
+    {
+        if (index == 0)
+            this.x = value;
+        else if (index == 1)
+            this.y = value;
+        else
+            this.z = value;
+        return this;
+    }
+
     public Vector3d scale(final double f)
     {
         this.x *= f;
@@ -176,7 +194,7 @@ public class Vector3d
         this.z = Math.min(this.z, other.z);
         return this;
     }
-    
+
     public Vector3d max(final Vector3d other)
     {
         this.x = Math.max(this.x, other.x);
@@ -184,7 +202,7 @@ public class Vector3d
         this.z = Math.max(this.z, other.z);
         return this;
     }
-    
+
     public void intoArray(final double[] arr, final int offset)
     {
         arr[offset] = this.x;
