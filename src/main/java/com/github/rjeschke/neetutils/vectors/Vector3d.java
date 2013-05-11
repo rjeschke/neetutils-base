@@ -247,4 +247,12 @@ public class Vector3d
         this.z = v.z;
         return this;
     }
+
+    public Vector3d div(final Vector3d v)
+    {
+        this.x /= v.x;
+        this.y /= v.y;
+        this.z /= v.z;
+        return this;
+    }
 }

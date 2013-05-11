@@ -7,13 +7,12 @@ import java.awt.Image;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import com.github.rjeschke.neetutils.graphics.WrappedImage;
-
 public class ImageFrame implements WindowListener
 {
     private final Frame frame;
-    Image         image  = null;
-    Canvas        canvas = null;
+    Image               image    = null;
+    Canvas              canvas   = null;
+    volatile boolean    isClosed = false;
 
     public ImageFrame(final String title, final int width, final int height)
     {
@@ -41,6 +40,11 @@ public class ImageFrame implements WindowListener
         return this;
     }
 
+    public boolean isClosed()
+    {
+        return this.isClosed;
+    }
+
     public ImageFrame setImage(final Image image)
     {
         this.image = image;
@@ -64,6 +68,7 @@ public class ImageFrame implements WindowListener
     @Override
     public void windowClosing(final WindowEvent e)
     {
+        this.isClosed = true;
         this.frame.dispose();
     }
 
