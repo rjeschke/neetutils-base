@@ -100,8 +100,7 @@ public class IntList2
      */
     public void set(final int index, final int value)
     {
-        if (index < 0 || index >= this.size)
-            throw new ArrayIndexOutOfBoundsException("Got " + index + ", range is [0, " + this.size + "[");
+        if (index < 0 || index >= this.size) throw new ArrayIndexOutOfBoundsException("Got " + index + ", range is [0, " + this.size + "[");
         this.blkmap[index >>> this.shift].d[index & this.blkMask] = value;
     }
 
@@ -118,8 +117,7 @@ public class IntList2
      */
     public int getAndSet(final int index, final int value)
     {
-        if (index < 0 || index >= this.size)
-            throw new ArrayIndexOutOfBoundsException("Got " + index + ", range is [0, " + this.size + "[");
+        if (index < 0 || index >= this.size) throw new ArrayIndexOutOfBoundsException("Got " + index + ", range is [0, " + this.size + "[");
         final int ret = this.blkmap[index >>> this.shift].d[index & this.blkMask];
         this.blkmap[index >>> this.shift].d[index & this.blkMask] = value;
         return ret;
@@ -136,8 +134,7 @@ public class IntList2
      */
     public int get(final int index)
     {
-        if (index < 0 || index >= this.size)
-            throw new ArrayIndexOutOfBoundsException("Got " + index + ", range is [0, " + this.size + "[");
+        if (index < 0 || index >= this.size) throw new ArrayIndexOutOfBoundsException("Got " + index + ", range is [0, " + this.size + "[");
         return this.blkmap[index >>> this.shift].d[index & this.blkMask];
     }
 

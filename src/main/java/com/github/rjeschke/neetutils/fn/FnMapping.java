@@ -26,7 +26,7 @@ public abstract class FnMapping<A, B>
         return new FnMapping<A, C>()
         {
             @Override
-            public C applyMapping(A value)
+            public C applyMapping(final A value)
             {
                 return mapping.applyMapping(me.applyMapping(value));
             }

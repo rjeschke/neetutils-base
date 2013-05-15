@@ -25,9 +25,9 @@ import java.util.ArrayList;
  */
 public class ElapsedTime
 {
-    private long            min  = Long.MAX_VALUE;
-    private long            max  = Long.MIN_VALUE;
-    private ArrayList<Long> runs = new ArrayList<>();
+    private long                  min  = Long.MAX_VALUE;
+    private long                  max  = Long.MIN_VALUE;
+    private final ArrayList<Long> runs = new ArrayList<>();
 
     /**
      * Constructor.
@@ -102,10 +102,9 @@ public class ElapsedTime
     public String toString()
     {
         long sum = 0;
-        for (long l : this.runs)
+        for (final long l : this.runs)
             sum += l;
 
-        return String.format("Min: %g, max: %g, avg: %g, tot: %g", this.min * 1e-9, this.max * 1e-9,
-                sum * 1e-9 / this.runs.size(), sum * 1e-9);
+        return String.format("Min: %g, max: %g, avg: %g, tot: %g", this.min * 1e-9, this.max * 1e-9, sum * 1e-9 / this.runs.size(), sum * 1e-9);
     }
 }

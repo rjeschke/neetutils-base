@@ -100,7 +100,7 @@ public class ReferenceList<T>
      * @param node
      *            The Node to remove
      */
-    public void remove(Node<T> node)
+    public void remove(final Node<T> node)
     {
         if (!node.inside) return;
 

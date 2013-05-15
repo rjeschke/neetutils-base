@@ -37,6 +37,8 @@ public final class RNGFactory
         {
         case LCG:
             return new RndLCG(seed);
+        case LCG32:
+            return new RndLCG32(seed);
         case GFSR:
             return new RndGFSR(seed);
         case CMWC:

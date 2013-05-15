@@ -13,7 +13,7 @@ public class FilterKernel
     final int        offsy;
     final boolean    isSingle;
 
-    public FilterKernel(float[] kernel, int width, int height, int offsx, int offsy)
+    public FilterKernel(final float[] kernel, final int width, final int height, final int offsx, final int offsy)
     {
         this.xf = null;
         this.yf = null;
@@ -25,7 +25,7 @@ public class FilterKernel
         this.isSingle = true;
     }
 
-    public FilterKernel(float[] kernelx, float[] kernely, int width, int height, int offsx, int offsy)
+    public FilterKernel(final float[] kernelx, final float[] kernely, final int width, final int height, final int offsx, final int offsy)
     {
         this.xf = Arrays.copyOf(kernelx, width);
         this.yf = Arrays.copyOf(kernely, height);

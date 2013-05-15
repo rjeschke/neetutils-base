@@ -88,8 +88,7 @@ public final class Iterables
         return asMap(iterable, new HashMap<A, B>());
     }
 
-    public final static <A, B> Map<A, B> asMap(final Iterable<? extends Tuple<? extends A, ? extends B>> iterable,
-            final Map<A, B> map)
+    public final static <A, B> Map<A, B> asMap(final Iterable<? extends Tuple<? extends A, ? extends B>> iterable, final Map<A, B> map)
     {
         for (final Tuple<? extends A, ? extends B> t : iterable)
         {
@@ -98,14 +97,13 @@ public final class Iterables
         return map;
     }
 
-    public final static <A, B> Map<? super A, ? super B> asMap(final Iterable<? extends A> iterableA,
-            final Iterable<? extends B> iterableB)
+    public final static <A, B> Map<? super A, ? super B> asMap(final Iterable<? extends A> iterableA, final Iterable<? extends B> iterableB)
     {
         return asMap(iterableA, iterableB, new HashMap<A, B>());
     }
 
-    public final static <A, B> Map<? super A, ? super B> asMap(final Iterable<? extends A> iterableA,
-            final Iterable<? extends B> iterableB, final Map<? super A, ? super B> map)
+    public final static <A, B> Map<? super A, ? super B> asMap(final Iterable<? extends A> iterableA, final Iterable<? extends B> iterableB,
+            final Map<? super A, ? super B> map)
     {
         final Iterator<? extends A> ai = iterableA.iterator();
         final Iterator<? extends B> bi = iterableB.iterator();
@@ -182,8 +180,7 @@ public final class Iterables
         return b;
     }
 
-    public final static <A, B> XIterable<B> reductions(final Iterable<A> iterable, final FnFoldStep<? super A, B> foldStep,
-            final B initialValue)
+    public final static <A, B> XIterable<B> reductions(final Iterable<A> iterable, final FnFoldStep<? super A, B> foldStep, final B initialValue)
     {
         return new XIterableReductions<>(iterable, foldStep, initialValue);
     }

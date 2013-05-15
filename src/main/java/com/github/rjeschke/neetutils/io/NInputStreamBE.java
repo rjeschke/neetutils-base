@@ -21,7 +21,7 @@ import java.nio.ByteOrder;
 
 public class NInputStreamBE extends NInputStream
 {
-    public NInputStreamBE(InputStream in)
+    public NInputStreamBE(final InputStream in)
     {
         super(in);
     }
@@ -111,19 +111,19 @@ public class NInputStreamBE extends NInputStream
     }
 
     @Override
-    public String readString(int length, int padding, String charsetName) throws IOException
+    public String readString(final int length, final int padding, final String charsetName) throws IOException
     {
         return BEIO.readString(this.in, length, padding, charsetName);
     }
 
     @Override
-    public String readString(int length, int padding) throws IOException
+    public String readString(final int length, final int padding) throws IOException
     {
         return BEIO.readString(this.in, length, padding);
     }
 
     @Override
-    public String readString(int length) throws IOException
+    public String readString(final int length) throws IOException
     {
         return BEIO.readString(this.in, length, 0);
     }

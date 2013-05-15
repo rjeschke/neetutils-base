@@ -8,7 +8,7 @@ class NImageFilter implements Worker<NImagePBlock>
     final FilterKernel filter;
     final int          mode;
 
-    NImageFilter(NImage image, FilterKernel filter, int mode)
+    NImageFilter(final NImage image, final FilterKernel filter, final int mode)
     {
         this.image = image;
         this.filter = filter;
@@ -16,7 +16,7 @@ class NImageFilter implements Worker<NImagePBlock>
     }
 
     @Override
-    public void run(NImagePBlock p)
+    public void run(final NImagePBlock p)
     {
         if (this.mode == 0)
         {
@@ -31,8 +31,7 @@ class NImageFilter implements Worker<NImagePBlock>
                         for (int fx = 0; fx < this.filter.width; fx++)
                         {
                             final float f = this.filter.xyf[fx + fy * this.filter.width];
-                            final NColor c = this.image.getPixel(p.x + x + fx + this.filter.offsx, p.y + y + fy
-                                    + this.filter.offsy);
+                            final NColor c = this.image.getPixel(p.x + x + fx + this.filter.offsx, p.y + y + fy + this.filter.offsy);
 
                             a += c.a * f;
                             r += c.r * f;

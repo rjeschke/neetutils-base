@@ -359,7 +359,7 @@ public class ByteList implements RandomAccess, Cloneable, Serializable
      * @throws IOException
      *             on IO error.
      */
-    private void writeObject(ObjectOutputStream out) throws IOException
+    private void writeObject(final ObjectOutputStream out) throws IOException
     {
         out.defaultWriteObject();
         for (int i = 0; i < this.size; i++)
@@ -378,7 +378,7 @@ public class ByteList implements RandomAccess, Cloneable, Serializable
      * @throws ClassNotFoundException
      *             on class not found.
      */
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
+    private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException
     {
         in.defaultReadObject();
         this.data = new byte[this.maxSize = this.size];

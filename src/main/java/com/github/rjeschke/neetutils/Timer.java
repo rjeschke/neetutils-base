@@ -28,7 +28,7 @@ public class Timer implements Runnable
     }
 
     // TODO here's stuff missing
-    public static Timer start(double freq, Timer.Callback callback)
+    public static Timer start(final double freq, final Timer.Callback callback)
     {
         final Timer t = new Timer(freq, callback);
         final Thread th = new Thread(t);
@@ -73,7 +73,7 @@ public class Timer implements Runnable
                 t0 += this.delay;
             }
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException e)
         {
             // exit
         }

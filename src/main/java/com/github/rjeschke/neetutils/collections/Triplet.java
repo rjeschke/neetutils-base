@@ -23,14 +23,14 @@ public class Triplet<A, B, C>
     public final B b;
     public final C c;
 
-    public Triplet(A a, B b, C c)
+    public Triplet(final A a, final B b, final C c)
     {
         this.a = a;
         this.b = b;
         this.c = c;
     }
 
-    public final static <A, B, C> Triplet<A, B, C> of(A a, B b, C c)
+    public final static <A, B, C> Triplet<A, B, C> of(final A a, final B b, final C c)
     {
         return new Triplet<>(a, b, c);
     }
@@ -38,12 +38,11 @@ public class Triplet<A, B, C>
     @Override
     public int hashCode()
     {
-        return ((this.a == null ? 0 : this.a.hashCode()) * 31 + (this.b == null ? 0 : this.b.hashCode())) * 31
-                + (this.c == null ? 0 : this.c.hashCode());
+        return ((this.a == null ? 0 : this.a.hashCode()) * 31 + (this.b == null ? 0 : this.b.hashCode())) * 31 + (this.c == null ? 0 : this.c.hashCode());
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (obj == this) return true;
 

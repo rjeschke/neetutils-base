@@ -15,7 +15,10 @@
  */
 package com.github.rjeschke.neetutils.vectors;
 
+import java.nio.FloatBuffer;
+
 import com.github.rjeschke.neetutils.graphics.NColor;
+import com.github.rjeschke.neetutils.math.NMath;
 
 public class Vector4f
 {
@@ -74,11 +77,39 @@ public class Vector4f
         return new Vector4f(x, y, z, w);
     }
 
+    public static Vector4f of(final Vector2f v, final float z, final float w)
+    {
+        return new Vector4f(v, z, w);
+    }
+
+    public static Vector4f of(final Vector3f v, final float w)
+    {
+        return new Vector4f(v, w);
+    }
+
     public Vector4f set(final float x, final float y, final float z, final float w)
     {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.w = w;
+        return this;
+    }
+
+    public Vector4f set(final Vector2f v, final float z, final float w)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = z;
+        this.w = w;
+        return this;
+    }
+
+    public Vector4f set(final Vector3f v, final float w)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
         this.w = w;
         return this;
     }
@@ -90,6 +121,35 @@ public class Vector4f
         this.z = v.z;
         this.w = v.w;
         return this;
+    }
+
+    public Vector4f set(final int index, final float value)
+    {
+        if (index == 0)
+        {
+            this.x = value;
+        }
+        else if (index == 1)
+        {
+            this.y = value;
+        }
+        else if (index == 2)
+        {
+            this.z = value;
+        }
+        else
+        {
+            this.w = value;
+        }
+        return this;
+    }
+
+    public float get(final int index)
+    {
+        if (index == 0) return this.x;
+        if (index == 1) return this.y;
+        if (index == 2) return this.z;
+        return this.w;
     }
 
     public Vector4f scale(final float f)
@@ -155,6 +215,24 @@ public class Vector4f
         return this;
     }
 
+    public Vector4f div(final Vector4f v)
+    {
+        this.w /= v.w;
+        this.x /= v.x;
+        this.y /= v.y;
+        this.z /= v.z;
+        return this;
+    }
+
+    public Vector4f div(final Vector4f v, final float scale)
+    {
+        this.w /= v.w * scale;
+        this.x /= v.x * scale;
+        this.y /= v.y * scale;
+        this.z /= v.z * scale;
+        return this;
+    }
+
     public Vector4f lerp(final Vector4f v, final float f)
     {
         this.x += (v.x - this.x) * f;
@@ -169,12 +247,39 @@ public class Vector4f
         return this.w * v.w + this.x * v.x + this.y * v.y + this.z * v.z;
     }
 
+    public Vector4f min(final Vector4f other)
+    {
+        this.x = Math.min(this.x, other.x);
+        this.y = Math.min(this.y, other.y);
+        this.z = Math.min(this.z, other.z);
+        this.w = Math.min(this.w, other.w);
+        return this;
+    }
+
+    public Vector4f max(final Vector4f other)
+    {
+        this.x = Math.max(this.x, other.x);
+        this.y = Math.max(this.y, other.y);
+        this.z = Math.max(this.z, other.z);
+        this.w = Math.max(this.w, other.w);
+        return this;
+    }
+
+    public Vector4f clamp(final Vector4f min, final Vector4f max)
+    {
+        this.x = NMath.clamp(this.x, min.x, max.x);
+        this.y = NMath.clamp(this.y, min.y, max.y);
+        this.z = NMath.clamp(this.z, min.z, max.z);
+        this.w = NMath.clamp(this.w, min.w, max.w);
+        return this;
+    }
+
     public Vector4f normalize()
     {
         float len = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
         if (len != 0)
         {
-            len = 1.f / (float)Math.sqrt(len);
+            len = (float)(1.0 / Math.sqrt(len));
             this.w *= len;
             this.x *= len;
             this.y *= len;
@@ -197,7 +302,22 @@ public class Vector4f
         return (float)Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
-    public void intoArray(final float[] arr, final int offset)
+    public Vector2f swizzle(final int a, final int b)
+    {
+        return Vector2f.of(this.get(a), this.get(b));
+    }
+
+    public Vector3f swizzle(final int a, final int b, final int c)
+    {
+        return Vector3f.of(this.get(a), this.get(b), this.get(c));
+    }
+
+    public Vector4f swizzle(final int a, final int b, final int c, final int d)
+    {
+        return Vector4f.of(this.get(a), this.get(b), this.get(c), this.get(d));
+    }
+
+    public void into(final float[] arr, final int offset)
     {
         arr[offset] = this.x;
         arr[offset + 1] = this.y;
@@ -205,20 +325,25 @@ public class Vector4f
         arr[offset + 3] = this.w;
     }
 
-    public Vector3f toVector3f(final Vector3f v)
+    public void into(final FloatBuffer buffer, final int offset)
     {
-        v.x = this.x;
-        v.y = this.y;
-        v.z = this.z;
-        return v;
+        buffer.put(offset, this.x);
+        buffer.put(offset + 1, this.y);
+        buffer.put(offset + 2, this.z);
+        buffer.put(offset + 3, this.w);
     }
 
-    public Vector3f toVector3f()
+    public Vector2f asVector2()
     {
-        return toVector3f(new Vector3f());
+        return Vector2f.of(this.x, this.y);
     }
 
-    public Vector3f toVector3fN(final Vector3f v)
+    public Vector3f asVector3()
+    {
+        return Vector3f.of(this.x, this.y, this.z);
+    }
+
+    public Vector3f asVector3DivW(final Vector3f v)
     {
         v.x = this.x / this.w;
         v.y = this.y / this.w;
@@ -226,12 +351,12 @@ public class Vector4f
         return v;
     }
 
-    public Vector3f toVector3fN()
+    public Vector3f asVector3DivW()
     {
-        return toVector3fN(new Vector3f());
+        return this.asVector3DivW(new Vector3f());
     }
 
-    public NColor toNColor()
+    public NColor asNColor()
     {
         return new NColor(this.w, this.x, this.y, this.z);
     }

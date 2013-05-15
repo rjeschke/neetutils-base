@@ -147,7 +147,7 @@ public class WrappedImage
     {
         try (final InputStream in = WrappedImage.class.getResourceAsStream(resourcename))
         {
-            WrappedImage img = new WrappedImage(ImageIO.read(in), hasTransparency);
+            final WrappedImage img = new WrappedImage(ImageIO.read(in), hasTransparency);
             return img;
         }
     }

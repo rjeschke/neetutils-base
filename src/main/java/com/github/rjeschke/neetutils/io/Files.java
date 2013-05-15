@@ -59,14 +59,14 @@ public final class Files implements Runnable
      *            Path.
      * @return List of files.
      */
-    public final static List<File> listFiles(File parent)
+    public final static List<File> listFiles(final File parent)
     {
-        List<File> files = Colls.list();
+        final List<File> files = Colls.list();
         listFiles(parent, files);
         return files;
     }
 
-    private final static void listFiles(File parent, List<File> files)
+    private final static void listFiles(final File parent, final List<File> files)
     {
         if (parent.isFile())
             files.add(parent);
@@ -87,7 +87,7 @@ public final class Files implements Runnable
         return createUniqueTempFolder("neetutils", true);
     }
 
-    public final static File createUniqueTempFolder(String prefix, boolean autoCleanup)
+    public final static File createUniqueTempFolder(final String prefix, final boolean autoCleanup)
     {
         final String tmp = System.getProperty("java.io.tmpdir");
         final RNG rnd = RNGFactory.create(RNGType.LCG);
@@ -107,7 +107,7 @@ public final class Files implements Runnable
         throw new RuntimeException("Could not create unique temp folder, please clean up your /tmp.");
     }
 
-    public final static void recurseDeleteFolder(File path)
+    public final static void recurseDeleteFolder(final File path)
     {
         if (path.isDirectory())
         {
@@ -123,7 +123,7 @@ public final class Files implements Runnable
         else path.delete();
     }
 
-    public final static void copy(File input, File output) throws IOException
+    public final static void copy(final File input, final File output) throws IOException
     {
         try (final InputStream in = new FileInputStream(input))
         {
@@ -134,7 +134,7 @@ public final class Files implements Runnable
         }
     }
 
-    public final static void copy(InputStream in, File output) throws IOException
+    public final static void copy(final InputStream in, final File output) throws IOException
     {
         try (final OutputStream out = new FileOutputStream(output))
         {
@@ -142,7 +142,7 @@ public final class Files implements Runnable
         }
     }
 
-    public final static void copy(File input, OutputStream out) throws IOException
+    public final static void copy(final File input, final OutputStream out) throws IOException
     {
         try (final InputStream in = new FileInputStream(input))
         {
@@ -150,7 +150,7 @@ public final class Files implements Runnable
         }
     }
 
-    public final static void copy(InputStream input, OutputStream output) throws IOException
+    public final static void copy(final InputStream input, final OutputStream output) throws IOException
     {
         final byte[] buffer = new byte[65536];
 
@@ -162,12 +162,12 @@ public final class Files implements Runnable
         }
     }
 
-    public final static byte[] asBytes(String filename) throws IOException
+    public final static byte[] asBytes(final String filename) throws IOException
     {
         return asBytes(new File(filename));
     }
 
-    public final static byte[] asBytes(File file) throws IOException
+    public final static byte[] asBytes(final File file) throws IOException
     {
         try (final FileInputStream fis = new FileInputStream(file))
         {
@@ -179,13 +179,12 @@ public final class Files implements Runnable
                 if (r == -1) break;
                 p += r;
             }
-            if (p != buffer.length)
-                throw new IOException("Unexpected end of stream, expected " + buffer.length + ", got " + p + " bytes");
+            if (p != buffer.length) throw new IOException("Unexpected end of stream, expected " + buffer.length + ", got " + p + " bytes");
             return buffer;
         }
     }
 
-    public final static byte[] asBytes(InputStream in) throws IOException
+    public final static byte[] asBytes(final InputStream in) throws IOException
     {
         byte[] buffer = new byte[65536];
         try
@@ -206,37 +205,37 @@ public final class Files implements Runnable
         }
     }
 
-    public final static String asString(String filename, String charsetName) throws IOException
+    public final static String asString(final String filename, final String charsetName) throws IOException
     {
         return new String(asBytes(filename), charsetName);
     }
 
-    public final static String asString(File file, String charsetName) throws IOException
+    public final static String asString(final File file, final String charsetName) throws IOException
     {
         return new String(asBytes(file), charsetName);
     }
 
-    public final static String asString(InputStream in, String charsetName) throws IOException
+    public final static String asString(final InputStream in, final String charsetName) throws IOException
     {
         return new String(asBytes(in), charsetName);
     }
 
-    public final static void saveBytes(String filename, byte[] bytes) throws IOException
+    public final static void saveBytes(final String filename, final byte[] bytes) throws IOException
     {
         saveBytes(filename, bytes, 0, bytes.length);
     }
 
-    public final static void saveBytes(String filename, byte[] bytes, int offs, int len) throws IOException
+    public final static void saveBytes(final String filename, final byte[] bytes, final int offs, final int len) throws IOException
     {
         saveBytes(new File(filename), bytes, offs, len);
     }
 
-    public final static void saveBytes(File file, byte[] bytes) throws IOException
+    public final static void saveBytes(final File file, final byte[] bytes) throws IOException
     {
         saveBytes(file, bytes, 0, bytes.length);
     }
 
-    public final static void saveBytes(File file, byte[] bytes, int offs, int len) throws IOException
+    public final static void saveBytes(final File file, final byte[] bytes, final int offs, final int len) throws IOException
     {
         try (final FileOutputStream fos = new FileOutputStream(file))
         {
@@ -292,13 +291,13 @@ public final class Files implements Runnable
         return ret;
     }
 
-    private final static List<String> getFiles(final String path, String basePackage)
+    private final static List<String> getFiles(final String path, final String basePackage)
     {
         final ArrayList<String> classes = new ArrayList<>();
         final String basePath = "/" + basePackage.replace('.', '/') + "/";
         final File dir = new File(path).getAbsoluteFile();
         final File[] files = dir.listFiles();
-        for (File f : files)
+        for (final File f : files)
         {
             final String fn = f.getName();
             if (f.isDirectory())
@@ -313,7 +312,7 @@ public final class Files implements Runnable
         return classes;
     }
 
-    private final static List<String> getJarFiles(File file)
+    private final static List<String> getJarFiles(final File file)
     {
         final ArrayList<String> classes = new ArrayList<>();
         try
@@ -331,7 +330,7 @@ public final class Files implements Runnable
                 }
             }
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
             return null;
@@ -339,7 +338,7 @@ public final class Files implements Runnable
         return classes;
     }
 
-    private final static List<String> getJars(URL furl, String pkgname)
+    private final static List<String> getJars(final URL furl, final String pkgname)
     {
         final ArrayList<String> classes = new ArrayList<>();
         try
@@ -363,7 +362,7 @@ public final class Files implements Runnable
                 }
             }
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
             return null;
@@ -371,12 +370,12 @@ public final class Files implements Runnable
         return classes;
     }
 
-    public final static String home(String path)
+    public final static String home(final String path)
     {
         return new File(System.getProperty("user.home"), path).getAbsolutePath();
     }
 
-    public final static File home(File path)
+    public final static File home(final File path)
     {
         return new File(new File(System.getProperty("user.home")), path.toString());
     }

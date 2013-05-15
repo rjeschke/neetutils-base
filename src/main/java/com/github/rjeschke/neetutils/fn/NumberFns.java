@@ -29,7 +29,7 @@ public final class NumberFns
         return new FnCombine<Number, Number, Number>()
         {
             @Override
-            public Number applyCombine(Number a, Number b)
+            public Number applyCombine(final Number a, final Number b)
             {
                 return Numbers.add(a, b);
             }
@@ -41,7 +41,7 @@ public final class NumberFns
         return new FnFoldStep<Number, Number>()
         {
             @Override
-            public Number applyFoldStep(Number a, Number b)
+            public Number applyFoldStep(final Number a, final Number b)
             {
                 return Numbers.add(a, b);
             }
@@ -53,7 +53,7 @@ public final class NumberFns
         return new FnCombine<Number, Number, Number>()
         {
             @Override
-            public Number applyCombine(Number a, Number b)
+            public Number applyCombine(final Number a, final Number b)
             {
                 return Numbers.sub(a, b);
             }
@@ -65,7 +65,7 @@ public final class NumberFns
         return new FnFoldStep<Number, Number>()
         {
             @Override
-            public Number applyFoldStep(Number a, Number b)
+            public Number applyFoldStep(final Number a, final Number b)
             {
                 return Numbers.sub(a, b);
             }
@@ -77,7 +77,7 @@ public final class NumberFns
         return new FnCombine<Number, Number, Number>()
         {
             @Override
-            public Number applyCombine(Number a, Number b)
+            public Number applyCombine(final Number a, final Number b)
             {
                 return Numbers.mul(a, b);
             }
@@ -89,7 +89,7 @@ public final class NumberFns
         return new FnFoldStep<Number, Number>()
         {
             @Override
-            public Number applyFoldStep(Number a, Number b)
+            public Number applyFoldStep(final Number a, final Number b)
             {
                 return Numbers.mul(a, b);
             }
@@ -101,7 +101,7 @@ public final class NumberFns
         return new FnCombine<Number, Number, Number>()
         {
             @Override
-            public Number applyCombine(Number a, Number b)
+            public Number applyCombine(final Number a, final Number b)
             {
                 return Numbers.div(a, b);
             }
@@ -113,7 +113,7 @@ public final class NumberFns
         return new FnFoldStep<Number, Number>()
         {
             @Override
-            public Number applyFoldStep(Number a, Number b)
+            public Number applyFoldStep(final Number a, final Number b)
             {
                 return Numbers.div(a, b);
             }

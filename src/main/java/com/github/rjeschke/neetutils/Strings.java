@@ -74,9 +74,9 @@ public class Strings
         return sb.toString();
     }
 
-    public final static List<String> split(final String str, char ch)
+    public final static List<String> split(final String str, final char ch)
     {
-        List<String> ret = Colls.list();
+        final List<String> ret = Colls.list();
 
         if (str != null)
         {

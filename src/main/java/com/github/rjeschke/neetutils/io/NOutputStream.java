@@ -22,12 +22,12 @@ import java.nio.ByteOrder;
 
 public abstract class NOutputStream extends FilterOutputStream
 {
-    protected NOutputStream(OutputStream out)
+    protected NOutputStream(final OutputStream out)
     {
         super(out);
     }
 
-    public static NOutputStream fromStream(OutputStream in, ByteOrder byteOrder)
+    public static NOutputStream fromStream(final OutputStream in, final ByteOrder byteOrder)
     {
         if (byteOrder == ByteOrder.BIG_ENDIAN) return new NOutputStreamBE(in);
         return new NOutputStreamLE(in);
@@ -47,8 +47,7 @@ public abstract class NOutputStream extends FilterOutputStream
 
     public abstract void writeDouble(final double value) throws IOException;
 
-    public abstract void writeString(final String value, final int length, final int padding, final String charsetName)
-            throws IOException;
+    public abstract void writeString(final String value, final int length, final int padding, final String charsetName) throws IOException;
 
     public abstract void writeString(final String value, final int length, final int padding) throws IOException;
 

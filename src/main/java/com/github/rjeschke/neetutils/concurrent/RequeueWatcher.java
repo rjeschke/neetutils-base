@@ -25,18 +25,18 @@ class RequeueWatcher<A, B> implements Runnable
     private final ConcurrentLinkedQueue<A>     jobs;
     private final ConcurrentLinkedQueue<B>     workers;
     private Thread                             thread;
-    private int                                delayMs = 100;
+    private final int                          delayMs = 100;
     private volatile boolean                   running = true;
 
-    private RequeueWatcher(RequeueWatcherCallback<A, B> callback, ConcurrentLinkedQueue<A> jobs, ConcurrentLinkedQueue<B> workers)
+    private RequeueWatcher(final RequeueWatcherCallback<A, B> callback, final ConcurrentLinkedQueue<A> jobs, final ConcurrentLinkedQueue<B> workers)
     {
         this.callback = callback;
         this.jobs = jobs;
         this.workers = workers;
     }
 
-    public static <A, B> RequeueWatcher<A, B> start(RequeueWatcherCallback<A, B> callback, ConcurrentLinkedQueue<A> jobs,
-            ConcurrentLinkedQueue<B> workers)
+    public static <A, B> RequeueWatcher<A, B> start(final RequeueWatcherCallback<A, B> callback, final ConcurrentLinkedQueue<A> jobs,
+            final ConcurrentLinkedQueue<B> workers)
     {
         final RequeueWatcher<A, B> watcher = new RequeueWatcher<>(callback, jobs, workers);
         watcher.thread = new Thread(watcher);
@@ -53,7 +53,7 @@ class RequeueWatcher<A, B> implements Runnable
         {
             this.thread.join();
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException e)
         {
             // ignore
         }

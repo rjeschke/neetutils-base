@@ -78,14 +78,13 @@ public final class LEIO
         write64(out, Double.doubleToLongBits(value));
     }
 
-    public final static void writeString(final OutputStream out, final String value, final int length, final int padding,
-            final String charsetName) throws IOException
+    public final static void writeString(final OutputStream out, final String value, final int length, final int padding, final String charsetName)
+            throws IOException
     {
         BEIO.writeString(out, value, length, padding, charsetName);
     }
 
-    public final static void writeString(final OutputStream out, final String value, final int length, final int padding)
-            throws IOException
+    public final static void writeString(final OutputStream out, final String value, final int length, final int padding) throws IOException
     {
         BEIO.writeString(out, value, length, padding, "UTF-8");
     }
@@ -134,7 +133,7 @@ public final class LEIO
 
     public final static int readI24(final InputStream in) throws IOException
     {
-        int v = readU24(in);
+        final int v = readU24(in);
         if (v >= 0x800000) return v - 0x1000000;
         return v;
     }
@@ -199,8 +198,7 @@ public final class LEIO
         return BEIO.readStringN(in, readI32(in));
     }
 
-    public final static String readString(final InputStream in, final int length, final int padding, final String charsetName)
-            throws IOException
+    public final static String readString(final InputStream in, final int length, final int padding, final String charsetName) throws IOException
     {
         return BEIO.readString(in, length, padding, charsetName);
     }

@@ -20,7 +20,7 @@ package com.github.rjeschke.neetutils.rng;
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
-public class RndCMWC implements RNG
+public class RndCMWC extends AbstractRNG
 {
     private int         pos     = 4095;
     private int         accu;
@@ -31,7 +31,7 @@ public class RndCMWC implements RNG
         this(RNGFactory.defaultSeed());
     }
 
-    public RndCMWC(long seed)
+    public RndCMWC(final long seed)
     {
         final RndLCG rnd = new RndLCG(seed);
         this.accu = rnd.nextInt();
@@ -59,35 +59,5 @@ public class RndCMWC implements RNG
             this.accu++;
         }
         return this.history[p] = 0xfffffffe - x;
-    }
-
-    @Override
-    public int nextInt(int max)
-    {
-        return (int)(nextDoubleUnipolar() * max);
-    }
-
-    @Override
-    public float nextFloatUnipolar()
-    {
-        return (this.nextInt() / 4294967296.f) + 0.5f;
-    }
-
-    @Override
-    public float nextFloatBipolar()
-    {
-        return this.nextInt() / 2147483648.f;
-    }
-
-    @Override
-    public double nextDoubleUnipolar()
-    {
-        return (this.nextInt() / 4294967296.0) + 0.5;
-    }
-
-    @Override
-    public double nextDoubleBipolar()
-    {
-        return this.nextInt() / 2147483648.0;
     }
 }

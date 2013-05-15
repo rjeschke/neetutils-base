@@ -112,7 +112,7 @@ public class BinaryHeap<T extends Comparable<T>>
     }
 
     @SuppressWarnings("unchecked")
-    public void put(T e)
+    public void put(final T e)
     {
         this.ensureCapacity();
         this.data[this.size] = e;

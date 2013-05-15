@@ -28,61 +28,61 @@ import com.github.rjeschke.neetutils.fn.FnPredicate;
 public abstract class AbstractXIterable<A> implements XIterable<A>
 {
     @Override
-    public XIterable<A> filter(FnPredicate<? super A> predicate)
+    public XIterable<A> filter(final FnPredicate<? super A> predicate)
     {
         return Iterables.filter(this, predicate);
     }
 
     @Override
-    public <B> XIterable<B> map(FnMapping<? super A, B> mapping)
+    public <B> XIterable<B> map(final FnMapping<? super A, B> mapping)
     {
         return Iterables.map(this, mapping);
     }
 
     @Override
-    public <B> B reduce(FnFoldStep<? super A, B> foldStep, B initialValue)
+    public <B> B reduce(final FnFoldStep<? super A, B> foldStep, final B initialValue)
     {
         return Iterables.reduce(this, foldStep, initialValue);
     }
 
     @Override
-    public A reduce(FnFoldStep<? super A, A> foldStep)
+    public A reduce(final FnFoldStep<? super A, A> foldStep)
     {
         return Iterables.reduce(this, foldStep);
     }
 
     @Override
-    public XIterable<A> reductions(FnFoldStep<? super A, A> foldStep)
+    public XIterable<A> reductions(final FnFoldStep<? super A, A> foldStep)
     {
         return Iterables.reductions(this, foldStep);
     }
 
     @Override
-    public <B> XIterable<B> reductions(FnFoldStep<? super A, B> foldStep, B initialValue)
+    public <B> XIterable<B> reductions(final FnFoldStep<? super A, B> foldStep, final B initialValue)
     {
         return Iterables.reductions(this, foldStep, initialValue);
     }
 
     @Override
-    public <B> XIterable<Tuple<A, B>> zip(Iterable<B> iterable)
+    public <B> XIterable<Tuple<A, B>> zip(final Iterable<B> iterable)
     {
         return Iterables.zip(this, iterable);
     }
 
     @Override
-    public <B, C> XIterable<C> zipWith(Iterable<B> iterable, FnCombine<? super A, ? super B, C> combine)
+    public <B, C> XIterable<C> zipWith(final Iterable<B> iterable, final FnCombine<? super A, ? super B, C> combine)
     {
         return Iterables.zipWith(this, iterable, combine);
     }
 
     @Override
-    public <B> XIterable<B> collect(Collector<? super A, B> collector)
+    public <B> XIterable<B> collect(final Collector<? super A, B> collector)
     {
         return Iterables.collect(this, collector);
     }
 
     @Override
-    public XIterable<A> take(int amount)
+    public XIterable<A> take(final int amount)
     {
         return Iterables.take(this, amount);
     }
@@ -94,7 +94,7 @@ public abstract class AbstractXIterable<A> implements XIterable<A>
     }
 
     @Override
-    public XIterable<A> drop(int amount)
+    public XIterable<A> drop(final int amount)
     {
         return Iterables.drop(this, amount);
     }
@@ -106,20 +106,20 @@ public abstract class AbstractXIterable<A> implements XIterable<A>
     }
 
     @Override
-    public XIterable<A> concat(Iterable<? extends A> iterable)
+    public XIterable<A> concat(final Iterable<? extends A> iterable)
     {
         return Iterables.concat(this, iterable);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public XIterable<A> concat(Iterable<? extends A>... iterables)
+    public XIterable<A> concat(final Iterable<? extends A>... iterables)
     {
         return Iterables.concat(this, iterables);
     }
 
     @Override
-    public XIterable<A> interleave(Iterable<? extends A> iterable)
+    public XIterable<A> interleave(final Iterable<? extends A> iterable)
     {
         return Iterables.interleave(this, iterable);
     }
@@ -131,7 +131,7 @@ public abstract class AbstractXIterable<A> implements XIterable<A>
     }
 
     @Override
-    public List<A> asList(List<A> list)
+    public List<A> asList(final List<A> list)
     {
         return Iterables.asList(this, list);
     }
@@ -143,31 +143,31 @@ public abstract class AbstractXIterable<A> implements XIterable<A>
     }
 
     @Override
-    public Set<A> asSet(Set<A> set)
+    public Set<A> asSet(final Set<A> set)
     {
         return Iterables.asSet(this, set);
     }
 
     @Override
-    public <B> Map<? super A, ? super B> asMapKV(Iterable<? extends B> iterable)
+    public <B> Map<? super A, ? super B> asMapKV(final Iterable<? extends B> iterable)
     {
         return Iterables.asMap(this, iterable);
     }
 
     @Override
-    public <B> Map<? super A, ? super B> asMapKV(Iterable<? extends B> iterable, Map<? super A, ? super B> map)
+    public <B> Map<? super A, ? super B> asMapKV(final Iterable<? extends B> iterable, final Map<? super A, ? super B> map)
     {
         return Iterables.asMap(this, iterable, map);
     }
 
     @Override
-    public <B> Map<? super B, ? super A> asMapVK(Iterable<? extends B> iterable)
+    public <B> Map<? super B, ? super A> asMapVK(final Iterable<? extends B> iterable)
     {
         return Iterables.asMap(iterable, this);
     }
 
     @Override
-    public <B> Map<? super B, ? super A> asMapVK(Iterable<? extends B> iterable, Map<? super B, ? super A> map)
+    public <B> Map<? super B, ? super A> asMapVK(final Iterable<? extends B> iterable, final Map<? super B, ? super A> map)
     {
         return Iterables.asMap(iterable, this, map);
     }

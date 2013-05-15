@@ -27,7 +27,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return !Character.isWhitespace(a) && !Character.isSpaceChar(a);
             }
@@ -39,7 +39,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return Character.isWhitespace(a) || Character.isSpaceChar(a);
             }
@@ -51,7 +51,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return Character.isLetter(a);
             }
@@ -63,7 +63,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return !Character.isLetter(a);
             }
@@ -75,7 +75,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return Character.isDigit(a);
             }
@@ -87,7 +87,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return !Character.isDigit(a);
             }
@@ -99,7 +99,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return Character.isLetterOrDigit(a);
             }
@@ -111,7 +111,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return !Character.isLetterOrDigit(a);
             }
@@ -123,7 +123,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return Character.isUpperCase(a);
             }
@@ -135,7 +135,7 @@ public final class CharacterFns
         return new FnPredicate<Character>()
         {
             @Override
-            public boolean applyPredicate(Character a)
+            public boolean applyPredicate(final Character a)
             {
                 return Character.isLowerCase(a);
             }

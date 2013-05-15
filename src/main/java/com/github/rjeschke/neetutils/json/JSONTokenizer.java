@@ -154,7 +154,7 @@ public final class JSONTokenizer
                     {
                         sb.append((char)Integer.parseInt(this.stringBuilderTmp.toString(), 16));
                     }
-                    catch (NumberFormatException e)
+                    catch (final NumberFormatException e)
                     {
                         throw new IOException("Illegal unicode escape sequence" + this.getPosition(), e);
                     }
@@ -252,7 +252,7 @@ public final class JSONTokenizer
             this.longValue = Long.parseLong(sb.toString());
             return Token.LONG;
         }
-        catch (NumberFormatException e)
+        catch (final NumberFormatException e)
         {
             throw new IOException("Syntax error: " + sb.toString() + "," + this.getPosition(), e);
         }

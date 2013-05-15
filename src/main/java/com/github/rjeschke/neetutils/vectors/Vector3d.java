@@ -15,7 +15,10 @@
  */
 package com.github.rjeschke.neetutils.vectors;
 
+import java.nio.DoubleBuffer;
+
 import com.github.rjeschke.neetutils.graphics.NColor;
+import com.github.rjeschke.neetutils.math.NMath;
 
 public class Vector3d
 {
@@ -42,11 +45,18 @@ public class Vector3d
         this.z = xyz;
     }
 
-    public Vector3d(final Vector3d v, final double z)
+    public Vector3d(final Vector2d v, final double z)
     {
         this.x = v.x;
         this.y = v.y;
         this.z = z;
+    }
+
+    public Vector3d(final Vector3d v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
     }
 
     public Vector3d(final NColor color)
@@ -61,22 +71,70 @@ public class Vector3d
         return new Vector3d(x, y, z);
     }
 
-    public double get(final int index)
+    public static Vector3d of(final Vector2d v, final double z)
     {
-        if (index == 0) return this.x;
-        if (index == 1) return this.y;
-        return this.z;
+        return new Vector3d(v, z);
+    }
+
+    public static Vector3d of(final Vector3d v)
+    {
+        return new Vector3d(v);
+    }
+
+    public Vector3d set(final double x, final double y, final double z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this;
+    }
+
+    public Vector3d set(final Vector2d v, final double z)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = z;
+        return this;
+    }
+
+    public Vector3d set(final Vector3d v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
+        return this;
+    }
+
+    public Vector3d set(final Vector4d v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
+        return this;
     }
 
     public Vector3d set(final int index, final double value)
     {
         if (index == 0)
+        {
             this.x = value;
+        }
         else if (index == 1)
+        {
             this.y = value;
+        }
         else
+        {
             this.z = value;
+        }
         return this;
+    }
+
+    public double get(final int index)
+    {
+        if (index == 0) return this.x;
+        if (index == 1) return this.y;
+        return this.z;
     }
 
     public Vector3d scale(final double f)
@@ -135,6 +193,22 @@ public class Vector3d
         return this;
     }
 
+    public Vector3d div(final Vector3d v)
+    {
+        this.x /= v.x;
+        this.y /= v.y;
+        this.z /= v.z;
+        return this;
+    }
+
+    public Vector3d div(final Vector3d v, final double scale)
+    {
+        this.x /= v.x * scale;
+        this.y /= v.y * scale;
+        this.z /= v.z * scale;
+        return this;
+    }
+
     public Vector3d lerp(final Vector3d v, final double f)
     {
         this.x += (v.x - this.x) * f;
@@ -158,6 +232,30 @@ public class Vector3d
         this.y = y;
         this.z = z;
 
+        return this;
+    }
+
+    public Vector3d min(final Vector3d other)
+    {
+        this.x = Math.min(this.x, other.x);
+        this.y = Math.min(this.y, other.y);
+        this.z = Math.min(this.z, other.z);
+        return this;
+    }
+
+    public Vector3d max(final Vector3d other)
+    {
+        this.x = Math.max(this.x, other.x);
+        this.y = Math.max(this.y, other.y);
+        this.z = Math.max(this.z, other.z);
+        return this;
+    }
+
+    public Vector3d clamp(final Vector3d min, final Vector3d max)
+    {
+        this.x = NMath.clamp(this.x, min.x, max.x);
+        this.y = NMath.clamp(this.y, min.y, max.y);
+        this.z = NMath.clamp(this.z, min.z, max.z);
         return this;
     }
 
@@ -187,35 +285,46 @@ public class Vector3d
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
-    public Vector3d min(final Vector3d other)
+    public Vector2d swizzle(final int a, final int b)
     {
-        this.x = Math.min(this.x, other.x);
-        this.y = Math.min(this.y, other.y);
-        this.z = Math.min(this.z, other.z);
-        return this;
+        return Vector2d.of(this.get(a), this.get(b));
     }
 
-    public Vector3d max(final Vector3d other)
+    public Vector3d swizzle(final int a, final int b, final int c)
     {
-        this.x = Math.max(this.x, other.x);
-        this.y = Math.max(this.y, other.y);
-        this.z = Math.max(this.z, other.z);
-        return this;
+        return Vector3d.of(this.get(a), this.get(b), this.get(c));
     }
 
-    public void intoArray(final double[] arr, final int offset)
+    public Vector4d swizzle(final int a, final int b, final int c, final int d)
+    {
+        return Vector4d.of(this.get(a), this.get(b), this.get(c), this.get(d));
+    }
+
+    public void into(final double[] arr, final int offset)
     {
         arr[offset] = this.x;
         arr[offset + 1] = this.y;
         arr[offset + 2] = this.z;
     }
 
-    public NColor toNColor()
+    public void into(final DoubleBuffer buffer, final int offset)
+    {
+        buffer.put(offset, this.x);
+        buffer.put(offset + 1, this.y);
+        buffer.put(offset + 2, this.z);
+    }
+
+    public Vector2d asVector2()
+    {
+        return Vector2d.of(this.x, this.y);
+    }
+
+    public NColor asNColor()
     {
         return new NColor((float)this.x, (float)this.y, (float)this.z);
     }
 
-    public NColor toNColor(final float alpha)
+    public NColor asNColor(final float alpha)
     {
         return new NColor(alpha, (float)this.x, (float)this.y, (float)this.z);
     }
@@ -230,29 +339,5 @@ public class Vector3d
     public String toString()
     {
         return "(" + this.x + ", " + this.y + ", " + this.z + ")";
-    }
-
-    public Vector3d set(final double x, final double y, final double z)
-    {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        return this;
-    }
-
-    public Vector3d set(final Vector3d v)
-    {
-        this.x = v.x;
-        this.y = v.y;
-        this.z = v.z;
-        return this;
-    }
-
-    public Vector3d div(final Vector3d v)
-    {
-        this.x /= v.x;
-        this.y /= v.y;
-        this.z /= v.z;
-        return this;
     }
 }

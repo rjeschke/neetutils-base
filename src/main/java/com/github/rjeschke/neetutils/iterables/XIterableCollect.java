@@ -18,8 +18,6 @@ package com.github.rjeschke.neetutils.iterables;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.github.rjeschke.neetutils.iterables.AbstractXIterable;
-
 class XIterableCollect<A, B> extends AbstractXIterable<B>
 {
     private final Iterable<? extends A>   iterable;

@@ -34,7 +34,7 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
     private final Thread[]                            threads;
     private RequeueWatcher<Runnable, ThreadWorker>    watcher;
 
-    private ThreadPool(int threads, int queueLimit)
+    private ThreadPool(final int threads, final int queueLimit)
     {
         this.numThreads = threads;
         this.queueLimit = Math.max(0, queueLimit);
@@ -46,12 +46,12 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
         return Runtime.getRuntime().availableProcessors();
     }
 
-    final static int defaultThreadcount(int threads)
+    final static int defaultThreadcount(final int threads)
     {
         return threads < 1 ? Runtime.getRuntime().availableProcessors() : threads;
     }
 
-    public static ThreadPool start(int threads, int queueLimit)
+    public static ThreadPool start(final int threads, final int queueLimit)
     {
         final ThreadPool jobber = new ThreadPool(defaultThreadcount(threads), queueLimit);
 
@@ -75,7 +75,7 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
         return this.numThreads;
     }
 
-    public void enqueue(Runnable job)
+    public void enqueue(final Runnable job)
     {
         if (job == null) throw new NullPointerException("A null Runnable is not permitted");
 
@@ -96,7 +96,7 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
         }
     }
 
-    void reuseOrEnqueue(ThreadWorker w)
+    void reuseOrEnqueue(final ThreadWorker w)
     {
         final Runnable job = this.jobs.poll();
         if (job != null)
@@ -136,13 +136,13 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
         private final ThreadPool  pool;
         private volatile Runnable workload = null;
 
-        public ThreadWorker(ThreadPool pool)
+        public ThreadWorker(final ThreadPool pool)
         {
             this.sync.acquireUninterruptibly();
             this.pool = pool;
         }
 
-        protected void setWorkLoad(Runnable job)
+        protected void setWorkLoad(final Runnable job)
         {
             this.workload = job;
             this.sync.release();
@@ -159,7 +159,7 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
                     if (this.workload instanceof StopWorker) break;
                     this.workload.run();
                 }
-                catch (Throwable t)
+                catch (final Throwable t)
                 {
                     t.printStackTrace();
                 }
@@ -184,7 +184,7 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
     }
 
     @Override
-    public void requeue(ThreadWorker worker, Runnable job)
+    public void requeue(final ThreadWorker worker, final Runnable job)
     {
         worker.setWorkLoad(job);
     }

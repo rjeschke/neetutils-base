@@ -22,13 +22,13 @@ public class Tuple<A, B>
     public final A a;
     public final B b;
 
-    public Tuple(A a, B b)
+    public Tuple(final A a, final B b)
     {
         this.a = a;
         this.b = b;
     }
 
-    public final static <A, B> Tuple<A, B> of(A a, B b)
+    public final static <A, B> Tuple<A, B> of(final A a, final B b)
     {
         return new Tuple<>(a, b);
     }
@@ -40,7 +40,7 @@ public class Tuple<A, B>
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (obj == this) return true;
 

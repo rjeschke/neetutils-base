@@ -22,7 +22,7 @@ import java.awt.image.DataBufferInt;
 
 public class ImageUtils
 {
-    public static BufferedImage toGrayscale(BufferedImage image)
+    public static BufferedImage toGrayscale(final BufferedImage image)
     {
         if (image.getType() == BufferedImage.TYPE_BYTE_GRAY) return image;
 

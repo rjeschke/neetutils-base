@@ -148,8 +148,8 @@ public final class BEIO
         write64(out, Double.doubleToLongBits(value));
     }
 
-    public final static void writeString(final OutputStream out, final String value, final int length, final int padding,
-            final String charsetName) throws IOException
+    public final static void writeString(final OutputStream out, final String value, final int length, final int padding, final String charsetName)
+            throws IOException
     {
         final byte[] bytes = value.getBytes(charsetName);
         if (bytes.length > length) throw new IOException("String too long, expected max. " + length + ", got " + bytes.length);
@@ -157,8 +157,7 @@ public final class BEIO
             out.write(i < bytes.length ? bytes[i] : padding);
     }
 
-    public final static void writeString(final OutputStream out, final String value, final int length, final int padding)
-            throws IOException
+    public final static void writeString(final OutputStream out, final String value, final int length, final int padding) throws IOException
     {
         writeString(out, value, length, padding, "UTF-8");
     }
@@ -210,7 +209,7 @@ public final class BEIO
 
     public final static int readI24(final InputStream in) throws IOException
     {
-        int v = readU24(in);
+        final int v = readU24(in);
         if (v >= 0x800000) return v - 0x1000000;
         return v;
     }
@@ -264,9 +263,7 @@ public final class BEIO
     {
         final byte[] bytes = new byte[length];
         final int r = readBytes(in, bytes);
-        if (r != bytes.length)
-            throw new IOException("Unexpected end of stream while reading string, expected " + bytes.length + ", got " + r
-                    + " bytes");
+        if (r != bytes.length) throw new IOException("Unexpected end of stream while reading string, expected " + bytes.length + ", got " + r + " bytes");
         return new String(bytes, "UTF-8");
     }
 
@@ -285,13 +282,11 @@ public final class BEIO
         return readStringN(in, readI32(in));
     }
 
-    public final static String readString(final InputStream in, final int length, final int padding, final String charsetName)
-            throws IOException
+    public final static String readString(final InputStream in, final int length, final int padding, final String charsetName) throws IOException
     {
         final byte[] bytes = new byte[length];
         final int r = readBytes(in, bytes);
-        if (r != length)
-            throw new IOException("Unexpected end of stream while reading string, expected " + length + ", got " + r + " bytes");
+        if (r != length) throw new IOException("Unexpected end of stream while reading string, expected " + length + ", got " + r + " bytes");
         int n = length - 1;
         while (n >= 0 && bytes[n] == padding)
             n--;

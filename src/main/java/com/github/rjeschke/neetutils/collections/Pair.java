@@ -17,7 +17,7 @@ package com.github.rjeschke.neetutils.collections;
 
 public class Pair<A extends Comparable<A>, B extends Comparable<B>> extends Tuple<A, B> implements Comparable<Pair<A, B>>
 {
-    public Pair(A a, B b)
+    public Pair(final A a, final B b)
     {
         super(a, b);
 
@@ -26,7 +26,7 @@ public class Pair<A extends Comparable<A>, B extends Comparable<B>> extends Tupl
         if (b == null) throw new IllegalArgumentException("Second value of Pair is null");
     }
 
-    public final static <A extends Comparable<A>, B extends Comparable<B>> Pair<A, B> of(A a, B b)
+    public final static <A extends Comparable<A>, B extends Comparable<B>> Pair<A, B> of(final A a, final B b)
     {
         return new Pair<>(a, b);
     }
@@ -38,7 +38,7 @@ public class Pair<A extends Comparable<A>, B extends Comparable<B>> extends Tupl
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (obj == this) return true;
 
@@ -50,7 +50,7 @@ public class Pair<A extends Comparable<A>, B extends Comparable<B>> extends Tupl
     }
 
     @Override
-    public int compareTo(Pair<A, B> o)
+    public int compareTo(final Pair<A, B> o)
     {
         final int t;
 

@@ -31,7 +31,7 @@ public final class Fns
         return new FnFoldStep<A, Map<A, Integer>>()
         {
             @Override
-            public Map<A, Integer> applyFoldStep(A a, Map<A, Integer> b)
+            public Map<A, Integer> applyFoldStep(final A a, final Map<A, Integer> b)
             {
                 final Integer i = b.get(a);
                 b.put(a, i == null ? Numbers.integerOf(1) : Numbers.integerOf(i + 1));
@@ -45,7 +45,7 @@ public final class Fns
         return new FnPredicate<A>()
         {
             @Override
-            public boolean applyPredicate(A a)
+            public boolean applyPredicate(final A a)
             {
                 return !predicate.applyPredicate(a);
             }
@@ -57,7 +57,7 @@ public final class Fns
         return new FnEquals<A>()
         {
             @Override
-            public boolean applyEquals(A a, A b)
+            public boolean applyEquals(final A a, final A b)
             {
                 if (a == null) return b == null;
                 return a.equals(b);

@@ -36,8 +36,8 @@ class NImagePerlin implements Worker<NImagePBlock>
     final NColor  color0;
     final NColor  color1;
 
-    NImagePerlin(NImage image, final int seed, final float scalex, final float scaley, final int octaves, final float fallOff,
-            final float amp, final NColor color0, final NColor color1)
+    NImagePerlin(final NImage image, final int seed, final float scalex, final float scaley, final int octaves, final float fallOff, final float amp,
+            final NColor color0, final NColor color1)
     {
         this.image = image;
         this.scalex = scalex;
@@ -70,7 +70,7 @@ class NImagePerlin implements Worker<NImagePBlock>
     }
 
     @Override
-    public void run(NImagePBlock p)
+    public void run(final NImagePBlock p)
     {
         for (int y = 0; y < p.h; y++)
         {
@@ -86,12 +86,12 @@ class NImagePerlin implements Worker<NImagePBlock>
                 for (int oct = 0; oct < this.octaves; oct++)
                 {
                     float px0 = tx * 256.f;
-                    int ix = (int)px0;
+                    final int ix = (int)px0;
                     px0 -= ix;
                     final float px1 = px0 - 1.f;
 
                     float py0 = ty * 256.f;
-                    int iy = (int)py0;
+                    final int iy = (int)py0;
                     py0 -= iy;
                     final float py1 = py0 - 1.f;
 

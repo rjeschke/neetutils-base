@@ -18,9 +18,6 @@ package com.github.rjeschke.neetutils.fn;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import com.github.rjeschke.neetutils.fn.FnFoldStep;
-import com.github.rjeschke.neetutils.fn.FnMapping;
-import com.github.rjeschke.neetutils.fn.FnPredicate;
 import com.github.rjeschke.neetutils.iterables.Collector;
 
 public final class StringFns
@@ -35,7 +32,7 @@ public final class StringFns
         return new FnPredicate<String>()
         {
             @Override
-            public boolean applyPredicate(String a)
+            public boolean applyPredicate(final String a)
             {
                 return a != null && a.length() > 0;
             }
@@ -47,7 +44,7 @@ public final class StringFns
         return new Collector<Character, String>()
         {
             @Override
-            public void collect(Iterator<? extends Character> iterator)
+            public void collect(final Iterator<? extends Character> iterator)
             {
                 if (iterator.hasNext())
                 {
@@ -72,7 +69,7 @@ public final class StringFns
         return new FnMapping<String, String>()
         {
             @Override
-            public String applyMapping(String value)
+            public String applyMapping(final String value)
             {
                 return value.toUpperCase();
             }
@@ -84,7 +81,7 @@ public final class StringFns
         return new FnMapping<String, String>()
         {
             @Override
-            public String applyMapping(String value)
+            public String applyMapping(final String value)
             {
                 return value.trim();
             }
@@ -96,7 +93,7 @@ public final class StringFns
         return new FnMapping<A, String>()
         {
             @Override
-            public String applyMapping(A value)
+            public String applyMapping(final A value)
             {
                 return value.toString();
             }
@@ -108,7 +105,7 @@ public final class StringFns
         return new FnMapping<String, String>()
         {
             @Override
-            public String applyMapping(String value)
+            public String applyMapping(final String value)
             {
                 return value.toLowerCase();
             }
@@ -122,7 +119,7 @@ public final class StringFns
         return new FnPredicate<String>()
         {
             @Override
-            public boolean applyPredicate(String a)
+            public boolean applyPredicate(final String a)
             {
                 if (needles.length == 0) return true;
 
@@ -145,7 +142,7 @@ public final class StringFns
         return new FnPredicate<String>()
         {
             @Override
-            public boolean applyPredicate(String a)
+            public boolean applyPredicate(final String a)
             {
                 if (needles.length == 0) return true;
 
@@ -172,7 +169,7 @@ public final class StringFns
         return new FnPredicate<String>()
         {
             @Override
-            public boolean applyPredicate(String a)
+            public boolean applyPredicate(final String a)
             {
                 if (needles.length == 0) return true;
 
@@ -199,7 +196,7 @@ public final class StringFns
         return new FnPredicate<String>()
         {
             @Override
-            public boolean applyPredicate(String a)
+            public boolean applyPredicate(final String a)
             {
                 if (needles.length == 0) return true;
 
@@ -220,7 +217,7 @@ public final class StringFns
         return new FnFoldStep<A, StringBuilder>()
         {
             @Override
-            public StringBuilder applyFoldStep(A a, StringBuilder b)
+            public StringBuilder applyFoldStep(final A a, final StringBuilder b)
             {
                 b.append(a);
 

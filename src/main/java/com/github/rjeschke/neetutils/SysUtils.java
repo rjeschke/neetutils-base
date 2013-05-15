@@ -51,33 +51,33 @@ public final class SysUtils
         //
     }
 
-    public final static boolean sleep(long millis)
+    public final static boolean sleep(final long millis)
     {
         try
         {
             Thread.sleep(millis);
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException e)
         {
             return false;
         }
         return true;
     }
 
-    public final static boolean sleep(long millis, int nanos)
+    public final static boolean sleep(final long millis, final int nanos)
     {
         try
         {
             Thread.sleep(millis, nanos);
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException e)
         {
             return false;
         }
         return true;
     }
 
-    public final static boolean fineSleep(long millis)
+    public final static boolean fineSleep(final long millis)
     {
         final Object obj = sleepObject.get();
 
@@ -88,7 +88,7 @@ public final class SysUtils
                 obj.wait(millis);
             }
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException e)
         {
             return false;
         }
@@ -96,7 +96,7 @@ public final class SysUtils
         return true;
     }
 
-    public final static boolean fineSleep(long millis, int nanos)
+    public final static boolean fineSleep(final long millis, final int nanos)
     {
         final Object obj = sleepObject.get();
 
@@ -107,7 +107,7 @@ public final class SysUtils
                 obj.wait(millis, nanos);
             }
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException e)
         {
             return false;
         }
@@ -121,7 +121,7 @@ public final class SysUtils
         {
             t.join();
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException e)
         {
             return false;
         }
@@ -133,7 +133,7 @@ public final class SysUtils
         return RNG.get().nextInt();
     }
 
-    public final static int rndInt(int max)
+    public final static int rndInt(final int max)
     {
         return RNG.get().nextInt(max);
     }

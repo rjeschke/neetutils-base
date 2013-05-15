@@ -34,13 +34,13 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     final int                 size;
     int                       hashCode         = 0;
 
-    ImmutableList(Object[] data, int size)
+    ImmutableList(final Object[] data, final int size)
     {
         this.data = data;
         this.size = size;
     }
 
-    public ImmutableList(Collection<? extends A> coll)
+    public ImmutableList(final Collection<? extends A> coll)
     {
         this.data = new Object[coll.size()];
         int i = 0;
@@ -50,13 +50,13 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     }
 
     @SafeVarargs
-    public ImmutableList(A... coll)
+    public ImmutableList(final A... coll)
     {
         this.data = Arrays.copyOf(coll, coll.length);
         this.size = this.data.length;
     }
 
-    public ImmutableList(Iterable<? extends A> coll)
+    public ImmutableList(final Iterable<? extends A> coll)
     {
         Object[] d = new Object[8];
         int i = 0;
@@ -82,7 +82,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     }
 
     @Override
-    public boolean contains(Object o)
+    public boolean contains(final Object o)
     {
         if (o == null)
         {
@@ -114,7 +114,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     }
 
     @Override
-    public <T> T[] toArray(T[] a)
+    public <T> T[] toArray(final T[] a)
     {
         if (a.length >= this.size)
         {
@@ -126,19 +126,19 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     }
 
     @Override
-    public boolean add(A e)
+    public boolean add(final A e)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean remove(Object o)
+    public boolean remove(final Object o)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)
+    public boolean containsAll(final Collection<?> c)
     {
         for (final Object o : c)
         {
@@ -148,25 +148,25 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     }
 
     @Override
-    public boolean addAll(Collection<? extends A> c)
+    public boolean addAll(final Collection<? extends A> c)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends A> c)
+    public boolean addAll(final int index, final Collection<? extends A> c)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean removeAll(Collection<?> c)
+    public boolean removeAll(final Collection<?> c)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean retainAll(final Collection<?> c)
     {
         throw new UnsupportedOperationException();
     }
@@ -179,32 +179,32 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
 
     @SuppressWarnings("unchecked")
     @Override
-    public A get(int index)
+    public A get(final int index)
     {
         if (index > this.size) throw new NoSuchElementException();
         return (A)this.data[index];
     }
 
     @Override
-    public A set(int index, A element)
+    public A set(final int index, final A element)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void add(int index, A element)
+    public void add(final int index, final A element)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public A remove(int index)
+    public A remove(final int index)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int indexOf(Object o)
+    public int indexOf(final Object o)
     {
         for (int i = 0; i < this.size; i++)
         {
@@ -214,7 +214,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     }
 
     @Override
-    public int lastIndexOf(Object o)
+    public int lastIndexOf(final Object o)
     {
         for (int i = this.size - 1; i >= 0; i--)
         {
@@ -230,13 +230,13 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     }
 
     @Override
-    public ListIterator<A> listIterator(int index)
+    public ListIterator<A> listIterator(final int index)
     {
         return new ImmutableListIterator<>(this.data, index, this.size - index);
     }
 
     @Override
-    public List<A> subList(int fromIndex, int toIndex)
+    public List<A> subList(final int fromIndex, final int toIndex)
     {
         return new SubList<>(this, fromIndex, toIndex);
     }
@@ -255,7 +255,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (obj == this) return true;
 
@@ -298,7 +298,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         private int            index;
         private final int      end;
 
-        public IIterator(Object[] data, int index, int size)
+        public IIterator(final Object[] data, final int index, final int size)
         {
             this.data = data;
             this.index = index;
@@ -334,7 +334,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         private final int      start;
         private int            index;
 
-        public ImmutableListIterator(Object[] data, int index, int size)
+        public ImmutableListIterator(final Object[] data, final int index, final int size)
         {
             this.data = data;
             this.index = this.start = index;
@@ -387,13 +387,13 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         }
 
         @Override
-        public void set(A e)
+        public void set(final A e)
         {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public void add(A e)
+        public void add(final A e)
         {
             throw new UnsupportedOperationException();
         }
@@ -405,7 +405,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         private final int         start;
         private final int         end;
 
-        public SubList(ImmutableList<A> list, int start, int end)
+        public SubList(final ImmutableList<A> list, final int start, final int end)
         {
             super(list.data, Math.max(0, end - start));
             this.start = Math.min(list.size, start);
@@ -413,7 +413,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         }
 
         @Override
-        public boolean contains(Object o)
+        public boolean contains(final Object o)
         {
             if (o == null)
             {
@@ -448,7 +448,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
 
         @SuppressWarnings("unchecked")
         @Override
-        public <T> T[] toArray(T[] a)
+        public <T> T[] toArray(final T[] a)
         {
             if (a.length >= this.size)
             {
@@ -456,19 +456,19 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
                 return a;
             }
 
-            return (T[])toArray();
+            return (T[])this.toArray();
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        public A get(int index)
+        public A get(final int index)
         {
             if (index > this.size) throw new NoSuchElementException();
             return (A)this.data[this.start + index];
         }
 
         @Override
-        public int indexOf(Object o)
+        public int indexOf(final Object o)
         {
             for (int i = this.start; i < this.end; i++)
             {
@@ -478,7 +478,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         }
 
         @Override
-        public int lastIndexOf(Object o)
+        public int lastIndexOf(final Object o)
         {
             for (int i = this.end - 1; i >= this.start; i--)
             {
@@ -494,13 +494,13 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         }
 
         @Override
-        public ListIterator<A> listIterator(int index)
+        public ListIterator<A> listIterator(final int index)
         {
             return new ImmutableListIterator<>(this.data, this.start + index, this.size - index - this.start);
         }
 
         @Override
-        public List<A> subList(int fromIndex, int toIndex)
+        public List<A> subList(final int fromIndex, final int toIndex)
         {
             return new SubList<>(this, this.start + fromIndex, this.start + toIndex);
         }
@@ -519,7 +519,7 @@ public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Seria
         }
 
         @Override
-        public boolean equals(Object obj)
+        public boolean equals(final Object obj)
         {
             if (obj == this) return true;
 

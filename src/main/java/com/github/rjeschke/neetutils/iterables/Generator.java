@@ -57,7 +57,7 @@ public abstract class Generator<A> implements Iterable<A>
             {
                 this.queue.put(new State<>(element, true));
             }
-            catch (InterruptedException e)
+            catch (final InterruptedException e)
             {
                 //
             }
@@ -69,7 +69,7 @@ public abstract class Generator<A> implements Iterable<A>
             {
                 this.queue.put(new State<A>(null, false));
             }
-            catch (InterruptedException e)
+            catch (final InterruptedException e)
             {
                 //
             }
@@ -82,7 +82,7 @@ public abstract class Generator<A> implements Iterable<A>
             {
                 this.state = this.queue.take();
             }
-            catch (InterruptedException e)
+            catch (final InterruptedException e)
             {
                 return false;
             }

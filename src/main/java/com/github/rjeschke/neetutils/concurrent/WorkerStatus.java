@@ -25,7 +25,7 @@ public class WorkerStatus
 
     public static WorkerStatus OK = new WorkerStatus(null);
 
-    public WorkerStatus(Throwable t)
+    public WorkerStatus(final Throwable t)
     {
         this.t = t;
     }

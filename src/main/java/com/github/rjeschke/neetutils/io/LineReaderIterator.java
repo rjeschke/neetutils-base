@@ -30,7 +30,7 @@ public class LineReaderIterator implements Iterable<String>, Closeable
     volatile boolean     iteratorInUse = false;
     String               current;
 
-    public LineReaderIterator(BufferedReader in)
+    public LineReaderIterator(final BufferedReader in)
     {
         this.in = in;
         this.current = this.read();
@@ -49,7 +49,7 @@ public class LineReaderIterator implements Iterable<String>, Closeable
                 this.closed = true;
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             this.current = null;
             try
@@ -57,7 +57,7 @@ public class LineReaderIterator implements Iterable<String>, Closeable
                 this.in.close();
                 this.closed = true;
             }
-            catch (IOException e1)
+            catch (final IOException e1)
             {
                 throw new WrappedCheckedException(e);
             }
@@ -76,7 +76,7 @@ public class LineReaderIterator implements Iterable<String>, Closeable
     {
         final LineReaderIterator lri;
 
-        public StreamIterator(LineReaderIterator lri)
+        public StreamIterator(final LineReaderIterator lri)
         {
             this.lri = lri;
         }

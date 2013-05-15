@@ -29,8 +29,7 @@ import com.github.rjeschke.neetutils.collections.Colls;
  * @param <A>
  * @param <B>
  */
-public class MapWorkerPool<A, B> implements Runnable,
-        RequeueWatcherCallback<MapWorkerPool.Job<A, B>, MapWorkerPool.ThreadWorker<A, B>>
+public class MapWorkerPool<A, B> implements Runnable, RequeueWatcherCallback<MapWorkerPool.Job<A, B>, MapWorkerPool.ThreadWorker<A, B>>
 {
     private final int                                       numThreads;
     private final int                                       queueLimit;
@@ -44,7 +43,7 @@ public class MapWorkerPool<A, B> implements Runnable,
     private Thread                                          callbackThread = null;
     private RequeueWatcher<Job<A, B>, ThreadWorker<A, B>>   watcher;
 
-    private MapWorkerPool(MapWorkerCallback<A, B> callback, int threads, int queueLimit, boolean serialCallbacks)
+    private MapWorkerPool(final MapWorkerCallback<A, B> callback, final int threads, final int queueLimit, final boolean serialCallbacks)
     {
         this.callback = callback;
         this.numThreads = threads;
@@ -53,11 +52,10 @@ public class MapWorkerPool<A, B> implements Runnable,
         this.threads = new Thread[threads];
     }
 
-    public static <A, B> MapWorkerPool<A, B> start(MapWorkerCallback<A, B> callback, int threads, int queueLimit,
-            boolean serialCallbacks)
+    public static <A, B> MapWorkerPool<A, B> start(final MapWorkerCallback<A, B> callback, final int threads, final int queueLimit,
+            final boolean serialCallbacks)
     {
-        final MapWorkerPool<A, B> jobber = new MapWorkerPool<>(callback, ThreadPool.defaultThreadcount(threads), queueLimit,
-                serialCallbacks);
+        final MapWorkerPool<A, B> jobber = new MapWorkerPool<>(callback, ThreadPool.defaultThreadcount(threads), queueLimit, serialCallbacks);
 
         for (int i = 0; i < jobber.threads.length; i++)
         {
@@ -83,7 +81,7 @@ public class MapWorkerPool<A, B> implements Runnable,
         return jobber;
     }
 
-    public static <A, B> List<B> processCollection(MapWorker<A, B> worker, int threads, Iterable<A> input)
+    public static <A, B> List<B> processCollection(final MapWorker<A, B> worker, final int threads, final Iterable<A> input)
     {
         final int usedThreads = ThreadPool.defaultThreadcount(threads);
         final ProcessCollectionMapWorkerCallback<A, B> callback = new ProcessCollectionMapWorkerCallback<>();
@@ -107,7 +105,7 @@ public class MapWorkerPool<A, B> implements Runnable,
         return this.numThreads;
     }
 
-    public void enqueue(MapWorker<A, B> worker, A object)
+    public void enqueue(final MapWorker<A, B> worker, final A object)
     {
         if (worker == null) throw new NullPointerException("A null Worker is not permitted");
 
@@ -130,7 +128,7 @@ public class MapWorkerPool<A, B> implements Runnable,
         }
     }
 
-    private void reuseOrEnqueue(ThreadWorker<A, B> w)
+    private void reuseOrEnqueue(final ThreadWorker<A, B> w)
     {
         final Job<A, B> job = this.jobs.poll();
         if (job != null)
@@ -138,7 +136,7 @@ public class MapWorkerPool<A, B> implements Runnable,
         else this.workers.offer(w);
     }
 
-    void doCallback(ThreadWorker<A, B> threadWorker, MapWorker<A, B> worker, WorkerStatus status, A input, B output)
+    void doCallback(final ThreadWorker<A, B> threadWorker, final MapWorker<A, B> worker, final WorkerStatus status, final A input, final B output)
     {
         if (this.serialCallbacks)
         {
@@ -151,7 +149,7 @@ public class MapWorkerPool<A, B> implements Runnable,
             {
                 this.callback.workerCallback(this, worker, status, input, output);
             }
-            catch (Throwable t)
+            catch (final Throwable t)
             {
                 //
             }
@@ -205,7 +203,7 @@ public class MapWorkerPool<A, B> implements Runnable,
                 if (r.status == null) break;
                 this.callback.workerCallback(this, r.worker, r.status, r.input, r.output);
             }
-            catch (Throwable t)
+            catch (final Throwable t)
             {
                 //
             }
@@ -219,7 +217,7 @@ public class MapWorkerPool<A, B> implements Runnable,
         final A               input;
         final B               output;
 
-        public WorkerResult(MapWorker<A, B> worker, WorkerStatus status, A input, B output)
+        public WorkerResult(final MapWorker<A, B> worker, final WorkerStatus status, final A input, final B output)
         {
             this.worker = worker;
             this.status = status;
@@ -234,13 +232,13 @@ public class MapWorkerPool<A, B> implements Runnable,
         private final MapWorkerPool<A, B> pool;
         private volatile Job<A, B>        workload = null;
 
-        public ThreadWorker(MapWorkerPool<A, B> pool)
+        public ThreadWorker(final MapWorkerPool<A, B> pool)
         {
             this.sync.acquireUninterruptibly();
             this.pool = pool;
         }
 
-        protected void setWorkLoad(Job<A, B> job)
+        protected void setWorkLoad(final Job<A, B> job)
         {
             this.workload = job;
             this.sync.release();
@@ -260,14 +258,13 @@ public class MapWorkerPool<A, B> implements Runnable,
                     if (this.workload.worker instanceof StopWorker) break;
                     output = this.workload.worker.run(this.workload.input);
                 }
-                catch (Throwable t)
+                catch (final Throwable t)
                 {
                     ta = t;
                     ok = false;
                 }
 
-                this.pool.doCallback(this, this.workload.worker, ok ? WorkerStatus.OK : new WorkerStatus(ta),
-                        this.workload.input, output);
+                this.pool.doCallback(this, this.workload.worker, ok ? WorkerStatus.OK : new WorkerStatus(ta), this.workload.input, output);
             }
         }
     }
@@ -277,7 +274,7 @@ public class MapWorkerPool<A, B> implements Runnable,
         public final MapWorker<A, B> worker;
         public final A               input;
 
-        public Job(MapWorker<A, B> worker, A input)
+        public Job(final MapWorker<A, B> worker, final A input)
         {
             this.worker = worker;
             this.input = input;
@@ -292,7 +289,7 @@ public class MapWorkerPool<A, B> implements Runnable,
         }
 
         @Override
-        public B run(A object)
+        public B run(final A object)
         {
             return null;
         }
@@ -308,14 +305,14 @@ public class MapWorkerPool<A, B> implements Runnable,
         }
 
         @Override
-        public void workerCallback(MapWorkerPool<A, B> pool, MapWorker<A, B> worker, WorkerStatus status, A input, B output)
+        public void workerCallback(final MapWorkerPool<A, B> pool, final MapWorker<A, B> worker, final WorkerStatus status, final A input, final B output)
         {
             this.outputList.add(output);
         }
     }
 
     @Override
-    public void requeue(ThreadWorker<A, B> worker, Job<A, B> job)
+    public void requeue(final ThreadWorker<A, B> worker, final Job<A, B> job)
     {
         worker.setWorkLoad(job);
     }

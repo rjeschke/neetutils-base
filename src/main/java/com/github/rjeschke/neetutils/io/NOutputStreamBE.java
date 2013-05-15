@@ -21,85 +21,85 @@ import java.nio.ByteOrder;
 
 public class NOutputStreamBE extends NOutputStream
 {
-    public NOutputStreamBE(OutputStream out)
+    public NOutputStreamBE(final OutputStream out)
     {
         super(out);
     }
 
     @Override
-    public void write8(int value) throws IOException
+    public void write8(final int value) throws IOException
     {
         BEIO.write8(this.out, value);
     }
 
     @Override
-    public void write16(int value) throws IOException
+    public void write16(final int value) throws IOException
     {
         BEIO.write16(this.out, value);
     }
 
     @Override
-    public void write24(int value) throws IOException
+    public void write24(final int value) throws IOException
     {
         BEIO.write24(this.out, value);
     }
 
     @Override
-    public void write32(int value) throws IOException
+    public void write32(final int value) throws IOException
     {
         BEIO.write32(this.out, value);
     }
 
     @Override
-    public void write64(long value) throws IOException
+    public void write64(final long value) throws IOException
     {
         BEIO.write64(this.out, value);
     }
 
     @Override
-    public void writeFloat(float value) throws IOException
+    public void writeFloat(final float value) throws IOException
     {
         BEIO.writeFloat(this.out, value);
     }
 
     @Override
-    public void writeDouble(double value) throws IOException
+    public void writeDouble(final double value) throws IOException
     {
         BEIO.writeDouble(this.out, value);
     }
 
     @Override
-    public void writeString(String value, int length, int padding, String charsetName) throws IOException
+    public void writeString(final String value, final int length, final int padding, final String charsetName) throws IOException
     {
         BEIO.writeString(this.out, value, length, padding, charsetName);
     }
 
     @Override
-    public void writeString(String value, int length, int padding) throws IOException
+    public void writeString(final String value, final int length, final int padding) throws IOException
     {
         BEIO.writeString(this.out, value, length, padding);
     }
 
     @Override
-    public void writeString8(String value) throws IOException
+    public void writeString8(final String value) throws IOException
     {
         BEIO.writeString8(this.out, value);
     }
 
     @Override
-    public void writeString16(String value) throws IOException
+    public void writeString16(final String value) throws IOException
     {
         BEIO.writeString16(this.out, value);
     }
 
     @Override
-    public void writeString32(String value) throws IOException
+    public void writeString32(final String value) throws IOException
     {
         BEIO.writeString32(this.out, value);
     }
 
     @Override
-    public void writeString(String value, int length) throws IOException
+    public void writeString(final String value, final int length) throws IOException
     {
         BEIO.writeString(this.out, value, length, 0);
     }

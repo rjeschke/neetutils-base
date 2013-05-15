@@ -15,6 +15,10 @@
  */
 package com.github.rjeschke.neetutils.vectors;
 
+import java.nio.FloatBuffer;
+
+import com.github.rjeschke.neetutils.math.NMath;
+
 public class Vector2f
 {
     public float x;
@@ -22,7 +26,7 @@ public class Vector2f
 
     public Vector2f()
     {
-        // 0
+        // default
     }
 
     public Vector2f(final float x, final float y)
@@ -37,16 +41,20 @@ public class Vector2f
         this.y = xy;
     }
 
+    public Vector2f(final Vector2f v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+    }
+
     public static Vector2f of(final float x, final float y)
     {
         return new Vector2f(x, y);
     }
 
-    public Vector2f scale(final float f)
+    public static Vector2f of(final Vector2f v)
     {
-        this.x *= f;
-        this.y *= f;
-        return this;
+        return new Vector2f(v);
     }
 
     public Vector2f set(final float x, final float y)
@@ -56,10 +64,57 @@ public class Vector2f
         return this;
     }
 
+    public Vector2f set(final float xy)
+    {
+        this.x = xy;
+        this.y = xy;
+        return this;
+    }
+
     public Vector2f set(final Vector2f v)
     {
         this.x = v.x;
         this.y = v.y;
+        return this;
+    }
+
+    public Vector2f set(final Vector3f v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        return this;
+    }
+
+    public Vector2f set(final Vector4f v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        return this;
+    }
+
+    public Vector2f set(final int index, final float value)
+    {
+        if (index == 0)
+        {
+            this.x = value;
+        }
+        else
+        {
+            this.y = value;
+        }
+        return this;
+    }
+
+    public float get(final int index)
+    {
+        if (index == 0) return this.x;
+        return this.y;
+    }
+
+    public Vector2f scale(final float f)
+    {
+        this.x *= f;
+        this.y *= f;
         return this;
     }
 
@@ -105,6 +160,20 @@ public class Vector2f
         return this;
     }
 
+    public Vector2f div(final Vector2f v)
+    {
+        this.x /= v.x;
+        this.y /= v.y;
+        return this;
+    }
+
+    public Vector2f div(final Vector2f v, final float scale)
+    {
+        this.x /= v.x * scale;
+        this.y /= v.y * scale;
+        return this;
+    }
+
     public Vector2f lerp(final Vector2f v, final float f)
     {
         this.x += (v.x - this.x) * f;
@@ -117,12 +186,33 @@ public class Vector2f
         return this.x * v.x + this.y * v.y;
     }
 
+    public Vector2f min(final Vector2f v)
+    {
+        this.x = Math.min(this.x, v.x);
+        this.y = Math.min(this.y, v.y);
+        return this;
+    }
+
+    public Vector2f max(final Vector2f v)
+    {
+        this.x = Math.max(this.x, v.x);
+        this.y = Math.max(this.y, v.y);
+        return this;
+    }
+
+    public Vector2f clamp(final Vector2f min, final Vector2f max)
+    {
+        this.x = NMath.clamp(this.x, min.x, max.x);
+        this.y = NMath.clamp(this.y, min.y, max.y);
+        return this;
+    }
+
     public Vector2f normalize()
     {
         float len = this.x * this.x + this.y * this.y;
         if (len != 0)
         {
-            len = 1.f / (float)Math.sqrt(len);
+            len = (float)(1.0 / Math.sqrt(len));
             this.x *= len;
             this.y *= len;
         }
@@ -141,10 +231,31 @@ public class Vector2f
         return (float)Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
-    public void intoArray(final float[] arr, final int offset)
+    public Vector2f swizzle(final int a, final int b)
+    {
+        return Vector2f.of(this.get(a), this.get(b));
+    }
+
+    public Vector3f swizzle(final int a, final int b, final int c)
+    {
+        return Vector3f.of(this.get(a), this.get(b), this.get(c));
+    }
+
+    public Vector4f swizzle(final int a, final int b, final int c, final int d)
+    {
+        return Vector4f.of(this.get(a), this.get(b), this.get(c), this.get(d));
+    }
+
+    public void into(final float[] arr, final int offset)
     {
         arr[offset] = this.x;
         arr[offset + 1] = this.y;
+    }
+
+    public void into(final FloatBuffer buffer, final int offset)
+    {
+        buffer.put(offset, this.x);
+        buffer.put(offset + 1, this.y);
     }
 
     @Override

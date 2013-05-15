@@ -20,7 +20,7 @@ package com.github.rjeschke.neetutils.rng;
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
-public class RndLCG implements RNG
+public class RndLCG extends AbstractRNG
 {
     private final static long A = 6364136223846793005L;
     private final static long C = 1442695040888963407L;
@@ -41,35 +41,5 @@ public class RndLCG implements RNG
     {
         this.value = this.value * A + C;
         return (int)(this.value >> 32);
-    }
-
-    @Override
-    public int nextInt(int max)
-    {
-        return (int)(nextDoubleUnipolar() * max);
-    }
-
-    @Override
-    public float nextFloatUnipolar()
-    {
-        return (this.nextInt() / 4294967296.f) + 0.5f;
-    }
-
-    @Override
-    public float nextFloatBipolar()
-    {
-        return this.nextInt() / 2147483648.f;
-    }
-
-    @Override
-    public double nextDoubleUnipolar()
-    {
-        return (this.nextInt() / 4294967296.0) + 0.5;
-    }
-
-    @Override
-    public double nextDoubleBipolar()
-    {
-        return this.nextInt() / 2147483648.0;
     }
 }

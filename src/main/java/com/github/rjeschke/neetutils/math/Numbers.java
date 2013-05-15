@@ -52,17 +52,17 @@ public final class Numbers
         }
     }
 
-    public final static Integer integerOf(int value)
+    public final static Integer integerOf(final int value)
     {
         return (value > -129 && value < maxIntCache) ? integerCache[value + 128] : Integer.valueOf(value);
     }
 
-    public final static Character characterOf(char value)
+    public final static Character characterOf(final char value)
     {
         return hasCharacterCache ? characterCache[value] : Character.valueOf(value);
     }
 
-    public final static Type getType(Number a)
+    public final static Type getType(final Number a)
     {
         if (a instanceof Byte) return Type.BYTE;
         if (a instanceof Short) return Type.SHORT;
@@ -73,14 +73,14 @@ public final class Numbers
         throw new ArithmeticException("Unsupported number type: " + a);
     }
 
-    private final static Type getLargerType(Number a, Number b)
+    private final static Type getLargerType(final Number a, final Number b)
     {
         final Type ta = getType(a);
         final Type tb = getType(b);
         return tb.size > ta.size ? tb : ta;
     }
 
-    public final static Number add(Number a, Number b)
+    public final static Number add(final Number a, final Number b)
     {
         switch (getLargerType(a, b))
         {
@@ -100,7 +100,7 @@ public final class Numbers
         return null;
     }
 
-    public final static Number sub(Number a, Number b)
+    public final static Number sub(final Number a, final Number b)
     {
         switch (getLargerType(a, b))
         {
@@ -120,7 +120,7 @@ public final class Numbers
         return null;
     }
 
-    public final static Number mul(Number a, Number b)
+    public final static Number mul(final Number a, final Number b)
     {
         switch (getLargerType(a, b))
         {
@@ -140,7 +140,7 @@ public final class Numbers
         return null;
     }
 
-    public final static Number div(Number a, Number b)
+    public final static Number div(final Number a, final Number b)
     {
         switch (getLargerType(a, b))
         {

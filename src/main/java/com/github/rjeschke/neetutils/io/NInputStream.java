@@ -22,12 +22,12 @@ import java.nio.ByteOrder;
 
 public abstract class NInputStream extends FilterInputStream
 {
-    protected NInputStream(InputStream in)
+    protected NInputStream(final InputStream in)
     {
         super(in);
     }
 
-    public static NInputStream fromStream(InputStream in, ByteOrder byteOrder)
+    public static NInputStream fromStream(final InputStream in, final ByteOrder byteOrder)
     {
         if (byteOrder == ByteOrder.BIG_ENDIAN) return new NInputStreamBE(in);
         return new NInputStreamLE(in);
@@ -70,19 +70,19 @@ public abstract class NInputStream extends FilterInputStream
     public abstract ByteOrder getByteOrder();
 
     @Override
-    public int read(byte[] b) throws IOException
+    public int read(final byte[] b) throws IOException
     {
         return BEIO.readBytes(this.in, b);
     }
 
     @Override
-    public int read(byte[] b, int off, int len) throws IOException
+    public int read(final byte[] b, final int off, final int len) throws IOException
     {
         return BEIO.readBytes(this.in, b, off, len);
     }
 
     @Override
-    public long skip(long n) throws IOException
+    public long skip(final long n) throws IOException
     {
         return BEIO.skipBytes(this.in, n);
     }

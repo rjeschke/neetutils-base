@@ -34,26 +34,26 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
         this.comparator = null;
     }
 
-    public SortedList(int initialSize)
+    public SortedList(final int initialSize)
     {
         this.list = new ArrayList<>(initialSize);
         this.comparator = null;
     }
 
-    public SortedList(Comparator<? super E> comparator)
+    public SortedList(final Comparator<? super E> comparator)
     {
         this.list = new ArrayList<>();
         this.comparator = comparator;
     }
 
-    public SortedList(Collection<? extends E> c)
+    public SortedList(final Collection<? extends E> c)
     {
         this.list = new ArrayList<>();
         this.comparator = null;
         this.addAll(c);
     }
 
-    public SortedList(Collection<? extends E> c, Comparator<? super E> comparator)
+    public SortedList(final Collection<? extends E> c, final Comparator<? super E> comparator)
     {
         this.list = new ArrayList<>();
         this.comparator = comparator;
@@ -61,10 +61,9 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     }
 
     @Override
-    public boolean add(E e)
+    public boolean add(final E e)
     {
-        final int index = this.comparator == null ? Collections.binarySearch(this.list, e) : Collections.binarySearch(this.list,
-                e, this.comparator);
+        final int index = this.comparator == null ? Collections.binarySearch(this.list, e) : Collections.binarySearch(this.list, e, this.comparator);
         if (index < 0)
         {
             this.list.add(-index - 1, e);
@@ -77,15 +76,15 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     }
 
     @Override
-    public void add(int index, E element)
+    public void add(final int index, final E element)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c)
+    public boolean addAll(final Collection<? extends E> c)
     {
-        for (E e : c)
+        for (final E e : c)
         {
             this.add(e);
         }
@@ -93,7 +92,7 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c)
+    public boolean addAll(final int index, final Collection<? extends E> c)
     {
         throw new UnsupportedOperationException();
     }
@@ -105,25 +104,25 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     }
 
     @Override
-    public boolean contains(Object o)
+    public boolean contains(final Object o)
     {
         return this.list.contains(o);
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)
+    public boolean containsAll(final Collection<?> c)
     {
         return this.list.containsAll(c);
     }
 
     @Override
-    public E get(int index)
+    public E get(final int index)
     {
         return this.list.get(index);
     }
 
     @Override
-    public int indexOf(Object o)
+    public int indexOf(final Object o)
     {
         return this.list.indexOf(o);
     }
@@ -141,7 +140,7 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     }
 
     @Override
-    public int lastIndexOf(Object o)
+    public int lastIndexOf(final Object o)
     {
         return this.list.lastIndexOf(o);
     }
@@ -153,37 +152,37 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     }
 
     @Override
-    public ListIterator<E> listIterator(int index)
+    public ListIterator<E> listIterator(final int index)
     {
         return this.list.listIterator(index);
     }
 
     @Override
-    public boolean remove(Object o)
+    public boolean remove(final Object o)
     {
         return this.list.remove(o);
     }
 
     @Override
-    public E remove(int index)
+    public E remove(final int index)
     {
         return this.list.remove(index);
     }
 
     @Override
-    public boolean removeAll(Collection<?> c)
+    public boolean removeAll(final Collection<?> c)
     {
         return this.list.removeAll(c);
     }
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean retainAll(final Collection<?> c)
     {
         return this.list.retainAll(c);
     }
 
     @Override
-    public E set(int index, E element)
+    public E set(final int index, final E element)
     {
         throw new UnsupportedOperationException();
     }
@@ -195,7 +194,7 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     }
 
     @Override
-    public List<E> subList(int fromIndex, int toIndex)
+    public List<E> subList(final int fromIndex, final int toIndex)
     {
         return this.list.subList(fromIndex, toIndex);
     }
@@ -207,7 +206,7 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
     }
 
     @Override
-    public <T> T[] toArray(T[] a)
+    public <T> T[] toArray(final T[] a)
     {
         return this.list.toArray(a);
     }
@@ -226,7 +225,7 @@ public class SortedList<E extends Comparable<? super E>> implements List<E>, Clo
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (!(obj instanceof SortedList)) return false;
         return this.list.equals(((SortedList<E>)obj).list);

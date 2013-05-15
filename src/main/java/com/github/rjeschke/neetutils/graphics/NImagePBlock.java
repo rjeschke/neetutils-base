@@ -25,7 +25,7 @@ public class NImagePBlock
     public final int      w;
     public final int      h;
 
-    public NImagePBlock(int x, int y, int w, int h)
+    public NImagePBlock(final int x, final int y, final int w, final int h)
     {
         this.x = x;
         this.y = y;

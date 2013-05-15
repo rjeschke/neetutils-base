@@ -60,7 +60,7 @@ public class CodePointIterator
         return this.bufferSize - this.bufferReadPos + this.bufferWritePos;
     }
 
-    private int readBuffer(int offset)
+    private int readBuffer(final int offset)
     {
         return this.buffer[(this.bufferReadPos + this.lookBack + offset) & this.bufferMask];
     }
@@ -87,7 +87,7 @@ public class CodePointIterator
         }
     }
 
-    public int get(int offset)
+    public int get(final int offset)
     {
         if (offset < -this.lookBack || offset > this.lookAhead)
             throw new IndexOutOfBoundsException("Got " + offset + ", range: " + (-this.lookBack) + " to " + this.lookAhead);
@@ -105,7 +105,7 @@ public class CodePointIterator
         this.fillBuffer();
     }
 
-    public void advance(int numChars)
+    public void advance(final int numChars)
     {
         for (int i = 0; i < numChars; i++)
             this.advance();

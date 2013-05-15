@@ -31,7 +31,7 @@ public abstract class Maybe<A> implements Iterable<A>
         return new Nothing<>();
     }
 
-    public final static <A> Maybe<A> just(A value)
+    public final static <A> Maybe<A> just(final A value)
     {
         return new Just<>(value);
     }
@@ -56,7 +56,7 @@ public abstract class Maybe<A> implements Iterable<A>
         }
 
         @Override
-        public Maybe<A> or(Maybe<A> a)
+        public Maybe<A> or(final Maybe<A> a)
         {
             return a;
         }
@@ -68,7 +68,7 @@ public abstract class Maybe<A> implements Iterable<A>
         }
 
         @Override
-        public boolean equals(Object obj)
+        public boolean equals(final Object obj)
         {
             return false;
         }
@@ -84,7 +84,7 @@ public abstract class Maybe<A> implements Iterable<A>
     {
         private final A value;
 
-        public Just(A value)
+        public Just(final A value)
         {
             this.value = value;
         }
@@ -102,7 +102,7 @@ public abstract class Maybe<A> implements Iterable<A>
         }
 
         @Override
-        public Maybe<A> or(Maybe<A> a)
+        public Maybe<A> or(final Maybe<A> a)
         {
             return this;
         }
@@ -114,7 +114,7 @@ public abstract class Maybe<A> implements Iterable<A>
         }
 
         @Override
-        public boolean equals(Object obj)
+        public boolean equals(final Object obj)
         {
             if (!(obj instanceof Just)) return false;
             final Just<?> just = (Just<?>)obj;

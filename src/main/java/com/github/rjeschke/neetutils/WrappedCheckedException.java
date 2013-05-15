@@ -27,7 +27,7 @@ public class WrappedCheckedException extends RuntimeException
     /**
      * @see RuntimeException#RuntimeException(Throwable)
      */
-    public WrappedCheckedException(Exception e)
+    public WrappedCheckedException(final Exception e)
     {
         super(e);
     }

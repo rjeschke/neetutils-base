@@ -31,7 +31,7 @@ public class ReaderIterator implements Iterable<Character>, Closeable
     volatile boolean iteratorInUse = false;
     int              current;
 
-    public ReaderIterator(Reader in)
+    public ReaderIterator(final Reader in)
     {
         this.in = in;
         this.current = this.read();
@@ -49,7 +49,7 @@ public class ReaderIterator implements Iterable<Character>, Closeable
                 this.closed = true;
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             this.current = -1;
             try
@@ -57,7 +57,7 @@ public class ReaderIterator implements Iterable<Character>, Closeable
                 this.in.close();
                 this.closed = true;
             }
-            catch (IOException e1)
+            catch (final IOException e1)
             {
                 throw new WrappedCheckedException(e);
             }
@@ -76,7 +76,7 @@ public class ReaderIterator implements Iterable<Character>, Closeable
     {
         final ReaderIterator ri;
 
-        public StreamIterator(ReaderIterator ri)
+        public StreamIterator(final ReaderIterator ri)
         {
             this.ri = ri;
         }

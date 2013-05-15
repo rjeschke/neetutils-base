@@ -48,7 +48,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
     private final static double TO_sRGB           = 1.0 / 2.2;
     private final static double FROM_sRGB         = 2.2;
 
-    public NImage(int width, int height)
+    public NImage(final int width, final int height)
     {
         this.width = width;
         this.height = height;
@@ -56,7 +56,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         Arrays.fill(this.pixels, NColor.BLACK_TRANS);
     }
 
-    public NImage(NImage image)
+    public NImage(final NImage image)
     {
         this.width = image.width;
         this.height = image.height;
@@ -64,12 +64,12 @@ public class NImage implements WorkerCallback<NImagePBlock>
         System.arraycopy(image.pixels, 0, this.pixels, 0, this.pixels.length);
     }
 
-    public NImage(BufferedImage image)
+    public NImage(final BufferedImage image)
     {
         this(image, FROM_sRGB);
     }
 
-    public NImage(BufferedImage image, double gamma)
+    public NImage(final BufferedImage image, final double gamma)
     {
         final BufferedImage img = forceARGB(image);
         this.width = img.getWidth();
@@ -89,7 +89,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    private static BufferedImage forceARGB(BufferedImage in)
+    private static BufferedImage forceARGB(final BufferedImage in)
     {
         if (in.getType() == BufferedImage.TYPE_INT_ARGB) return in;
         final BufferedImage img = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -99,7 +99,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return img;
     }
 
-    private final static int clampXY(ClampMode c, int v, int max)
+    private final static int clampXY(final ClampMode c, final int v, final int max)
     {
         int temp;
 
@@ -114,28 +114,28 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    private int clampX(int x)
+    private int clampX(final int x)
     {
         return clampXY(this.clampX, x, this.width);
     }
 
-    private int clampY(int y)
+    private int clampY(final int y)
     {
         return clampXY(this.clampY, y, this.height);
     }
 
-    private int clampedPos(int x, int y)
+    private int clampedPos(final int x, final int y)
     {
         return this.clampX(x) + this.clampY(y) * this.width;
     }
 
-    public NImage setThreadCount(int threads)
+    public NImage setThreadCount(final int threads)
     {
         this.processingThreads = Math.max(1, threads);
         return this;
     }
 
-    public void setPixel(int x, int y, NColor c)
+    public void setPixel(final int x, final int y, final NColor c)
     {
         final int p = this.clampedPos(x, y);
 
@@ -169,24 +169,24 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public NImage forceFill(NColor c)
+    public NImage forceFill(final NColor c)
     {
         Arrays.fill(this.pixels, c);
         return this;
     }
 
-    public NColor getPixel(int x, int y)
+    public NColor getPixel(final int x, final int y)
     {
         return this.pixels[this.clampedPos(x, y)];
     }
 
-    public void setClampMode(ClampMode clampX, ClampMode clampY)
+    public void setClampMode(final ClampMode clampX, final ClampMode clampY)
     {
         this.clampX = clampX;
         this.clampY = clampY;
     }
 
-    public void setColorOp(ColorOp op)
+    public void setColorOp(final ColorOp op)
     {
         this.cop = op;
     }
@@ -235,7 +235,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return this.toBufferedImageARGB(TO_sRGB);
     }
 
-    public BufferedImage toBufferedImageARGB(double gamma)
+    public BufferedImage toBufferedImageARGB(final double gamma)
     {
         final BufferedImage img = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
         final int[] pix = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
@@ -254,16 +254,16 @@ public class NImage implements WorkerCallback<NImagePBlock>
 
     public BufferedImage toBufferedImageARGBDithered()
     {
-        return toBufferedImageARGBDithered(TO_sRGB);
+        return this.toBufferedImageARGBDithered(TO_sRGB);
     }
 
-    public BufferedImage toBufferedImageARGBDithered(double gamma)
+    public BufferedImage toBufferedImageARGBDithered(final double gamma)
     {
         final BufferedImage img = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
         final int[] pix = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
 
-        float[] err0 = new float[3 * this.width + 6];
-        float[] err1 = new float[3 * this.width + 6];
+        final float[] err0 = new float[3 * this.width + 6];
+        final float[] err1 = new float[3 * this.width + 6];
 
         final float e0 = 7.f / 16.f;
         final float e1 = 3.f / 16.f;
@@ -312,7 +312,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return img;
     }
 
-    private static void vecNormalize(float[] v)
+    private static void vecNormalize(final float[] v)
     {
         final float len = (float)Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
         if (len > 0)
@@ -323,10 +323,10 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public NImage bump(final NImage normals, final float[] light, final NColor ambient, final NColor diffuse,
-            final NColor specular, final float power, final float heightScale, final boolean directional)
+    public NImage bump(final NImage normals, final float[] light, final NColor ambient, final NColor diffuse, final NColor specular, final float power,
+            final float heightScale, final boolean directional)
     {
-        float[] l = new float[3], n = new float[3], h = new float[3];
+        final float[] l = new float[3], n = new float[3], h = new float[3];
         NColor color, out, norm;
 
         if (directional)
@@ -379,7 +379,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return this;
     }
 
-    public NImage normals(float scale)
+    public NImage normals(final float scale)
     {
         final NColor[] pix = new NColor[this.width * this.height];
         final float sx = scale * this.width / 512.0f;
@@ -406,8 +406,8 @@ public class NImage implements WorkerCallback<NImagePBlock>
                 dx /= len;
                 dy /= len;
                 final NColor c = this.getPixel(x, y);
-                pix[x + y * this.width] = new NColor(NMath.saturate(dx * 0.5f + 0.5f), NMath.saturate(dy * 0.5f + 0.5f),
-                        NMath.saturate(dz * 0.5f + 0.5f), c.luminance());
+                pix[x + y * this.width] = new NColor(NMath.saturate(dx * 0.5f + 0.5f), NMath.saturate(dy * 0.5f + 0.5f), NMath.saturate(dz * 0.5f + 0.5f),
+                        c.luminance());
             }
         }
 
@@ -415,8 +415,8 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return this;
     }
 
-    public NImage perlin(final int seed, final float scalex, final float scaley, final int octaves, final float fallOff,
-            final float amp, final NColor color0, final NColor color1)
+    public NImage perlin(final int seed, final float scalex, final float scaley, final int octaves, final float fallOff, final float amp, final NColor color0,
+            final NColor color1)
     {
         return this.runThreaded(new NImagePerlin(this, seed, scalex, scaley, octaves, fallOff, amp, color0, color1), 8);
     }
@@ -458,7 +458,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return this;
     }
 
-    public NImage filter(FilterKernel kernel)
+    public NImage filter(final FilterKernel kernel)
     {
         if (kernel.isSingle) return this.runThreaded(new NImageFilter(new NImage(this), kernel, 0), 8);
 
@@ -466,19 +466,18 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return this.runThreaded(new NImageFilter(this, kernel, 2), 8);
     }
 
-    public NImage voronoi(final int seed, final int max, final float minDist, final float fallOff, final boolean invert,
-            final boolean colorCells, final NColor color0, final NColor color1)
+    public NImage voronoi(final int seed, final int max, final float minDist, final float fallOff, final boolean invert, final boolean colorCells,
+            final NColor color0, final NColor color1)
     {
         return this.runThreaded(new NImageVoronoi(this, seed, max, minDist, fallOff, invert, colorCells, color0, color1), 8);
     }
 
-    public NImage bricks(final int seed, final int bricksx, final int bricksy, final float jointsx, final float jointsy,
-            final float singleProb, final float rowOffset, final float jointHardness, final NColor color0, final NColor color1,
-            final NColor colorJoints)
+    public NImage bricks(final int seed, final int bricksx, final int bricksy, final float jointsx, final float jointsy, final float singleProb,
+            final float rowOffset, final float jointHardness, final NColor color0, final NColor color1, final NColor colorJoints)
     {
         final RNG rnd = RNGFactory.create(RNGType.LCG, seed);
         NColor col;
-        float[][] points = new float[bricksx + 1][2];
+        final float[][] points = new float[bricksx + 1][2];
         int lastRow = -1, count = 0;
 
         for (int y = 0; y < this.height; y++)
@@ -492,7 +491,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
                 count = 0;
                 for (int x = 0; x < bricksx;)
                 {
-                    boolean single = (bricksx - x == 1) ? true : rnd.nextFloatUnipolar() < singleProb;
+                    final boolean single = (bricksx - x == 1) ? true : rnd.nextFloatUnipolar() < singleProb;
                     final float fx = (float)x / (float)bricksx;
                     points[count][0] = fx;
                     points[count][1] = rnd.nextFloatUnipolar();
@@ -519,12 +518,11 @@ public class NImage implements WorkerCallback<NImagePBlock>
                 final float dx = Math.min(dx0, dx1);
                 final float dy = Math.min(Math.abs(fy - y0), Math.abs(fy - y1));
 
-                float jx = (dx / jointsx);
-                float jy = (dy / jointsy);
+                final float jx = (dx / jointsx);
+                final float jy = (dy / jointsy);
                 col = color0.lerp(color1, points[idx][1]);
 
-                if (jx < 1 | jy < 1)
-                    col = col.lerp(colorJoints, (float)Math.pow(1.0 - NMath.saturate(jx) * NMath.saturate(jy), jointHardness));
+                if (jx < 1 | jy < 1) col = col.lerp(colorJoints, (float)Math.pow(1.0 - NMath.saturate(jx) * NMath.saturate(jy), jointHardness));
 
                 this.pixels[x + y * this.width] = col;
             }
@@ -534,13 +532,13 @@ public class NImage implements WorkerCallback<NImagePBlock>
     }
 
     @Override
-    public void workerCallback(WorkerPool<NImagePBlock> pool, WorkerStatus status, Worker<NImagePBlock> worker, NImagePBlock p)
+    public void workerCallback(final WorkerPool<NImagePBlock> pool, final WorkerStatus status, final Worker<NImagePBlock> worker, final NImagePBlock p)
     {
         for (int y = 0; y < p.h; y++)
             System.arraycopy(p.pixels, y * p.w, this.pixels, p.x + (y + p.y) * this.width, p.w);
     }
 
-    public static void drawLine(int x0, int y0, int x1, int y1, List<NPoint> points)
+    public static void drawLine(final int x0, final int y0, final int x1, final int y1, final List<NPoint> points)
     {
         int x, y;
         int dx, dy, xs, ys, a;
@@ -593,7 +591,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         points.add(new NPoint(x, y));
     }
 
-    public void drawLine(int x0, int y0, int x1, int y1, NColor color)
+    public void drawLine(final int x0, final int y0, final int x1, final int y1, final NColor color)
     {
         int x, y;
         int dx, dy, xs, ys, a;
@@ -647,7 +645,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         this.setPixel(x, y, color);
     }
 
-    public void drawThickLine(int x0, int y0, int x1, int y1, int w, NColor color)
+    public void drawThickLine(final int x0, final int y0, final int x1, final int y1, final int w, final NColor color)
     {
         if (w < 2)
         {
@@ -697,7 +695,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         this.fillPolygon(points, color);
     }
 
-    public void drawHLine(int x, int y, int w, NColor color)
+    public void drawHLine(final int x, final int y, final int w, final NColor color)
     {
         if (w < 2)
         {
@@ -710,7 +708,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void drawVLine(int x, int y, int h, NColor color)
+    public void drawVLine(final int x, final int y, final int h, final NColor color)
     {
         if (h < 2)
         {
@@ -723,7 +721,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void drawRect(int x, int y, int w, int h, NColor color)
+    public void drawRect(final int x, final int y, final int w, final int h, final NColor color)
     {
         this.drawHLine(x, y, w, color);
         this.drawVLine(x, y, h, color);
@@ -731,7 +729,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         this.drawVLine(x + w - 1, y, h, color);
     }
 
-    public void fillRect(int x, int y, int w, int h, NColor color)
+    public void fillRect(final int x, final int y, final int w, final int h, final NColor color)
     {
         for (int i = y; i < y + h; i++)
         {
@@ -739,7 +737,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void drawPolygon(NPoint[] points, NColor color)
+    public void drawPolygon(final NPoint[] points, final NColor color)
     {
         for (int i = 0; i < points.length - 1; i++)
             this.drawLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y, color);
@@ -748,7 +746,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
             this.drawLine(points[points.length - 1].x, points[points.length - 1].y, points[0].x, points[0].y, color);
     }
 
-    public void drawPolygon(List<NPoint> points, NColor color)
+    public void drawPolygon(final List<NPoint> points, final NColor color)
     {
         for (int i = 0; i < points.size() - 1; i++)
             this.drawLine(points.get(i).x, points.get(i).y, points.get(i + 1).x, points.get(i + 1).y, color);
@@ -757,7 +755,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
             this.drawLine(Colls.last(points).x, Colls.last(points).y, Colls.head(points).x, Colls.head(points).y, color);
     }
 
-    private void _fillPolygon(List<NPoint> dpoints, NColor color)
+    private void _fillPolygon(final List<NPoint> dpoints, final NColor color)
     {
         Colls.sort(dpoints);
 
@@ -765,7 +763,8 @@ public class NImage implements WorkerCallback<NImagePBlock>
         int oy = dpoints.get(i).y;
         for (; i < dpoints.size();)
         {
-            int sx = dpoints.get(i).x, ex = 0;
+            final int sx = dpoints.get(i).x;
+            int ex = 0;
             while (i < dpoints.size() && dpoints.get(i).y == oy)
             {
                 ex = dpoints.get(i++).x;
@@ -778,7 +777,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void fillPolygon(NPoint[] points, NColor color)
+    public void fillPolygon(final NPoint[] points, final NColor color)
     {
         final List<NPoint> dpoints = Colls.list();
 
@@ -791,7 +790,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         this._fillPolygon(dpoints, color);
     }
 
-    public void fillPolygon(List<NPoint> points, NColor color)
+    public void fillPolygon(final List<NPoint> points, final NColor color)
     {
         final List<NPoint> dpoints = Colls.list();
 
@@ -804,7 +803,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         this._fillPolygon(dpoints, color);
     }
 
-    public void drawCircle(int x, int y, int radius, NColor color)
+    public void drawCircle(final int x, final int y, final int radius, final NColor color)
     {
         if (radius < 2)
         {
@@ -859,7 +858,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void fillCircle(int x, int y, int radius, NColor color)
+    public void fillCircle(final int x, final int y, final int radius, final NColor color)
     {
         if (radius < 2)
         {
@@ -912,7 +911,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void drawEllipse(int x, int y, int a, int b, NColor color)
+    public void drawEllipse(final int x, final int y, final int a, final int b, final NColor color)
     {
         if (a < 2 && b < 2)
         {
@@ -979,7 +978,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void fillEllipse(int x, int y, int a, int b, NColor color)
+    public void fillEllipse(final int x, final int y, final int a, final int b, final NColor color)
     {
         if (a < 2 && b < 2)
         {
@@ -1044,7 +1043,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void drawArc(int x, int y, int radius, double start, double end, NColor color)
+    public void drawArc(final int x, final int y, final int radius, final double start, final double end, final NColor color)
     {
         final double invRad = 1.0 / (Math.PI * 180.0);
         int cy = radius;
@@ -1065,7 +1064,8 @@ public class NImage implements WorkerCallback<NImagePBlock>
             double err = 10, d;
             int nx = cx, ny = cy, tx, ty;
 
-            double wi0 = 90 - (Math.asin(cy / Math.sqrt(cx * cx + cy * cy)) * invRad), wi;
+            final double wi0 = 90 - (Math.asin(cy / Math.sqrt(cx * cx + cy * cy)) * invRad);
+            double wi;
             if (rs > re)
             {
                 if (wi0 >= rs || wi0 <= re)
@@ -1145,14 +1145,14 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    private void fillArcHLine(int sx, int sy, int cx, int cy, double rs, double re, NColor color)
+    private void fillArcHLine(final int sx, final int sy, final int cx, final int cy, final double rs, final double re, final NColor color)
     {
         final double invRad = 1.0 / (Math.PI * 180.0);
-        double cy2 = Math.abs(cy);
+        final double cy2 = Math.abs(cy);
 
         for (int x = -cx; x <= cx; x++)
         {
-            double r = Math.sqrt(x * x + cy * cy);
+            final double r = Math.sqrt(x * x + cy * cy);
             if (r == 0)
             {
                 this.setPixel(sx, sy, color);
@@ -1188,7 +1188,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void fillArc(int x, int y, int radius, double start, double end, NColor color)
+    public void fillArc(final int x, final int y, final int radius, final double start, final double end, final NColor color)
     {
         int cy = radius;
         int cx = 0;
@@ -1245,17 +1245,17 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void drawRoundRect(int x, int y, int w, int h, int arcsz, NColor color)
+    public void drawRoundRect(final int x, final int y, final int w, final int h, final int arcsz, final NColor color)
     {
         this.drawRoundRect(x, y, w, h, arcsz, arcsz, color);
     }
 
-    public void fillRoundRect(int x, int y, int w, int h, int arcsz, NColor color)
+    public void fillRoundRect(final int x, final int y, final int w, final int h, final int arcsz, final NColor color)
     {
         this.fillRoundRect(x, y, w, h, arcsz, arcsz, color);
     }
 
-    public void drawRoundRect(int x, int y, int w, int h, int arcWidth, int arcHeight, NColor color)
+    public void drawRoundRect(final int x, final int y, final int w, final int h, final int arcWidth, final int arcHeight, final NColor color)
     {
         final int x0 = x + arcWidth;
         final int y0 = y + arcHeight;
@@ -1325,7 +1325,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
     }
 
-    public void fillRoundRect(int x, int y, int w, int h, int arcWidth, int arcHeight, NColor color)
+    public void fillRoundRect(final int x, final int y, final int w, final int h, final int arcWidth, final int arcHeight, final NColor color)
     {
         final int x0 = x + arcWidth;
         final int y0 = y + arcHeight;
@@ -1394,7 +1394,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
     {
         public final int x, y;
 
-        public NPoint(int x, int y)
+        public NPoint(final int x, final int y)
         {
             this.x = x;
             this.y = y;
@@ -1407,7 +1407,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
 
         @Override
-        public boolean equals(Object obj)
+        public boolean equals(final Object obj)
         {
             if (!(obj instanceof NPoint)) return false;
             final NPoint point = (NPoint)obj;
@@ -1415,7 +1415,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
 
         @Override
-        public int compareTo(NPoint o)
+        public int compareTo(final NPoint o)
         {
             if (this.y == o.y) return this.x - o.x;
             return this.y - o.y;

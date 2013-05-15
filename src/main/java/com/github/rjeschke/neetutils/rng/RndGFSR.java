@@ -20,7 +20,7 @@ package com.github.rjeschke.neetutils.rng;
  * 
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
-public class RndGFSR implements RNG
+public class RndGFSR extends AbstractRNG
 {
     private final static int A       = 11, B = 103, C = 307, D = 1009, E = 3001;
     private int              pos     = 0;
@@ -31,7 +31,7 @@ public class RndGFSR implements RNG
         this(RNGFactory.defaultSeed());
     }
 
-    public RndGFSR(long seed)
+    public RndGFSR(final long seed)
     {
         final RndLCG rnd = new RndLCG(seed);
         for (int i = 0; i < 4096; i++)
@@ -44,37 +44,7 @@ public class RndGFSR implements RNG
     public int nextInt()
     {
         final int p = this.pos = (this.pos + 1) & 4095;
-        return this.history[p] = this.history[(p - A) & 4095] ^ this.history[(p - B) & 4095] ^ this.history[(p - C) & 4095]
-                ^ this.history[(p - D) & 4095] ^ this.history[(p - E) & 4095];
-    }
-
-    @Override
-    public int nextInt(int max)
-    {
-        return (int)(nextDoubleUnipolar() * max);
-    }
-
-    @Override
-    public float nextFloatUnipolar()
-    {
-        return (this.nextInt() / 4294967296.f) + 0.5f;
-    }
-
-    @Override
-    public float nextFloatBipolar()
-    {
-        return this.nextInt() / 2147483648.f;
-    }
-
-    @Override
-    public double nextDoubleUnipolar()
-    {
-        return (this.nextInt() / 4294967296.0) + 0.5;
-    }
-
-    @Override
-    public double nextDoubleBipolar()
-    {
-        return this.nextInt() / 2147483648.0;
+        return this.history[p] = this.history[(p - A) & 4095] ^ this.history[(p - B) & 4095] ^ this.history[(p - C) & 4095] ^ this.history[(p - D) & 4095]
+                ^ this.history[(p - E) & 4095];
     }
 }

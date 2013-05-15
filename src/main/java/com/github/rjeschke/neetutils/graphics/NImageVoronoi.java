@@ -32,8 +32,8 @@ class NImageVoronoi implements Worker<NImagePBlock>
     final NColor    color0;
     final NColor    color1;
 
-    NImageVoronoi(NImage image, final int seed, final int max, final float minDist, final float fallOff, final boolean invert,
-            final boolean colorCells, final NColor color0, final NColor color1)
+    NImageVoronoi(final NImage image, final int seed, final int max, final float minDist, final float fallOff, final boolean invert, final boolean colorCells,
+            final NColor color0, final NColor color1)
     {
         this.image = image;
         this.fallOff = fallOff;
@@ -50,7 +50,7 @@ class NImageVoronoi implements Worker<NImagePBlock>
         while (count < todo)
         {
             int i;
-            float[] point = new float[3];
+            final float[] point = new float[3];
             for (i = 0; i < 500; i++)
             {
                 point[0] = rnd.nextFloatUnipolar();
@@ -78,7 +78,7 @@ class NImageVoronoi implements Worker<NImagePBlock>
     }
 
     @Override
-    public void run(NImagePBlock p)
+    public void run(final NImagePBlock p)
     {
         for (int y = 0; y < p.h; y++)
         {

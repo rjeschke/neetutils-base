@@ -15,7 +15,31 @@
  */
 package com.github.rjeschke.neetutils.rng;
 
-public enum RNGType
+/**
+ * Linear congruential random number generator.
+ * 
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
+public class RndLCG32 extends AbstractRNG
 {
-    GFSR, CMWC, LCG, LCG32
+    private final static long A = 1036229L;
+    private final static long C = 404161;
+    private long              value;
+
+    public RndLCG32()
+    {
+        this(RNGFactory.defaultSeed());
+    }
+
+    public RndLCG32(final long seed)
+    {
+        this.value = seed & 0xffffffffL;
+    }
+
+    @Override
+    public int nextInt()
+    {
+        this.value = (this.value * A + C) & 0xffffffffL;
+        return (int)(this.value >> 32);
+    }
 }

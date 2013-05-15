@@ -39,7 +39,7 @@ public class Disposer extends WeakReference<Object>
         thread.start();
     }
 
-    public Disposer(Object referent, Disposable disposable)
+    public Disposer(final Object referent, final Disposable disposable)
     {
         super(referent, refQueue);
         this.disposable = disposable;
@@ -84,7 +84,7 @@ public class Disposer extends WeakReference<Object>
                 {
                     ((Disposer)refQueue.remove()).dispose();
                 }
-                catch (Throwable t)
+                catch (final Throwable t)
                 {
                     //
                 }

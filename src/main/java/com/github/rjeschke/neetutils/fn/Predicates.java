@@ -27,7 +27,7 @@ public final class Predicates
         return new FnPredicate<A>()
         {
             @Override
-            public boolean applyPredicate(A a)
+            public boolean applyPredicate(final A a)
             {
                 return !predicate.applyPredicate(a);
             }
@@ -39,7 +39,7 @@ public final class Predicates
         return new FnPredicate<A>()
         {
             @Override
-            public boolean applyPredicate(A a)
+            public boolean applyPredicate(final A a)
             {
                 return predicateA.applyPredicate(a) && predicateB.applyPredicate(a);
             }
@@ -52,7 +52,7 @@ public final class Predicates
         return new FnPredicate<A>()
         {
             @Override
-            public boolean applyPredicate(A a)
+            public boolean applyPredicate(final A a)
             {
                 return predicateA.applyPredicate(a) && predicateB.applyPredicate(a) && predicateC.applyPredicate(a);
             }
@@ -64,7 +64,7 @@ public final class Predicates
         return new FnPredicate<A>()
         {
             @Override
-            public boolean applyPredicate(A a)
+            public boolean applyPredicate(final A a)
             {
                 return predicateA.applyPredicate(a) || predicateB.applyPredicate(a);
             }
@@ -77,7 +77,7 @@ public final class Predicates
         return new FnPredicate<A>()
         {
             @Override
-            public boolean applyPredicate(A a)
+            public boolean applyPredicate(final A a)
             {
                 return predicateA.applyPredicate(a) || predicateB.applyPredicate(a) || predicateC.applyPredicate(a);
             }

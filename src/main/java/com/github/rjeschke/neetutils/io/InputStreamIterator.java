@@ -31,7 +31,7 @@ public class InputStreamIterator implements Iterable<Integer>, Closeable
     volatile boolean  iteratorInUse = false;
     int               current;
 
-    public InputStreamIterator(InputStream in)
+    public InputStreamIterator(final InputStream in)
     {
         this.in = in;
         this.current = this.read();
@@ -49,7 +49,7 @@ public class InputStreamIterator implements Iterable<Integer>, Closeable
                 this.closed = true;
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             this.current = -1;
             try
@@ -57,7 +57,7 @@ public class InputStreamIterator implements Iterable<Integer>, Closeable
                 this.in.close();
                 this.closed = true;
             }
-            catch (IOException e1)
+            catch (final IOException e1)
             {
                 throw new WrappedCheckedException(e);
             }
@@ -76,7 +76,7 @@ public class InputStreamIterator implements Iterable<Integer>, Closeable
     {
         final InputStreamIterator ist;
 
-        public StreamIterator(InputStreamIterator ist)
+        public StreamIterator(final InputStreamIterator ist)
         {
             this.ist = ist;
         }

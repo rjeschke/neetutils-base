@@ -15,6 +15,10 @@
  */
 package com.github.rjeschke.neetutils.vectors;
 
+import java.nio.DoubleBuffer;
+
+import com.github.rjeschke.neetutils.math.NMath;
+
 public class Vector2d
 {
     public double x;
@@ -22,7 +26,7 @@ public class Vector2d
 
     public Vector2d()
     {
-        // 0
+        // default
     }
 
     public Vector2d(final double x, final double y)
@@ -37,16 +41,20 @@ public class Vector2d
         this.y = xy;
     }
 
-    public Vector2d scale(final double f)
+    public Vector2d(final Vector2d v)
     {
-        this.x *= f;
-        this.y *= f;
-        return this;
+        this.x = v.x;
+        this.y = v.y;
     }
 
     public static Vector2d of(final double x, final double y)
     {
         return new Vector2d(x, y);
+    }
+
+    public static Vector2d of(final Vector2d v)
+    {
+        return new Vector2d(v);
     }
 
     public Vector2d set(final double x, final double y)
@@ -56,10 +64,57 @@ public class Vector2d
         return this;
     }
 
+    public Vector2d set(final double xy)
+    {
+        this.x = xy;
+        this.y = xy;
+        return this;
+    }
+
     public Vector2d set(final Vector2d v)
     {
         this.x = v.x;
         this.y = v.y;
+        return this;
+    }
+
+    public Vector2d set(final Vector3d v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        return this;
+    }
+
+    public Vector2d set(final Vector4d v)
+    {
+        this.x = v.x;
+        this.y = v.y;
+        return this;
+    }
+
+    public Vector2d set(final int index, final double value)
+    {
+        if (index == 0)
+        {
+            this.x = value;
+        }
+        else
+        {
+            this.y = value;
+        }
+        return this;
+    }
+
+    public double get(final int index)
+    {
+        if (index == 0) return this.x;
+        return this.y;
+    }
+
+    public Vector2d scale(final double f)
+    {
+        this.x *= f;
+        this.y *= f;
         return this;
     }
 
@@ -105,6 +160,20 @@ public class Vector2d
         return this;
     }
 
+    public Vector2d div(final Vector2d v)
+    {
+        this.x /= v.x;
+        this.y /= v.y;
+        return this;
+    }
+
+    public Vector2d div(final Vector2d v, final double scale)
+    {
+        this.x /= v.x * scale;
+        this.y /= v.y * scale;
+        return this;
+    }
+
     public Vector2d lerp(final Vector2d v, final double f)
     {
         this.x += (v.x - this.x) * f;
@@ -115,6 +184,27 @@ public class Vector2d
     public double dot(final Vector2d v)
     {
         return this.x * v.x + this.y * v.y;
+    }
+
+    public Vector2d min(final Vector2d v)
+    {
+        this.x = Math.min(this.x, v.x);
+        this.y = Math.min(this.y, v.y);
+        return this;
+    }
+
+    public Vector2d max(final Vector2d v)
+    {
+        this.x = Math.max(this.x, v.x);
+        this.y = Math.max(this.y, v.y);
+        return this;
+    }
+
+    public Vector2d clamp(final Vector2d min, final Vector2d max)
+    {
+        this.x = NMath.clamp(this.x, min.x, max.x);
+        this.y = NMath.clamp(this.y, min.y, max.y);
+        return this;
     }
 
     public Vector2d normalize()
@@ -141,10 +231,31 @@ public class Vector2d
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
-    public void intoArray(final double[] arr, final int offset)
+    public Vector2d swizzle(final int a, final int b)
+    {
+        return Vector2d.of(this.get(a), this.get(b));
+    }
+
+    public Vector3d swizzle(final int a, final int b, final int c)
+    {
+        return Vector3d.of(this.get(a), this.get(b), this.get(c));
+    }
+
+    public Vector4d swizzle(final int a, final int b, final int c, final int d)
+    {
+        return Vector4d.of(this.get(a), this.get(b), this.get(c), this.get(d));
+    }
+
+    public void into(final double[] arr, final int offset)
     {
         arr[offset] = this.x;
         arr[offset + 1] = this.y;
+    }
+
+    public void into(final DoubleBuffer buffer, final int offset)
+    {
+        buffer.put(offset, this.x);
+        buffer.put(offset + 1, this.y);
     }
 
     @Override

@@ -189,48 +189,46 @@ public final class NMath
         return 1 << (int)Math.ceil(Math.log(value) * INV_LOG_2);
     }
 
-    public final static float step(float edge, float x)
+    public final static float step(final float edge, final float x)
     {
         return x < edge ? 0.0f : 1.0f;
     }
 
-    public final static double step(double edge, double x)
+    public final static double step(final double edge, final double x)
     {
         return x < edge ? 0.0 : 1.0;
     }
 
-    public final static float smoothstep(float edge0, float edge1, float x)
+    public final static float smoothstep(final float edge0, final float edge1, final float x)
     {
         final float y = saturate((x - edge0) / (edge1 - edge0));
         return y * y * (3.0f - 2.0f * y);
     }
 
-    public final static double smoothstep(double edge0, double edge1, double x)
+    public final static double smoothstep(final double edge0, final double edge1, final double x)
     {
         final double y = saturate((x - edge0) / (edge1 - edge0));
         return y * y * (3.0 - 2.0 * y);
     }
 
-    public final static float saturate(float x)
+    public final static float saturate(final float x)
     {
         return Math.max(0, Math.min(1, x));
     }
 
-    public final static double saturate(double x)
+    public final static double saturate(final double x)
     {
         return Math.max(0, Math.min(1, x));
     }
 
-    // TODO verify
-    public final static float fract(float x)
+    public final static float fract(final float x)
     {
-        return x < 0 ? x - (float)Math.ceil(x) : x - (float)Math.floor(x);
+        return Math.min(x - (float)Math.floor(x), 0x1.fffffep-1f);
     }
 
-    // TODO verify
-    public final static double fract(double x)
+    public final static double fract(final double x)
     {
-        return x < 0 ? x - Math.ceil(x) : x - Math.floor(x);
+        return Math.min(x - Math.floor(x), 0x1.ffffffffffff7ep-1);
     }
 
     /**
@@ -257,7 +255,7 @@ public final class NMath
      *            Value.
      * @return Return value.
      */
-    public final static double i0(double x)
+    public final static double i0(final double x)
     {
         double f = 1;
         final double x2 = x * x * 0.25;
@@ -291,7 +289,7 @@ public final class NMath
         return 1.0;
     }
 
-    public final static long rol64(long value, int bits)
+    public final static long rol64(final long value, final int bits)
     {
         final int b = bits & 63;
         if (b == 0) return value;
@@ -299,7 +297,7 @@ public final class NMath
         return (value << b) | (value >>> (64 - b));
     }
 
-    public final static long ror64(long value, int bits)
+    public final static long ror64(final long value, final int bits)
     {
         final int b = bits & 63;
         if (b == 0) return value;
@@ -307,7 +305,7 @@ public final class NMath
         return (value >>> b) | (value << (64 - b));
     }
 
-    public final static int rol32(int value, int bits)
+    public final static int rol32(final int value, final int bits)
     {
         final int b = bits & 31;
         if (b == 0) return value;
@@ -315,7 +313,7 @@ public final class NMath
         return (value << b) | (value >>> (32 - b));
     }
 
-    public final static int ror32(int value, int bits)
+    public final static int ror32(final int value, final int bits)
     {
         final int b = bits & 31;
         if (b == 0) return value;
@@ -323,7 +321,7 @@ public final class NMath
         return (value >>> b) | (value << (32 - b));
     }
 
-    public final static int rol24(int value, int bits)
+    public final static int rol24(final int value, final int bits)
     {
         final int b = Math.abs(bits % 24);
         if (b == 0) return value;
@@ -332,7 +330,7 @@ public final class NMath
         return ((v >> b) | (v << (24 - b))) & 0xffffff;
     }
 
-    public final static int ror24(int value, int bits)
+    public final static int ror24(final int value, final int bits)
     {
         final int b = Math.abs(bits % 24);
         if (b == 0) return value;
@@ -341,7 +339,7 @@ public final class NMath
         return ((v >> b) | (v << (24 - b))) & 0xffffff;
     }
 
-    public final static int rol16(int value, int bits)
+    public final static int rol16(final int value, final int bits)
     {
         final int b = bits & 15;
         if (b == 0) return value;
@@ -350,7 +348,7 @@ public final class NMath
         return ((v << b) | (v >> (16 - b))) & 65535;
     }
 
-    public final static int ror16(int value, int bits)
+    public final static int ror16(final int value, final int bits)
     {
         final int b = bits & 15;
         if (b == 0) return value;
@@ -359,7 +357,7 @@ public final class NMath
         return ((v >> b) | (v << (16 - b))) & 65535;
     }
 
-    public final static int rol8(int value, int bits)
+    public final static int rol8(final int value, final int bits)
     {
         final int b = bits & 7;
         if (b == 0) return value;
@@ -368,7 +366,7 @@ public final class NMath
         return ((v << b) | (v >> (8 - b))) & 255;
     }
 
-    public final static int ror8(int value, int bits)
+    public final static int ror8(final int value, final int bits)
     {
         final int b = bits & 7;
         if (b == 0) return value;
@@ -377,27 +375,27 @@ public final class NMath
         return ((v >> b) | (v << (8 - b))) & 255;
     }
 
-    public final static double getButterworthFactor(int n, int k)
+    public final static double getButterworthFactor(final int n, final int k)
     {
         return -2.0 * Math.cos((2.0 * k + n - 1) / (2 * n) * Math.PI);
     }
 
-    public final static double log2(double x)
+    public final static double log2(final double x)
     {
         return Math.log(x) * INV_LOG_2;
     }
 
-    public final static double exp2(double x)
+    public final static double exp2(final double x)
     {
         return Math.pow(2, x);
     }
 
-    public final static float log2(float x)
+    public final static float log2(final float x)
     {
         return (float)(Math.log(x) * INV_LOG_2);
     }
 
-    public final static float exp2(float x)
+    public final static float exp2(final float x)
     {
         return (float)Math.pow(2, x);
     }

@@ -40,7 +40,7 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
     private Thread                                                        callbackThread = null;
     private RequeueWatcher<WorkerPool.Job<T>, WorkerPool.ThreadWorker<T>> watcher;
 
-    private WorkerPool(WorkerCallback<T> callback, int threads, int queueLimit, boolean serialCallbacks)
+    private WorkerPool(final WorkerCallback<T> callback, final int threads, final int queueLimit, final boolean serialCallbacks)
     {
         this.callback = callback;
         this.numThreads = threads;
@@ -49,10 +49,9 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
         this.threads = new Thread[threads];
     }
 
-    public static <T> WorkerPool<T> start(WorkerCallback<T> callback, int threads, int queueLimit, boolean serialCallbacks)
+    public static <T> WorkerPool<T> start(final WorkerCallback<T> callback, final int threads, final int queueLimit, final boolean serialCallbacks)
     {
-        final WorkerPool<T> jobber = new WorkerPool<>(callback, ThreadPool.defaultThreadcount(threads), queueLimit,
-                serialCallbacks);
+        final WorkerPool<T> jobber = new WorkerPool<>(callback, ThreadPool.defaultThreadcount(threads), queueLimit, serialCallbacks);
 
         for (int i = 0; i < jobber.threads.length; i++)
         {
@@ -88,7 +87,7 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
         return this.numThreads;
     }
 
-    public void enqueue(Worker<T> worker, T object)
+    public void enqueue(final Worker<T> worker, final T object)
     {
         if (worker == null) throw new NullPointerException("A null Worker is not permitted");
 
@@ -111,7 +110,7 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
         }
     }
 
-    private void reuseOrEnqueue(ThreadWorker<T> w)
+    private void reuseOrEnqueue(final ThreadWorker<T> w)
     {
         final Job<T> job = this.jobs.poll();
         if (job != null)
@@ -119,7 +118,7 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
         else this.workers.offer(w);
     }
 
-    void doCallback(ThreadWorker<T> threadWorker, WorkerStatus status, Worker<T> worker, T object)
+    void doCallback(final ThreadWorker<T> threadWorker, final WorkerStatus status, final Worker<T> worker, final T object)
     {
         if (this.serialCallbacks)
         {
@@ -132,7 +131,7 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
             {
                 this.callback.workerCallback(this, status, worker, object);
             }
-            catch (Throwable t)
+            catch (final Throwable t)
             {
                 //
             }
@@ -185,7 +184,7 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
                 if (r.worker == null) break;
                 this.callback.workerCallback(this, r.status, r.worker, r.object);
             }
-            catch (Throwable t)
+            catch (final Throwable t)
             {
                 //
             }
@@ -198,7 +197,7 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
         final WorkerStatus status;
         final T            object;
 
-        public WorkerResult(Worker<T> worker, T object, WorkerStatus status)
+        public WorkerResult(final Worker<T> worker, final T object, final WorkerStatus status)
         {
             this.worker = worker;
             this.object = object;
@@ -212,13 +211,13 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
         private final WorkerPool<T> pool;
         private volatile Job<T>     workload = null;
 
-        public ThreadWorker(WorkerPool<T> pool)
+        public ThreadWorker(final WorkerPool<T> pool)
         {
             this.sync.acquireUninterruptibly();
             this.pool = pool;
         }
 
-        protected void setWorkLoad(Job<T> job)
+        protected void setWorkLoad(final Job<T> job)
         {
             this.workload = job;
             this.sync.release();
@@ -237,14 +236,13 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
                     if (this.workload.worker instanceof StopWorker) break;
                     this.workload.worker.run(this.workload.object);
                 }
-                catch (Throwable t)
+                catch (final Throwable t)
                 {
                     ta = t;
                     ok = false;
                 }
 
-                this.pool.doCallback(this, ok ? WorkerStatus.OK : new WorkerStatus(ta), this.workload.worker,
-                        this.workload.object);
+                this.pool.doCallback(this, ok ? WorkerStatus.OK : new WorkerStatus(ta), this.workload.worker, this.workload.object);
             }
         }
     }
@@ -254,7 +252,7 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
         public final Worker<T> worker;
         public final T         object;
 
-        public Job(Worker<T> worker, T object)
+        public Job(final Worker<T> worker, final T object)
         {
             this.worker = worker;
             this.object = object;
@@ -269,14 +267,14 @@ public class WorkerPool<T> implements Runnable, RequeueWatcherCallback<WorkerPoo
         }
 
         @Override
-        public void run(T object)
+        public void run(final T object)
         {
             // empty
         }
     }
 
     @Override
-    public void requeue(ThreadWorker<T> worker, Job<T> job)
+    public void requeue(final ThreadWorker<T> worker, final Job<T> job)
     {
         worker.setWorkLoad(job);
     }

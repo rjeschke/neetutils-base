@@ -221,7 +221,7 @@ public final class JSON
 
                 if (isFieldVisible(f, vis, false))
                 {
-                    boolean isAccessible = f.isAccessible();
+                    final boolean isAccessible = f.isAccessible();
                     f.setAccessible(true);
                     if (f.getType().isEnum())
                     {
@@ -230,7 +230,7 @@ public final class JSON
                         {
                             m = f.getType().getMethod("fromJSONString", String.class);
                         }
-                        catch (NoSuchMethodException ex)
+                        catch (final NoSuchMethodException ex)
                         {
                             m = f.getType().getMethod("valueOf", String.class);
                         }
@@ -260,7 +260,7 @@ public final class JSON
                                         {
                                             m = t.getMethod("fromJSONString", String.class);
                                         }
-                                        catch (NoSuchMethodException ex)
+                                        catch (final NoSuchMethodException ex)
                                         {
                                             m = t.getMethod("valueOf", String.class);
                                         }
@@ -291,7 +291,7 @@ public final class JSON
                                         {
                                             m = t.getMethod("fromJSONString", String.class);
                                         }
-                                        catch (NoSuchMethodException ex)
+                                        catch (final NoSuchMethodException ex)
                                         {
                                             m = t.getMethod("valueOf", String.class);
                                         }
@@ -327,7 +327,7 @@ public final class JSON
                     rest.put(e.getKey(), e.getValue());
                 }
             }
-            catch (NoSuchFieldException ex)
+            catch (final NoSuchFieldException ex)
             {
                 rest.put(e.getKey(), e.getValue());
             }
@@ -342,7 +342,7 @@ public final class JSON
         {
             try
             {
-                boolean isAccessible = catchAll.isAccessible();
+                final boolean isAccessible = catchAll.isAccessible();
                 catchAll.setAccessible(true);
                 catchAll.set(object, rest);
                 catchAll.setAccessible(isAccessible);
@@ -543,7 +543,7 @@ public final class JSON
 
         for (;;)
         {
-            Token t = tokenizer.getCurrentToken();
+            final Token t = tokenizer.getCurrentToken();
             if (t == Token.ARRAY_CLOSE)
             {
                 tokenizer.next();
@@ -578,7 +578,7 @@ public final class JSON
         final Map<String, Object> map = new HashMap<>();
         for (;;)
         {
-            Token t = tokenizer.getCurrentToken();
+            final Token t = tokenizer.getCurrentToken();
             if (t == Token.OBJECT_CLOSE)
             {
                 tokenizer.next();
@@ -790,7 +790,7 @@ public final class JSON
                 {
                     if (isFieldVisible(f, vis, true))
                     {
-                        boolean isAccessible = f.isAccessible();
+                        final boolean isAccessible = f.isAccessible();
                         f.setAccessible(true);
 
                         final Object value = f.get(obj);
@@ -962,7 +962,7 @@ public final class JSON
                 m.setAccessible(isAccessible);
                 return Objects.uncheckedCast(ret);
             }
-            catch (NoSuchMethodException e)
+            catch (final NoSuchMethodException e)
             {
                 final Constructor<?> ctor = clazz.getConstructor();
                 final boolean isAccessible = ctor.isAccessible();
