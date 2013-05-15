@@ -92,7 +92,7 @@ public class Vector2f
         return this;
     }
 
-    public Vector2f set(final int index, final float value)
+    public Vector2f setIdx(final int index, final float value)
     {
         if (index == 0)
         {

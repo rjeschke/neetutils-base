@@ -113,7 +113,7 @@ public class Vector3f
         return this;
     }
 
-    public Vector3f set(final int index, final float value)
+    public Vector3f setIdx(final int index, final float value)
     {
         if (index == 0)
         {

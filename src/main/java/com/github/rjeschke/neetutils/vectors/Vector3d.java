@@ -113,7 +113,7 @@ public class Vector3d
         return this;
     }
 
-    public Vector3d set(final int index, final double value)
+    public Vector3d setIdx(final int index, final double value)
     {
         if (index == 0)
         {

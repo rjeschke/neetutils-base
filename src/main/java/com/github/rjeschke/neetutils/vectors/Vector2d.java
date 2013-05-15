@@ -92,7 +92,7 @@ public class Vector2d
         return this;
     }
 
-    public Vector2d set(final int index, final double value)
+    public Vector2d setIdx(final int index, final double value)
     {
         if (index == 0)
         {

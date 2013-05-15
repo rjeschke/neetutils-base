@@ -123,7 +123,7 @@ public class Vector4d
         return this;
     }
 
-    public Vector4d set(final int index, final double value)
+    public Vector4d setIdx(final int index, final double value)
     {
         if (index == 0)
         {
