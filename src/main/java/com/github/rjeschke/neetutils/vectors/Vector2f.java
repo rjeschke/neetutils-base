@@ -71,6 +71,13 @@ public class Vector2f
         return this;
     }
 
+    public Vector2f set(final FloatBuffer buffer, final int offset)
+    {
+        this.x = buffer.get(offset);
+        this.y = buffer.get(offset + 1);
+        return this;
+    }
+
     public Vector2f set(final Vector2f v)
     {
         this.x = v.x;
@@ -193,6 +200,11 @@ public class Vector2f
         return this;
     }
 
+    public float min()
+    {
+        return Math.min(this.x, this.y);
+    }
+
     public Vector2f max(final Vector2f v)
     {
         this.x = Math.max(this.x, v.x);
@@ -200,10 +212,29 @@ public class Vector2f
         return this;
     }
 
+    public float max()
+    {
+        return Math.min(this.x, this.y);
+    }
+
     public Vector2f clamp(final Vector2f min, final Vector2f max)
     {
         this.x = NMath.clamp(this.x, min.x, max.x);
         this.y = NMath.clamp(this.y, min.y, max.y);
+        return this;
+    }
+
+    public Vector2f abs()
+    {
+        this.x = Math.abs(this.x);
+        this.y = Math.abs(this.y);
+        return this;
+    }
+
+    public Vector2f pow(final double value)
+    {
+        this.x = (float)Math.pow(this.x, value);
+        this.y = (float)Math.pow(this.y, value);
         return this;
     }
 

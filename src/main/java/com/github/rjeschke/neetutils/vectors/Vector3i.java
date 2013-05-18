@@ -81,6 +81,14 @@ public class Vector3i
         return this;
     }
 
+    public Vector3i set(final int xyz)
+    {
+        this.x = xyz;
+        this.y = xyz;
+        this.z = xyz;
+        return this;
+    }
+
     public Vector3i set(final Vector2i v, final int z)
     {
         this.x = v.x;

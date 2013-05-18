@@ -89,6 +89,22 @@ public class Vector3d
         return this;
     }
 
+    public Vector3d set(final double xyz)
+    {
+        this.x = xyz;
+        this.y = xyz;
+        this.z = xyz;
+        return this;
+    }
+
+    public Vector3d set(final DoubleBuffer buffer, final int offset)
+    {
+        this.x = buffer.get(offset);
+        this.y = buffer.get(offset + 1);
+        this.z = buffer.get(offset + 2);
+        return this;
+    }
+
     public Vector3d set(final Vector2d v, final double z)
     {
         this.x = v.x;
@@ -243,6 +259,11 @@ public class Vector3d
         return this;
     }
 
+    public double min()
+    {
+        return Math.min(this.x, Math.min(this.y, this.z));
+    }
+
     public Vector3d max(final Vector3d other)
     {
         this.x = Math.max(this.x, other.x);
@@ -251,11 +272,32 @@ public class Vector3d
         return this;
     }
 
+    public double max()
+    {
+        return Math.max(this.x, Math.max(this.y, this.z));
+    }
+
     public Vector3d clamp(final Vector3d min, final Vector3d max)
     {
         this.x = NMath.clamp(this.x, min.x, max.x);
         this.y = NMath.clamp(this.y, min.y, max.y);
         this.z = NMath.clamp(this.z, min.z, max.z);
+        return this;
+    }
+
+    public Vector3d abs()
+    {
+        this.x = Math.abs(this.x);
+        this.y = Math.abs(this.y);
+        this.z = Math.abs(this.z);
+        return this;
+    }
+
+    public Vector3d pow(final double value)
+    {
+        this.x = Math.pow(this.x, value);
+        this.y = Math.pow(this.y, value);
+        this.z = Math.pow(this.z, value);
         return this;
     }
 

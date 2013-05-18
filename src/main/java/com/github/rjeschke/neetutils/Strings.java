@@ -110,4 +110,28 @@ public class Strings
     {
         return str == null || str.isEmpty();
     }
+
+    public final static String collapseWhitespace(final String str)
+    {
+        final StringBuilder sb = new StringBuilder();
+        boolean wasWs = false;
+        for (int i = 0; i < str.length(); i++)
+        {
+            final char c = str.charAt(i);
+            if (Character.isWhitespace(c) || Character.isSpaceChar(c))
+            {
+                if (!wasWs)
+                {
+                    sb.append(' ');
+                    wasWs = true;
+                }
+            }
+            else
+            {
+                wasWs = false;
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
 }

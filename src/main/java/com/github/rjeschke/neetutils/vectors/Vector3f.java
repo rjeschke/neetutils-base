@@ -89,6 +89,22 @@ public class Vector3f
         return this;
     }
 
+    public Vector3f set(final float xyz)
+    {
+        this.x = xyz;
+        this.y = xyz;
+        this.z = xyz;
+        return this;
+    }
+
+    public Vector3f set(final FloatBuffer buffer, final int offset)
+    {
+        this.x = buffer.get(offset);
+        this.y = buffer.get(offset + 1);
+        this.z = buffer.get(offset + 2);
+        return this;
+    }
+
     public Vector3f set(final Vector2f v, final float z)
     {
         this.x = v.x;
@@ -243,6 +259,11 @@ public class Vector3f
         return this;
     }
 
+    public float min()
+    {
+        return Math.min(this.x, Math.min(this.y, this.z));
+    }
+
     public Vector3f max(final Vector3f other)
     {
         this.x = Math.max(this.x, other.x);
@@ -251,11 +272,32 @@ public class Vector3f
         return this;
     }
 
+    public float max()
+    {
+        return Math.max(this.x, Math.max(this.y, this.z));
+    }
+
     public Vector3f clamp(final Vector3f min, final Vector3f max)
     {
         this.x = NMath.clamp(this.x, min.x, max.x);
         this.y = NMath.clamp(this.y, min.y, max.y);
         this.z = NMath.clamp(this.z, min.z, max.z);
+        return this;
+    }
+
+    public Vector3f abs()
+    {
+        this.x = Math.abs(this.x);
+        this.y = Math.abs(this.y);
+        this.z = Math.abs(this.z);
+        return this;
+    }
+
+    public Vector3f pow(final double value)
+    {
+        this.x = (float)Math.pow(this.x, value);
+        this.y = (float)Math.pow(this.y, value);
+        this.z = (float)Math.pow(this.z, value);
         return this;
     }
 

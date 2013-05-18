@@ -96,6 +96,24 @@ public class Vector4d
         return this;
     }
 
+    public Vector4d set(final double xyzw)
+    {
+        this.x = xyzw;
+        this.y = xyzw;
+        this.z = xyzw;
+        this.w = xyzw;
+        return this;
+    }
+
+    public Vector4d set(final DoubleBuffer buffer, final int offset)
+    {
+        this.x = buffer.get(offset);
+        this.y = buffer.get(offset + 1);
+        this.z = buffer.get(offset + 2);
+        this.w = buffer.get(offset + 3);
+        return this;
+    }
+
     public Vector4d set(final Vector2d v, final double z, final double w)
     {
         this.x = v.x;
@@ -256,6 +274,11 @@ public class Vector4d
         return this;
     }
 
+    public double min()
+    {
+        return Math.min(this.x, Math.min(this.y, Math.min(this.z, this.w)));
+    }
+
     public Vector4d max(final Vector4d other)
     {
         this.x = Math.max(this.x, other.x);
@@ -265,12 +288,35 @@ public class Vector4d
         return this;
     }
 
+    public double max()
+    {
+        return Math.max(this.x, Math.max(this.y, Math.max(this.z, this.w)));
+    }
+
     public Vector4d clamp(final Vector4d min, final Vector4d max)
     {
         this.x = NMath.clamp(this.x, min.x, max.x);
         this.y = NMath.clamp(this.y, min.y, max.y);
         this.z = NMath.clamp(this.z, min.z, max.z);
         this.w = NMath.clamp(this.w, min.w, max.w);
+        return this;
+    }
+
+    public Vector4d abs()
+    {
+        this.x = Math.abs(this.x);
+        this.y = Math.abs(this.y);
+        this.z = Math.abs(this.z);
+        this.w = Math.abs(this.w);
+        return this;
+    }
+
+    public Vector4d pow(final double value)
+    {
+        this.x = Math.pow(this.x, value);
+        this.y = Math.pow(this.y, value);
+        this.z = Math.pow(this.z, value);
+        this.w = Math.pow(this.w, value);
         return this;
     }
 
