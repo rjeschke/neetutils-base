@@ -31,4 +31,9 @@ public class Swappable<T>
     {
         this.swapped = !this.swapped;
     }
+
+    public void reset()
+    {
+        this.swapped = false;
+    }
 }

@@ -4,10 +4,12 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-public class ImageFrame implements WindowListener
+public class ImageFrame implements WindowListener, KeyListener
 {
     private final Frame frame;
     Image               image    = null;
@@ -23,10 +25,13 @@ public class ImageFrame implements WindowListener
         c.setMaximumSize(dim);
         c.setPreferredSize(dim);
         this.frame.add(c);
-        this.frame.addWindowListener(this);
         this.frame.pack();
         this.frame.setResizable(false);
         this.canvas = c;
+
+        this.frame.addWindowListener(this);
+        this.frame.addKeyListener(this);
+        this.canvas.addKeyListener(this);
     }
 
     public void setTitle(final String title)
@@ -34,10 +39,11 @@ public class ImageFrame implements WindowListener
         this.frame.setTitle(title);
     }
 
-    public ImageFrame setVisible(final boolean visible)
+    @SuppressWarnings("unchecked")
+    public <T extends ImageFrame> T setVisible(final boolean visible)
     {
         this.frame.setVisible(visible);
-        return this;
+        return (T)this;
     }
 
     public boolean isClosed()
@@ -45,18 +51,20 @@ public class ImageFrame implements WindowListener
         return this.isClosed;
     }
 
-    public ImageFrame setImage(final Image image)
+    @SuppressWarnings("unchecked")
+    public <T extends ImageFrame> T setImage(final Image image)
     {
         this.image = image;
         this.canvas.repaint();
-        return this;
+        return (T)this;
     }
 
-    public ImageFrame setImage(final WrappedImage image)
+    @SuppressWarnings("unchecked")
+    public <T extends ImageFrame> T setImage(final WrappedImage image)
     {
         this.image = image.getImage();
         this.canvas.repaint();
-        return this;
+        return (T)this;
     }
 
     @Override
@@ -75,7 +83,7 @@ public class ImageFrame implements WindowListener
     @Override
     public void windowClosed(final WindowEvent e)
     {
-        //
+        // TODO Auto-generated method stub
     }
 
     @Override
@@ -126,5 +134,23 @@ public class ImageFrame implements WindowListener
                 g.drawImage(img, 0, 0, null);
             }
         }
+    }
+
+    @Override
+    public void keyTyped(final KeyEvent e)
+    {
+        // to be overwritten
+    }
+
+    @Override
+    public void keyPressed(final KeyEvent e)
+    {
+        // to be overwritten
+    }
+
+    @Override
+    public void keyReleased(final KeyEvent e)
+    {
+        // to be overwritten
     }
 }
