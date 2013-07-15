@@ -413,7 +413,7 @@ public final class NMath
     /**
      * @return The minimum value of {@code xs}
      */
-    public final static byte min(final byte... xs)
+    public final static byte min(final byte[] xs)
     {
         byte v = Byte.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -424,9 +424,22 @@ public final class NMath
     }
 
     /**
+     * @return The minimum value of {@code xs}
+     */
+    public final static byte min(final byte[] xs, final int offset, final int length)
+    {
+        byte v = Byte.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = (byte)Math.min(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The maximum value of {@code xs}
      */
-    public final static byte max(final byte... xs)
+    public final static byte max(final byte[] xs)
     {
         byte v = Byte.MIN_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -437,9 +450,22 @@ public final class NMath
     }
 
     /**
+     * @return The maximum value of {@code xs}
+     */
+    public final static byte max(final byte[] xs, final int offset, final int length)
+    {
+        byte v = Byte.MIN_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = (byte)Math.max(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The minimum value of {@code xs}
      */
-    public final static short min(final short... xs)
+    public final static short min(final short[] xs)
     {
         short v = Short.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -450,9 +476,22 @@ public final class NMath
     }
 
     /**
+     * @return The minimum value of {@code xs}
+     */
+    public final static short min(final short[] xs, final int offset, final int length)
+    {
+        short v = Short.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = (short)Math.min(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The maximum value of {@code xs}
      */
-    public final static short max(final short... xs)
+    public final static short max(final short[] xs)
     {
         short v = Short.MIN_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -463,9 +502,22 @@ public final class NMath
     }
 
     /**
+     * @return The maximum value of {@code xs}
+     */
+    public final static short max(final short[] xs, final int offset, final int length)
+    {
+        short v = Short.MIN_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = (short)Math.max(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The minimum value of {@code xs}
      */
-    public final static int min(final int... xs)
+    public final static int min(final int[] xs)
     {
         int v = Integer.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -476,9 +528,22 @@ public final class NMath
     }
 
     /**
+     * @return The minimum value of {@code xs}
+     */
+    public final static int min(final int[] xs, final int offset, final int length)
+    {
+        int v = Integer.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.min(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The maximum value of {@code xs}
      */
-    public final static int max(final int... xs)
+    public final static int max(final int[] xs)
     {
         int v = Integer.MIN_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -489,9 +554,22 @@ public final class NMath
     }
 
     /**
+     * @return The maximum value of {@code xs}
+     */
+    public final static int max(final int[] xs, final int offset, final int length)
+    {
+        int v = Integer.MIN_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.max(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The minimum value of {@code xs}
      */
-    public final static long min(final long... xs)
+    public final static long min(final long[] xs)
     {
         long v = Long.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -502,9 +580,22 @@ public final class NMath
     }
 
     /**
+     * @return The minimum value of {@code xs}
+     */
+    public final static long min(final long[] xs, final int offset, final int length)
+    {
+        long v = Long.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.min(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The maximum value of {@code xs}
      */
-    public final static long max(final long... xs)
+    public final static long max(final long[] xs)
     {
         long v = Long.MIN_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -515,9 +606,22 @@ public final class NMath
     }
 
     /**
+     * @return The maximum value of {@code xs}
+     */
+    public final static long max(final long[] xs, final int offset, final int length)
+    {
+        long v = Long.MIN_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.max(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The minimum value of {@code xs}
      */
-    public final static float min(final float... xs)
+    public final static float min(final float[] xs)
     {
         float v = Float.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -528,9 +632,22 @@ public final class NMath
     }
 
     /**
+     * @return The minimum value of {@code xs}
+     */
+    public final static float min(final float[] xs, final int offset, final int length)
+    {
+        float v = Float.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.min(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The maximum value of {@code xs}
      */
-    public final static float max(final float... xs)
+    public final static float max(final float[] xs)
     {
         float v = -Float.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -541,9 +658,22 @@ public final class NMath
     }
 
     /**
+     * @return The maximum value of {@code xs}
+     */
+    public final static float max(final float[] xs, final int offset, final int length)
+    {
+        float v = -Float.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.max(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The minimum value of the absolute values of {@code xs}
      */
-    public final static float amin(final float... xs)
+    public final static float amin(final float[] xs)
     {
         float v = Float.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -554,12 +684,38 @@ public final class NMath
     }
 
     /**
+     * @return The minimum value of the absolute values of {@code xs}
+     */
+    public final static float amin(final float[] xs, final int offset, final int length)
+    {
+        float v = Float.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.min(Math.abs(xs[i]), v);
+        }
+        return v;
+    }
+
+    /**
      * @return The maximum value of the absolute values of {@code xs}
      */
-    public final static float amax(final float... xs)
+    public final static float amax(final float[] xs)
     {
         float v = 0;
         for (int i = 0; i < xs.length; i++)
+        {
+            v = Math.max(Math.abs(xs[i]), v);
+        }
+        return v;
+    }
+
+    /**
+     * @return The maximum value of the absolute values of {@code xs}
+     */
+    public final static float amax(final float[] xs, final int offset, final int length)
+    {
+        float v = 0;
+        for (int i = offset; i < offset + length; i++)
         {
             v = Math.max(Math.abs(xs[i]), v);
         }
@@ -575,9 +731,27 @@ public final class NMath
         return xs;
     }
 
+    public final static float[] add(final float[] xs, final int offset, final int length, final float y)
+    {
+        for (int i = offset; i < offset + length; i++)
+        {
+            xs[i] += y;
+        }
+        return xs;
+    }
+
     public final static float[] sub(final float[] xs, final float y)
     {
         for (int i = 0; i < xs.length; i++)
+        {
+            xs[i] -= y;
+        }
+        return xs;
+    }
+
+    public final static float[] sub(final float[] xs, final int offset, final int length, final float y)
+    {
+        for (int i = offset; i < offset + length; i++)
         {
             xs[i] -= y;
         }
@@ -593,9 +767,27 @@ public final class NMath
         return xs;
     }
 
+    public final static float[] mul(final float[] xs, final int offset, final int length, final float y)
+    {
+        for (int i = offset; i < offset + length; i++)
+        {
+            xs[i] *= y;
+        }
+        return xs;
+    }
+
     public final static float[] div(final float[] xs, final float y)
     {
         for (int i = 0; i < xs.length; i++)
+        {
+            xs[i] /= y;
+        }
+        return xs;
+    }
+
+    public final static float[] div(final float[] xs, final int offset, final int length, final float y)
+    {
+        for (int i = offset; i < offset + length; i++)
         {
             xs[i] /= y;
         }
@@ -611,9 +803,27 @@ public final class NMath
         return xs;
     }
 
+    public final static float[] pow(final float[] xs, final int offset, final int length, final float y)
+    {
+        for (int i = offset; i < offset + length; i++)
+        {
+            xs[i] = (float)Math.pow(xs[i], y);
+        }
+        return xs;
+    }
+
     public final static float[] square(final float[] xs)
     {
         for (int i = 0; i < xs.length; i++)
+        {
+            xs[i] *= xs[i];
+        }
+        return xs;
+    }
+
+    public final static float[] square(final float[] xs, final int offset, final int length)
+    {
+        for (int i = offset; i < offset + length; i++)
         {
             xs[i] *= xs[i];
         }
@@ -629,10 +839,19 @@ public final class NMath
         return xs;
     }
 
+    public final static float[] sqrt(final float[] xs, final int offset, final int length)
+    {
+        for (int i = offset; i < offset + length; i++)
+        {
+            xs[i] = (float)Math.sqrt(xs[i]);
+        }
+        return xs;
+    }
+
     /**
      * @return The minimum value of {@code xs}
      */
-    public final static double min(final double... xs)
+    public final static double min(final double[] xs)
     {
         double v = Double.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -643,9 +862,22 @@ public final class NMath
     }
 
     /**
+     * @return The minimum value of {@code xs}
+     */
+    public final static double min(final double[] xs, final int offset, final int length)
+    {
+        double v = Double.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.min(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The maximum value of {@code xs}
      */
-    public final static double max(final double... xs)
+    public final static double max(final double[] xs)
     {
         double v = -Double.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -656,9 +888,22 @@ public final class NMath
     }
 
     /**
+     * @return The maximum value of {@code xs}
+     */
+    public final static double max(final double[] xs, final int offset, final int length)
+    {
+        double v = -Double.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.max(xs[i], v);
+        }
+        return v;
+    }
+
+    /**
      * @return The minimum value of the absolute values of {@code xs}
      */
-    public final static double amin(final double... xs)
+    public final static double amin(final double[] xs)
     {
         double v = Double.MAX_VALUE;
         for (int i = 0; i < xs.length; i++)
@@ -669,12 +914,38 @@ public final class NMath
     }
 
     /**
+     * @return The minimum value of the absolute values of {@code xs}
+     */
+    public final static double amin(final double[] xs, final int offset, final int length)
+    {
+        double v = Double.MAX_VALUE;
+        for (int i = offset; i < offset + length; i++)
+        {
+            v = Math.min(Math.abs(xs[i]), v);
+        }
+        return v;
+    }
+
+    /**
      * @return The maximum value of the absolute values of {@code xs}
      */
-    public final static double amax(final double... xs)
+    public final static double amax(final double[] xs)
     {
         double v = 0;
         for (int i = 0; i < xs.length; i++)
+        {
+            v = Math.max(Math.abs(xs[i]), v);
+        }
+        return v;
+    }
+
+    /**
+     * @return The maximum value of the absolute values of {@code xs}
+     */
+    public final static double amax(final double[] xs, final int offset, final int length)
+    {
+        double v = 0;
+        for (int i = offset; i < offset + length; i++)
         {
             v = Math.max(Math.abs(xs[i]), v);
         }
@@ -690,9 +961,27 @@ public final class NMath
         return xs;
     }
 
+    public final static double[] add(final double[] xs, final int offset, final int length, final double y)
+    {
+        for (int i = offset; i < offset + length; i++)
+        {
+            xs[i] += y;
+        }
+        return xs;
+    }
+
     public final static double[] sub(final double[] xs, final double y)
     {
         for (int i = 0; i < xs.length; i++)
+        {
+            xs[i] -= y;
+        }
+        return xs;
+    }
+
+    public final static double[] sub(final double[] xs, final int offset, final int length, final double y)
+    {
+        for (int i = offset; i < offset + length; i++)
         {
             xs[i] -= y;
         }
@@ -708,9 +997,27 @@ public final class NMath
         return xs;
     }
 
+    public final static double[] mul(final double[] xs, final int offset, final int length, final double y)
+    {
+        for (int i = offset; i < offset + length; i++)
+        {
+            xs[i] *= y;
+        }
+        return xs;
+    }
+
     public final static double[] div(final double[] xs, final double y)
     {
         for (int i = 0; i < xs.length; i++)
+        {
+            xs[i] /= y;
+        }
+        return xs;
+    }
+
+    public final static double[] div(final double[] xs, final int offset, final int length, final double y)
+    {
+        for (int i = offset; i < offset + length; i++)
         {
             xs[i] /= y;
         }
@@ -726,6 +1033,15 @@ public final class NMath
         return xs;
     }
 
+    public final static double[] pow(final double[] xs, final int offset, final int length, final double y)
+    {
+        for (int i = offset; i < offset + length; i++)
+        {
+            xs[i] = Math.pow(xs[i], y);
+        }
+        return xs;
+    }
+
     public final static double[] square(final double[] xs)
     {
         for (int i = 0; i < xs.length; i++)
@@ -735,9 +1051,27 @@ public final class NMath
         return xs;
     }
 
+    public final static double[] square(final double[] xs, final int offset, final int length)
+    {
+        for (int i = offset; i < offset + length; i++)
+        {
+            xs[i] *= xs[i];
+        }
+        return xs;
+    }
+
     public final static double[] sqrt(final double[] xs)
     {
         for (int i = 0; i < xs.length; i++)
+        {
+            xs[i] = Math.sqrt(xs[i]);
+        }
+        return xs;
+    }
+
+    public final static double[] sqrt(final double[] xs, final int offset, final int length)
+    {
+        for (int i = offset; i < offset + length; i++)
         {
             xs[i] = Math.sqrt(xs[i]);
         }

@@ -24,6 +24,8 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import com.github.rjeschke.neetutils.math.NMath;
+
 public class WrappedImage
 {
     private int           width;
@@ -111,6 +113,16 @@ public class WrappedImage
     public int[] getPixels()
     {
         return this.pixels;
+    }
+
+    public int getPixel(final int x, final int y)
+    {
+        return this.pixels[NMath.clamp(x, 0, this.width - 1) + NMath.clamp(y, 0, this.height - 1) * this.width];
+    }
+
+    public void setPixel(final int x, final int y, final int c)
+    {
+        this.pixels[NMath.clamp(x, 0, this.width - 1) + NMath.clamp(y, 0, this.height - 1) * this.width] = c;
     }
 
     public Graphics2D createGraphics()
