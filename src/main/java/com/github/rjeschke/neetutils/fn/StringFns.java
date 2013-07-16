@@ -39,6 +39,18 @@ public final class StringFns
         };
     }
 
+    public final static FnPredicate<String> isEmpty()
+    {
+        return new FnPredicate<String>()
+        {
+            @Override
+            public boolean applyPredicate(final String a)
+            {
+                return a == null || a.length() < 1;
+            }
+        };
+    }
+
     public final static Collector<Character, String> splitCollector(final char splitCharacter)
     {
         return new Collector<Character, String>()

@@ -16,14 +16,14 @@
 package com.github.rjeschke.neetutils.io;
 
 import java.io.BufferedReader;
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.github.rjeschke.neetutils.WrappedCheckedException;
+import com.github.rjeschke.neetutils.iterables.AbstractXIterable;
 
-public class LineReaderIterator implements Iterable<String>, Closeable
+public class LineReaderIterator extends AbstractXIterable<String> implements AutoCloseable
 {
     final BufferedReader in;
     boolean              closed        = false;
@@ -72,7 +72,7 @@ public class LineReaderIterator implements Iterable<String>, Closeable
         return new StreamIterator(this);
     }
 
-    private class StreamIterator implements Iterator<String>
+    private static class StreamIterator implements Iterator<String>
     {
         final LineReaderIterator lri;
 

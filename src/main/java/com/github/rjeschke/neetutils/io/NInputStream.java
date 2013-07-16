@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteOrder;
 
-public abstract class NInputStream extends FilterInputStream
+public abstract class NInputStream extends FilterInputStream implements AutoCloseable
 {
     protected NInputStream(final InputStream in)
     {

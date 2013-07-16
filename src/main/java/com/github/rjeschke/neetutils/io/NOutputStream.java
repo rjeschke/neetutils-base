@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteOrder;
 
-public abstract class NOutputStream extends FilterOutputStream
+public abstract class NOutputStream extends FilterOutputStream implements AutoCloseable
 {
     protected NOutputStream(final OutputStream out)
     {

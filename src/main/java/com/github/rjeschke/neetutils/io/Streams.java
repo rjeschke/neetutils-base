@@ -32,21 +32,66 @@ public final class Streams
         //
     }
 
+    public final static String UTF8 = "UTF-8";
+
     public final static BufferedReader newBufferedReader(final InputStream in, final String charsetName) throws IOException
     {
         return new BufferedReader(new InputStreamReader(in, charsetName));
     }
 
-    @SuppressWarnings("resource")
-    public final static BufferedReader newBufferedReader(final String filename, final String charsetName) throws IOException
+    public final static BufferedReader newBufferedReader(final InputStream in) throws IOException
     {
-        return newBufferedReader(new FileInputStream(filename), charsetName);
+        return newBufferedReader(in, UTF8);
     }
 
-    @SuppressWarnings("resource")
+    public final static BufferedReader newBufferedReader(final String filename, final String charsetName) throws IOException
+    {
+        return new BufferedReader(new InputStreamReader(new FileInputStream(filename), charsetName));
+    }
+
+    public final static BufferedReader newBufferedReader(final String filename) throws IOException
+    {
+        return newBufferedReader(filename, UTF8);
+    }
+
     public final static BufferedReader newBufferedReader(final File file, final String charsetName) throws IOException
     {
-        return newBufferedReader(new FileInputStream(file), charsetName);
+        return new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
+    }
+
+    public final static BufferedReader newBufferedReader(final File file) throws IOException
+    {
+        return newBufferedReader(file, UTF8);
+    }
+
+    public final static LineReaderIterator newLineReaderIterator(final InputStream in, final String charsetName) throws IOException
+    {
+        return new LineReaderIterator(newBufferedReader(in, charsetName));
+    }
+
+    public final static LineReaderIterator newLineReaderIterator(final InputStream in) throws IOException
+    {
+        return new LineReaderIterator(newBufferedReader(in));
+    }
+
+    public final static LineReaderIterator newLineReaderIterator(final File file, final String charsetName) throws IOException
+    {
+        return new LineReaderIterator(newBufferedReader(file, charsetName));
+    }
+
+    public final static LineReaderIterator newLineReaderIterator(final File file) throws IOException
+    {
+        return new LineReaderIterator(newBufferedReader(file));
+    }
+
+    public final static LineReaderIterator newLineReaderIterator(final String filename, final String charsetName) throws IOException
+    {
+        return new LineReaderIterator(newBufferedReader(filename, charsetName));
+    }
+
+    public final static LineReaderIterator newLineReaderIterator(final String filename) throws IOException
+    {
+        return new LineReaderIterator(newBufferedReader(filename));
     }
 
     public final static BufferedInputStream newBufferedInputStream(final String filename) throws IOException

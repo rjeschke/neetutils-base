@@ -15,16 +15,16 @@
  */
 package com.github.rjeschke.neetutils.io;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.github.rjeschke.neetutils.WrappedCheckedException;
+import com.github.rjeschke.neetutils.iterables.AbstractXIterable;
 import com.github.rjeschke.neetutils.math.Numbers;
 
-public class InputStreamIterator implements Iterable<Integer>, Closeable
+public class InputStreamIterator extends AbstractXIterable<Integer> implements AutoCloseable
 {
     final InputStream in;
     boolean           closed        = false;

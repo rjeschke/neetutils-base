@@ -22,6 +22,30 @@ public final class Predicates
         // 1up
     }
 
+    public final static <A> FnPredicate<A> isNull()
+    {
+        return new FnPredicate<A>()
+        {
+            @Override
+            public boolean applyPredicate(final A a)
+            {
+                return a == null;
+            }
+        };
+    }
+
+    public final static <A> FnPredicate<A> notNull()
+    {
+        return new FnPredicate<A>()
+        {
+            @Override
+            public boolean applyPredicate(final A a)
+            {
+                return a != null;
+            }
+        };
+    }
+
     public final static <A> FnPredicate<A> not(final FnPredicate<? super A> predicate)
     {
         return new FnPredicate<A>()

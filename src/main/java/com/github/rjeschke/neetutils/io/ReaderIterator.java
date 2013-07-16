@@ -15,16 +15,16 @@
  */
 package com.github.rjeschke.neetutils.io;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.github.rjeschke.neetutils.WrappedCheckedException;
+import com.github.rjeschke.neetutils.iterables.AbstractXIterable;
 import com.github.rjeschke.neetutils.math.Numbers;
 
-public class ReaderIterator implements Iterable<Character>, Closeable
+public class ReaderIterator extends AbstractXIterable<Character> implements AutoCloseable
 {
     final Reader     in;
     boolean          closed        = false;
