@@ -848,6 +848,26 @@ public final class NMath
         return xs;
     }
 
+    public final static float sum(final float[] xs)
+    {
+        float sum = 0;
+        for (int i = 0; i < xs.length; i++)
+        {
+            sum += xs[i];
+        }
+        return sum;
+    }
+
+    public final static float sum(final float[] xs, final int offset, final int length)
+    {
+        float sum = 0;
+        for (int i = offset; i < offset + length; i++)
+        {
+            sum += xs[i];
+        }
+        return sum;
+    }
+
     /**
      * @return The minimum value of {@code xs}
      */
@@ -1076,5 +1096,25 @@ public final class NMath
             xs[i] = Math.sqrt(xs[i]);
         }
         return xs;
+    }
+
+    public final static double sum(final double[] xs)
+    {
+        double sum = 0;
+        for (int i = 0; i < xs.length; i++)
+        {
+            sum += xs[i];
+        }
+        return sum;
+    }
+
+    public final static double sum(final double[] xs, final int offset, final int length)
+    {
+        double sum = 0;
+        for (int i = offset; i < offset + length; i++)
+        {
+            sum += xs[i];
+        }
+        return sum;
     }
 }

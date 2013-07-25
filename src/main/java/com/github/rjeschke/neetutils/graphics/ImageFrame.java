@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.ScrollPane;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -11,12 +12,12 @@ import java.awt.event.WindowListener;
 
 public class ImageFrame implements WindowListener, KeyListener
 {
-    private final Frame frame;
-    Image               image    = null;
-    Canvas              canvas   = null;
-    volatile boolean    isClosed = false;
+    private final Frame  frame;
+    private final Canvas canvas;
+    Image                image    = null;
+    volatile boolean     isClosed = false;
 
-    public ImageFrame(final String title, final int width, final int height)
+    public ImageFrame(final String title, final int width, final int height, final boolean resizable)
     {
         this.frame = new Frame(title);
         final Canvas c = new ImageCanvas();
@@ -24,14 +25,30 @@ public class ImageFrame implements WindowListener, KeyListener
         c.setMinimumSize(dim);
         c.setMaximumSize(dim);
         c.setPreferredSize(dim);
-        this.frame.add(c);
+
+        if (resizable)
+        {
+            final ScrollPane pane = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
+            pane.add(c);
+            this.frame.add(pane);
+        }
+        else
+        {
+            this.frame.add(c);
+        }
+
         this.frame.pack();
-        this.frame.setResizable(false);
+        this.frame.setResizable(resizable);
         this.canvas = c;
 
         this.frame.addWindowListener(this);
         this.frame.addKeyListener(this);
         this.canvas.addKeyListener(this);
+    }
+
+    public ImageFrame(final String title, final int width, final int height)
+    {
+        this(title, width, height, false);
     }
 
     public void setTitle(final String title)
@@ -83,7 +100,7 @@ public class ImageFrame implements WindowListener, KeyListener
     @Override
     public void windowClosed(final WindowEvent e)
     {
-        // TODO Auto-generated method stub
+        //
     }
 
     @Override
