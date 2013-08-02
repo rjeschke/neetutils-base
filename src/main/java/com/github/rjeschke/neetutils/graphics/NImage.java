@@ -210,7 +210,8 @@ public class NImage implements WorkerCallback<NImagePBlock>
         float d = max - min;
         if (d == 0)
             d = 1;
-        else d = 1.f / d;
+        else
+            d = 1.f / d;
         for (int i = 0; i < this.pixels.length; i++)
         {
             final NColor c = this.pixels[i];
@@ -1045,7 +1046,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
 
     public void drawArc(final int x, final int y, final int radius, final double start, final double end, final NColor color)
     {
-        final double invRad = 1.0 / (Math.PI * 180.0);
+        final double invRad = 180.0 / Math.PI;
         int cy = radius;
         int cx = 0;
         double rs = start, re = end;
@@ -1094,17 +1095,17 @@ public class NImage implements WorkerCallback<NImagePBlock>
                 {
                     this.setPixel(x + cx, y - cy, color);
                 }
-                wi = 180.0f - wi0;
+                wi = 180.0 - wi0;
                 if (wi >= rs && wi <= re)
                 {
                     this.setPixel(x + cx, y + cy, color);
                 }
-                wi = 180.0f + wi0;
+                wi = 180.0 + wi0;
                 if (wi >= rs && wi <= re)
                 {
                     this.setPixel(x - cx, y + cy, color);
                 }
-                wi = 360.0f - wi0;
+                wi = 360.0 - wi0;
                 if (wi >= rs && wi <= re)
                 {
                     this.setPixel(x - cx, y - cy, color);
@@ -1147,7 +1148,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
 
     private void fillArcHLine(final int sx, final int sy, final int cx, final int cy, final double rs, final double re, final NColor color)
     {
-        final double invRad = 1.0 / (Math.PI * 180.0);
+        final double invRad = 180.0 / Math.PI;
         final double cy2 = Math.abs(cy);
 
         for (int x = -cx; x <= cx; x++)
@@ -1388,6 +1389,30 @@ public class NImage implements WorkerCallback<NImagePBlock>
             cx = nx;
             cy = ny;
         }
+    }
+
+    public NImage boxDownsample(final int fx, final int fy)
+    {
+        final NImage ret = new NImage(this.width / fx, this.height / fy);
+        final float scale = 1.f / (fx * fy);
+        for (int sy = 0; sy < ret.height; sy++)
+        {
+            for (int sx = 0; sx < ret.width; sx++)
+            {
+                NColor s = new NColor(0);
+
+                for (int y = 0; y < fy; y++)
+                {
+                    for (int x = 0; x < fx; x++)
+                    {
+                        s = s.add(this.pixels[(x + fx * sx) + ((y + fy * sy) * this.width)]);
+                    }
+                }
+                ret.setPixel(sx, sy, s.scale(scale));
+            }
+        }
+
+        return ret;
     }
 
     public static class NPoint implements Comparable<NPoint>

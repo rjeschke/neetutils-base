@@ -78,7 +78,7 @@ class NImageFilter implements Worker<NImagePBlock>
                     for (int fy = 0; fy < this.filter.height; fy++)
                     {
                         final float f = this.filter.yf[fy];
-                        final NColor c = this.image.getPixel(p.x + x + this.filter.offsx, p.y + y + fy + this.filter.offsy);
+                        final NColor c = this.image.getPixel(p.x + x, p.y + y + fy + this.filter.offsy);
 
                         a += c.a * f;
                         r += c.r * f;
