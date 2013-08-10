@@ -56,6 +56,16 @@ public class ImageFrame implements WindowListener, KeyListener
         this.frame.setTitle(title);
     }
 
+    public static void display(final String title, final Image image)
+    {
+        new ImageFrame(title, image.getWidth(null), image.getHeight(null)).setVisible(true).setImage(image);
+    }
+
+    public static void display(final String title, final WrappedImage image)
+    {
+        new ImageFrame(title, image.getWidth(), image.getHeight()).setVisible(true).setImage(image);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends ImageFrame> T setVisible(final boolean visible)
     {

@@ -16,7 +16,7 @@ public class ResamplerDown implements Resampler
     private int            writePos;
     private int            subPos;
 
-    ResamplerDown(final double srcFs, final double targetFs, final double[] firFilter)
+    public ResamplerDown(final double srcFs, final double targetFs, final double[] firFilter)
     {
         this.bufferSize = NMath.nextPow2(firFilter.length * 2 + 1);
         this.bufferMask = this.bufferSize - 1;

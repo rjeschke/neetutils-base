@@ -16,9 +16,9 @@
 package com.github.rjeschke.neetutils.audio;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -30,7 +30,7 @@ import com.github.rjeschke.neetutils.math.NMath;
  * <p>
  * Simple RIFF WAVE writer class for quick audio dumps.
  * </p>
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public final class WavWriter
@@ -56,13 +56,18 @@ public final class WavWriter
     /** fmt . */
     private final static byte[] FMT_       =
                                            { 'f', 'm', 't', ' ' };
+    /** loop. */
+    private final static byte[] SMPL       =
+                                           { 's', 'm', 'p', 'l' };
     /** data. */
     private final static byte[] DATA       =
                                            { 'd', 'a', 't', 'a' };
 
+    private int                 loopOffset = -1;
+
     /**
      * Constructor.
-     * 
+     *
      * @param sampleRate
      *            A valid RIFF WAVE sample rate.
      * @param bitsPerSample
@@ -79,7 +84,7 @@ public final class WavWriter
 
     /**
      * Opens temporary file stream.
-     * 
+     *
      * @throws IOException
      *             if an IO error occurred.
      */
@@ -93,7 +98,7 @@ public final class WavWriter
 
     /**
      * Saves this RIFF WAVE to a file.
-     * 
+     *
      * @param filename
      *            The filename.
      * @throws IOException
@@ -106,7 +111,7 @@ public final class WavWriter
 
     /**
      * Saves this RIFF WAVE to a file.
-     * 
+     *
      * @param file
      *            The file to save to.
      * @throws IOException
@@ -120,7 +125,12 @@ public final class WavWriter
         }
     }
 
-    public final static double[] normalize(double[] wave)
+    public void setLoopRestart(final int loop)
+    {
+        this.loopOffset = loop;
+    }
+
+    public final static double[] normalize(final double[] wave)
     {
         double max = 0;
         for (int i = 0; i < wave.length; i++)
@@ -133,7 +143,7 @@ public final class WavWriter
         return wave;
     }
 
-    public final static float[] normalize(float[] wave)
+    public final static float[] normalize(final float[] wave)
     {
         float max = 0;
         for (int i = 0; i < wave.length; i++)
@@ -148,7 +158,7 @@ public final class WavWriter
 
     /**
      * Saves this RIFF WAVE to an output stream.
-     * 
+     *
      * @param output
      *            the output stream to write to.
      * @throws IOException
@@ -184,8 +194,10 @@ public final class WavWriter
 
             if (dLen != frames * this.channels * (this.bitsPerSample >> 3)) throw new IOException("Unfinished frame.");
 
+            final boolean isLooped = this.loopOffset > -1 && this.loopOffset < frames;
+
             out.write(RIFF);
-            out.write32(dLen + 36);
+            out.write32(dLen + 36 + (isLooped ? 68 : 0));
 
             out.write(WAVE);
 
@@ -198,6 +210,27 @@ public final class WavWriter
             out.write32(this.sampleRate * blockAlign);
             out.write16(blockAlign);
             out.write16(this.bitsPerSample);
+
+            if (isLooped)
+            {
+                out.write(SMPL);
+                out.write32(60);
+                out.write32(0);
+                out.write32(0);
+                out.write32((int)((1.0 / this.sampleRate) * 1e9 + 0.5));
+                out.write32(60);
+                out.write32(0);
+                out.write32(0);
+                out.write32(0);
+                out.write32(1);
+                out.write32(0);
+                out.write32(0);
+                out.write32(0);
+                out.write32(this.loopOffset);
+                out.write32(samples);
+                out.write32(0);
+                out.write32(0);
+            }
 
             out.write(DATA);
             out.write32(dLen);
@@ -231,7 +264,7 @@ public final class WavWriter
             {
                 this.tempStream.close();
             }
-            catch (IOException e)
+            catch (final IOException e)
             {
                 // gnah ... dispose should not throw nothing ... so:
                 // let's eat it ... eat it ... eat it ... *singz*
@@ -250,20 +283,18 @@ public final class WavWriter
 
     /**
      * <p>
-     * Writes the given (signed) sample(s) into this RIFF WAVE clamped to the
-     * given bit depth.
+     * Writes the given (signed) sample(s) into this RIFF WAVE clamped to the given bit depth.
      * </p>
      * <p>
-     * Samples are expected to be in [-128,128[, [-32768,32768[ or
-     * [-8388608,8388608[ range depending on bit depth.
+     * Samples are expected to be in [-128,128[, [-32768,32768[ or [-8388608,8388608[ range depending on bit depth.
      * </p>
-     * 
+     *
      * @param samples
      *            The samples to write.
      * @throws IOException
      *             if an IO error occurred.
      */
-    public void write(int... samples) throws IOException
+    public void write(final int... samples) throws IOException
     {
         if (this.tempStream == null) this.openTemp();
 
@@ -288,19 +319,18 @@ public final class WavWriter
 
     /**
      * <p>
-     * Writes the given sample(s) into this RIFF WAVE clamped to the given bit
-     * depth.
+     * Writes the given sample(s) into this RIFF WAVE clamped to the given bit depth.
      * </p>
      * <p>
      * Samples are expected to be in [-1.0,1.0] range.
      * </p>
-     * 
+     *
      * @param samples
      *            The samples to write.
      * @throws IOException
      *             if an IO error occurred.
      */
-    public void write(float... samples) throws IOException
+    public void write(final float... samples) throws IOException
     {
         if (this.tempStream == null) this.openTemp();
 
@@ -325,19 +355,18 @@ public final class WavWriter
 
     /**
      * <p>
-     * Writes the given sample(s) into this RIFF WAVE clamped to the given bit
-     * depth.
+     * Writes the given sample(s) into this RIFF WAVE clamped to the given bit depth.
      * </p>
      * <p>
      * Samples are expected to be in [-1.0,1.0] range.
      * </p>
-     * 
+     *
      * @param samples
      *            The samples to write.
      * @throws IOException
      *             if an IO error occurred.
      */
-    public void write(double... samples) throws IOException
+    public void write(final double... samples) throws IOException
     {
         if (this.tempStream == null) this.openTemp();
 
@@ -360,8 +389,8 @@ public final class WavWriter
         }
     }
 
-    public final static void write(final String filename, final int sampleRate, final int bitsPerSample, final int channels,
-            final double[] samples, boolean normalize) throws IOException
+    public final static void write(final String filename, final int sampleRate, final int bitsPerSample, final int channels, final double[] samples,
+            final boolean normalize) throws IOException
     {
         final WavWriter wav = new WavWriter(sampleRate, bitsPerSample, channels);
 

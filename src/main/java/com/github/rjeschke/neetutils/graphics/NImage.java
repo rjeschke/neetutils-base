@@ -69,6 +69,11 @@ public class NImage implements WorkerCallback<NImagePBlock>
         this(image, FROM_sRGB);
     }
 
+    public NImage(final WrappedImage image)
+    {
+        this(image.getImage(), FROM_sRGB);
+    }
+
     public NImage(final BufferedImage image, final double gamma)
     {
         final BufferedImage img = forceARGB(image);

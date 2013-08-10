@@ -17,7 +17,7 @@ public class ResamplerUp implements Resampler
     private int            writePos;
     private int            subPos;
 
-    ResamplerUp(final double srcFs, final double targetFs, final double[] firFilter)
+    public ResamplerUp(final double srcFs, final double targetFs, final double[] firFilter)
     {
         this.bufferSize = NMath.nextPow2(firFilter.length * 2 + 1);
         this.bufferMask = this.bufferSize - 1;
