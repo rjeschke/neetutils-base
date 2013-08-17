@@ -65,14 +65,17 @@ public class DigitalOSC
         this.wave = w;
     }
 
-    public static int pitchFromFreq(double freq)
+    public static int pitchFromFreq(final double freq)
     {
         return (int)Math.floor(6900.5 + 1200.0 * Math.log(freq / 440) / Math.log(2));
     }
 
     public static double fastSin(final int p)
     {
-        final double x = (1 - (((p & 0x800000) >> 22) & 2)) * ((p ^ (0x400000 - ((p >> 22) & 1))) & 0x3fffff) * F0PI5_2;
+        double x = (p & 0x3fffff) * F0PI5_2;
+        if ((p & 0x400000) != 0) x = F0PI5 - x;
+        if ((p & 0x800000) != 0) x = -x;
+
         final double x2 = x * x;
         return ((((SIN9 * x2 + SIN7) * x2 + SIN5) * x2 + SIN3) * x2 + 1.0) * x;
     }
@@ -92,7 +95,7 @@ public class DigitalOSC
             break;
         case SAWTOOTH:
         {
-            double fp = this.phase / 16777216.0;
+            final double fp = this.phase * (1.0 / 16777216.0);
             if (this.phase > np)
             {
                 double a = 1 - fp;
@@ -109,35 +112,45 @@ public class DigitalOSC
         }
         case PULSE:
         {
-            double fp = this.phase / 16777216.0;
             if (this.phase > np)
             {
                 if (this.phase < this.pw && np < this.pw)
+                {
                     out = (1 - this.fpw) * this.invFstep;
+                }
                 else if (this.phase >= this.pw && np >= this.pw)
+                {
                     out = (this.fstep - this.fpw) * this.invFstep;
-                else out = (1 - fp) * this.invFstep;
+                }
+                else
+                {
+                    final double fp = this.phase * (1.0 / 16777216.0);
+                    out = (1 - fp) * this.invFstep;
+                }
             }
             else if (this.phase < this.pw && np >= this.pw)
             {
+                final double fp = this.phase / 16777216.0;
                 out = (fp + this.fstep - this.fpw) * this.invFstep;
             }
-            else if (fp >= this.fpw)
+            else if (this.phase >= this.pw)
             {
                 out = 1;
             }
+
             if (np > this.nextPw)
             {
                 this.pw = this.nextPw;
-                this.fpw = this.pw / 16777216.0;
+                this.fpw = this.pw * (1.0 / 16777216.0);
                 this.nextPw = 0xffffff;
             }
+
             out = 2.0 * out - 1.0;
             break;
         }
         case TRIANGLE:
         {
-            double fp = this.phase / 16777216.0;
+            final double fp = this.phase * (1.0 / 16777216.0);
             if (this.phase > np)
             {
                 double a = 1 - fp;

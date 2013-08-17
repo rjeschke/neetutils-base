@@ -25,10 +25,10 @@ import com.github.rjeschke.neetutils.io.NInputStreamLE;
 
 public final class WavReader
 {
-    private int     sampleRate;
-    private int     channels;
-    private float[] data;
-    private int[]   originalData;
+    private final int     sampleRate;
+    private final int     channels;
+    private final float[] data;
+    private final int[]   originalData;
 
     private WavReader(final int sampleRate, final int channels, final float[] data, final int[] originalData)
     {
