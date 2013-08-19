@@ -40,11 +40,11 @@ public class NImage implements WorkerCallback<NImagePBlock>
     private ClampMode           clampY            = ClampMode.ClAMP_TO_EDGE;
     private ColorOp             cop               = ColorOp.SET;
     private int                 processingThreads = 1;
-    final static float[]        SOBEL_X           =
-                                                  { 1, 0, -1, 2, 0, -2, 1, 0, -1 };
-    final static float[]        SOBEL_Y           =
-                                                  { 1, 2, 1, 0, 0, 0, -1, -2, -1 };
-
+    final static float[]        SOBEL_X           = Colls.array(1.f, 0, -1, 2, 0, -2, 1, 0, -1);
+    final static float[]        SOBEL_Y           = Colls.array(1.f, 2, 1, 0, 0, 0, -1, -2, -1);
+    final static int[]          PAINT_DX          = Colls.array(1, 1, 0);
+    final static int[]          PAINT_DY          = Colls.array(0, -1, -1);
+    final static int            BLOCK_SIZE        = 8;
     private final static double TO_sRGB           = 1.0 / 2.2;
     private final static double FROM_sRGB         = 2.2;
 
@@ -170,6 +170,9 @@ public class NImage implements WorkerCallback<NImagePBlock>
             break;
         case BLEND:
             this.pixels[p] = this.pixels[p].blendOver(c);
+            break;
+        case BLEND1:
+            this.pixels[p] = new NColor(this.pixels[p].a, NColor.lerpRGB(this.pixels[p], c, c.a));
             break;
         }
     }
@@ -424,7 +427,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
     public NImage perlin(final int seed, final float scalex, final float scaley, final int octaves, final float fallOff, final float amp, final NColor color0,
             final NColor color1)
     {
-        return this.runThreaded(new NImagePerlin(this, seed, scalex, scaley, octaves, fallOff, amp, color0, color1), 8);
+        return this.runThreaded(new NImagePerlin(this, seed, scalex, scaley, octaves, fallOff, amp, color0, color1), BLOCK_SIZE);
     }
 
     public final static float distOnTorus(final float[] a, final float[] b)
@@ -464,18 +467,93 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return this;
     }
 
+    @Override
+    public void workerCallback(final WorkerPool<NImagePBlock> pool, final WorkerStatus status, final Worker<NImagePBlock> worker, final NImagePBlock p)
+    {
+        for (int y = 0; y < p.h; y++)
+            System.arraycopy(p.pixels, y * p.w, this.pixels, p.x + (y + p.y) * this.width, p.w);
+    }
+
+    public NImage boxDownsample(final int fx, final int fy)
+    {
+        final NImage ret = new NImage(this.width / fx, this.height / fy);
+        ret.setThreadCount(this.processingThreads);
+        return ret.runThreaded(new NImageBoxDownsampler(this, fx, fy), BLOCK_SIZE);
+    }
+
+    public NImage decimate(final int fx, final int fy)
+    {
+        final NImage ret = new NImage(this.width / fx, this.height / fy);
+        ret.setThreadCount(this.processingThreads);
+        final int fx2 = fx / 2;
+        final int fy2 = fy / 2;
+        for (int y = 0; y < ret.height; y++)
+        {
+            for (int x = 0; x < ret.width; x++)
+            {
+                ret.setPixel(x, y, this.getPixel(x * fx + fx2, y * fy + fy2));
+            }
+        }
+
+        return ret;
+    }
+
+    public NImage filter(final FilterKernel kernel, final boolean zero)
+    {
+        if (kernel.isSingle) return this.runThreaded(new NImageFilter(new NImage(this), kernel, zero, 0), BLOCK_SIZE);
+
+        this.runThreaded(new NImageFilter(this, kernel, zero, 1), BLOCK_SIZE);
+        return this.runThreaded(new NImageFilter(this, kernel, zero, 2), BLOCK_SIZE);
+    }
+
     public NImage filter(final FilterKernel kernel)
     {
-        if (kernel.isSingle) return this.runThreaded(new NImageFilter(new NImage(this), kernel, 0), 8);
+        return this.filter(kernel, false);
+    }
 
-        this.runThreaded(new NImageFilter(this, kernel, 1), 8);
-        return this.runThreaded(new NImageFilter(this, kernel, 2), 8);
+    public NImage combine(final NImage other, final ColorOp colorOp, final int dx, final int dy, final int sx, final int sy, final int w, final int h)
+    {
+        final int tw = Math.min(Math.min(w, other.width - sx), this.width - dx);
+        final int th = Math.min(Math.min(h, other.height - sy), this.height - dy);
+        final ColorOp old = this.cop;
+
+        this.cop = colorOp;
+        for (int y = 0; y < th; y++)
+        {
+            for (int x = 0; x < tw; x++)
+            {
+                this.setPixel(dx + x, dy + y, other.getPixel(sx + x, sy + y));
+            }
+        }
+        this.cop = old;
+
+        return this;
+    }
+
+    public NImage combine(final NImage other, final int dx, final int dy)
+    {
+        return this.combine(other, ColorOp.SET, dx, dy, 0, 0, other.width, other.height);
+    }
+
+    public NImage combine(final NImage other)
+    {
+        return this.combine(other, ColorOp.SET, 0, 0, 0, 0, other.width, other.height);
+    }
+
+    public NImage combine(final NImage other, final ColorOp colorOp, final int dx, final int dy)
+    {
+        return this.combine(other, colorOp, dx, dy, 0, 0, other.width, other.height);
+    }
+
+    public NImage combine(final NImage other, final ColorOp colorOp)
+    {
+        return this.combine(other, colorOp, 0, 0, 0, 0, other.width, other.height);
     }
 
     public NImage voronoi(final int seed, final int max, final float minDist, final float fallOff, final boolean invert, final boolean colorCells,
             final NColor color0, final NColor color1)
     {
-        return this.runThreaded(new NImageVoronoi(this, seed, max, minDist, fallOff, invert, colorCells, color0, color1), 8);
+        return this.runThreaded(new NImageVoronoi(this, seed, max, minDist, fallOff, invert, colorCells, color0, color1), BLOCK_SIZE);
     }
 
     public NImage bricks(final int seed, final int bricksx, final int bricksy, final float jointsx, final float jointsy, final float singleProb,
@@ -535,13 +613,6 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
 
         return this;
-    }
-
-    @Override
-    public void workerCallback(final WorkerPool<NImagePBlock> pool, final WorkerStatus status, final Worker<NImagePBlock> worker, final NImagePBlock p)
-    {
-        for (int y = 0; y < p.h; y++)
-            System.arraycopy(p.pixels, y * p.w, this.pixels, p.x + (y + p.y) * this.width, p.w);
     }
 
     public static void drawLine(final int x0, final int y0, final int x1, final int y1, final List<NPoint> points)
@@ -822,41 +893,24 @@ public class NImage implements WorkerCallback<NImagePBlock>
         while (cy >= 0 || cx < radius)
         {
             double err = 10, d;
-            int nx = cx, ny = cy, tx, ty;
+            int nx = cx, ny = cy;
 
             this.setPixel(x + cx, y + cy, color);
             this.setPixel(x - cx, y + cy, color);
             this.setPixel(x + cx, y - cy, color);
             this.setPixel(x - cx, y - cy, color);
 
-            tx = cx + 1;
-            ty = cy;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
+            for (int i = 0; i < 3; i++)
             {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx + 1;
-            ty = cy - 1;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx;
-            ty = cy - 1;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
+                final int tx = cx + PAINT_DX[i];
+                final int ty = cy + PAINT_DY[i];
+                d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
+                if (d <= err)
+                {
+                    err = d;
+                    nx = tx;
+                    ny = ty;
+                }
             }
 
             cx = nx;
@@ -877,39 +931,22 @@ public class NImage implements WorkerCallback<NImagePBlock>
         while (cy >= 0 || cx < radius)
         {
             double err = 10, d;
-            int nx = cx, ny = cy, tx, ty;
+            int nx = cx, ny = cy;
 
             this.drawHLine(x - cx, y - cy, cx * 2 + 1, color);
             this.drawHLine(x - cx, y + cy, cx * 2 + 1, color);
 
-            tx = cx + 1;
-            ty = cy;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
+            for (int i = 0; i < 3; i++)
             {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx + 1;
-            ty = cy - 1;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx;
-            ty = cy - 1;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
+                final int tx = cx + PAINT_DX[i];
+                final int ty = cy + PAINT_DY[i];
+                d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
+                if (d <= err)
+                {
+                    err = d;
+                    nx = tx;
+                    ny = ty;
+                }
             }
 
             cx = nx;
@@ -942,41 +979,24 @@ public class NImage implements WorkerCallback<NImagePBlock>
         while (cy >= 0 || cx < a)
         {
             double err = 10, d;
-            int nx = cx, ny = cy, tx, ty;
+            int nx = cx, ny = cy;
 
             this.setPixel(x + cx, y + cy, color);
             this.setPixel(x - cx, y + cy, color);
             this.setPixel(x + cx, y - cy, color);
             this.setPixel(x - cx, y - cy, color);
 
-            tx = cx + 1;
-            ty = cy;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
+            for (int i = 0; i < 3; i++)
             {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx + 1;
-            ty = cy - 1;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx;
-            ty = cy - 1;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
+                final int tx = cx + PAINT_DX[i];
+                final int ty = cy + PAINT_DY[i];
+                d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
+                if (d <= err)
+                {
+                    err = d;
+                    nx = tx;
+                    ny = ty;
+                }
             }
 
             cx = nx;
@@ -1009,39 +1029,22 @@ public class NImage implements WorkerCallback<NImagePBlock>
         while (cy >= 0 || cx < a)
         {
             double err = 10, d;
-            int nx = cx, ny = cy, tx, ty;
+            int nx = cx, ny = cy;
 
             this.drawHLine(x - cx, y - cy, cx * 2 + 1, color);
             this.drawHLine(x - cx, y + cy, cx * 2 + 1, color);
 
-            tx = cx + 1;
-            ty = cy;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
+            for (int i = 0; i < 3; i++)
             {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx + 1;
-            ty = cy - 1;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx;
-            ty = cy - 1;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
+                final int tx = cx + PAINT_DX[i];
+                final int ty = cy + PAINT_DY[i];
+                d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
+                if (d <= err)
+                {
+                    err = d;
+                    nx = tx;
+                    ny = ty;
+                }
             }
 
             cx = nx;
@@ -1068,7 +1071,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         while (cy >= 0 || cx < radius)
         {
             double err = 10, d;
-            int nx = cx, ny = cy, tx, ty;
+            int nx = cx, ny = cy;
 
             final double wi0 = 90 - (Math.asin(cy / Math.sqrt(cx * cx + cy * cy)) * invRad);
             double wi;
@@ -1116,34 +1119,17 @@ public class NImage implements WorkerCallback<NImagePBlock>
                     this.setPixel(x - cx, y - cy, color);
                 }
             }
-            tx = cx + 1;
-            ty = cy;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
+            for (int i = 0; i < 3; i++)
             {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx + 1;
-            ty = cy - 1;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx;
-            ty = cy - 1;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
+                final int tx = cx + PAINT_DX[i];
+                final int ty = cy + PAINT_DY[i];
+                d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
+                if (d <= err)
+                {
+                    err = d;
+                    nx = tx;
+                    ny = ty;
+                }
             }
 
             cx = nx;
@@ -1212,38 +1198,21 @@ public class NImage implements WorkerCallback<NImagePBlock>
         while (cy >= 0 || cx < radius)
         {
             double err = 10, d;
-            int nx = cx, ny = cy, tx, ty;
+            int nx = cx, ny = cy;
             this.fillArcHLine(x, y, cx, -cy, rs, re, color);
             this.fillArcHLine(x, y, cx, cy, rs, re, color);
 
-            tx = cx + 1;
-            ty = cy;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
+            for (int i = 0; i < 3; i++)
             {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx + 1;
-            ty = cy - 1;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx;
-            ty = cy - 1;
-            d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
+                final int tx = cx + PAINT_DX[i];
+                final int ty = cy + PAINT_DY[i];
+                d = Math.abs(radius - Math.sqrt(tx * tx + ty * ty));
+                if (d <= err)
+                {
+                    err = d;
+                    nx = tx;
+                    ny = ty;
+                }
             }
 
             cx = nx;
@@ -1289,41 +1258,24 @@ public class NImage implements WorkerCallback<NImagePBlock>
         while (cy >= 0 || cx < arcWidth)
         {
             double err = 10, d;
-            int nx = cx, ny = cy, tx, ty;
+            int nx = cx, ny = cy;
 
             this.setPixel(x1 + cx, y1 + cy, color);
             this.setPixel(x0 - cx, y1 + cy, color);
             this.setPixel(x1 + cx, y0 - cy, color);
             this.setPixel(x0 - cx, y0 - cy, color);
 
-            tx = cx + 1;
-            ty = cy;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
+            for (int i = 0; i < 3; i++)
             {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx + 1;
-            ty = cy - 1;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx;
-            ty = cy - 1;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
+                final int tx = cx + PAINT_DX[i];
+                final int ty = cy + PAINT_DY[i];
+                d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
+                if (d <= err)
+                {
+                    err = d;
+                    nx = tx;
+                    ny = ty;
+                }
             }
 
             cx = nx;
@@ -1356,68 +1308,27 @@ public class NImage implements WorkerCallback<NImagePBlock>
         while (cy >= 0 || cx < arcWidth)
         {
             double err = 10, d;
-            int nx = cx, ny = cy, tx, ty;
+            int nx = cx, ny = cy;
 
             this.drawHLine(x0 - cx, y0 - cy, cx * 2 + w2, color);
             this.drawHLine(x0 - cx, y1 + cy, cx * 2 + w2, color);
 
-            tx = cx + 1;
-            ty = cy;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
+            for (int i = 0; i < 3; i++)
             {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx + 1;
-            ty = cy - 1;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
-            }
-
-            tx = cx;
-            ty = cy - 1;
-            d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
-            if (d <= err)
-            {
-                err = d;
-                nx = tx;
-                ny = ty;
+                final int tx = cx + PAINT_DX[i];
+                final int ty = cy + PAINT_DY[i];
+                d = Math.abs(1.0 - Math.sqrt(tx * tx * a2 + ty * ty * b2));
+                if (d <= err)
+                {
+                    err = d;
+                    nx = tx;
+                    ny = ty;
+                }
             }
 
             cx = nx;
             cy = ny;
         }
-    }
-
-    public NImage boxDownsample(final int fx, final int fy)
-    {
-        final NImage ret = new NImage(this.width / fx, this.height / fy);
-        final float scale = 1.f / (fx * fy);
-        for (int sy = 0; sy < ret.height; sy++)
-        {
-            for (int sx = 0; sx < ret.width; sx++)
-            {
-                NColor s = new NColor(0);
-
-                for (int y = 0; y < fy; y++)
-                {
-                    for (int x = 0; x < fx; x++)
-                    {
-                        s = s.add(this.pixels[(x + fx * sx) + ((y + fy * sy) * this.width)]);
-                    }
-                }
-                ret.setPixel(sx, sy, s.scale(scale));
-            }
-        }
-
-        return ret;
     }
 
     public static class NPoint implements Comparable<NPoint>

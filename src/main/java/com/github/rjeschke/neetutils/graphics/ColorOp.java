@@ -17,5 +17,5 @@ package com.github.rjeschke.neetutils.graphics;
 
 public enum ColorOp
 {
-    SET, ADD, SUB, MUL, ADD_RGB, SUB_RGB, MUL_RGB, BLEND
+    SET, ADD, SUB, MUL, ADD_RGB, SUB_RGB, MUL_RGB, BLEND, BLEND1
 }
