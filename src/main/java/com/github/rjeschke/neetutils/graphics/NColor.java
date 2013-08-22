@@ -79,6 +79,14 @@ public class NColor
         this.b = b;
     }
 
+    public NColor(final double a, final double r, final double g, final double b)
+    {
+        this.a = (float)a;
+        this.r = (float)r;
+        this.g = (float)g;
+        this.b = (float)b;
+    }
+
     public NColor(final int r, final int g, final int b)
     {
         this.a = 1;
@@ -95,9 +103,25 @@ public class NColor
         this.b = b;
     }
 
+    public NColor(final double r, final double g, final double b)
+    {
+        this.a = 1;
+        this.r = (float)r;
+        this.g = (float)g;
+        this.b = (float)b;
+    }
+
     public NColor(final float a, final NColor c)
     {
         this.a = a;
+        this.r = c.r;
+        this.g = c.g;
+        this.b = c.b;
+    }
+
+    public NColor(final double a, final NColor c)
+    {
+        this.a = (float)a;
         this.r = c.r;
         this.g = c.g;
         this.b = c.b;

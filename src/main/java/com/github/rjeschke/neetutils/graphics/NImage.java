@@ -30,14 +30,15 @@ import com.github.rjeschke.neetutils.math.NMath;
 import com.github.rjeschke.neetutils.rng.RNG;
 import com.github.rjeschke.neetutils.rng.RNGFactory;
 import com.github.rjeschke.neetutils.rng.RNGType;
+import com.github.rjeschke.neetutils.vectors.Vector3f;
 
 public class NImage implements WorkerCallback<NImagePBlock>
 {
     public final int            width;
     public final int            height;
     final NColor[]              pixels;
-    private ClampMode           clampX            = ClampMode.ClAMP_TO_EDGE;
-    private ClampMode           clampY            = ClampMode.ClAMP_TO_EDGE;
+    private ClampMode           clampX            = ClampMode.CLAMP_TO_EDGE;
+    private ClampMode           clampY            = ClampMode.CLAMP_TO_EDGE;
     private ColorOp             cop               = ColorOp.SET;
     private int                 processingThreads = 1;
     final static float[]        SOBEL_X           = Colls.array(1.f, 0, -1, 2, 0, -2, 1, 0, -1);
@@ -61,6 +62,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         this.width = image.width;
         this.height = image.height;
         this.pixels = new NColor[this.width * this.height];
+        this.processingThreads = image.processingThreads;
         System.arraycopy(image.pixels, 0, this.pixels, 0, this.pixels.length);
     }
 
@@ -111,7 +113,7 @@ public class NImage implements WorkerCallback<NImagePBlock>
         switch (c)
         {
         default:
-        case ClAMP_TO_EDGE:
+        case CLAMP_TO_EDGE:
             return NMath.clamp(v, 0, max - 1);
         case WRAP:
             temp = v % max;
@@ -142,6 +144,9 @@ public class NImage implements WorkerCallback<NImagePBlock>
 
     public void setPixel(final int x, final int y, final NColor c)
     {
+        if (this.clampX == ClampMode.CLIP && x < 0 || x >= this.width) return;
+        if (this.clampY == ClampMode.CLIP && y < 0 || y >= this.height) return;
+
         final int p = this.clampedPos(x, y);
 
         switch (this.cop)
@@ -183,9 +188,56 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return this;
     }
 
+    public NImage fill(final NColor c)
+    {
+        for (int y = 0; y < this.height; y++)
+        {
+            for (int x = 0; x < this.width; x++)
+            {
+                this.setPixel(x, y, c);
+            }
+        }
+
+        return this;
+    }
+
     public NColor getPixel(final int x, final int y)
     {
+        if (this.clampX == ClampMode.CLIP && x < 0 || x >= this.width) return NColor.BLACK_TRANS;
+        if (this.clampY == ClampMode.CLIP && y < 0 || y >= this.height) return NColor.BLACK_TRANS;
+
         return this.pixels[this.clampedPos(x, y)];
+    }
+
+    public NImage clampColors()
+    {
+        for (int i = 0; i < this.pixels.length; i++)
+        {
+            this.pixels[i] = this.pixels[i].saturate();
+        }
+        return this;
+    }
+
+    public NImage invertColors()
+    {
+        for (int i = 0; i < this.pixels.length; i++)
+        {
+            final NColor c = this.pixels[i];
+            this.pixels[i] = new NColor(1.0 - c.a, 1.0 - c.r, 1.0 - c.g, 1.0 - c.b);
+        }
+
+        return this;
+    }
+
+    public NImage invertColorsRGB()
+    {
+        for (int i = 0; i < this.pixels.length; i++)
+        {
+            final NColor c = this.pixels[i];
+            this.pixels[i] = new NColor(c.a, 1.0 - c.r, 1.0 - c.g, 1.0 - c.b);
+        }
+
+        return this;
     }
 
     public void setClampMode(final ClampMode clampX, final ClampMode clampY)
@@ -217,14 +269,28 @@ public class NImage implements WorkerCallback<NImagePBlock>
         }
         float d = max - min;
         if (d == 0)
+        {
             d = 1;
+        }
         else
+        {
             d = 1.f / d;
+        }
         for (int i = 0; i < this.pixels.length; i++)
         {
             final NColor c = this.pixels[i];
             this.pixels[i] = new NColor((c.a - min) * d, (c.r - min) * d, (c.g - min) * d, (c.b - min) * d);
         }
+        return this;
+    }
+
+    public NImage setAlpha(final float alpha)
+    {
+        for (int i = 0; i < this.pixels.length; i++)
+        {
+            this.pixels[i] = new NColor(alpha, this.pixels[i]);
+        }
+
         return this;
     }
 
@@ -321,30 +387,18 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return img;
     }
 
-    private static void vecNormalize(final float[] v)
-    {
-        final float len = (float)Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-        if (len > 0)
-        {
-            v[0] /= len;
-            v[1] /= len;
-            v[2] /= len;
-        }
-    }
-
-    public NImage bump(final NImage normals, final float[] light, final NColor ambient, final NColor diffuse, final NColor specular, final float power,
+    public NImage bump(final NImage normals, final Vector3f light, final NColor ambient, final NColor diffuse, final NColor specular, final float power,
             final float heightScale, final boolean directional)
     {
-        final float[] l = new float[3], n = new float[3], h = new float[3];
+        final Vector3f l = new Vector3f(), n = new Vector3f(), h = new Vector3f();
         NColor color, out, norm;
 
+        l.set(light);
         if (directional)
         {
-            l[0] = -light[0];
-            l[1] = -light[1];
-            l[2] = -light[2];
-            vecNormalize(l);
+            l.negate().normalize();
         }
+
         for (int y = 0; y < this.height; y++)
         {
             final float fz = (float)y / (float)this.height;
@@ -353,32 +407,24 @@ public class NImage implements WorkerCallback<NImagePBlock>
                 final float fx = (float)x / (float)this.width;
                 color = this.getPixel(x, y);
                 norm = normals.getPixel(x, y);
-                n[0] = norm.r * 2.f - 1.f;
-                n[1] = norm.b * 2.f - 1.f;
-                n[2] = norm.g * 2.f - 1.f;
-                vecNormalize(n);
+                n.set(norm.r * 2.f - 1.f, norm.b * 2.f - 1.f, norm.g * 2.f - 1.f).normalize();
                 final float fy = norm.a * heightScale;
+
                 if (!directional)
                 {
-                    l[0] = light[0] - fx;
-                    l[1] = light[1] - fy;
-                    l[2] = light[2] - fz;
-                    vecNormalize(l);
+                    l.set(light.x - fx, light.y - fy, light.z - fz).normalize();
                 }
 
                 out = color.mulRGB(ambient);
 
-                float d = Math.max(0.f, n[0] * l[0] + n[1] * l[1] + n[2] * l[2]);
+                float d = Math.max(0.f, n.dot(l));
                 if (d > 0)
                 {
                     out = out.addRGB(diffuse.mulRGB(color), d);
                     if (power > 0)
                     {
-                        h[0] = l[0];
-                        h[1] = l[1] + 1.f;
-                        h[2] = l[2];
-                        vecNormalize(h);
-                        d = (float)Math.pow(Math.max(0.f, n[0] * h[0] + n[1] * h[1] + n[2] * h[2]), power);
+                        h.set(light.x, light.y + 1, light.z).normalize();
+                        d = (float)Math.pow(Math.max(0.f, n.dot(h)), power);
                         out = out.addRGB(specular, d);
                     }
                 }
@@ -498,17 +544,12 @@ public class NImage implements WorkerCallback<NImagePBlock>
         return ret;
     }
 
-    public NImage filter(final FilterKernel kernel, final boolean zero)
-    {
-        if (kernel.isSingle) return this.runThreaded(new NImageFilter(new NImage(this), kernel, zero, 0), BLOCK_SIZE);
-
-        this.runThreaded(new NImageFilter(this, kernel, zero, 1), BLOCK_SIZE);
-        return this.runThreaded(new NImageFilter(this, kernel, zero, 2), BLOCK_SIZE);
-    }
-
     public NImage filter(final FilterKernel kernel)
     {
-        return this.filter(kernel, false);
+        if (kernel.isSingle) return this.runThreaded(new NImageFilter(new NImage(this), kernel, 0), BLOCK_SIZE);
+
+        this.runThreaded(new NImageFilter(this, kernel, 1), BLOCK_SIZE);
+        return this.runThreaded(new NImageFilter(this, kernel, 2), BLOCK_SIZE);
     }
 
     public NImage combine(final NImage other, final ColorOp colorOp, final int dx, final int dy, final int sx, final int sy, final int w, final int h)

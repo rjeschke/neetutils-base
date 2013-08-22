@@ -17,5 +17,5 @@ package com.github.rjeschke.neetutils.graphics;
 
 public enum ClampMode
 {
-    ClAMP_TO_EDGE, WRAP
+    CLAMP_TO_EDGE, WRAP, CLIP
 }

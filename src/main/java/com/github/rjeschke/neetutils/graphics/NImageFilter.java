@@ -7,14 +7,12 @@ class NImageFilter implements Worker<NImagePBlock>
     final NImage       image;
     final FilterKernel filter;
     final int          mode;
-    final boolean      zero;
 
-    NImageFilter(final NImage image, final FilterKernel filter, final boolean zero, final int mode)
+    NImageFilter(final NImage image, final FilterKernel filter, final int mode)
     {
         this.image = image;
         this.filter = filter;
         this.mode = mode;
-        this.zero = zero;
     }
 
     @Override
@@ -36,16 +34,7 @@ class NImageFilter implements Worker<NImagePBlock>
                             final int rx = p.x + x + fx + this.filter.offsx;
                             final int ry = p.y + y + fy + this.filter.offsy;
 
-                            final NColor c;
-
-                            if (this.zero)
-                            {
-                                c = (rx < 0 || ry < 0 || rx >= this.image.width || ry >= this.image.height) ? NColor.BLACK_TRANS : this.image.getPixel(rx, ry);
-                            }
-                            else
-                            {
-                                c = this.image.getPixel(rx, ry);
-                            }
+                            final NColor c = this.image.getPixel(rx, ry);
 
                             a += c.a * f;
                             r += c.r * f;
@@ -73,16 +62,7 @@ class NImageFilter implements Worker<NImagePBlock>
                         final int rx = p.x + x + fx + this.filter.offsx;
                         final int ry = p.y + y;
 
-                        final NColor c;
-
-                        if (this.zero)
-                        {
-                            c = (rx < 0 || ry < 0 || rx >= this.image.width || ry >= this.image.height) ? NColor.BLACK_TRANS : this.image.getPixel(rx, ry);
-                        }
-                        else
-                        {
-                            c = this.image.getPixel(rx, ry);
-                        }
+                        final NColor c = this.image.getPixel(rx, ry);
 
                         a += c.a * f;
                         r += c.r * f;
@@ -108,16 +88,7 @@ class NImageFilter implements Worker<NImagePBlock>
                         final int rx = p.x + x;
                         final int ry = p.y + y + fy + this.filter.offsy;
 
-                        final NColor c;
-
-                        if (this.zero)
-                        {
-                            c = (rx < 0 || ry < 0 || rx >= this.image.width || ry >= this.image.height) ? NColor.BLACK_TRANS : this.image.getPixel(rx, ry);
-                        }
-                        else
-                        {
-                            c = this.image.getPixel(rx, ry);
-                        }
+                        final NColor c = this.image.getPixel(rx, ry);
 
                         a += c.a * f;
                         r += c.r * f;
