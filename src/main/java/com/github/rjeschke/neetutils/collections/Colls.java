@@ -36,9 +36,9 @@ import com.github.rjeschke.neetutils.fn.Fns;
 
 /**
  * Some handy collection methods.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 public final class Colls
 {
@@ -49,7 +49,7 @@ public final class Colls
 
     /**
      * Creates a new instance of the default List type.
-     * 
+     *
      * @return A List instance.
      */
     public final static <A> List<A> list()
@@ -59,7 +59,7 @@ public final class Colls
 
     /**
      * Creates a new instance of the default List type.
-     * 
+     *
      * @param initialSize
      *            Initial list size.
      * @return A List instance.
@@ -71,7 +71,7 @@ public final class Colls
 
     /**
      * Creates a new instance of the default List type.
-     * 
+     *
      * @param coll
      *            Collection of values to populate List with.
      * @return A List instance.
@@ -83,7 +83,7 @@ public final class Colls
 
     /**
      * Creates a new instance of the default List type.
-     * 
+     *
      * @param coll
      *            Collection of values to populate List with.
      * @return A List instance.
@@ -98,7 +98,7 @@ public final class Colls
 
     /**
      * Creates a new instance of the default List type.
-     * 
+     *
      * @param coll
      *            Array of values to populate List with.
      * @return A List instance.
@@ -114,7 +114,7 @@ public final class Colls
 
     /**
      * Creates a new instance of the default ImmutableList type.
-     * 
+     *
      * @param coll
      *            Collection of values to populate List with.
      * @return A List instance.
@@ -126,7 +126,7 @@ public final class Colls
 
     /**
      * Creates a new instance of the default ImmutableList type.
-     * 
+     *
      * @param coll
      *            Collection of values to populate List with.
      * @return A List instance.
@@ -138,7 +138,7 @@ public final class Colls
 
     /**
      * Creates a new instance of the default ImmutableList type.
-     * 
+     *
      * @param coll
      *            Array of values to populate List with.
      * @return A List instance.
@@ -178,9 +178,8 @@ public final class Colls
     }
 
     /**
-     * Tries to call trimToSize() on the given list. If no suitable type is
-     * found, then this method is a no-op.
-     * 
+     * Tries to call trimToSize() on the given list. If no suitable type is found, then this method is a no-op.
+     *
      * @param list
      *            The list
      * @return The same list
@@ -201,7 +200,7 @@ public final class Colls
 
     /**
      * Transforms a Map into a list of Tuples.
-     * 
+     *
      * @param map
      *            Map to transform.
      * @return List of Tuples.
@@ -216,7 +215,7 @@ public final class Colls
 
     /**
      * Puts the given key/value pairs into the given map.
-     * 
+     *
      * @param keys
      *            Collection of keys.
      * @param values
@@ -237,7 +236,7 @@ public final class Colls
 
     /**
      * Puts the given key/value pairs into the given map.
-     * 
+     *
      * @param keyValues
      *            Collection of keys.
      * @param map
@@ -253,7 +252,7 @@ public final class Colls
 
     /**
      * Puts the given key/value pairs into a HashMap.
-     * 
+     *
      * @param keys
      *            Collection of keys.
      * @param values
@@ -268,7 +267,7 @@ public final class Colls
 
     /**
      * Puts the given key/value pairs into a HashMap.
-     * 
+     *
      * @param keyValues
      *            Collection of keys.
      * @return The HashMap.
@@ -281,7 +280,7 @@ public final class Colls
 
     /**
      * Puts the given key/value pairs into a TreeMap.
-     * 
+     *
      * @param keys
      *            Collection of keys.
      * @param values
@@ -296,7 +295,7 @@ public final class Colls
 
     /**
      * Puts the given key/value pairs into a TreeMap.
-     * 
+     *
      * @param keyValues
      *            Collection of keys.
      * @return The TreeMap.
@@ -309,7 +308,7 @@ public final class Colls
 
     /**
      * Puts the given key/value pairs into a LinkedHashMap.
-     * 
+     *
      * @param keys
      *            Collection of keys.
      * @param values
@@ -324,7 +323,7 @@ public final class Colls
 
     /**
      * Puts the given key/value pairs into a LinkedHashMap.
-     * 
+     *
      * @param keyValues
      *            Collection of keys.
      * @return The LinkedHashMap.
@@ -337,7 +336,7 @@ public final class Colls
 
     /**
      * Sorts the given List.
-     * 
+     *
      * @param list
      *            The list to sort.
      * @return The sorted list.
@@ -350,7 +349,7 @@ public final class Colls
 
     /**
      * Returns the first element of the given collection.
-     * 
+     *
      * @param coll
      *            The collection.
      * @return The first element.
@@ -362,7 +361,7 @@ public final class Colls
 
     /**
      * Returns the first element of the given collection.
-     * 
+     *
      * @param coll
      *            The collection.
      * @return The first element.
@@ -374,7 +373,7 @@ public final class Colls
 
     /**
      * Returns the last element of the given List.
-     * 
+     *
      * @param coll
      *            The list.
      * @return The first element.
@@ -386,7 +385,7 @@ public final class Colls
 
     /**
      * Returns a new List containing all but the first element of 'coll'.
-     * 
+     *
      * @param coll
      *            The collection.
      * @return The list.
@@ -398,7 +397,7 @@ public final class Colls
 
     /**
      * Returns a new List containing all but the first element of 'coll'.
-     * 
+     *
      * @param coll
      *            The collection.
      * @return The list.
@@ -409,9 +408,8 @@ public final class Colls
     }
 
     /**
-     * Returns a new list containing the first 'amount' elements of the given
-     * collection.
-     * 
+     * Returns a new list containing the first 'amount' elements of the given collection.
+     *
      * @param coll
      *            The collection.
      * @param amount
@@ -431,9 +429,8 @@ public final class Colls
     }
 
     /**
-     * Returns a new list containing the first 'amount' elements of the given
-     * collection.
-     * 
+     * Returns a new list containing the first 'amount' elements of the given collection.
+     *
      * @param coll
      *            The collection.
      * @param amount
@@ -452,9 +449,8 @@ public final class Colls
     }
 
     /**
-     * Returns a new List containing all but the first 'amount' elements of
-     * 'coll'.
-     * 
+     * Returns a new List containing all but the first 'amount' elements of 'coll'.
+     *
      * @param coll
      *            The collection.
      * @param amount
@@ -477,9 +473,8 @@ public final class Colls
     }
 
     /**
-     * Returns a new List containing all but the first 'amount' elements of
-     * 'coll'.
-     * 
+     * Returns a new List containing all but the first 'amount' elements of 'coll'.
+     *
      * @param coll
      *            The collection.
      * @param amount
@@ -610,7 +605,7 @@ public final class Colls
 
     /**
      * Zips the two given collections into a list of tuples.
-     * 
+     *
      * @param collA
      *            First collection.
      * @param collB
@@ -631,7 +626,7 @@ public final class Colls
 
     /**
      * Zips the two given collections into a list of tuples.
-     * 
+     *
      * @param collA
      *            First collection.
      * @param collB
@@ -672,7 +667,7 @@ public final class Colls
 
     /**
      * Unzips the given collection of tuples into two lists.
-     * 
+     *
      * @param coll
      *            The collection
      * @return A tuple of two lists
@@ -692,7 +687,7 @@ public final class Colls
 
     /**
      * Unzips the given collection of tuples into two lists.
-     * 
+     *
      * @param coll
      *            The collection
      * @return A tuple of two lists
@@ -737,7 +732,8 @@ public final class Colls
         {
             if (fn.applyPredicate(a))
                 l0.add(a);
-            else l1.add(a);
+            else
+                l1.add(a);
         }
         return Tuple.of(l0, l1);
     }
@@ -772,7 +768,7 @@ public final class Colls
 
     /**
      * Returns the given collection of numbers as an array of bytes.
-     * 
+     *
      * @param coll
      *            The collection
      * @return The array
@@ -788,7 +784,7 @@ public final class Colls
 
     /**
      * Returns the given collection of numbers as an array of shorts.
-     * 
+     *
      * @param coll
      *            The collection
      * @return The array
@@ -804,7 +800,7 @@ public final class Colls
 
     /**
      * Returns the given collection of numbers as an array of ints.
-     * 
+     *
      * @param coll
      *            The collection
      * @return The array
@@ -820,7 +816,7 @@ public final class Colls
 
     /**
      * Returns the given collection of numbers as an array of longs.
-     * 
+     *
      * @param coll
      *            The collection
      * @return The array
@@ -836,7 +832,7 @@ public final class Colls
 
     /**
      * Returns the given collection of numbers as an array of floats.
-     * 
+     *
      * @param coll
      *            The collection
      * @return The array
@@ -852,7 +848,7 @@ public final class Colls
 
     /**
      * Returns the given collection of numbers as an array of doubles.
-     * 
+     *
      * @param coll
      *            The collection
      * @return The array
@@ -905,5 +901,22 @@ public final class Colls
     public static double[] array(final double... doubles)
     {
         return doubles;
+    }
+
+    @SafeVarargs
+    public static <T> void addAll(final Collection<T> coll, final T... ts)
+    {
+        for (final T t : ts)
+        {
+            coll.add(t);
+        }
+    }
+
+    public static <T> void addAll(final Collection<T> coll, final Iterable<T> iterable)
+    {
+        for (final T t : iterable)
+        {
+            coll.add(t);
+        }
     }
 }

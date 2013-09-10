@@ -21,15 +21,14 @@ import com.github.rjeschke.neetutils.collections.Colls;
 
 /**
  * String utility methods.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public class Strings
 {
     /**
-     * Produces a in Java usable string representation of the given String,
-     * wrapping it in quotes and escaping all relevant characters.
-     * 
+     * Produces a in Java usable string representation of the given String, wrapping it in quotes and escaping all relevant characters.
+     *
      * @param str
      *            The String to escape.
      * @return Escape String or &quote;null&quote; if str is <code>null</code>
@@ -132,6 +131,22 @@ public class Strings
                 sb.append(c);
             }
         }
+        return sb.toString();
+    }
+
+    public static String join(final Iterable<String> iterable, final String glue)
+    {
+        final StringBuilder sb = new StringBuilder();
+
+        for (final String s : iterable)
+        {
+            if (sb.length() > 0)
+            {
+                sb.append(glue);
+            }
+            sb.append(s);
+        }
+
         return sb.toString();
     }
 }

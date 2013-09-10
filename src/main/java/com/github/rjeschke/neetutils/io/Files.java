@@ -54,7 +54,7 @@ public final class Files implements Runnable
 
     /**
      * Recursively lists all files at the given path.
-     * 
+     *
      * @param parent
      *            Path.
      * @return List of files.
@@ -77,7 +77,8 @@ public final class Files implements Runnable
             {
                 if (f.isFile())
                     files.add(f);
-                else listFiles(f, files);
+                else
+                    listFiles(f, files);
             }
         }
     }
@@ -116,11 +117,13 @@ public final class Files implements Runnable
             {
                 if (f.isDirectory())
                     recurseDeleteFolder(f);
-                else f.delete();
+                else
+                    f.delete();
             }
             path.delete();
         }
-        else path.delete();
+        else
+            path.delete();
     }
 
     public final static void copy(final File input, final File output) throws IOException
@@ -245,7 +248,7 @@ public final class Files implements Runnable
 
     /**
      * Lists all resources in the given package.
-     * 
+     *
      * @param pkgName
      *            The package name
      * @return List of all resources inside the package (recursively)
@@ -262,7 +265,7 @@ public final class Files implements Runnable
 
     /**
      * Gets a list of all resources on the classpath.
-     * 
+     *
      * @return A list of Strings.
      */
     public final static List<String> getFilesOnClasspath()
