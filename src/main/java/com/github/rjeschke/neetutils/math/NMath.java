@@ -73,8 +73,7 @@ public final class NMath
     public final static double U_y        = 1e-24;
 
     /**
-     * Returns <code>min</code> if <code>x</code> is less than <code>min</code>,
-     * <code>max</code> if <code>x</code> is greater than <code>max</code> and
+     * Returns <code>min</code> if <code>x</code> is less than <code>min</code>, <code>max</code> if <code>x</code> is greater than <code>max</code> and
      * </code>x</code> otherwise.
      *
      * @param x
@@ -91,8 +90,7 @@ public final class NMath
     }
 
     /**
-     * Returns <code>min</code> if <code>x</code> is less than <code>min</code>,
-     * <code>max</code> if <code>x</code> is greater than <code>max</code> and
+     * Returns <code>min</code> if <code>x</code> is less than <code>min</code>, <code>max</code> if <code>x</code> is greater than <code>max</code> and
      * </code>x</code> otherwise.
      *
      * @param x
@@ -109,8 +107,7 @@ public final class NMath
     }
 
     /**
-     * Returns <code>min</code> if <code>x</code> is less than <code>min</code>,
-     * <code>max</code> if <code>x</code> is greater than <code>max</code> and
+     * Returns <code>min</code> if <code>x</code> is less than <code>min</code>, <code>max</code> if <code>x</code> is greater than <code>max</code> and
      * </code>x</code> otherwise.
      *
      * @param x
@@ -163,8 +160,7 @@ public final class NMath
      *
      * @param v
      *            Number to normalize
-     * @return <code>0</code> if <code>abs(v)</code> is smaller than
-     *         <code>Float.MIN_NORMAL</code>
+     * @return <code>0</code> if <code>abs(v)</code> is smaller than <code>Float.MIN_NORMAL</code>
      */
     public final static float normalize(final float v)
     {
@@ -176,8 +172,7 @@ public final class NMath
      *
      * @param v
      *            Number to normalize
-     * @return <code>0</code> if <code>abs(v)</code> is smaller than
-     *         <code>Double.MIN_NORMAL</code>
+     * @return <code>0</code> if <code>abs(v)</code> is smaller than <code>Double.MIN_NORMAL</code>
      */
     public final static double normalize(final double v)
     {
@@ -1116,5 +1111,17 @@ public final class NMath
             sum += xs[i];
         }
         return sum;
+    }
+
+    public static int wrap(final int x, final int max)
+    {
+        final int w = x % max;
+        return w < 0 ? w + max : w;
+    }
+
+    public static long wrap(final long x, final long max)
+    {
+        final long w = x % max;
+        return w < 0 ? w + max : w;
     }
 }
