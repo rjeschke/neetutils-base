@@ -134,19 +134,47 @@ public class Strings
         return sb.toString();
     }
 
-    public static String join(final Iterable<String> iterable, final String glue)
+    public final static String join(final Iterable<String> iterable, final String glue)
+    {
+        final StringBuilder sb = new StringBuilder();
+        int index = 0;
+        for (final String s : iterable)
+        {
+            if (index > 0)
+            {
+                sb.append(glue);
+            }
+            sb.append(s);
+            ++index;
+        }
+
+        return sb.toString();
+    }
+
+    public final static String join(final Iterable<String> iterable)
     {
         final StringBuilder sb = new StringBuilder();
 
         for (final String s : iterable)
         {
-            if (sb.length() > 0)
-            {
-                sb.append(glue);
-            }
             sb.append(s);
         }
 
         return sb.toString();
+    }
+
+    public final static List<String> splitLength(final String str, final int len)
+    {
+        final List<String> ret = Colls.list();
+        int todo = str.length();
+        int pos = 0;
+        while (todo > 0)
+        {
+            final int n = Math.min(todo, len);
+            ret.add(str.substring(pos, pos + n));
+            pos += n;
+            todo -= n;
+        }
+        return ret;
     }
 }
