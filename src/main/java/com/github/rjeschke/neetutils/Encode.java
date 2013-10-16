@@ -16,7 +16,7 @@
 package com.github.rjeschke.neetutils;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -203,6 +203,57 @@ public final class Encode
         }
     }
 
+    public final static byte[] hmacSha256(final String key, final String data)
+    {
+        try
+        {
+            return hmacSha1(key.getBytes("UTF-8"), data.getBytes("UTF-8"));
+        }
+        catch (final UnsupportedEncodingException e)
+        {
+            throw new EncodingException("No UTF-8 encoding available", e);
+        }
+    }
+
+    public final static byte[] hmacSha256(final String key, final byte[] bytes)
+    {
+        try
+        {
+            return hmacSha1(key.getBytes("UTF-8"), bytes);
+        }
+        catch (final UnsupportedEncodingException e)
+        {
+            throw new EncodingException("No UTF-8 encoding available", e);
+        }
+    }
+
+    public final static byte[] hmacSha256(final byte[] key, final String data)
+    {
+        try
+        {
+            return hmacSha1(key, data.getBytes("UTF-8"));
+        }
+        catch (final UnsupportedEncodingException e)
+        {
+            throw new EncodingException("No UTF-8 encoding available", e);
+        }
+    }
+
+    public final static byte[] hmacSha256(final byte[] key, final byte[] bytes)
+    {
+        try
+        {
+            final SecretKeySpec sks = new SecretKeySpec(key, "HmacSHA256");
+            final Mac mac = Mac.getInstance("HmacSHA256");
+            mac.init(sks);
+            return mac.doFinal(bytes);
+        }
+        catch (NoSuchAlgorithmException | InvalidKeyException e)
+        {
+            throw new EncodingException("Generating HmacSHA256 hash failed", e);
+        }
+    }
+
     public final static String base64(final byte[] bytes)
     {
         final StringBuilder sb = new StringBuilder();
@@ -246,37 +297,66 @@ public final class Encode
         return sb.toString();
     }
 
-    public final static String url(final String url)
+    public final static String url(final String url, final Charset charset)
     {
-        try
+        final StringBuilder sb = new StringBuilder();
+
+        final byte[] bytes = url.getBytes(charset);
+
+        for (int i = 0; i < bytes.length; i++)
         {
-            return URLEncoder.encode(url, "UTF-8");
+            final int c = bytes[i] & 255;
+
+            if (c < 33 | c > 126)
+            {
+                sb.append(String.format("%%%02X", c));
+            }
+            else
+            {
+                switch (c)
+                {
+                case '!':
+                case '#':
+                case '$':
+                case '&':
+                case '\'':
+                case '(':
+                case ')':
+                case '*':
+                case '+':
+                case ',':
+                case '/':
+                case ':':
+                case ';':
+                case '=':
+                case '?':
+                case '@':
+                case '[':
+                case ']':
+                    sb.append(String.format("%%%02X", c));
+                    break;
+                default:
+                    sb.append((char)c);
+                    break;
+                }
+            }
         }
-        catch (final UnsupportedEncodingException e)
-        {
-            throw new EncodingException("No UTF-8 encoding available", e);
-        }
+
+        return sb.toString();
     }
 
-    public final static String urlPath(final String url)
+    public final static String urlPath(final String url, final Charset charset)
     {
-        try
+        final List<String> comps = Strings.split(url, '/');
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < comps.size(); i++)
         {
-            final List<String> comps = Strings.split(url, '/');
-            final StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < comps.size(); i++)
+            if (i > 0)
             {
-                if (i > 0)
-                {
-                    sb.append('/');
-                }
-                sb.append(URLEncoder.encode(comps.get(i), "UTF-8"));
+                sb.append('/');
             }
-            return sb.toString();
+            sb.append(url(comps.get(i), charset));
         }
-        catch (final UnsupportedEncodingException e)
-        {
-            throw new EncodingException("No UTF-8 encoding available", e);
-        }
+        return sb.toString();
     }
 }
