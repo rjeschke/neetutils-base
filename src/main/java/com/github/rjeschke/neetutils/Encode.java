@@ -297,6 +297,16 @@ public final class Encode
         return sb.toString();
     }
 
+    public final static String hexu(final byte[] bytes)
+    {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++)
+        {
+            sb.append(String.format("%02X", bytes[i] & 255));
+        }
+        return sb.toString();
+    }
+
     public final static String url(final String url, final Charset charset)
     {
         final StringBuilder sb = new StringBuilder();
