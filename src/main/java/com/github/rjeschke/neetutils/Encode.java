@@ -332,6 +332,9 @@ public final class Encode
                 case '\'':
                 case '(':
                 case ')':
+                case '{':
+                case '}':
+                case '"':
                 case '*':
                 case '+':
                 case ',':

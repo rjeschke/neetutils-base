@@ -49,7 +49,7 @@ public final class Files implements Runnable
 
     static
     {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Files()));
+        Runtime.getRuntime().addShutdownHook(new Thread(new Files(), "neetutils-files-cleaner"));
     }
 
     /**
