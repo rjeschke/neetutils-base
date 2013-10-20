@@ -256,7 +256,11 @@ public final class Encode
 
     public final static String base64(final byte[] bytes)
     {
-        final StringBuilder sb = new StringBuilder();
+        return base64(new StringBuilder(), bytes).toString();
+    }
+
+    public final static StringBuilder base64(final StringBuilder sb, final byte[] bytes)
+    {
         int todo = bytes.length;
         int pos = 0;
         while (todo > 2)
@@ -284,33 +288,44 @@ public final class Encode
             }
             sb.append('=');
         }
-        return sb.toString();
+        return sb;
     }
 
     public final static String hex(final byte[] bytes)
     {
-        final StringBuilder sb = new StringBuilder();
+        return hex(new StringBuilder(), bytes).toString();
+    }
+
+    public final static StringBuilder hex(final StringBuilder sb, final byte[] bytes)
+    {
         for (int i = 0; i < bytes.length; i++)
         {
             sb.append(String.format("%02x", bytes[i] & 255));
         }
-        return sb.toString();
+        return sb;
     }
 
     public final static String hexu(final byte[] bytes)
     {
-        final StringBuilder sb = new StringBuilder();
+        return hexu(new StringBuilder(), bytes).toString();
+    }
+
+    public final static StringBuilder hexu(final StringBuilder sb, final byte[] bytes)
+    {
         for (int i = 0; i < bytes.length; i++)
         {
             sb.append(String.format("%02X", bytes[i] & 255));
         }
-        return sb.toString();
+        return sb;
     }
 
     public final static String url(final String url, final Charset charset)
     {
-        final StringBuilder sb = new StringBuilder();
+        return url(new StringBuilder(), url, charset).toString();
+    }
 
+    public final static StringBuilder url(final StringBuilder sb, final String url, final Charset charset)
+    {
         final byte[] bytes = url.getBytes(charset);
 
         for (int i = 0; i < bytes.length; i++)
@@ -355,13 +370,17 @@ public final class Encode
             }
         }
 
-        return sb.toString();
+        return sb;
     }
 
     public final static String urlPath(final String url, final Charset charset)
     {
+        return urlPath(new StringBuilder(), url, charset).toString();
+    }
+
+    public final static StringBuilder urlPath(final StringBuilder sb, final String url, final Charset charset)
+    {
         final List<String> comps = Strings.split(url, '/');
-        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < comps.size(); i++)
         {
             if (i > 0)
@@ -370,6 +389,6 @@ public final class Encode
             }
             sb.append(url(comps.get(i), charset));
         }
-        return sb.toString();
+        return sb;
     }
 }

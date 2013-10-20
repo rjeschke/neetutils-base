@@ -29,7 +29,7 @@ public class Once<T>
 
     public static <T> Once<T> of(final T first, final T next)
     {
-        return new Once<T>(first, next);
+        return new Once<>(first, next);
     }
 
     public void reset()

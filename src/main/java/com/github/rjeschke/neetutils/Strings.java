@@ -15,6 +15,7 @@
  */
 package com.github.rjeschke.neetutils;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 import com.github.rjeschke.neetutils.collections.Colls;
@@ -176,5 +177,25 @@ public class Strings
             todo -= n;
         }
         return ret;
+    }
+
+    public final static String from(final byte[] bytes, final int offs, final int length, final Charset charset)
+    {
+        return new String(bytes, offs, length, charset);
+    }
+
+    public final static String from(final byte[] bytes, final Charset charset)
+    {
+        return new String(bytes, charset);
+    }
+
+    public final static String from(final byte[] bytes, final int offs, final int length)
+    {
+        return new String(bytes, offs, length, Charsets.UTF8);
+    }
+
+    public final static String from(final byte[] bytes)
+    {
+        return new String(bytes, Charsets.UTF8);
     }
 }
