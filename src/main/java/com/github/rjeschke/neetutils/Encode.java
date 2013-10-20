@@ -391,4 +391,40 @@ public final class Encode
         }
         return sb;
     }
+
+    public final static String html(final String str)
+    {
+        return html(new StringBuilder(), str).toString();
+    }
+
+    public final static StringBuilder html(final StringBuilder sb, final String str)
+    {
+        for (int i = 0; i < str.length(); i++)
+        {
+            final int ch = str.charAt(i);
+            switch (ch)
+            {
+            case '<':
+                sb.append("&lt;");
+                break;
+            case '>':
+                sb.append("&gt;");
+                break;
+            case '"':
+                sb.append("&quot;");
+                break;
+            case '\'':
+                sb.append("&#39;");
+                break;
+            case '&':
+                sb.append("&amp;");
+                break;
+            default:
+                sb.append((char)ch);
+                break;
+            }
+        }
+
+        return sb;
+    }
 }

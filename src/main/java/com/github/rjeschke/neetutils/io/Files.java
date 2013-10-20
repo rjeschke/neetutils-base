@@ -83,6 +83,17 @@ public final class Files implements Runnable
         }
     }
 
+    public final static String getExtension(final File file)
+    {
+        return getExtension(file.getName());
+    }
+
+    public final static String getExtension(final String filename)
+    {
+        final int idx = filename.lastIndexOf('.');
+        return idx != -1 ? filename.substring(idx + 1) : "";
+    }
+
     public final static File createUniqueTempFolder()
     {
         return createUniqueTempFolder("neetutils", true);
