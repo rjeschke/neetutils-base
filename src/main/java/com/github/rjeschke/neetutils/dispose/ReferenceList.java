@@ -16,9 +16,8 @@
 package com.github.rjeschke.neetutils.dispose;
 
 /**
- * Specialized linked list to hold weak references or similar stuff. Adding and
- * removing is guaranteed O(1).
- * 
+ * Specialized linked list to hold weak references or similar stuff. Adding and removing is guaranteed O(1).
+ *
  * @author René Jeschke <rene_jeschke@yhoo.de>
  */
 public class ReferenceList<T>
@@ -36,7 +35,7 @@ public class ReferenceList<T>
 
     /**
      * Gets the number of items currently in this list.
-     * 
+     *
      * @return The size.
      */
     public int size()
@@ -46,7 +45,7 @@ public class ReferenceList<T>
 
     /**
      * Checks if this list is empty.
-     * 
+     *
      * @return <code>true</code> is this list is empty
      */
     public boolean isEmpty()
@@ -56,7 +55,7 @@ public class ReferenceList<T>
 
     /**
      * Adds a value to this list (at head).
-     * 
+     *
      * @param value
      *            Value to add
      * @return Node reference needed for remove
@@ -77,7 +76,7 @@ public class ReferenceList<T>
 
     /**
      * Removes the last added Node.
-     * 
+     *
      * @return The last added Node or <code>null</code> if this list is empty.
      */
     public Node<T> removeLast()
@@ -96,7 +95,7 @@ public class ReferenceList<T>
 
     /**
      * Removes the given Node from this list. Multiple removes are prevented.
-     * 
+     *
      * @param node
      *            The Node to remove
      */
@@ -120,8 +119,8 @@ public class ReferenceList<T>
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @author René Jeschke <rene_jeschke@yhoo.de>
      */
     public static class Node<T>

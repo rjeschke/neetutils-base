@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.dispose;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public interface Disposable
 {
     public void dispose();

@@ -19,6 +19,11 @@ import java.util.Iterator;
 
 import com.github.rjeschke.neetutils.math.Numbers;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class CharacterIterator extends AbstractXIterable<Character>
 {
     private final String value;

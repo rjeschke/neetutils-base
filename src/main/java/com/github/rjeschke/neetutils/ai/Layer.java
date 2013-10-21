@@ -20,6 +20,12 @@ import java.io.IOException;
 import com.github.rjeschke.neetutils.io.NInputStream;
 import com.github.rjeschke.neetutils.io.NOutputStream;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 class Layer
 {
     final TransferFunction tf;
@@ -28,7 +34,7 @@ class Layer
     final int              width;
     final double[]         matrix;
 
-    Layer(final TransferFunction tf, int numInputs, int numOutputs)
+    Layer(final TransferFunction tf, final int numInputs, final int numOutputs)
     {
         this.tf = tf;
         this.numInputs = numInputs;
@@ -45,7 +51,7 @@ class Layer
         return l;
     }
 
-    double[] eval(double[] inputs, double[] outputs)
+    double[] eval(final double[] inputs, final double[] outputs)
     {
         for (int y = 0; y < this.numOutputs; y++)
         {
@@ -63,13 +69,12 @@ class Layer
         return new State(this.numOutputs);
     }
 
-    @SuppressWarnings("static-method")
-    State createState(double[] outputs)
+    State createState(final double[] outputs)
     {
         return new State(outputs);
     }
 
-    void toStream(NOutputStream out) throws IOException
+    void toStream(final NOutputStream out) throws IOException
     {
         out.write32(this.numInputs);
         out.write32(this.numOutputs);
@@ -87,7 +92,7 @@ class Layer
         }
     }
 
-    static Layer fromStream(NInputStream in) throws IOException
+    static Layer fromStream(final NInputStream in) throws IOException
     {
         final int a = in.readI32();
         final int b = in.readI32();
@@ -102,12 +107,12 @@ class Layer
     {
         public final double[] values;
 
-        State(int values)
+        State(final int values)
         {
             this.values = new double[values];
         }
 
-        State(double[] values)
+        State(final double[] values)
         {
             this.values = values;
         }

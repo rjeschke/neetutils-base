@@ -18,6 +18,12 @@ package com.github.rjeschke.neetutils.iterables;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 class XIterableTake<A> extends AbstractXIterable<A>
 {
     private final Iterable<A> iterable;

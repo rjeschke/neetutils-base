@@ -19,9 +19,10 @@ import java.util.Arrays;
 
 /**
  * WIP mutable UTF-32 String implementation.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
+@Deprecated
 public class String32
 {
     private int[] chars;

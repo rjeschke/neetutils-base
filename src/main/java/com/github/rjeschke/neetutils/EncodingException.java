@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils;
 
+/**
+ * Exception wrapping various checked exceptions for {@link Encode}
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public class EncodingException extends RuntimeException
 {
     private static final long serialVersionUID = -3904564656438926863L;

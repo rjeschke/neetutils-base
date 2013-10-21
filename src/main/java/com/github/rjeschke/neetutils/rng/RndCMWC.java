@@ -17,7 +17,7 @@ package com.github.rjeschke.neetutils.rng;
 
 /**
  * Complementary Multiply-With-Carry
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public class RndCMWC extends AbstractRNG
@@ -36,9 +36,13 @@ public class RndCMWC extends AbstractRNG
         final RndLCG rnd = new RndLCG(seed);
         this.accu = rnd.nextInt();
         while (this.accu < 0)
+        {
             this.accu += 809430660L;
+        }
         while (this.accu > 809430660L)
+        {
             this.accu -= 809430660L;
+        }
 
         for (int i = 0; i < 4096; i++)
         {

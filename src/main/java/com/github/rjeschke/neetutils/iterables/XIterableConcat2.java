@@ -18,6 +18,12 @@ package com.github.rjeschke.neetutils.iterables;
 import java.util.Collections;
 import java.util.Iterator;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 class XIterableConcat2<A> extends AbstractXIterable<A>
 {
     private final Iterable<? extends Iterable<? extends A>> iterable;

@@ -20,6 +20,11 @@ import java.util.Iterator;
 
 import com.github.rjeschke.neetutils.iterables.Collector;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public final class StringFns
 {
     private StringFns()

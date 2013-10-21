@@ -17,6 +17,11 @@ package com.github.rjeschke.neetutils.audio;
 
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class DigitalOSC
 {
     private Wave                wave    = Wave.NONE;
@@ -87,6 +92,7 @@ public class DigitalOSC
         double out = 0;
         switch (this.wave)
         {
+        default:
         case NONE:
             out = 0;
             break;

@@ -32,6 +32,11 @@ import com.github.rjeschke.neetutils.rng.RNGFactory;
 import com.github.rjeschke.neetutils.rng.RNGType;
 import com.github.rjeschke.neetutils.vectors.Vector3f;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class NImage implements WorkerCallback<NImagePBlock>
 {
     public final int            width;

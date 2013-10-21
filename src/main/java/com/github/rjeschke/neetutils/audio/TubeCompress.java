@@ -17,12 +17,17 @@ package com.github.rjeschke.neetutils.audio;
 
 import com.github.rjeschke.neetutils.math.CatmullRomSpline;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class TubeCompress
 {
     private final CatmullRomSpline spline;
     private final double           bp, m1, tp0, tp1, rtw;
 
-    public TubeCompress(double bp, double tw, double m1)
+    public TubeCompress(final double bp, final double tw, final double m1)
     {
         this.bp = bp;
         this.m1 = m1;
@@ -35,7 +40,7 @@ public class TubeCompress
         this.spline = new CatmullRomSpline(1, 1, v2, v3);
     }
 
-    public double get(double in)
+    public double get(final double in)
     {
         final double i = Math.abs(in);
         if (i < this.tp0) return 1;
@@ -43,7 +48,7 @@ public class TubeCompress
         return (i - this.bp) * this.m1 + 1;
     }
 
-    public double process(double in)
+    public double process(final double in)
     {
         return in / this.get(in);
     }

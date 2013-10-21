@@ -26,7 +26,7 @@ import com.github.rjeschke.neetutils.math.NMath;
 
 /**
  * FIR filter utility class.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public final class FIRUtils
@@ -41,7 +41,7 @@ public final class FIRUtils
 
     /**
      * Creates a lowpass filter.
-     * 
+     *
      * @param order
      *            Filter order.
      * @param fc
@@ -50,7 +50,7 @@ public final class FIRUtils
      *            Filter sampling rate.
      * @return The FIR filter.
      */
-    public final static double[] createLowpass(final int order, final double fc, double fs)
+    public final static double[] createLowpass(final int order, final double fc, final double fs)
     {
         final double cutoff = fc / fs;
         final double[] fir = new double[order + 1];
@@ -65,7 +65,7 @@ public final class FIRUtils
 
     /**
      * Creates a highpass filter.
-     * 
+     *
      * @param order
      *            Filter order.
      * @param fc
@@ -74,7 +74,7 @@ public final class FIRUtils
      *            Filter sampling rate.
      * @return The FIR filter.
      */
-    public final static double[] createHighpass(final int order, final double fc, double fs)
+    public final static double[] createHighpass(final int order, final double fc, final double fs)
     {
         final double cutoff = fc / fs;
         final double[] fir = new double[order + 1];
@@ -89,7 +89,7 @@ public final class FIRUtils
 
     /**
      * Creates a bandstop filter.
-     * 
+     *
      * @param order
      *            Filter order.
      * @param fcl
@@ -113,7 +113,7 @@ public final class FIRUtils
 
     /**
      * Creates a bandpass filter.
-     * 
+     *
      * @param order
      *            Filter order.
      * @param fcl
@@ -137,7 +137,7 @@ public final class FIRUtils
 
     /**
      * Normalizes the sum of the given FIR filter to 1.
-     * 
+     *
      * @param fir
      *            The FIR filter.
      * @return Normalized FIR filter.
@@ -161,7 +161,7 @@ public final class FIRUtils
 
     /**
      * Creates a Kaiser window.
-     * 
+     *
      * @param transitionWidth
      *            The transition width in Hz
      * @param attenuation
@@ -170,13 +170,14 @@ public final class FIRUtils
      *            Sampling frequency
      * @return The window.
      */
-    public final static double[] windowKaiser(double transitionWidth, double attenuation, double fs)
+    public final static double[] windowKaiser(final double transitionWidth, final double attenuation, final double fs)
     {
         final double tw = 2.0 * Math.PI * transitionWidth / fs;
         int m;
         if (attenuation <= 21)
             m = (int)Math.ceil(5.79 / tw);
-        else m = (int)Math.ceil((attenuation - 7.95) / (2.285 * tw));
+        else
+            m = (int)Math.ceil((attenuation - 7.95) / (2.285 * tw));
         if ((m & 1) == 0) m++;
         final double[] win = new double[m];
 
@@ -186,7 +187,8 @@ public final class FIRUtils
             beta = 0;
         else if (attenuation <= 50)
             beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
-        else beta = 0.1102 * (attenuation - 8.7);
+        else
+            beta = 0.1102 * (attenuation - 8.7);
 
         final double i0b = NMath.i0(beta);
 
@@ -201,7 +203,7 @@ public final class FIRUtils
 
     /**
      * Calculated the transition width in Hz for a Kaiser windowed FIR filter.
-     * 
+     *
      * @param m
      *            Size of the FIR filter.
      * @param attenuation
@@ -210,19 +212,19 @@ public final class FIRUtils
      *            Sampling frequency.
      * @return The transition width in Hz.
      */
-    public final static double kaiserTransitionWidth(int m, double attenuation, double fs)
+    public final static double kaiserTransitionWidth(final int m, final double attenuation, final double fs)
     {
         final double tw;
         if (attenuation <= 21)
             tw = 5.79 / m;
-        else tw = (attenuation - 7.95) / (2.285 * m);
+        else
+            tw = (attenuation - 7.95) / (2.285 * m);
         return tw * fs / (2.0 * Math.PI);
     }
 
     /**
-     * Applies a Kaiser window with given size and attenuation to the given FIR
-     * filter.
-     * 
+     * Applies a Kaiser window with given size and attenuation to the given FIR filter.
+     *
      * @param fir
      *            The FIR filter.
      * @param attenuation
@@ -231,7 +233,7 @@ public final class FIRUtils
      *            Sampling frequency.
      * @return The windowed FIR filter.
      */
-    public final static double[] windowKaiserFromAttenuation(double[] fir, double attenuation, double fs)
+    public final static double[] windowKaiserFromAttenuation(final double[] fir, final double attenuation, final double fs)
     {
         final int m = fir.length;
         final double beta;
@@ -240,7 +242,8 @@ public final class FIRUtils
             beta = 0;
         else if (attenuation <= 50)
             beta = 0.5842 * Math.pow(attenuation - 21, 0.4) + 0.07886 * (attenuation - 21);
-        else beta = 0.1102 * (attenuation - 8.7);
+        else
+            beta = 0.1102 * (attenuation - 8.7);
 
         final double i0b = NMath.i0(beta);
 
@@ -255,7 +258,7 @@ public final class FIRUtils
 
     /**
      * Applies a Bartlett window to the given FIR.
-     * 
+     *
      * @param fir
      *            The FIR filter.
      * @return The windowed FIR filter.
@@ -273,7 +276,7 @@ public final class FIRUtils
 
     /**
      * Applies a sinc window to the given FIR.
-     * 
+     *
      * @param fir
      *            The FIR filter.
      * @return The windowed FIR filter.
@@ -290,7 +293,7 @@ public final class FIRUtils
 
     /**
      * Applies a Hanning window to the given FIR.
-     * 
+     *
      * @param fir
      *            The FIR filter.
      * @return The windowed FIR filter.
@@ -307,7 +310,7 @@ public final class FIRUtils
 
     /**
      * Applies a Hamming window to the given FIR.
-     * 
+     *
      * @param fir
      *            The FIR filter.
      * @return The windowed FIR filter.
@@ -324,7 +327,7 @@ public final class FIRUtils
 
     /**
      * Applies a Blackman window to the given FIR.
-     * 
+     *
      * @param fir
      *            The FIR filter.
      * @return The windowed FIR filter.
@@ -341,7 +344,7 @@ public final class FIRUtils
 
     /**
      * Converts a double array to a float array.
-     * 
+     *
      * @param array
      *            The double array.
      * @return The float array.
@@ -361,7 +364,7 @@ public final class FIRUtils
     private final static String[] POSTS =
                                         { "", "k", "M", "G", "T", "P" };
 
-    private final static String engVal(int val)
+    private final static String engVal(final int val)
     {
         int v = 1;
         int z = 0;
@@ -379,19 +382,19 @@ public final class FIRUtils
 
     /**
      * Renders the frequency response of the given FIR filter.
-     * 
+     *
      * @param fir
      *            The FIR filter.
      * @return The response as an BufferedImage.
      */
-    public final static BufferedImage freqResponse(double[] fir, final double fs)
+    public final static BufferedImage freqResponse(final double[] fir, final double fs)
     {
         final int[] dbs = new int[]
         { 12, 6, 0, -6, -12, -24, -48, -72, -96, -120 };
         final BufferedImage ret = new BufferedImage(1024, 512, BufferedImage.TYPE_INT_RGB);
         final Graphics2D g = ret.createGraphics();
         g.setFont(new Font("Arial", Font.PLAIN, 12));
-        FontRenderContext frc = g.getFontRenderContext();
+        final FontRenderContext frc = g.getFontRenderContext();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, 1024, 512);
         g.setColor(Color.GRAY);
@@ -490,7 +493,7 @@ public final class FIRUtils
 
     /**
      * Multiplies two FIR filters.
-     * 
+     *
      * @param inout
      *            In and output FIR filter.
      * @param in
@@ -507,7 +510,7 @@ public final class FIRUtils
 
     /**
      * Adds two FIR filters.
-     * 
+     *
      * @param inout
      *            In and output FIR filter.
      * @param in
@@ -524,7 +527,7 @@ public final class FIRUtils
 
     /**
      * Scales a FIR filter.
-     * 
+     *
      * @param fir
      *            FIR filter.
      * @param f

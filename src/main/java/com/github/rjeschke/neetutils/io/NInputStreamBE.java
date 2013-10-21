@@ -19,6 +19,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteOrder;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class NInputStreamBE extends NInputStream
 {
     public NInputStreamBE(final InputStream in)

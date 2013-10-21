@@ -19,16 +19,14 @@ import com.github.rjeschke.neetutils.json.annotations.JSONObject;
 
 /**
  * A tagging interface for simple JSON objects.
- * 
+ *
  * <p>
- * Fields with visibility specified by {@link JSONObject} get automatically
- * encoded to JSON or decoded from. You may specify a
- * {@code static <T> createJSONInstance()} method for automatic JSON decoding,
- * otherwise the default constructor is used.
+ * Fields with visibility specified by {@link JSONObject} get automatically encoded to JSON or decoded from. You may specify a
+ * {@code static <T> createJSONInstance()} method for automatic JSON decoding, otherwise the default constructor is used.
  * </p>
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 public interface JSONMarshallable
 {

@@ -1,8 +1,11 @@
 package com.github.rjeschke.neetutils.audio;
 
-import com.github.rjeschke.neetutils.audio.Clipper;
-import com.github.rjeschke.neetutils.audio.DefaultClipper;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class HPF6dBG
 {
     private final double fs;
@@ -29,7 +32,7 @@ public class HPF6dBG
         this.f = Math.tan(Math.PI * freq / this.fs);
     }
 
-    public double coef(double previous)
+    public double coef(final double previous)
     {
         return previous / (1 + this.t * this.f);
     }

@@ -17,7 +17,7 @@ package com.github.rjeschke.neetutils.rng;
 
 /**
  * Generalized Feedback Shift Register
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public class RndGFSR extends AbstractRNG

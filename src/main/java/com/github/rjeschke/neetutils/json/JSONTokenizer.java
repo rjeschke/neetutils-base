@@ -20,9 +20,9 @@ import java.io.Reader;
 
 /**
  * JSON tokenizer.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 public final class JSONTokenizer
 {
@@ -43,8 +43,9 @@ public final class JSONTokenizer
     }
 
     /**
+     *
      * @return the last tokenized {@code double] value.
-
+     *
      */
     public double getDoubleValue()
     {
@@ -68,7 +69,7 @@ public final class JSONTokenizer
     }
 
     /**
-     * 
+     *
      * @return the current {@link Token}
      */
     public Token getCurrentToken()
@@ -97,8 +98,7 @@ public final class JSONTokenizer
     }
 
     /**
-     * @return the current parsing position as a
-     *         {@code String] suitable for error reporting.
+     * @return the current parsing position as a {@code String] suitable for error reporting.
 
      */
     public String getPosition()
@@ -260,7 +260,7 @@ public final class JSONTokenizer
 
     /**
      * Parses the next {@link Token}.
-     * 
+     *
      * @return The parsed {@code Token}
      * @throws IOException
      *             if an IO or parsing error occurred.
@@ -316,7 +316,7 @@ public final class JSONTokenizer
 
     /**
      * JSON token enum.
-     * 
+     *
      * @author René Jeschke (rene_jeschke@yahoo.de)
      */
     public enum Token

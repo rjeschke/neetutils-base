@@ -19,18 +19,24 @@ import java.io.IOException;
 
 import com.github.rjeschke.neetutils.io.NOutputStream;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class AtanTransferFunction implements TransferFunction
 {
     final static double REC_PI = 1.0 / Math.PI;
 
     @Override
-    public double map(double input)
+    public double map(final double input)
     {
         return 0.5 - Math.atan(-input) * REC_PI;
     }
 
     @Override
-    public void toStream(NOutputStream out) throws IOException
+    public void toStream(final NOutputStream out) throws IOException
     {
         out.write32(TransferFunctionType.ATAN.index);
     }

@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.math;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class CatmullRomSpline
 {
     private double a, b, c, d;

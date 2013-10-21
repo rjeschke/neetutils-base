@@ -22,9 +22,9 @@ import java.lang.annotation.Target;
 
 /**
  * Specifies the type of a {@code List<?>} or {@code Map<String, ?>}.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

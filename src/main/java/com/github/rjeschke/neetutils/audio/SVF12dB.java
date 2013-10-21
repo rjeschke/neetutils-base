@@ -15,12 +15,19 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public class SVF12dB
 {
-    private double  fs, f, bl, bb;
-    private double  r       = Math.sqrt(2), t, tf, u;
-    private double  low, high, band;
-    private Clipper clipper = new DefaultClipper();
+    private final double fs;
+    private double       f;
+    private double       bl;
+    private double       bb;
+    private double       r       = Math.sqrt(2), t, tf, u;
+    private double       low, high, band;
+    private Clipper      clipper = new DefaultClipper();
 
     public SVF12dB(final double fs)
     {
@@ -61,19 +68,19 @@ public class SVF12dB
         this.u = 1.0 / (1.0 + this.t * this.f * this.f);
     }
 
-    public void setRawQ(double r)
+    public void setRawQ(final double r)
     {
         this.r = r;
         this.recalc();
     }
 
-    public SVF12dB setClipper(Clipper clipper)
+    public SVF12dB setClipper(final Clipper clipper)
     {
         this.clipper = clipper;
         return this;
     }
 
-    public SVF12dB process(double input)
+    public SVF12dB process(final double input)
     {
         this.low = (this.bl + this.tf * (this.bb + this.f * input)) * this.u;
         this.band = (this.bb + this.f * (input - this.low)) * this.t;

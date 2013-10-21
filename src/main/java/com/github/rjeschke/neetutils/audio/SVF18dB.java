@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class SVF18dB
 {
     private final double fs;
@@ -24,13 +29,13 @@ public class SVF18dB
     private double       A, B, C, D;
     private Clipper      clipper = new DefaultClipper();
 
-    public SVF18dB(double fs)
+    public SVF18dB(final double fs)
     {
         this.fs = fs;
         this.setButterworthResponse();
     }
 
-    public SVF18dB setCoefficients(double a, double b, double c)
+    public SVF18dB setCoefficients(final double a, final double b, final double c)
     {
         this.a = a;
         this.b = b;
@@ -49,13 +54,13 @@ public class SVF18dB
         return this.setCoefficients(3, 3, 1);
     }
 
-    public void setCutoff(double freq)
+    public void setCutoff(final double freq)
     {
         this.f = Math.tan(Math.PI * freq / this.fs);
         this.recalc();
     }
 
-    public void setQ(double q)
+    public void setQ(final double q)
     {
         this.r = q;
         this.recalc();
@@ -66,7 +71,7 @@ public class SVF18dB
         this.b0 = this.b1 = this.b2 = 0;
     }
 
-    public SVF18dB setClipper(Clipper clipper)
+    public SVF18dB setClipper(final Clipper clipper)
     {
         this.clipper = clipper;
         return this;
@@ -118,7 +123,7 @@ public class SVF18dB
         return this.A;
     }
 
-    public SVF18dB process(double input)
+    public SVF18dB process(final double input)
     {
         this.D = (this.b2 + this.fC1 * (this.b1 + this.fB1 * (this.b0 + this.f * input))) * this.fD0;
         double temp = input - this.c * this.D;

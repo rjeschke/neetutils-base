@@ -15,6 +15,13 @@
  */
 package com.github.rjeschke.neetutils.collections;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ * @param <B>
+ */
 public class Pair<A extends Comparable<A>, B extends Comparable<B>> extends Tuple<A, B> implements Comparable<Pair<A, B>>
 {
     public Pair(final A a, final B b)

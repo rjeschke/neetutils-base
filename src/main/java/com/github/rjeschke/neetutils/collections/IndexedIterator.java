@@ -4,6 +4,12 @@ import java.util.Iterator;
 
 import com.github.rjeschke.neetutils.math.Numbers;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 class IndexedIterator<A> implements Iterator<Tuple<Integer, A>>
 {
     private final Iterator<A> iterator;
@@ -31,5 +37,4 @@ class IndexedIterator<A> implements Iterator<Tuple<Integer, A>>
     {
         throw new UnsupportedOperationException();
     }
-
 }

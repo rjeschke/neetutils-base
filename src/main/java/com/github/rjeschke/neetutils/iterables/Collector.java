@@ -17,6 +17,13 @@ package com.github.rjeschke.neetutils.iterables;
 
 import java.util.Iterator;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ * @param <B>
+ */
 public abstract class Collector<A, B>
 {
     boolean hasElement;

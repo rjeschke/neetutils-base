@@ -18,6 +18,12 @@ package com.github.rjeschke.neetutils.collections;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <T>
+ */
 public class BinaryHeap<T extends Comparable<T>>
 {
     public final static double DEFAULT_GROWTH_FACTOR = 0.5;

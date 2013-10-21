@@ -19,6 +19,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteOrder;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class NOutputStreamBE extends NOutputStream
 {
     public NOutputStreamBE(final OutputStream out)

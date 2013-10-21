@@ -23,6 +23,11 @@ import java.util.NoSuchElementException;
 import com.github.rjeschke.neetutils.WrappedCheckedException;
 import com.github.rjeschke.neetutils.iterables.AbstractXIterable;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class LineReaderIterator extends AbstractXIterable<String> implements AutoCloseable
 {
     final BufferedReader in;

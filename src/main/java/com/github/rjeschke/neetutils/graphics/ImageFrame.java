@@ -10,6 +10,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class ImageFrame implements WindowListener, KeyListener
 {
     private final Frame  frame;

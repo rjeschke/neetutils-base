@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.github.rjeschke.neetutils.Classes;
 import com.github.rjeschke.neetutils.Objects;
 import com.github.rjeschke.neetutils.collections.Colls;
 import com.github.rjeschke.neetutils.json.JSONTokenizer.Token;
@@ -41,9 +42,9 @@ import com.github.rjeschke.neetutils.json.annotations.JSONReadOnlyField;
 
 /**
  * JSON encoder, decoder and utilities.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 public final class JSON
 {
@@ -54,7 +55,7 @@ public final class JSON
 
     /**
      * Beautifies the given JSON string.
-     * 
+     *
      * @param sb
      *            The StringBuilder to write into.
      * @param json
@@ -83,7 +84,7 @@ public final class JSON
 
     /**
      * Beautifies the given JSON string.
-     * 
+     *
      * @param json
      *            The String to beautify.
      * @return The beautified String.
@@ -97,7 +98,7 @@ public final class JSON
 
     /**
      * Decodes the given JSON string into an object.
-     * 
+     *
      * @param string
      *            The string to decode.
      * @return The decoded object.
@@ -114,7 +115,7 @@ public final class JSON
 
     /**
      * Decodes a JSON string read from the given {@link Reader} into an object.
-     * 
+     *
      * @param reader
      *            The reader to read from.
      * @return The decoded object.
@@ -135,9 +136,8 @@ public final class JSON
     }
 
     /**
-     * Decodes a JSON string containing a single object into the given
-     * {@link JSONMarshallable}.
-     * 
+     * Decodes a JSON string containing a single object into the given {@link JSONMarshallable}.
+     *
      * @param string
      *            The string to decode.
      * @param object
@@ -155,9 +155,8 @@ public final class JSON
     }
 
     /**
-     * Decodes a JSON string read from the given {@link Reader} containing a
-     * single object into the given {@link JSONMarshallable}.
-     * 
+     * Decodes a JSON string read from the given {@link Reader} containing a single object into the given {@link JSONMarshallable}.
+     *
      * @param reader
      *            The reader to read from.
      * @param object
@@ -177,7 +176,7 @@ public final class JSON
 
     /**
      * Fills a {@link JSONMarshallable} using the given map.
-     * 
+     *
      * @param jsonObject
      *            The map.
      * @param object
@@ -238,7 +237,7 @@ public final class JSON
                     }
                     else
                     {
-                        if (Objects.implementsInterface(f.getType(), JSONMarshallable.class))
+                        if (Classes.implementsInterface(f.getType(), JSONMarshallable.class))
                         {
                             f.set(object, decodeInto(asMap(e.getValue()), newJSONInstance(f.getType())));
                         }
@@ -248,7 +247,7 @@ public final class JSON
                             {
                                 final Class<?> t = f.getAnnotation(JSONGenericType.class).type();
 
-                                if (Objects.implementsInterface(f.getType(), Map.class))
+                                if (Classes.implementsInterface(f.getType(), Map.class))
                                 {
                                     final Map<String, Object> in = asMap(e.getValue());
                                     final Map<String, Object> out = new HashMap<>();
@@ -279,7 +278,7 @@ public final class JSON
 
                                     f.set(object, out);
                                 }
-                                else if (Objects.implementsInterface(f.getType(), List.class))
+                                else if (Classes.implementsInterface(f.getType(), List.class))
                                 {
                                     final List<Object> in = asArray(e.getValue());
                                     final List<Object> out = Colls.list();
@@ -358,7 +357,7 @@ public final class JSON
 
     /**
      * Encodes the given object into a JSON string representation.
-     * 
+     *
      * @param obj
      *            The object to encode.
      * @return The JSON string representation.
@@ -370,7 +369,7 @@ public final class JSON
 
     /**
      * Encodes the given object into a JSON string representation.
-     * 
+     *
      * @param sb
      *            The {@link StringBuilder} to write the result into.
      * @param obj
@@ -385,7 +384,7 @@ public final class JSON
 
     /**
      * Returns the given object casted to {@code Map<String, Object>}.
-     * 
+     *
      * @param obj
      * @return
      */
@@ -397,7 +396,7 @@ public final class JSON
 
     /**
      * Returns the given object casted to {@code List<Object>}.
-     * 
+     *
      * @param obj
      * @return
      */
@@ -409,7 +408,7 @@ public final class JSON
 
     /**
      * Returns the given object casted to {@code Number}.
-     * 
+     *
      * @param obj
      * @return
      */
@@ -420,7 +419,7 @@ public final class JSON
 
     /**
      * Returns the given object casted to {@code Boolean}.
-     * 
+     *
      * @param obj
      * @return
      */
@@ -431,7 +430,7 @@ public final class JSON
 
     /**
      * Escapes the given string.
-     * 
+     *
      * @param value
      * @return
      */
@@ -442,7 +441,7 @@ public final class JSON
 
     /**
      * Escapes the given string to the given StringBuilder.
-     * 
+     *
      * @param sb
      * @param value
      * @return
@@ -530,7 +529,7 @@ public final class JSON
 
     /**
      * Parses a JSON array.
-     * 
+     *
      * @param tokenizer
      *            The tokenizer.
      * @return The parsed array as a {@code List}
@@ -566,7 +565,7 @@ public final class JSON
 
     /**
      * Parses a JSON object.
-     * 
+     *
      * @param tokenizer
      *            The tokenizer.
      * @return The parsed object as a {@code Map}
@@ -601,7 +600,7 @@ public final class JSON
 
     /**
      * Parses a JSON value into a Java object.
-     * 
+     *
      * @param tokenizer
      *            The tokenizer.
      * @return The parsed object.
@@ -643,7 +642,7 @@ public final class JSON
 
     /**
      * Writes a {@code long}.
-     * 
+     *
      * @param sb
      *            {@code StringBuilder} to write to
      * @param value
@@ -656,7 +655,7 @@ public final class JSON
 
     /**
      * Writes a {@code double}.
-     * 
+     *
      * @param sb
      *            {@code StringBuilder} to write to
      * @param value
@@ -669,7 +668,7 @@ public final class JSON
 
     /**
      * Writes a {@code Number}.
-     * 
+     *
      * @param sb
      *            {@code StringBuilder} to write to
      * @param value
@@ -689,7 +688,7 @@ public final class JSON
 
     /**
      * Writes a {@code String}.
-     * 
+     *
      * @param sb
      *            {@code StringBuilder} to write to
      * @param value
@@ -704,7 +703,7 @@ public final class JSON
 
     /**
      * Writes a {@code Collection}.
-     * 
+     *
      * @param sb
      *            {@code StringBuilder} to write to
      * @param list
@@ -731,7 +730,7 @@ public final class JSON
 
     /**
      * Writes a {@code Map} as a JSON object.
-     * 
+     *
      * @param sb
      *            {@code StringBuilder} to write to
      * @param map
@@ -827,7 +826,7 @@ public final class JSON
 
     /**
      * Writes an {@code Object}.
-     * 
+     *
      * @param sb
      *            {@code StringBuilder} to write to
      * @param obj

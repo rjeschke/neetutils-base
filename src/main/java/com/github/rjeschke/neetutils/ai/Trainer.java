@@ -15,6 +15,12 @@
  */
 package com.github.rjeschke.neetutils.ai;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public interface Trainer
 {
     public void train(double[] input, double[] expectedOutput);

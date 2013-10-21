@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.rng;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public enum RNGType
 {
     GFSR, CMWC, LCG, LCG32

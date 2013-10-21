@@ -23,11 +23,10 @@ import java.lang.annotation.Target;
 import com.github.rjeschke.neetutils.json.JSON;
 
 /**
- * Forces the tagged field to be exported by {@link JSON#decode(String)} but not
- * read-back during encoding.
- * 
+ * Forces the tagged field to be exported by {@link JSON#decode(String)} but not read-back during encoding.
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

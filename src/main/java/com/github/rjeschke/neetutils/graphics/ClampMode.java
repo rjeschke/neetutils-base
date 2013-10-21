@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.graphics;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public enum ClampMode
 {
     CLAMP_TO_EDGE, WRAP, CLIP

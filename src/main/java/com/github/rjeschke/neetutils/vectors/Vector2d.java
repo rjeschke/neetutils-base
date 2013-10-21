@@ -19,6 +19,11 @@ import java.nio.DoubleBuffer;
 
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class Vector2d
 {
     public double x;

@@ -19,6 +19,12 @@ import java.io.IOException;
 
 import com.github.rjeschke.neetutils.io.NOutputStream;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public interface TransferFunction
 {
     public double map(double input);

@@ -17,9 +17,16 @@ package com.github.rjeschke.neetutils.audio;
 
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class HPF24dB
 {
-    private double  fs, q, qf;
+    private final double  fs;
+    private double q;
+    private double qf;
     private double  f, bl0, bb0, r0, t0, tf0, u0, r0t0;
     private double  bl1, bb1, r1, t1, tf1, u1, r1t1;
     private Clipper clipper = new DefaultClipper();
@@ -55,7 +62,7 @@ public class HPF24dB
         this.qf = 1.0 / (1.0 + this.q * ha0 * ha1);
     }
 
-    public void setQ(double q)
+    public void setQ(final double q)
     {
         this.q = q;
         this.recalc();
@@ -73,7 +80,7 @@ public class HPF24dB
         return this;
     }
 
-    public HPF24dB setRawQs(double r0, double r1)
+    public HPF24dB setRawQs(final double r0, final double r1)
     {
         this.r0 = r0;
         this.r1 = r1;
@@ -87,13 +94,13 @@ public class HPF24dB
         this.bb0 = this.bb1 = 0;
     }
 
-    public HPF24dB setClipper(Clipper clipper)
+    public HPF24dB setClipper(final Clipper clipper)
     {
         this.clipper = clipper;
         return this;
     }
 
-    public double process(double input)
+    public double process(final double input)
     {
         // Precalculate output
         final double l1 = (this.bl1 + this.tf1 * (this.bb1 + this.f * input)) * this.u1;

@@ -20,23 +20,29 @@ import java.io.IOException;
 import com.github.rjeschke.neetutils.io.NOutputStream;
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class LinearTransferFunction implements TransferFunction
 {
     private final double factor;
 
-    public LinearTransferFunction(double factor)
+    public LinearTransferFunction(final double factor)
     {
         this.factor = factor;
     }
 
     @Override
-    public double map(double input)
+    public double map(final double input)
     {
         return NMath.clamp(input * this.factor * 0.5 + 0.5, 0, 1);
     }
 
     @Override
-    public void toStream(NOutputStream out) throws IOException
+    public void toStream(final NOutputStream out) throws IOException
     {
         out.write32(TransferFunctionType.LINEAR.index);
         out.writeDouble(this.factor);

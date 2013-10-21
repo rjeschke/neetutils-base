@@ -17,6 +17,12 @@ package com.github.rjeschke.neetutils.ai;
 
 import java.util.HashMap;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public enum TransferFunctionType
 {
     UNITY(0), STEP(1), LINEAR(2), TANH(3), SIGMOID(4), ATAN(5);
@@ -24,20 +30,20 @@ public enum TransferFunctionType
     public final int                                            index;
     private final static HashMap<Integer, TransferFunctionType> TYPE_MAP = new HashMap<>();
 
-    private TransferFunctionType(int i)
+    private TransferFunctionType(final int i)
     {
         this.index = i;
     }
 
     static
     {
-        for (TransferFunctionType t : TransferFunctionType.values())
+        for (final TransferFunctionType t : TransferFunctionType.values())
         {
             TYPE_MAP.put(t.index, t);
         }
     }
 
-    public static TransferFunctionType fromInt(int i)
+    public static TransferFunctionType fromInt(final int i)
     {
         return TYPE_MAP.get(i);
     }

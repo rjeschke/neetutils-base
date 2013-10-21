@@ -21,18 +21,19 @@ import java.io.OutputStream;
 
 /**
  * Big endian stream IO methods.
- * 
+ *
  * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public final class BEIO
 {
     private BEIO()
-    { /* forbidden */
+    {
+        // meh!
     }
 
     /**
      * Writes a byte.
-     * 
+     *
      * @param out
      *            Stream to write to
      * @param value
@@ -47,7 +48,7 @@ public final class BEIO
 
     /**
      * Writes a short.
-     * 
+     *
      * @param out
      *            Stream to write to
      * @param value
@@ -63,7 +64,7 @@ public final class BEIO
 
     /**
      * Writes a 24 bit integer.
-     * 
+     *
      * @param out
      *            Stream to write to
      * @param value
@@ -80,7 +81,7 @@ public final class BEIO
 
     /**
      * Writes an integer.
-     * 
+     *
      * @param out
      *            Stream to write to
      * @param value
@@ -98,7 +99,7 @@ public final class BEIO
 
     /**
      * Writes a long.
-     * 
+     *
      * @param out
      *            Stream to write to
      * @param value
@@ -120,7 +121,7 @@ public final class BEIO
 
     /**
      * Writes a float.
-     * 
+     *
      * @param out
      *            Stream to write to
      * @param value
@@ -135,7 +136,7 @@ public final class BEIO
 
     /**
      * Writes a double.
-     * 
+     *
      * @param out
      *            Stream to write to
      * @param value

@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.graphics;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public enum ColorOp
 {
     SET, ADD, SUB, MUL, ADD_RGB, SUB_RGB, MUL_RGB, BLEND, BLEND1

@@ -19,11 +19,17 @@ import java.io.IOException;
 
 import com.github.rjeschke.neetutils.io.NInputStream;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class TransferFunctions
 {
-    public static TransferFunction fromStream(NInputStream in) throws IOException
+    public static TransferFunction fromStream(final NInputStream in) throws IOException
     {
-        TransferFunctionType tf = TransferFunctionType.fromInt(in.readI32());
+        final TransferFunctionType tf = TransferFunctionType.fromInt(in.readI32());
         switch (tf)
         {
         case UNITY:
@@ -38,7 +44,8 @@ public class TransferFunctions
             return new StepTransferFunction(in.readDouble());
         case ATAN:
             return new AtanTransferFunction();
+        default:
+            return null;
         }
-        return null;
     }
 }

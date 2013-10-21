@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class LPF6dBVar
 {
     private final double fs;
@@ -38,14 +43,14 @@ public class LPF6dBVar
         this.f2 = 1.0 / (1 + this.f * this.fb);
     }
 
-    public LPF6dBVar setFeedback(double fb)
+    public LPF6dBVar setFeedback(final double fb)
     {
         this.fb = fb;
         this.f2 = 1.0 / (1 + this.f * this.fb);
         return this;
     }
 
-    public double coef(double previous)
+    public double coef(final double previous)
     {
         return previous * this.f * this.f2;
     }
@@ -62,7 +67,7 @@ public class LPF6dBVar
         return o;
     }
 
-    public LPF6dBVar setClipper(Clipper clipper)
+    public LPF6dBVar setClipper(final Clipper clipper)
     {
         this.clipper = clipper;
         return this;

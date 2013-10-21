@@ -17,6 +17,14 @@ package com.github.rjeschke.neetutils.collections;
 
 import com.github.rjeschke.neetutils.Objects;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ * @param <B>
+ * @param <C>
+ */
 public class Triplet<A, B, C>
 {
     public final A a;

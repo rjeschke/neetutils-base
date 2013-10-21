@@ -15,31 +15,36 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class HighShelf6dB
 {
     private final LPF6dB lp;
     private final HPF6dB hp;
     private double       gain = 1;
 
-    public HighShelf6dB(double fs)
+    public HighShelf6dB(final double fs)
     {
         this.lp = new LPF6dB(fs);
         this.hp = new HPF6dB(fs);
         this.setCutoff(fs * 0.1);
     }
 
-    public void setCutoff(double cutoff)
+    public void setCutoff(final double cutoff)
     {
         this.lp.setCutoff(cutoff);
         this.hp.setCutoff(cutoff);
     }
 
-    public void setGain(double db)
+    public void setGain(final double db)
     {
         this.gain = Math.pow(10.0, db / 20.0);
     }
 
-    public HighShelf6dB setClipper(Clipper clipper)
+    public HighShelf6dB setClipper(final Clipper clipper)
     {
         this.lp.setClipper(clipper);
         this.hp.setClipper(clipper);
@@ -52,7 +57,7 @@ public class HighShelf6dB
         this.hp.reset();
     }
 
-    public double process(double input)
+    public double process(final double input)
     {
         return this.gain * this.hp.tick(input) + this.lp.tick(input);
     }

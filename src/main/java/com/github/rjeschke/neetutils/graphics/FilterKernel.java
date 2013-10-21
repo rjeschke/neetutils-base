@@ -2,6 +2,11 @@ package com.github.rjeschke.neetutils.graphics;
 
 import java.util.Arrays;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class FilterKernel
 {
     final float[]    xf;

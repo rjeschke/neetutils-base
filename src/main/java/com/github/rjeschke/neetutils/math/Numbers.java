@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.math;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public final class Numbers
 {
     private Numbers()
@@ -96,8 +101,9 @@ public final class Numbers
             return Float.valueOf(a.floatValue() + b.floatValue());
         case DOUBLE:
             return Double.valueOf(a.doubleValue() + b.doubleValue());
+        default:
+            return null;
         }
-        return null;
     }
 
     public final static Number sub(final Number a, final Number b)
@@ -116,8 +122,9 @@ public final class Numbers
             return Float.valueOf(a.floatValue() - b.floatValue());
         case DOUBLE:
             return Double.valueOf(a.doubleValue() - b.doubleValue());
+        default:
+            return null;
         }
-        return null;
     }
 
     public final static Number mul(final Number a, final Number b)
@@ -136,8 +143,9 @@ public final class Numbers
             return Float.valueOf(a.floatValue() * b.floatValue());
         case DOUBLE:
             return Double.valueOf(a.doubleValue() * b.doubleValue());
+        default:
+            return null;
         }
-        return null;
     }
 
     public final static Number div(final Number a, final Number b)
@@ -156,8 +164,9 @@ public final class Numbers
             return Float.valueOf(a.floatValue() / b.floatValue());
         case DOUBLE:
             return Double.valueOf(a.doubleValue() / b.doubleValue());
+        default:
+            return null;
         }
-        return null;
     }
 
     public enum Type

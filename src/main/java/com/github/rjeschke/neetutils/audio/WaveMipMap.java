@@ -20,6 +20,11 @@ import java.util.Arrays;
 import com.github.rjeschke.neetutils.math.CatmullRomSpline;
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class WaveMipMap
 {
     private final MipWave[] mipWaves;
@@ -141,7 +146,7 @@ public class WaveMipMap
             this.frac = 1.0 / (1 << this.shift);
         }
 
-        public double get(int phase)
+        public double get(final int phase)
         {
             final int p = phase >> this.shift;
             final double f = (phase & this.shiftMask) * this.frac;

@@ -17,6 +17,11 @@ package com.github.rjeschke.neetutils.fn;
 
 import com.github.rjeschke.neetutils.math.Numbers;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public final class NumberFns
 {
     private NumberFns()

@@ -20,12 +20,10 @@ import java.util.Arrays;
 import com.github.rjeschke.neetutils.math.NMath;
 
 /**
- * Integer primitive list with focus on fast adding and low memory usage (for
- * large list sizes).
- * 
- * Roughly 16 times faster on 'add' and 2 times slower on 'get' compared to an
- * ArrayList (benchmarked using 16M adds/gets).
- * 
+ * Integer primitive list with focus on fast adding and low memory usage (for large list sizes).
+ *
+ * Roughly 16 times faster on 'add' and 2 times slower on 'get' compared to an ArrayList (benchmarked using 16M adds/gets).
+ *
  * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public class IntList2
@@ -61,7 +59,7 @@ public class IntList2
 
     /**
      * Gets this list's size.
-     * 
+     *
      * @return The size.
      */
     public int size()
@@ -71,7 +69,7 @@ public class IntList2
 
     /**
      * Adds an element to the end of this list.
-     * 
+     *
      * @param value
      *            Value to add.
      */
@@ -90,7 +88,7 @@ public class IntList2
 
     /**
      * Sets a new value at index.
-     * 
+     *
      * @param index
      *            The index.
      * @param value
@@ -106,7 +104,7 @@ public class IntList2
 
     /**
      * Sets a new value at index, returns the old value at that index.
-     * 
+     *
      * @param index
      *            The index.
      * @param value
@@ -125,7 +123,7 @@ public class IntList2
 
     /**
      * Gets the value at the given index.
-     * 
+     *
      * @param index
      *            The index.
      * @return The value.
@@ -140,7 +138,7 @@ public class IntList2
 
     /**
      * Copies this list's contents into a newly created array.
-     * 
+     *
      * @return the array.
      */
     public int[] toArray()

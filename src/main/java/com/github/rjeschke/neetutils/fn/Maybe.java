@@ -20,6 +20,12 @@ import java.util.Iterator;
 
 import com.github.rjeschke.neetutils.Objects;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 public abstract class Maybe<A> implements Iterable<A>
 {
     public abstract boolean isNothing();

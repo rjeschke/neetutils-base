@@ -1,5 +1,11 @@
 package com.github.rjeschke.neetutils.collections;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <T>
+ */
 public class Swappable<T>
 {
     private final T first;

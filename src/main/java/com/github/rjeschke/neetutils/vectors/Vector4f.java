@@ -20,6 +20,11 @@ import java.nio.FloatBuffer;
 import com.github.rjeschke.neetutils.graphics.NColor;
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class Vector4f
 {
     public float w;

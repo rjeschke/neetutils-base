@@ -17,6 +17,13 @@ package com.github.rjeschke.neetutils.collections;
 
 import com.github.rjeschke.neetutils.Objects;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ * @param <B>
+ */
 public class Tuple<A, B>
 {
     public final A a;

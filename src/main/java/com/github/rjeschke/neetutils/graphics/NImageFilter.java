@@ -2,6 +2,11 @@ package com.github.rjeschke.neetutils.graphics;
 
 import com.github.rjeschke.neetutils.concurrent.Worker;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 class NImageFilter implements Worker<NImagePBlock>
 {
     final NImage       image;

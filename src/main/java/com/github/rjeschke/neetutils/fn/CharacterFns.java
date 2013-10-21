@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public final class CharacterFns
 {
     private CharacterFns()

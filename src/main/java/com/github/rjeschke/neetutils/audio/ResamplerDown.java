@@ -4,6 +4,11 @@ import java.util.Arrays;
 
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class ResamplerDown implements Resampler
 {
     private final double[] buffer;

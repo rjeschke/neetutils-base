@@ -15,6 +15,12 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 public abstract class FnPredicate<A>
 {
     public abstract boolean applyPredicate(A a);

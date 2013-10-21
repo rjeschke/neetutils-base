@@ -19,6 +19,16 @@ import java.util.Arrays;
 
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ * <p>
+ * A pseudo iterator that iterates over code points in a string.
+ * </p>
+ * <p>
+ * <i>WIP</i>
+ * </p>
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public class CodePointIterator
 {
     private final String string;
@@ -90,7 +100,9 @@ public class CodePointIterator
     public int get(final int offset)
     {
         if (offset < -this.lookBack || offset > this.lookAhead)
+        {
             throw new IndexOutOfBoundsException("Got " + offset + ", range: " + (-this.lookBack) + " to " + this.lookAhead);
+        }
         return this.readBuffer(offset);
     }
 
@@ -108,6 +120,8 @@ public class CodePointIterator
     public void advance(final int numChars)
     {
         for (int i = 0; i < numChars; i++)
+        {
             this.advance();
+        }
     }
 }

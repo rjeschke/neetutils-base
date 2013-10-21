@@ -21,9 +21,9 @@ import java.util.concurrent.Semaphore;
 import com.github.rjeschke.neetutils.SysUtils;
 
 /**
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.ThreadWorker>
 {
@@ -101,7 +101,8 @@ public class ThreadPool implements RequeueWatcherCallback<Runnable, ThreadPool.T
         final Runnable job = this.jobs.poll();
         if (job != null)
             w.setWorkLoad(job);
-        else this.workers.offer(w);
+        else
+            this.workers.offer(w);
     }
 
     public boolean hasWork()

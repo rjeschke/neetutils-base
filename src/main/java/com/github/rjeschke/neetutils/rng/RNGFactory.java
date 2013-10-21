@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.rng;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public final class RNGFactory
 {
     private RNGFactory()
@@ -43,7 +48,8 @@ public final class RNGFactory
             return new RndGFSR(seed);
         case CMWC:
             return new RndCMWC(seed);
+        default:
+            throw new IllegalArgumentException("This should never happen");
         }
-        throw new IllegalArgumentException("This should never happen");
     }
 }

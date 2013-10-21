@@ -25,6 +25,11 @@ import java.util.List;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * Encoding and hashing funtions.
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public final class Encode
 {
     private final static String BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -34,6 +39,15 @@ public final class Encode
 
     }
 
+    /**
+     * Calculates the MD5 hash of the given String using UTF-8.
+     *
+     * @param string
+     *            String to hash
+     * @return the hash
+     * @throws EncodingException
+     *             if MD5 or UTF-8 is not available
+     */
     public final static byte[] md5(final String string)
     {
         try
@@ -46,6 +60,15 @@ public final class Encode
         }
     }
 
+    /**
+     * Calculates the MD5 hash of the given bytes.
+     *
+     * @param bytes
+     *            Bytes to hash
+     * @return the hash
+     * @throws EncodingException
+     *             if MD5 is not available
+     */
     public final static byte[] md5(final byte[] bytes)
     {
         try

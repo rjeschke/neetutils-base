@@ -17,6 +17,11 @@ package com.github.rjeschke.neetutils;
 
 import java.nio.charset.Charset;
 
+/**
+ * Charset constants for various charsets.
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public final class Charsets
 {
     private Charsets()

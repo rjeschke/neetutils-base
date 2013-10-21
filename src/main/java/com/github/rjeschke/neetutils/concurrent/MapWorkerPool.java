@@ -23,9 +23,9 @@ import com.github.rjeschke.neetutils.SysUtils;
 import com.github.rjeschke.neetutils.collections.Colls;
 
 /**
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  * @param <A>
  * @param <B>
  */
@@ -133,7 +133,8 @@ public class MapWorkerPool<A, B> implements Runnable, RequeueWatcherCallback<Map
         final Job<A, B> job = this.jobs.poll();
         if (job != null)
             w.setWorkLoad(job);
-        else this.workers.offer(w);
+        else
+            this.workers.offer(w);
     }
 
     void doCallback(final ThreadWorker<A, B> threadWorker, final MapWorker<A, B> worker, final WorkerStatus status, final A input, final B output)

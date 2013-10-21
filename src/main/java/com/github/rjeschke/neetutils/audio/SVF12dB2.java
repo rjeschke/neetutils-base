@@ -15,7 +15,11 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
-
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class SVF12dB2
 {
     private final double fs;

@@ -20,6 +20,11 @@ import java.util.List;
 import com.github.rjeschke.neetutils.collections.Colls;
 import com.github.rjeschke.neetutils.io.Files;
 
+/**
+ * Functions dealing with classes.
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public final class Classes
 {
     private Classes()
@@ -27,6 +32,11 @@ public final class Classes
         //
     }
 
+    /**
+     * Lists all classes on the classpath.
+     *
+     * @return List of class names
+     */
     public final static List<String> getClassesOnClasspath()
     {
         final List<String> ret = Colls.list();
@@ -42,6 +52,15 @@ public final class Classes
         return ret;
     }
 
+    /**
+     * Tests whether {@code clazz} implements interface {@code interfce}
+     *
+     * @param clazz
+     *            The class to test
+     * @param interfce
+     *            The interface to check for
+     * @return {@code true} if the class implements the given interface
+     */
     public final static boolean implementsInterface(final Class<?> clazz, final Class<?> interfce)
     {
         for (final Class<?> c : clazz.getInterfaces())
@@ -53,5 +72,10 @@ public final class Classes
         }
 
         return false;
+    }
+
+    public final static boolean implementsInterface(final Object o, final Class<?> interfce)
+    {
+        return implementsInterface(o.getClass(), interfce);
     }
 }

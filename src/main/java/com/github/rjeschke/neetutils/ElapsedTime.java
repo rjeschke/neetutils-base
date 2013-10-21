@@ -19,9 +19,9 @@ import java.util.ArrayList;
 
 /**
  * Simple benchmark helper.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 public class ElapsedTime
 {
@@ -39,7 +39,7 @@ public class ElapsedTime
 
     /**
      * Resets all runs, minimum and maximum durations.
-     * 
+     *
      * @return this
      */
     public ElapsedTime reset()
@@ -52,7 +52,7 @@ public class ElapsedTime
 
     /**
      * Executes the given Runnable once.
-     * 
+     *
      * @param r
      *            Runnable to measure.
      * @return this
@@ -64,7 +64,7 @@ public class ElapsedTime
 
     /**
      * Executes the given Runnable 'runs' times.
-     * 
+     *
      * @param r
      *            The Runnable to measure.
      * @param runs
@@ -95,7 +95,7 @@ public class ElapsedTime
 
     /**
      * Returns a String representation of all benchmark results.
-     * 
+     *
      * @return A String.
      */
     @Override
@@ -103,7 +103,9 @@ public class ElapsedTime
     {
         long sum = 0;
         for (final long l : this.runs)
+        {
             sum += l;
+        }
 
         return String.format("Min: %g, max: %g, avg: %g, tot: %g", this.min * 1e-9, this.max * 1e-9, sum * 1e-9 / this.runs.size(), sum * 1e-9);
     }

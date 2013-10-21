@@ -22,9 +22,9 @@ import java.lang.annotation.Target;
 
 /**
  * Ignores the given field in JSON de- and encoding.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -17,7 +17,7 @@ package com.github.rjeschke.neetutils.rng;
 
 /**
  * Linear congruential random number generator.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public class RndLCG extends AbstractRNG

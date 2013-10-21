@@ -17,9 +17,9 @@ package com.github.rjeschke.neetutils.json;
 
 /**
  * Constants for field visibility.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 public final class JSONObjectVisibility
 {

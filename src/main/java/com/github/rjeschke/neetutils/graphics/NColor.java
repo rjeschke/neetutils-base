@@ -19,6 +19,11 @@ import java.awt.Color;
 
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class NColor
 {
     public final float         a, r, g, b;

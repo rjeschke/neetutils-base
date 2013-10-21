@@ -16,8 +16,13 @@
 package com.github.rjeschke.neetutils.ai;
 
 import com.github.rjeschke.neetutils.ai.Layer.State;
-import com.github.rjeschke.neetutils.ai.Layer;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class BackpropMomentumTrainer implements Trainer
 {
     double step;
@@ -26,7 +31,7 @@ public class BackpropMomentumTrainer implements Trainer
     Net    oldDeltas;
     double min, max, sum;
 
-    public BackpropMomentumTrainer(Net net, double step, double alpha)
+    public BackpropMomentumTrainer(final Net net, final double step, final double alpha)
     {
         this.net = net;
         this.step = step;
@@ -50,7 +55,7 @@ public class BackpropMomentumTrainer implements Trainer
     }
 
     @Override
-    public void train(double[] input, double[] expectedOutput)
+    public void train(final double[] input, final double[] expectedOutput)
     {
         final State[] netState = this.net.createExtraStates(input);
         final State[] deltas = this.net.createExtraStates(new double[this.net.numInputs]);
@@ -114,7 +119,7 @@ public class BackpropMomentumTrainer implements Trainer
         if (runs != 0) this.sum /= runs;
     }
 
-    private double updateDeltas(double delta)
+    private double updateDeltas(final double delta)
     {
         final double da = Math.abs(delta);
         this.min = Math.min(this.min, da);
@@ -123,12 +128,12 @@ public class BackpropMomentumTrainer implements Trainer
         return delta;
     }
 
-    public void setStep(double v)
+    public void setStep(final double v)
     {
         this.step = v;
     }
 
-    public void setAlpha(double v)
+    public void setAlpha(final double v)
     {
         this.alpha = v;
     }

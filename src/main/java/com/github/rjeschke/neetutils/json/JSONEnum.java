@@ -16,20 +16,17 @@
 package com.github.rjeschke.neetutils.json;
 
 /**
- * An interface intended to be used with {@link JSONMarshallable} on
- * {@code enums}.
+ * An interface intended to be used with {@link JSONMarshallable} on {@code enums}.
  * <p>
- * If you implement this interface then you also have to implement a
- * {@code static <enum> fromJSONString(final String string)} method with
- * transforms the given String into an enum.
+ * If you implement this interface then you also have to implement a {@code static <enum> fromJSONString(final String string)} method with transforms the given
+ * String into an enum.
  * </p>
  * <p>
- * If you don't use this interface on enums, enums will be serialized by
- * {@link Enum#toString()} and deserialized using {@link Enum#valueOf(String)}.
+ * If you don't use this interface on enums, enums will be serialized by {@link Enum#toString()} and deserialized using {@link Enum#valueOf(String)}.
  * </p>
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 public interface JSONEnum
 {

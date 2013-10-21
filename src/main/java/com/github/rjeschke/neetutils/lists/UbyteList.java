@@ -24,7 +24,7 @@ import java.util.RandomAccess;
 
 /**
  * Unsigned byte list.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public class UbyteList implements RandomAccess, Cloneable, Serializable
@@ -50,7 +50,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Creates a list with a given initial capacity.
-     * 
+     *
      * @param initialCapacity
      *            Initial capacity.
      */
@@ -65,7 +65,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Returns a list containing the given values.
-     * 
+     *
      * @param values
      *            Values to create the list from.
      * @return The list.
@@ -83,7 +83,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Returns a list containing the given values.
-     * 
+     *
      * @param values
      *            Values to create the list from.
      * @return The list.
@@ -98,7 +98,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Gets the size of this list.
-     * 
+     *
      * @return The size.
      */
     public int size()
@@ -108,7 +108,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Checks if this list is empty.
-     * 
+     *
      * @return <code>true</code> if this list is empty.
      */
     public boolean isEmpty()
@@ -138,7 +138,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Adds an element to the end of this list.
-     * 
+     *
      * @param v
      *            The element to add.
      * @return The added element.
@@ -152,7 +152,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Adds (inserts) an element at the given index.
-     * 
+     *
      * @param index
      *            The index.
      * @param v
@@ -176,7 +176,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Removes the element at the specified position.
-     * 
+     *
      * @param index
      *            Index of element to remove.
      * @return The removed element.
@@ -195,7 +195,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Sets the element at the given position.
-     * 
+     *
      * @param index
      *            Index of element to set.
      * @param v
@@ -211,7 +211,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Gets the element at the given position.
-     * 
+     *
      * @param index
      *            The elements index.
      * @return The elements value.
@@ -224,7 +224,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Returns a copy of this list's content as an array.
-     * 
+     *
      * @return The array.
      */
     public byte[] toArray()
@@ -234,7 +234,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Checks if this list contains the given value.
-     * 
+     *
      * @param v
      *            The value.
      * @return <code>true</code> if the list contains the value
@@ -246,7 +246,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Returns the first occurrence of the given value in this list.
-     * 
+     *
      * @param v
      *            The value.
      * @return The index or <code>-1</code> if the value was not found.
@@ -266,7 +266,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Returns the last occurrence of the given value in this list.
-     * 
+     *
      * @param v
      *            The value.
      * @return The index or <code>-1</code> if the value was not found.
@@ -367,7 +367,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Serialize object.
-     * 
+     *
      * @param out
      *            Output stream.
      * @throws IOException
@@ -384,7 +384,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Deserialize object.
-     * 
+     *
      * @param in
      *            Input stream.
      * @throws IOException
@@ -404,7 +404,7 @@ public class UbyteList implements RandomAccess, Cloneable, Serializable
 
     /**
      * Grows this list if required.
-     * 
+     *
      * @param required
      *            Minimum size required.
      */

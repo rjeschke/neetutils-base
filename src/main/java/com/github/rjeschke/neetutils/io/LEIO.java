@@ -21,13 +21,14 @@ import java.io.OutputStream;
 
 /**
  * Little endian stream IO methods.
- * 
+ *
  * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public final class LEIO
 {
     private LEIO()
-    { /* forbidden */
+    {
+        // meh!
     }
 
     public final static void write8(final OutputStream out, final int value) throws IOException

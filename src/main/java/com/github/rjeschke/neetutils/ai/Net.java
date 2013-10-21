@@ -25,13 +25,19 @@ import com.github.rjeschke.neetutils.io.NInputStream;
 import com.github.rjeschke.neetutils.io.NOutputStream;
 import com.github.rjeschke.neetutils.rng.RNG;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class Net
 {
     final Layer[]    layers;
     public final int numInputs;
     public final int numOutputs;
 
-    Net(int numLayers, int numInputs, int numOutputs)
+    Net(final int numLayers, final int numInputs, final int numOutputs)
     {
         this.layers = new Layer[numLayers];
         this.numInputs = numInputs;
@@ -49,7 +55,7 @@ public class Net
 
     public Net randomize()
     {
-        for (Layer l : this.layers)
+        for (final Layer l : this.layers)
         {
             Arrays.fill(l.matrix, 0);
             for (int i = 0; i < l.matrix.length; i++)
@@ -61,9 +67,9 @@ public class Net
         return this;
     }
 
-    public Net randomize(RNG rng)
+    public Net randomize(final RNG rng)
     {
-        for (Layer l : this.layers)
+        for (final Layer l : this.layers)
         {
             Arrays.fill(l.matrix, 0);
             for (int i = 0; i < l.matrix.length; i++)
@@ -77,7 +83,7 @@ public class Net
 
     public Net clear()
     {
-        for (Layer l : this.layers)
+        for (final Layer l : this.layers)
             Arrays.fill(l.matrix, 0);
         return this;
     }
@@ -89,7 +95,7 @@ public class Net
         return this;
     }
 
-    public double[] run(double[] inputs, double[] outputs)
+    public double[] run(final double[] inputs, final double[] outputs)
     {
         final State[] states = this.createStates(outputs);
 
@@ -103,14 +109,14 @@ public class Net
         return outputs;
     }
 
-    double[] run(State[] states)
+    double[] run(final State[] states)
     {
         for (int i = 0; i < this.layers.length; i++)
             this.layers[i].eval(states[i].values, states[i + 1].values);
         return states[this.layers.length].values;
     }
 
-    State[] createStates(double[] outputs)
+    State[] createStates(final double[] outputs)
     {
         final State[] s = new State[this.layers.length];
         for (int i = 0; i < this.layers.length; i++)
@@ -122,7 +128,7 @@ public class Net
         return s;
     }
 
-    State[] createExtraStates(double[] inputs)
+    State[] createExtraStates(final double[] inputs)
     {
         final State[] s = new State[this.layers.length + 1];
         for (int i = 0; i < this.layers.length + 1; i++)
@@ -134,7 +140,7 @@ public class Net
         return s;
     }
 
-    public void toStream(NOutputStream out) throws IOException
+    public void toStream(final NOutputStream out) throws IOException
     {
         out.write32(this.layers.length);
         out.write32(this.numInputs);
@@ -143,7 +149,7 @@ public class Net
             l.toStream(out);
     }
 
-    public static Net fromStream(NInputStream in) throws IOException
+    public static Net fromStream(final NInputStream in) throws IOException
     {
         final int l = in.readI32();
         final int a = in.readI32();
@@ -154,23 +160,23 @@ public class Net
         return net;
     }
 
-    public static Builder builder(int numInputs)
+    public static Builder builder(final int numInputs)
     {
         return new Builder(numInputs);
     }
 
     public static class Builder
     {
-        private int                 numInputs;
+        private final int                 numInputs;
         ArrayList<Integer>          outputs = new ArrayList<>();
         ArrayList<TransferFunction> tfs     = new ArrayList<>();
 
-        Builder(int numInputs)
+        Builder(final int numInputs)
         {
             this.numInputs = numInputs;
         }
 
-        public Builder addLayer(int outputs, TransferFunction tf)
+        public Builder addLayer(final int outputs, final TransferFunction tf)
         {
             if (outputs < 1) throw new IllegalArgumentException("Number of outputs must be greater than zero");
             this.outputs.add(outputs);

@@ -17,50 +17,49 @@ package com.github.rjeschke.neetutils.rng;
 
 /**
  * Random number generator interface.
- * 
+ *
  * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public interface RNG
 {
     /**
      * Returns a random integer number.
-     * 
-     * @return A number between <code>Integer.MIN_VALUE</code> and
-     *         <code>Integer.MAX_VALUE</code>
+     *
+     * @return A number between <code>Integer.MIN_VALUE</code> and <code>Integer.MAX_VALUE</code>
      */
     public int nextInt();
 
     /**
      * Returns a random integer number.
-     * 
+     *
      * @return A number between <code>0</code> and <code>max - 1</code>
      */
     public int nextInt(int max);
 
     /**
      * Returns a random float number.
-     * 
+     *
      * @return A float between 0.0 and 1.0 (exclusively).
      */
     public float nextFloatUnipolar();
 
     /**
      * Returns a random float number.
-     * 
+     *
      * @return A float between -1.0 and 1.0 (exclusively).
      */
     public float nextFloatBipolar();
 
     /**
      * Returns a random double number.
-     * 
+     *
      * @return A double between 0.0 and 1.0 (exclusively).
      */
     public double nextDoubleUnipolar();
 
     /**
      * Returns a random double number.
-     * 
+     *
      * @return A double between -1.0 and 1.0 (exclusively).
      */
     public double nextDoubleBipolar();

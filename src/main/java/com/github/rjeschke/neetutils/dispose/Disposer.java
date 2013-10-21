@@ -20,6 +20,11 @@ import java.lang.ref.WeakReference;
 
 import com.github.rjeschke.neetutils.dispose.ReferenceList.Node;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class Disposer extends WeakReference<Object>
 {
     private final Disposable             disposable;

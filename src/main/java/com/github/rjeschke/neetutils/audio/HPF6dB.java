@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class HPF6dB
 {
     private final double fs;
@@ -38,7 +43,7 @@ public class HPF6dB
         this.b = 0;
     }
 
-    public double coef(double previous)
+    public double coef(final double previous)
     {
         return previous * this.f2;
     }
@@ -55,7 +60,7 @@ public class HPF6dB
         return input - o;
     }
 
-    public HPF6dB setClipper(Clipper clipper)
+    public HPF6dB setClipper(final Clipper clipper)
     {
         this.clipper = clipper;
         return this;

@@ -15,6 +15,12 @@
  */
 package com.github.rjeschke.neetutils;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <T>
+ */
 public class Once<T>
 {
     private final T first;

@@ -19,16 +19,22 @@ import java.io.IOException;
 
 import com.github.rjeschke.neetutils.io.NOutputStream;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class SigmoidTransferFunction implements TransferFunction
 {
     @Override
-    public double map(double input)
+    public double map(final double input)
     {
         return 1.0 / (1.0 + Math.exp(-input));
     }
 
     @Override
-    public void toStream(NOutputStream out) throws IOException
+    public void toStream(final NOutputStream out) throws IOException
     {
         out.write32(TransferFunctionType.SIGMOID.index);
     }

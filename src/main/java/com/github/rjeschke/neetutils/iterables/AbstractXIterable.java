@@ -25,6 +25,12 @@ import com.github.rjeschke.neetutils.fn.FnFoldStep;
 import com.github.rjeschke.neetutils.fn.FnMapping;
 import com.github.rjeschke.neetutils.fn.FnPredicate;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 public abstract class AbstractXIterable<A> implements XIterable<A>
 {
     @Override

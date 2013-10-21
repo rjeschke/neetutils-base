@@ -17,15 +17,14 @@ package com.github.rjeschke.neetutils.audio;
 
 /**
  * Audio clipper mostly used in filters.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public interface Clipper
 {
     /**
-     * This method should normalize the incoming value and range limit it in any
-     * way to an appropriate range.
-     * 
+     * This method should normalize the incoming value and range limit it in any way to an appropriate range.
+     *
      * @param value
      *            Incoming sample value.
      * @return Normalized and clipped value.

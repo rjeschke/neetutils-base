@@ -19,6 +19,13 @@ import java.util.Iterator;
 
 import com.github.rjeschke.neetutils.fn.FnMapping;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ * @param <B>
+ */
 class XIterableMap<A, B> extends AbstractXIterable<B>
 {
     private final Iterable<? extends A> iterable;

@@ -24,6 +24,11 @@ import com.github.rjeschke.neetutils.WrappedCheckedException;
 import com.github.rjeschke.neetutils.iterables.AbstractXIterable;
 import com.github.rjeschke.neetutils.math.Numbers;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class ReaderIterator extends AbstractXIterable<Character> implements AutoCloseable
 {
     final Reader     in;

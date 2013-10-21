@@ -15,6 +15,14 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ * @param <B>
+ * @param <C>
+ */
 public interface FnCombine<A, B, C>
 {
     public C applyCombine(A a, B b);

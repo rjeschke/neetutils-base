@@ -16,15 +16,20 @@
 package com.github.rjeschke.neetutils.ai;
 
 import com.github.rjeschke.neetutils.ai.Layer.State;
-import com.github.rjeschke.neetutils.ai.Layer;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class BackpropLinearTrainer implements Trainer
 {
     double  step;
     Net     net;
     State[] deltas;
 
-    public BackpropLinearTrainer(Net net, double step)
+    public BackpropLinearTrainer(final Net net, final double step)
     {
         this.net = net;
         this.step = step;
@@ -32,7 +37,7 @@ public class BackpropLinearTrainer implements Trainer
     }
 
     @Override
-    public void train(double[] input, double[] expectedOutput)
+    public void train(final double[] input, final double[] expectedOutput)
     {
         final State[] netState = this.net.createExtraStates(input);
         this.net.run(netState);
@@ -49,7 +54,7 @@ public class BackpropLinearTrainer implements Trainer
 
         for (int i = this.net.layers.length - 1; i >= 0; i--)
         {
-            Layer l = this.net.layers[i];
+            final Layer l = this.net.layers[i];
 
             os = netState[i].values;
             ds = this.deltas[i + 1].values;
@@ -69,12 +74,12 @@ public class BackpropLinearTrainer implements Trainer
 
         for (int i = 0; i < this.net.layers.length; i++)
         {
-            Layer l = this.net.layers[i];
+            final Layer l = this.net.layers[i];
 
             for (int y = 0; y < l.numOutputs; y++)
             {
-                int p = y * l.width;
-                double d = this.step * this.deltas[i + 1].values[y];
+                final int p = y * l.width;
+                final double d = this.step * this.deltas[i + 1].values[y];
                 l.matrix[p + l.numInputs] += d;
 
                 for (int x = 0; x < l.numInputs; x++)
@@ -85,7 +90,7 @@ public class BackpropLinearTrainer implements Trainer
         }
     }
 
-    public void setStep(double v)
+    public void setStep(final double v)
     {
         this.step = v;
     }

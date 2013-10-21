@@ -19,16 +19,22 @@ import java.io.IOException;
 
 import com.github.rjeschke.neetutils.io.NOutputStream;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class TanhTransferFunction implements TransferFunction
 {
     @Override
-    public double map(double input)
+    public double map(final double input)
     {
         return 0.5 - Math.tanh(-input) * 0.5;
     }
 
     @Override
-    public void toStream(NOutputStream out) throws IOException
+    public void toStream(final NOutputStream out) throws IOException
     {
         out.write32(TransferFunctionType.TANH.index);
     }

@@ -17,6 +17,11 @@ package com.github.rjeschke.neetutils.audio;
 
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class SVF24dB
 {
     private final double fs;
@@ -26,13 +31,13 @@ public class SVF24dB
     private double       A, B, C, D, E;
     private Clipper      clipper = new DefaultClipper();
 
-    public SVF24dB(double fs)
+    public SVF24dB(final double fs)
     {
         this.fs = fs;
         this.setButterworthResponse();
     }
 
-    public SVF24dB setCoefficients(double a, double b, double c, double d)
+    public SVF24dB setCoefficients(final double a, final double b, final double c, final double d)
     {
         this.a = a;
         this.b = b;
@@ -69,13 +74,13 @@ public class SVF24dB
         return this.setCoefficients(8.115667411135693, 19.595917942265423, 13.554030054147672, 1);
     }
 
-    public void setCutoff(double freq)
+    public void setCutoff(final double freq)
     {
         this.f = Math.tan(Math.PI * freq / this.fs);
         this.recalc();
     }
 
-    public void setQ(double q)
+    public void setQ(final double q)
     {
         this.r = q;
         this.recalc();
@@ -86,7 +91,7 @@ public class SVF24dB
         this.b0 = this.b1 = this.b2 = this.b3 = 0;
     }
 
-    public SVF24dB setClipper(Clipper clipper)
+    public SVF24dB setClipper(final Clipper clipper)
     {
         this.clipper = clipper;
         return this;
@@ -132,7 +137,7 @@ public class SVF24dB
         return this.A;
     }
 
-    public SVF24dB process(double input)
+    public SVF24dB process(final double input)
     {
         this.E = (this.b3 + this.fD1 * (this.b2 + this.fC1 * (this.b1 + this.fB1 * (this.b0 + this.f * input)))) * this.fE0;
         double temp = input - this.dr * this.E;

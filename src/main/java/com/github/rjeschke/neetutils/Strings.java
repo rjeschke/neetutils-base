@@ -101,7 +101,10 @@ public class Strings
         for (int i = 0; i < strings.size(); i++)
         {
             final String s = strings.get(i);
-            if (s != null) strings.set(i, s.trim());
+            if (s != null)
+            {
+                strings.set(i, s.trim());
+            }
         }
         return strings;
     }

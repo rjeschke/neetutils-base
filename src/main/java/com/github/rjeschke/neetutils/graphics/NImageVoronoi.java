@@ -21,6 +21,11 @@ import com.github.rjeschke.neetutils.rng.RNG;
 import com.github.rjeschke.neetutils.rng.RNGFactory;
 import com.github.rjeschke.neetutils.rng.RNGType;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 class NImageVoronoi implements Worker<NImagePBlock>
 {
     final NImage    image;

@@ -23,12 +23,11 @@ import java.lang.annotation.Target;
 import com.github.rjeschke.neetutils.json.JSONMarshallable;
 
 /**
- * Used to tag a field of type {@code Map<String, Object>} as a catch-all field
- * which will receive all unmapped values during a decode into a
+ * Used to tag a field of type {@code Map<String, Object>} as a catch-all field which will receive all unmapped values during a decode into a
  * {@link JSONMarshallable}.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

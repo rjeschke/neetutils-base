@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class DefaultClipper implements Clipper
 {
     public DefaultClipper()
@@ -23,7 +28,7 @@ public class DefaultClipper implements Clipper
     }
 
     @Override
-    public double clip(double value)
+    public double clip(final double value)
     {
         return Math.max(-1, Math.min(1, Math.abs(value) < 1e-100 ? 0 : value));
     }

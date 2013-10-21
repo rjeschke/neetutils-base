@@ -1,5 +1,10 @@
 package com.github.rjeschke.neetutils.rng;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public abstract class AbstractRNG implements RNG
 {
     @Override

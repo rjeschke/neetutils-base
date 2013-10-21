@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class TanhClipper implements Clipper
 {
     public TanhClipper()
@@ -23,7 +28,7 @@ public class TanhClipper implements Clipper
     }
 
     @Override
-    public double clip(double value)
+    public double clip(final double value)
     {
         return Math.abs(value) < 1e-100 ? 0 : Math.tanh(value);
     }

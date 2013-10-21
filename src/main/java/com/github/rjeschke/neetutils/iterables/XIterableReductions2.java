@@ -19,6 +19,12 @@ import java.util.Iterator;
 
 import com.github.rjeschke.neetutils.fn.FnFoldStep;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 class XIterableReductions2<A> extends AbstractXIterable<A>
 {
     private final Iterable<? extends A>            iterable;

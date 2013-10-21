@@ -19,23 +19,29 @@ import java.io.IOException;
 
 import com.github.rjeschke.neetutils.io.NOutputStream;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class StepTransferFunction implements TransferFunction
 {
     private final double threshold;
 
-    public StepTransferFunction(double threshold)
+    public StepTransferFunction(final double threshold)
     {
         this.threshold = threshold;
     }
 
     @Override
-    public double map(double input)
+    public double map(final double input)
     {
         return input < this.threshold ? 0 : 1;
     }
 
     @Override
-    public void toStream(NOutputStream out) throws IOException
+    public void toStream(final NOutputStream out) throws IOException
     {
         out.write32(TransferFunctionType.STEP.index);
         out.writeDouble(this.threshold);

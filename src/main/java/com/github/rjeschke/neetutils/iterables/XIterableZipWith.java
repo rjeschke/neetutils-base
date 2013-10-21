@@ -19,6 +19,14 @@ import java.util.Iterator;
 
 import com.github.rjeschke.neetutils.fn.FnCombine;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ * @param <B>
+ * @param <C>
+ */
 class XIterableZipWith<A, B, C> extends AbstractXIterable<C>
 {
     private final Iterable<A>                        iterableA;

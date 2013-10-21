@@ -23,6 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <E>
+ */
 public class SortedList<E extends Comparable<? super E>> implements List<E>, Cloneable
 {
     private final ArrayList<E>          list;

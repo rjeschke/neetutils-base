@@ -19,6 +19,13 @@ import java.util.Iterator;
 
 import com.github.rjeschke.neetutils.collections.Tuple;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ * @param <B>
+ */
 class XIterableZip<A, B> extends AbstractXIterable<Tuple<A, B>>
 {
     private final Iterable<A> iterableA;

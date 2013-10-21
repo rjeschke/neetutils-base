@@ -22,9 +22,9 @@ import java.lang.annotation.Target;
 
 /**
  * Forces the tagged field to be visible.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

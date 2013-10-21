@@ -15,8 +15,11 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
-import com.github.rjeschke.neetutils.audio.Clipper;
-
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class NopClipper implements Clipper
 {
     public NopClipper()
@@ -25,7 +28,7 @@ public class NopClipper implements Clipper
     }
 
     @Override
-    public double clip(double value)
+    public double clip(final double value)
     {
         return Math.abs(value) < 1e-100 ? 0 : value;
     }

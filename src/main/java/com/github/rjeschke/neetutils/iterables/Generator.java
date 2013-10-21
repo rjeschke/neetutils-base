@@ -19,6 +19,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.SynchronousQueue;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 public abstract class Generator<A> implements Iterable<A>
 {
     final ThreadLocal<GeneratorIterator<A>> generatorIterator = new ThreadLocal<>();

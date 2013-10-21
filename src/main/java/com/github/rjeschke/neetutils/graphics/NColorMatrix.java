@@ -17,7 +17,7 @@ package com.github.rjeschke.neetutils.graphics;
 
 /**
  * Color transformation matrix in row-major order.
- * 
+ *
  * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public class NColorMatrix

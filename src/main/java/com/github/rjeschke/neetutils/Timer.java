@@ -15,6 +15,10 @@
  */
 package com.github.rjeschke.neetutils;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public class Timer implements Runnable
 {
     private final long           delay;

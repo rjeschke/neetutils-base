@@ -15,6 +15,11 @@
  */
 package com.github.rjeschke.neetutils.vectors;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class Matrix4x4d
 {
     // column major order

@@ -23,7 +23,7 @@ import com.github.rjeschke.neetutils.rng.RNGType;
 
 /**
  * Utility methods like in java.lang.System.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public final class SysUtils
@@ -209,8 +209,6 @@ public final class SysUtils
     }
 
     /*
-     * public final static Unsafe getUnsafe() { final Field f =
-     * Unsafe.class.getDeclaredField("theUnsafe"); f.setAccessible(true); return
-     * (Unsafe)f.get(null); }
+     * public final static Unsafe getUnsafe() { final Field f = Unsafe.class.getDeclaredField("theUnsafe"); f.setAccessible(true); return (Unsafe)f.get(null); }
      */
 }

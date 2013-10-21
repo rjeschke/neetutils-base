@@ -15,6 +15,12 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 public interface FnEquals<A>
 {
     public boolean applyEquals(A a, A b);

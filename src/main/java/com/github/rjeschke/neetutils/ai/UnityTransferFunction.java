@@ -20,6 +20,12 @@ import java.io.IOException;
 import com.github.rjeschke.neetutils.io.NOutputStream;
 import com.github.rjeschke.neetutils.math.NMath;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
+@Deprecated
 public class UnityTransferFunction implements TransferFunction
 {
     public UnityTransferFunction()
@@ -28,13 +34,13 @@ public class UnityTransferFunction implements TransferFunction
     }
 
     @Override
-    public double map(double input)
+    public double map(final double input)
     {
         return NMath.clamp(input, 0, 1);
     }
 
     @Override
-    public void toStream(NOutputStream out) throws IOException
+    public void toStream(final NOutputStream out) throws IOException
     {
         out.write32(TransferFunctionType.UNITY.index);
     }

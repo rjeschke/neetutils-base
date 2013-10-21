@@ -19,6 +19,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public final class Objects
 {
     private Objects()
@@ -26,11 +30,13 @@ public final class Objects
         //
     }
 
+    @Deprecated
     public final static boolean implementsInterface(final Object o, final Class<?> interfaceClass)
     {
         return implementsInterface(o.getClass(), interfaceClass);
     }
 
+    @Deprecated
     public final static boolean implementsInterface(final Class<?> clazz, final Class<?> interfaceClass)
     {
         if (clazz.equals(interfaceClass)) return true;

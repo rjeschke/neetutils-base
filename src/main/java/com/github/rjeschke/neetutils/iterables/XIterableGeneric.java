@@ -17,6 +17,12 @@ package com.github.rjeschke.neetutils.iterables;
 
 import java.util.Iterator;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 class XIterableGeneric<A> extends AbstractXIterable<A>
 {
     private final Iterable<A> iterable;

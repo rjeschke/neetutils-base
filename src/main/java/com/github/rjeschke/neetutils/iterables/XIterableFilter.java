@@ -20,6 +20,12 @@ import java.util.NoSuchElementException;
 
 import com.github.rjeschke.neetutils.fn.FnPredicate;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 class XIterableFilter<A> extends AbstractXIterable<A>
 {
     private final Iterable<? extends A>  iterable;

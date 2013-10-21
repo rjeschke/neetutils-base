@@ -20,6 +20,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class ImageUtils
 {
     public static BufferedImage toGrayscale(final BufferedImage image)

@@ -18,6 +18,12 @@ package com.github.rjeschke.neetutils.iterables;
 import java.util.Arrays;
 import java.util.Iterator;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 public class ArrayIterator<A> extends AbstractXIterable<A>
 {
     private final A[] values;

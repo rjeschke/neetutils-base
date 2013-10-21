@@ -23,6 +23,11 @@ import java.io.InputStream;
 
 import com.github.rjeschke.neetutils.io.NInputStreamLE;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public final class WavReader
 {
     private final int     sampleRate;
@@ -108,7 +113,8 @@ public final class WavReader
                     v = (iret[i] = in.readI16()) << 8;
                 else if (bits == 24)
                     iret[i] = v = in.readI24();
-                else throw new IOException("Unsupported bit depth: " + bits);
+                else
+                    throw new IOException("Unsupported bit depth: " + bits);
                 ret[i] = v / 8388608.0f;
             }
 

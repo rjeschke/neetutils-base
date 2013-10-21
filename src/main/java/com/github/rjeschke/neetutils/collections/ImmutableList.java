@@ -26,6 +26,12 @@ import java.util.RandomAccess;
 
 import com.github.rjeschke.neetutils.Objects;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ */
 public class ImmutableList<A> implements List<A>, RandomAccess, Cloneable, Serializable
 {
     private static final long serialVersionUID = 634340469636541150L;

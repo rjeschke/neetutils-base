@@ -1,8 +1,10 @@
 package com.github.rjeschke.neetutils.audio;
 
-import com.github.rjeschke.neetutils.audio.Clipper;
-import com.github.rjeschke.neetutils.audio.DefaultClipper;
-
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class LPF6dBG
 {
     private final double fs;
@@ -29,7 +31,7 @@ public class LPF6dBG
         this.f = Math.tan(Math.PI * freq / this.fs);
     }
 
-    public double coef(double previous)
+    public double coef(final double previous)
     {
         return previous * this.t * this.f / (1 + this.t * this.f);
     }

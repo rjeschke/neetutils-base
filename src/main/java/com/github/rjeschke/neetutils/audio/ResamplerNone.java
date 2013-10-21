@@ -1,5 +1,10 @@
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class ResamplerNone implements Resampler
 {
     private double value;

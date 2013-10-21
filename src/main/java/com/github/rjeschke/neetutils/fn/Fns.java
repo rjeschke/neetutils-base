@@ -19,6 +19,11 @@ import java.util.Map;
 
 import com.github.rjeschke.neetutils.math.Numbers;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public final class Fns
 {
     private Fns()

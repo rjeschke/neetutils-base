@@ -29,6 +29,11 @@ import com.github.rjeschke.neetutils.fn.FnFoldStep;
 import com.github.rjeschke.neetutils.fn.FnMapping;
 import com.github.rjeschke.neetutils.fn.FnPredicate;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public final class Iterables
 {
     private Iterables()

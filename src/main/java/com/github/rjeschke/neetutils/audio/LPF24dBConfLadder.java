@@ -15,12 +15,17 @@
  */
 package com.github.rjeschke.neetutils.audio;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ */
 public class LPF24dBConfLadder
 {
-    private LPF6dBVar l0, l1, l2, l3;
+    private final LPF6dBVar l0, l1, l2, l3;
     private double    coef, q = 0;
 
-    public LPF24dBConfLadder(double fs)
+    public LPF24dBConfLadder(final double fs)
     {
         this.l0 = new LPF6dBVar(fs);
         this.l1 = new LPF6dBVar(fs);
@@ -50,7 +55,7 @@ public class LPF24dBConfLadder
         return this.setCoefficients(0.083518178391154, 1.0139013273720, 2.7987196223090, 4.2195282830636);
     }
 
-    public LPF24dBConfLadder setCoefficients(double a, double b, double c, double d)
+    public LPF24dBConfLadder setCoefficients(final double a, final double b, final double c, final double d)
     {
         this.l0.setFeedback(a);
         this.l1.setFeedback(b);
@@ -69,7 +74,7 @@ public class LPF24dBConfLadder
         this.recalc();
     }
 
-    public void setQ(double q)
+    public void setQ(final double q)
     {
         this.q = q;
         this.recalc();
@@ -88,7 +93,7 @@ public class LPF24dBConfLadder
         this.l3.reset();
     }
 
-    public LPF24dBConfLadder setClipper(Clipper clipper)
+    public LPF24dBConfLadder setClipper(final Clipper clipper)
     {
         this.l0.setClipper(clipper);
         this.l1.setClipper(clipper);
@@ -97,7 +102,7 @@ public class LPF24dBConfLadder
         return this;
     }
 
-    public double process(double input)
+    public double process(final double input)
     {
         return this.l3.tick(this.l2.tick(this.l1.tick(this.l0.tick(input
                 - this.l3.output(this.l2.output(this.l1.output(this.l0.output(input)))) * this.coef))));

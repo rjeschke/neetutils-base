@@ -15,6 +15,13 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
+/**
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ *
+ * @param <A>
+ * @param <B>
+ */
 public abstract class FnMapping<A, B>
 {
     public abstract B applyMapping(A value);

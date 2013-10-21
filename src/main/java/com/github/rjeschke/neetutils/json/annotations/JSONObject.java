@@ -25,26 +25,24 @@ import com.github.rjeschke.neetutils.json.JSONObjectVisibility;
 
 /**
  * {@link JSONMarshallable} field visibility annotation.
- * 
+ *
  * @author René Jeschke (rene_jeschke@yahoo.de)
- * 
+ *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface JSONObject
 {
     /**
-     * A bit-wise combination of {@link JSONObjectVisibility} values. Default is
-     * {@link JSONObjectVisibility#PUBLIC}.
-     * 
+     * A bit-wise combination of {@link JSONObjectVisibility} values. Default is {@link JSONObjectVisibility#PUBLIC}.
+     *
      * @return The visibility bit mask.
      */
     int visibility() default JSONObjectVisibility.PUBLIC;
 
     /**
-     * Specify if {@code null} values are ignored or not. Default is
-     * {@code true}.
-     * 
+     * Specify if {@code null} values are ignored or not. Default is {@code true}.
+     *
      * @return If {@code null} should be ignored or not.
      */
     boolean ignoreNull() default true;
