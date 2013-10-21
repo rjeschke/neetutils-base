@@ -230,7 +230,7 @@ public final class Encode
     {
         try
         {
-            return hmacSha1(key.getBytes("UTF-8"), data.getBytes("UTF-8"));
+            return hmacSha256(key.getBytes("UTF-8"), data.getBytes("UTF-8"));
         }
         catch (final UnsupportedEncodingException e)
         {
@@ -242,7 +242,7 @@ public final class Encode
     {
         try
         {
-            return hmacSha1(key.getBytes("UTF-8"), bytes);
+            return hmacSha256(key.getBytes("UTF-8"), bytes);
         }
         catch (final UnsupportedEncodingException e)
         {
@@ -254,7 +254,7 @@ public final class Encode
     {
         try
         {
-            return hmacSha1(key, data.getBytes("UTF-8"));
+            return hmacSha256(key, data.getBytes("UTF-8"));
         }
         catch (final UnsupportedEncodingException e)
         {
