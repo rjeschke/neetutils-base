@@ -384,6 +384,7 @@ public final class Encode
                 case '@':
                 case '[':
                 case ']':
+                case '%':
                     sb.append(String.format("%%%02X", c));
                     break;
                 default:
