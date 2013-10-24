@@ -368,6 +368,7 @@ public final class Encode
                 case '$':
                 case '&':
                 case '\'':
+                case '`':
                 case '(':
                 case ')':
                 case '{':
@@ -376,7 +377,10 @@ public final class Encode
                 case '*':
                 case '+':
                 case ',':
+                case '^':
+                case '~':
                 case '/':
+                case '\\':
                 case ':':
                 case ';':
                 case '=':
