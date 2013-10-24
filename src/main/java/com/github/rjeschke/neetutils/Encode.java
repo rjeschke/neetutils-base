@@ -20,6 +20,7 @@ import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.BitSet;
 import java.util.List;
 
 import javax.crypto.Mac;
@@ -32,11 +33,21 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public final class Encode
 {
-    private final static String BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    private final static String BASE64            = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    private final static String ALLOWED_URL_CHARS = "-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
+    private final static BitSet URL_ENCODE_SET    = new BitSet(256);
 
     private Encode()
     {
 
+    }
+
+    static
+    {
+        for (int i = 0; i < ALLOWED_URL_CHARS.length(); i++)
+        {
+            URL_ENCODE_SET.set(ALLOWED_URL_CHARS.charAt(i));
+        }
     }
 
     /**
@@ -319,11 +330,23 @@ public final class Encode
         return hex(new StringBuilder(), bytes).toString();
     }
 
+    private final static char hexCharL(final int nibble)
+    {
+        return (char)(nibble < 10 ? '0' + nibble : 'a' + nibble - 10);
+    }
+
+    private final static char hexCharU(final int nibble)
+    {
+        return (char)(nibble < 10 ? '0' + nibble : 'A' + nibble - 10);
+    }
+
     public final static StringBuilder hex(final StringBuilder sb, final byte[] bytes)
     {
         for (int i = 0; i < bytes.length; i++)
         {
-            sb.append(String.format("%02x", bytes[i] & 255));
+            final int b = bytes[i] & 255;
+            sb.append(hexCharL(b >> 4));
+            sb.append(hexCharL(b & 15));
         }
         return sb;
     }
@@ -337,7 +360,9 @@ public final class Encode
     {
         for (int i = 0; i < bytes.length; i++)
         {
-            sb.append(String.format("%02X", bytes[i] & 255));
+            final int b = bytes[i] & 255;
+            sb.append(hexCharU(b >> 4));
+            sb.append(hexCharU(b & 15));
         }
         return sb;
     }
@@ -353,48 +378,17 @@ public final class Encode
 
         for (int i = 0; i < bytes.length; i++)
         {
-            final int c = bytes[i] & 255;
+            final char c = (char)(bytes[i] & 255);
 
-            if (c < 33 | c > 126)
+            if (URL_ENCODE_SET.get(c))
             {
-                sb.append(String.format("%%%02X", c));
+                sb.append(c);
             }
             else
             {
-                switch (c)
-                {
-                case '!':
-                case '#':
-                case '$':
-                case '&':
-                case '\'':
-                case '`':
-                case '(':
-                case ')':
-                case '{':
-                case '}':
-                case '"':
-                case '*':
-                case '+':
-                case ',':
-                case '^':
-                case '~':
-                case '/':
-                case '\\':
-                case ':':
-                case ';':
-                case '=':
-                case '?':
-                case '@':
-                case '[':
-                case ']':
-                case '%':
-                    sb.append(String.format("%%%02X", c));
-                    break;
-                default:
-                    sb.append((char)c);
-                    break;
-                }
+                sb.append('%');
+                sb.append(hexCharU(c >> 4));
+                sb.append(hexCharU(c & 15));
             }
         }
 
