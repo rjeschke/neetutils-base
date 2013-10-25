@@ -378,11 +378,11 @@ public final class Encode
 
         for (int i = 0; i < bytes.length; i++)
         {
-            final char c = (char)(bytes[i] & 255);
+            final int c = bytes[i] & 255;
 
             if (URL_ENCODE_SET.get(c))
             {
-                sb.append(c);
+                sb.append((char)c);
             }
             else
             {

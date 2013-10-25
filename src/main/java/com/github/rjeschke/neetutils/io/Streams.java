@@ -18,12 +18,15 @@ package com.github.rjeschke.neetutils.io;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 /**
  *
@@ -38,6 +41,39 @@ public final class Streams
     }
 
     public final static String UTF8 = "UTF-8";
+
+    public final static boolean close(final Closeable closable)
+    {
+        try
+        {
+            closable.close();
+            return true;
+        }
+        catch (final IOException e)
+        {
+            return false;
+        }
+    }
+
+    public final static boolean flush(final Flushable flushable)
+    {
+        try
+        {
+            flushable.flush();
+            return true;
+        }
+        catch (final IOException e)
+        {
+            return false;
+        }
+    }
+
+    public final static boolean flushAndClose(final OutputStream out)
+    {
+        boolean ret = flush(out);
+        ret |= close(out);
+        return ret;
+    }
 
     public final static BufferedReader newBufferedReader(final InputStream in, final String charsetName) throws IOException
     {
