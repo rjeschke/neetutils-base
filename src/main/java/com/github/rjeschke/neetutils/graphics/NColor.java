@@ -370,6 +370,40 @@ public class NColor
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
+    public static int toARGB(final double r, final double g, final double b)
+    {
+        final int ir = NMath.clamp((int)(r * 255.0), 0, 255);
+        final int ig = NMath.clamp((int)(g * 255.0), 0, 255);
+        final int ib = NMath.clamp((int)(b * 255.0), 0, 255);
+        return 0xff000000 | (ir << 16) | (ig << 8) | ib;
+    }
+
+    public static int toARGBg(final double r, final double g, final double b, final double exp)
+    {
+        final int ir = (int)(Math.pow(NMath.clamp(r, 0.0, 1.0), exp) * 255.0);
+        final int ig = (int)(Math.pow(NMath.clamp(g, 0.0, 1.0), exp) * 255.0);
+        final int ib = (int)(Math.pow(NMath.clamp(b, 0.0, 1.0), exp) * 255.0);
+        return 0xff000000 | (ir << 16) | (ig << 8) | ib;
+    }
+
+    public static int toARGB(final double r, final double g, final double b, final double a)
+    {
+        final int ia = NMath.clamp((int)(a * 255.0), 0, 255);
+        final int ir = NMath.clamp((int)(r * 255.0), 0, 255);
+        final int ig = NMath.clamp((int)(g * 255.0), 0, 255);
+        final int ib = NMath.clamp((int)(b * 255.0), 0, 255);
+        return (ia << 24) | (ir << 16) | (ig << 8) | ib;
+    }
+
+    public static int toARGBg(final double r, final double g, final double b, final double a, final double exp)
+    {
+        final int ia = NMath.clamp((int)(a * 255.0), 0, 255);
+        final int ir = (int)(Math.pow(NMath.clamp(r, 0.0, 1.0), exp) * 255.0);
+        final int ig = (int)(Math.pow(NMath.clamp(g, 0.0, 1.0), exp) * 255.0);
+        final int ib = (int)(Math.pow(NMath.clamp(b, 0.0, 1.0), exp) * 255.0);
+        return (ia << 24) | (ir << 16) | (ig << 8) | ib;
+    }
+
     public Color toColor()
     {
         return toColor(this);

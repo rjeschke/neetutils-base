@@ -1124,4 +1124,16 @@ public final class NMath
         final long w = x % max;
         return w < 0 ? w + max : w;
     }
+
+    public static float wrap(final float x, final float max)
+    {
+        final float w = x % max;
+        return w < 0 ? w + max : w;
+    }
+
+    public static double wrap(final double x, final double max)
+    {
+        final double w = x % max;
+        return w < 0 ? w + max : w;
+    }
 }
