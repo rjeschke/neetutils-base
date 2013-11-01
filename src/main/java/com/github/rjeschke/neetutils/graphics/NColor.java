@@ -354,54 +354,180 @@ public class NColor
 
     public static int toARGB(final NColor c)
     {
-        final int a = NMath.clamp((int)(c.a * 255.f), 0, 255);
-        final int r = NMath.clamp((int)(c.r * 255.f), 0, 255);
-        final int g = NMath.clamp((int)(c.g * 255.f), 0, 255);
-        final int b = NMath.clamp((int)(c.b * 255.f), 0, 255);
+        final int a = NMath.clamp((int)(c.a * 255.f + 0.5f), 0, 255);
+        final int r = NMath.clamp((int)(c.r * 255.f + 0.5f), 0, 255);
+        final int g = NMath.clamp((int)(c.g * 255.f + 0.5f), 0, 255);
+        final int b = NMath.clamp((int)(c.b * 255.f + 0.5f), 0, 255);
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
     public static int toARGB(final NColor c, final double exp)
     {
         final int a = NMath.clamp((int)(c.a * 255.f), 0, 255);
-        final int r = (int)(Math.pow(NMath.clamp(c.r, 0.f, 1.f), exp) * 255.0);
-        final int g = (int)(Math.pow(NMath.clamp(c.g, 0.f, 1.f), exp) * 255.0);
-        final int b = (int)(Math.pow(NMath.clamp(c.b, 0.f, 1.f), exp) * 255.0);
+        final int r = (int)(Math.pow(NMath.clamp(c.r, 0.f, 1.f), exp) * 255.0 + 0.5);
+        final int g = (int)(Math.pow(NMath.clamp(c.g, 0.f, 1.f), exp) * 255.0 + 0.5);
+        final int b = (int)(Math.pow(NMath.clamp(c.b, 0.f, 1.f), exp) * 255.0 + 0.5);
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
     public static int toARGB(final double r, final double g, final double b)
     {
-        final int ir = NMath.clamp((int)(r * 255.0), 0, 255);
-        final int ig = NMath.clamp((int)(g * 255.0), 0, 255);
-        final int ib = NMath.clamp((int)(b * 255.0), 0, 255);
+        final int ir = NMath.clamp((int)(r * 255.0 + 0.5), 0, 255);
+        final int ig = NMath.clamp((int)(g * 255.0 + 0.5), 0, 255);
+        final int ib = NMath.clamp((int)(b * 255.0 + 0.5), 0, 255);
         return 0xff000000 | (ir << 16) | (ig << 8) | ib;
+    }
+
+    public static int toARGB(final int r, final int g, final int b)
+    {
+        return 0xff000000 | (NMath.clamp(r, 0, 255) << 16) | (NMath.clamp(g, 0, 255) << 8) | NMath.clamp(b, 0, 255);
     }
 
     public static int toARGBg(final double r, final double g, final double b, final double exp)
     {
-        final int ir = (int)(Math.pow(NMath.clamp(r, 0.0, 1.0), exp) * 255.0);
-        final int ig = (int)(Math.pow(NMath.clamp(g, 0.0, 1.0), exp) * 255.0);
-        final int ib = (int)(Math.pow(NMath.clamp(b, 0.0, 1.0), exp) * 255.0);
+        final int ir = (int)(Math.pow(NMath.clamp(r, 0.0, 1.0), exp) * 255.0 + 0.5);
+        final int ig = (int)(Math.pow(NMath.clamp(g, 0.0, 1.0), exp) * 255.0 + 0.5);
+        final int ib = (int)(Math.pow(NMath.clamp(b, 0.0, 1.0), exp) * 255.0 + 0.5);
         return 0xff000000 | (ir << 16) | (ig << 8) | ib;
     }
 
     public static int toARGB(final double r, final double g, final double b, final double a)
     {
-        final int ia = NMath.clamp((int)(a * 255.0), 0, 255);
-        final int ir = NMath.clamp((int)(r * 255.0), 0, 255);
-        final int ig = NMath.clamp((int)(g * 255.0), 0, 255);
-        final int ib = NMath.clamp((int)(b * 255.0), 0, 255);
+        final int ia = NMath.clamp((int)(a * 255.0 + 0.5), 0, 255);
+        final int ir = NMath.clamp((int)(r * 255.0 + 0.5), 0, 255);
+        final int ig = NMath.clamp((int)(g * 255.0 + 0.5), 0, 255);
+        final int ib = NMath.clamp((int)(b * 255.0 + 0.5), 0, 255);
         return (ia << 24) | (ir << 16) | (ig << 8) | ib;
+    }
+
+    public static int toARGB(final int r, final int g, final int b, final int a)
+    {
+        return (NMath.clamp(a, 0, 255) << 24) | (NMath.clamp(r, 0, 255) << 16) | (NMath.clamp(g, 0, 255) << 8) | NMath.clamp(b, 0, 255);
     }
 
     public static int toARGBg(final double r, final double g, final double b, final double a, final double exp)
     {
         final int ia = NMath.clamp((int)(a * 255.0), 0, 255);
-        final int ir = (int)(Math.pow(NMath.clamp(r, 0.0, 1.0), exp) * 255.0);
-        final int ig = (int)(Math.pow(NMath.clamp(g, 0.0, 1.0), exp) * 255.0);
-        final int ib = (int)(Math.pow(NMath.clamp(b, 0.0, 1.0), exp) * 255.0);
+        final int ir = (int)(Math.pow(NMath.clamp(r, 0.0, 1.0), exp) * 255.0 + 0.5);
+        final int ig = (int)(Math.pow(NMath.clamp(g, 0.0, 1.0), exp) * 255.0 + 0.5);
+        final int ib = (int)(Math.pow(NMath.clamp(b, 0.0, 1.0), exp) * 255.0 + 0.5);
         return (ia << 24) | (ir << 16) | (ig << 8) | ib;
+    }
+
+    public static double hueFunction(final double t)
+    {
+        final double t1 = 6. * NMath.wrap1(t);
+        return NMath.clamp(t1 < 3 ? 2. - t1 : t1 - 4., 0, 1.);
+    }
+
+    public static int hsv2rgb(final double h, final double s, final double v)
+    {
+        int r, g, b;
+
+        if (s == 0)
+        {
+            r = g = b = (int)(v * 255. + .5);
+        }
+        else
+        {
+            double c = s * v;
+            final double m = 255. * (v - c) + 0.5;
+            c *= 255.;
+
+            r = (int)(m + c * hueFunction(h));
+            g = (int)(m + c * hueFunction(h + 2. / 3.));
+            b = (int)(m + c * hueFunction(h + 1. / 3.));
+        }
+
+        return 0xff000000 | (r << 16) | (g << 8) | b;
+    }
+
+    public static int hsv2rgbClamped(final double h, final double s, final double v)
+    {
+        int r, g, b;
+
+        if (s == 0)
+        {
+            r = g = b = (int)(v * 255. + .5);
+        }
+        else
+        {
+            double c = s * v;
+            final double m = 255. * (v - c) + 0.5;
+            c *= 255.;
+
+            r = (int)(m + c * hueFunction(h));
+            g = (int)(m + c * hueFunction(h + 2. / 3.));
+            b = (int)(m + c * hueFunction(h + 1. / 3.));
+        }
+
+        return 0xff000000 | (NMath.clamp(r, 0, 255) << 16) | (NMath.clamp(g, 0, 255) << 8) | NMath.clamp(b, 0, 255);
+    }
+
+    public static double[] rgb2hsv(final int argb, final double[] hsv)
+    {
+        return rgb2hsv(((argb >> 16) & 255) * (1. / 255.), ((argb >> 8) & 255) * (1. / 255.), (argb & 255) * (1. / 255.), hsv);
+    }
+
+    public static double[] rgb2hsv(final int argb)
+    {
+        return rgb2hsv(((argb >> 16) & 255) * (1. / 255.), ((argb >> 8) & 255) * (1. / 255.), (argb & 255) * (1. / 255.), new double[3]);
+    }
+
+    public static double[] rgb2hsv(final double r, final double g, final double b)
+    {
+        return rgb2hsv(r, g, b, new double[3]);
+    }
+
+    public static double[] rgb2hsv(final double r, final double g, final double b, final double[] hsv)
+    {
+        int idx = 0;
+        double max = r;
+
+        if (g > max)
+        {
+            idx = 1;
+            max = g;
+        }
+
+        if (b > max)
+        {
+            idx = 2;
+            max = b;
+        }
+
+        final double m = Math.min(r, Math.min(g, b));
+        final double c = max - m;
+
+        if (c > 0)
+        {
+            final double h;
+            hsv[1] = c / (m + c);
+            hsv[2] = c / hsv[1];
+
+            switch (idx)
+            {
+            default:
+            case 0:
+                h = (g - b) / c;
+                break;
+            case 1:
+                h = 2. + (b - r) / c;
+                break;
+            case 2:
+                h = 4. + (r - g) / c;
+                break;
+            }
+            hsv[0] = NMath.wrap1(h * (1. / 6.));
+        }
+        else
+        {
+            hsv[0] = 0;
+            hsv[1] = 0;
+            hsv[2] = max;
+        }
+
+        return hsv;
     }
 
     public Color toColor()

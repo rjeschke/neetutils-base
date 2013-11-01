@@ -1136,4 +1136,14 @@ public final class NMath
         final double w = x % max;
         return w < 0 ? w + max : w;
     }
+
+    public static float wrap1(final float x)
+    {
+        return x - (float)Math.floor(x);
+    }
+
+    public static double wrap1(final double x)
+    {
+        return x - Math.floor(x);
+    }
 }
