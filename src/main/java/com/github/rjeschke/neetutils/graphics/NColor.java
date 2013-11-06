@@ -342,6 +342,46 @@ public class NColor
         return 0.299f * c.r + 0.587f * c.g + 0.114f * c.b;
     }
 
+    public static int alpha(final int argb)
+    {
+        return argb >>> 24;
+    }
+
+    public static float alphaf(final int argb)
+    {
+        return (argb >>> 24) / 255.f;
+    }
+
+    public static int red(final int argb)
+    {
+        return (argb >> 16) & 255;
+    }
+
+    public static float redf(final int argb)
+    {
+        return ((argb >> 16) & 255) / 255.f;
+    }
+
+    public static int green(final int argb)
+    {
+        return (argb >> 8) & 255;
+    }
+
+    public static float greenf(final int argb)
+    {
+        return ((argb >> 8) & 255) / 255.f;
+    }
+
+    public static int blue(final int argb)
+    {
+        return argb & 255;
+    }
+
+    public static float bluef(final int argb)
+    {
+        return (argb & 255) / 255.f;
+    }
+
     public int toARGB()
     {
         return toARGB(this);

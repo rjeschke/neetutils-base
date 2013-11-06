@@ -807,6 +807,26 @@ public final class NMath
         return xs;
     }
 
+    public final static int square(final int x)
+    {
+        return x * x;
+    }
+
+    public final static long square(final long x)
+    {
+        return x * x;
+    }
+
+    public final static float square(final float x)
+    {
+        return x * x;
+    }
+
+    public final static double square(final double x)
+    {
+        return x * x;
+    }
+
     public final static float[] square(final float[] xs)
     {
         for (int i = 0; i < xs.length; i++)
@@ -1145,5 +1165,15 @@ public final class NMath
     public static double wrap1(final double x)
     {
         return x - Math.floor(x);
+    }
+
+    public static float round(final float x)
+    {
+        return (float)(x < 0 ? Math.ceil(x - 0.5) : Math.floor(x + 0.5));
+    }
+
+    public static double round(final double x)
+    {
+        return x < 0 ? Math.ceil(x - 0.5) : Math.floor(x + 0.5);
     }
 }
