@@ -74,6 +74,26 @@ public class Strings
         return sb.toString();
     }
 
+    public final static String replace(final String str, final char oldChar, final char newChar)
+    {
+        final StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < str.length(); i++)
+        {
+            final char ch = str.charAt(i);
+            if (ch == oldChar)
+            {
+                sb.append(newChar);
+            }
+            else
+            {
+                sb.append(ch);
+            }
+        }
+
+        return sb.toString();
+    }
+
     public final static List<String> split(final String str, final char ch)
     {
         final List<String> ret = Colls.list();
@@ -180,6 +200,20 @@ public class Strings
             todo -= n;
         }
         return ret;
+    }
+
+    public final static int firstDiffIndex(final String a, final String b)
+    {
+        final int todo = Math.min(a.length(), b.length());
+        int i = 0;
+        for (; i < todo; i++)
+        {
+            if (a.charAt(i) != b.charAt(i))
+            {
+                break;
+            }
+        }
+        return i;
     }
 
     public final static String from(final byte[] bytes, final int offs, final int length, final Charset charset)

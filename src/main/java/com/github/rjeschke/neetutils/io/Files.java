@@ -26,11 +26,13 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.github.rjeschke.neetutils.Once;
 import com.github.rjeschke.neetutils.Strings;
 import com.github.rjeschke.neetutils.SysUtils;
 import com.github.rjeschke.neetutils.collections.Colls;
@@ -392,6 +394,53 @@ public final class Files implements Runnable
     public final static File home(final File path)
     {
         return new File(new File(System.getProperty("user.home")), path.toString());
+    }
+
+    public final static File normalize(final File file)
+    {
+        final boolean isWindows = System.getProperty("os.name").toLowerCase().contains("win");
+        final char sep = System.getProperty("file.separator").charAt(0);
+
+        final List<String> toks = Strings.split(file.toString(), sep);
+        final LinkedList<String> stack = new LinkedList<>();
+
+        for (int i = 0; i < toks.size(); i++)
+        {
+            final String t = toks.get(i);
+            if (Strings.isEmpty(t))
+            {
+                if (i == 0 && !isWindows)
+                {
+                    stack.addLast(t);
+                }
+            }
+            else
+            {
+                if (!t.equals("."))
+                {
+                    if (t.equals("..") && !stack.isEmpty())
+                    {
+                        stack.removeLast();
+                    }
+                    else
+                    {
+                        stack.addLast(t);
+                    }
+                }
+            }
+        }
+
+        final StringBuilder sb = new StringBuilder();
+
+        final Once<String> once = Once.of("", System.getProperty("file.separator"));
+
+        for (final String s : stack)
+        {
+            sb.append(once.get());
+            sb.append(s);
+        }
+
+        return new File(sb.toString());
     }
 
     @Override
