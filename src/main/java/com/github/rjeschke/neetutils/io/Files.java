@@ -71,16 +71,22 @@ public final class Files implements Runnable
     private final static void listFiles(final File parent, final List<File> files)
     {
         if (parent.isFile())
+        {
             files.add(parent);
+        }
         else
         {
             final File[] fs = parent.listFiles();
             for (final File f : fs)
             {
                 if (f.isFile())
+                {
                     files.add(f);
+                }
                 else
+                {
                     listFiles(f, files);
+                }
             }
         }
     }
@@ -94,6 +100,17 @@ public final class Files implements Runnable
     {
         final int idx = filename.lastIndexOf('.');
         return idx != -1 ? filename.substring(idx + 1) : "";
+    }
+
+    public final static String getFullExtension(final File file)
+    {
+        return getFullExtension(file.getName());
+    }
+
+    public final static String getFullExtension(final String filename)
+    {
+        final int idx = filename.lastIndexOf('.');
+        return idx != -1 ? filename.substring(idx) : "";
     }
 
     public final static File createUniqueTempFolder()
@@ -129,14 +146,20 @@ public final class Files implements Runnable
             for (final File f : files)
             {
                 if (f.isDirectory())
+                {
                     recurseDeleteFolder(f);
+                }
                 else
+                {
                     f.delete();
+                }
             }
             path.delete();
         }
         else
+        {
             path.delete();
+        }
     }
 
     public final static void copy(final File input, final File output) throws IOException
@@ -396,6 +419,16 @@ public final class Files implements Runnable
         return new File(new File(System.getProperty("user.home")), path.toString());
     }
 
+    public final static String cwd(final String path)
+    {
+        return new File(System.getProperty("user.dir"), path).getAbsolutePath();
+    }
+
+    public final static File cwd(final File path)
+    {
+        return new File(new File(System.getProperty("user.dir")), path.toString());
+    }
+
     public final static File normalize(final File file)
     {
         final boolean isWindows = System.getProperty("os.name").toLowerCase().contains("win");
@@ -438,6 +471,42 @@ public final class Files implements Runnable
         {
             sb.append(once.get());
             sb.append(s);
+        }
+
+        return new File(sb.toString());
+    }
+
+    public final static File relativeTo(final File root, final File child)
+    {
+        final List<String> rt = Strings.split(Files.normalize(new File(Strings.replace(root.getAbsolutePath(), '\\', '/'))).getAbsolutePath(), '/');
+        final List<String> ct = Strings.split(Files.normalize(new File(Strings.replace(child.getAbsolutePath(), '\\', '/'))).getAbsolutePath(), '/');
+
+        int i = 0;
+        final int len = Math.min(rt.size(), ct.size());
+        while (i < len && rt.get(i).equals(ct.get(i)))
+        {
+            ++i;
+        }
+
+        if (i == 0)
+        {
+            return Files.normalize(child.getAbsoluteFile());
+        }
+
+        final StringBuilder sb = new StringBuilder();
+
+        while (i < rt.size())
+        {
+            sb.append("../");
+            ++i;
+        }
+
+        final Once<String> once = Once.of("", "/");
+
+        for (int n = i; n < ct.size(); n++)
+        {
+            sb.append(once.get());
+            sb.append(ct.get(n));
         }
 
         return new File(sb.toString());

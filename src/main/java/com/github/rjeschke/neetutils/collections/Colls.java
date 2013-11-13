@@ -18,6 +18,7 @@ package com.github.rjeschke.neetutils.collections;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -92,7 +93,9 @@ public final class Colls
     {
         final List<A> ret = list();
         for (final A a : coll)
+        {
             ret.add(a);
+        }
         return ret;
     }
 
@@ -108,7 +111,9 @@ public final class Colls
     {
         final List<A> ret = list(coll.length);
         for (int i = 0; i < coll.length; i++)
+        {
             ret.add(coll[i]);
+        }
         return ret;
     }
 
@@ -190,10 +195,17 @@ public final class Colls
     public final static <A> List<A> trimToSize(final List<A> list)
     {
         if (list instanceof Vector)
+        {
             ((Vector<?>)list).trimToSize();
+        }
         else if (list instanceof ArrayList)
+        {
             ((ArrayList<?>)list).trimToSize();
-        else if (list instanceof SortedList) ((SortedList<?>)list).trimToSize();
+        }
+        else if (list instanceof SortedList)
+        {
+            ((SortedList<?>)list).trimToSize();
+        }
 
         return list;
     }
@@ -209,7 +221,26 @@ public final class Colls
     {
         final List<Tuple<A, B>> ret = list();
         for (final Map.Entry<A, B> e : map.entrySet())
+        {
             ret.add(Tuple.of(e.getKey(), e.getValue()));
+        }
+        return ret;
+    }
+
+    /**
+     * Transforms a Map into a list of Pairs.
+     *
+     * @param map
+     *            Map to transform.
+     * @return List of Tuples.
+     */
+    public final static <A extends Comparable<A>, B extends Comparable<B>> List<Pair<A, B>> asPairList(final Map<A, B> map)
+    {
+        final List<Pair<A, B>> ret = list();
+        for (final Map.Entry<A, B> e : map.entrySet())
+        {
+            ret.add(Pair.of(e.getKey(), e.getValue()));
+        }
         return ret;
     }
 
@@ -229,7 +260,9 @@ public final class Colls
         final Iterator<A> a = keys.iterator();
         final Iterator<B> b = values.iterator();
         while (a.hasNext() && b.hasNext())
+        {
             map.put(a.next(), b.next());
+        }
 
         return map;
     }
@@ -246,7 +279,9 @@ public final class Colls
     public final static <A, B> Map<A, B> intoMap(final Iterable<Tuple<A, B>> keyValues, final Map<A, B> map)
     {
         for (final Tuple<A, B> t : keyValues)
+        {
             map.put(t.a, t.b);
+        }
         return map;
     }
 
@@ -348,6 +383,21 @@ public final class Colls
     }
 
     /**
+     * Sorts the given List using the given Comparator.
+     *
+     * @param list
+     *            The list to sort.
+     * @param comparator
+     *            The comparator.
+     * @return The sorted list.
+     */
+    public final static <A> List<A> sort(final List<A> list, final Comparator<? super A> comparator)
+    {
+        Collections.sort(list, comparator);
+        return list;
+    }
+
+    /**
      * Returns the first element of the given collection.
      *
      * @param coll
@@ -423,7 +473,9 @@ public final class Colls
         final List<A> ret = list(amount);
         final Iterator<A> it = coll.iterator();
         for (int i = 0; i < amount; i++)
+        {
             ret.add(it.next());
+        }
 
         return ret;
     }
@@ -443,7 +495,9 @@ public final class Colls
         final Iterator<A> it = coll.iterator();
         int i = 0;
         while (i++ < amount && it.hasNext())
+        {
             ret.add(it.next());
+        }
 
         return ret;
     }
@@ -465,9 +519,13 @@ public final class Colls
         final List<A> ret = list(toTake);
         final Iterator<A> it = coll.iterator();
         for (int i = 0; i < amount; i++)
+        {
             it.next();
+        }
         for (int i = 0; i < toTake; i++)
+        {
             ret.add(it.next());
+        }
 
         return ret;
     }
@@ -487,9 +545,13 @@ public final class Colls
         final Iterator<A> it = coll.iterator();
         int i = 0;
         while (i++ < amount && it.hasNext())
+        {
             it.next();
+        }
         while (it.hasNext())
+        {
             ret.add(it.next());
+        }
 
         return ret;
     }
@@ -498,7 +560,9 @@ public final class Colls
     {
         final List<B> l = list(coll.size());
         for (final A a : coll)
+        {
             l.add(fn.applyMapping(a));
+        }
         return l;
     }
 
@@ -506,7 +570,9 @@ public final class Colls
     {
         final List<B> l = list();
         for (final A a : coll)
+        {
             l.add(fn.applyMapping(a));
+        }
         return l;
     }
 
@@ -545,7 +611,9 @@ public final class Colls
     {
         C c = initial;
         for (final A a : coll)
+        {
             c = fnReduce.applyFoldStep(fnMap.applyMapping(a), c);
+        }
         return c;
     }
 
@@ -579,7 +647,9 @@ public final class Colls
             final int sz = coll.size();
             B b = initial;
             for (int i = 0; i < sz; i++)
+            {
                 b = fn.applyFoldStep(coll.get(i), b);
+            }
             return b;
         }
         return reduce((Iterable<A>)coll, fn, initial);
@@ -589,7 +659,9 @@ public final class Colls
     {
         B b = initial;
         for (final A a : coll)
+        {
             b = fn.applyFoldStep(a, b);
+        }
         return b;
     }
 
@@ -620,7 +692,9 @@ public final class Colls
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
         for (int i = 0; i < todo; i++)
+        {
             ret.add(Tuple.of(a.next(), b.next()));
+        }
         return ret;
     }
 
@@ -640,7 +714,9 @@ public final class Colls
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
         while (a.hasNext() && b.hasNext())
+        {
             ret.add(Tuple.of(a.next(), b.next()));
+        }
         return ret;
     }
 
@@ -651,7 +727,9 @@ public final class Colls
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
         for (int i = 0; i < todo; i++)
+        {
             ret.add(fn.applyCombine(a.next(), b.next()));
+        }
         return ret;
     }
 
@@ -661,7 +739,9 @@ public final class Colls
         final Iterator<A> a = collA.iterator();
         final Iterator<B> b = collB.iterator();
         while (a.hasNext() && b.hasNext())
+        {
             ret.add(fn.applyCombine(a.next(), b.next()));
+        }
         return ret;
     }
 
@@ -731,9 +811,13 @@ public final class Colls
         for (final A a : coll)
         {
             if (fn.applyPredicate(a))
+            {
                 l0.add(a);
+            }
             else
+            {
                 l1.add(a);
+            }
         }
         return Tuple.of(l0, l1);
     }
@@ -751,7 +835,9 @@ public final class Colls
         for (final A a : coll)
         {
             if (part.size() == 0)
+            {
                 part.add(a);
+            }
             else
             {
                 if (!fn.applyEquals(last(part), a))
@@ -778,7 +864,9 @@ public final class Colls
         final byte[] ret = new byte[coll.size()];
         int i = 0;
         for (final Number n : coll)
+        {
             ret[i++] = n.byteValue();
+        }
         return ret;
     }
 
@@ -794,7 +882,9 @@ public final class Colls
         final short[] ret = new short[coll.size()];
         int i = 0;
         for (final Number n : coll)
+        {
             ret[i++] = n.shortValue();
+        }
         return ret;
     }
 
@@ -810,7 +900,9 @@ public final class Colls
         final int[] ret = new int[coll.size()];
         int i = 0;
         for (final Number n : coll)
+        {
             ret[i++] = n.intValue();
+        }
         return ret;
     }
 
@@ -826,7 +918,9 @@ public final class Colls
         final long[] ret = new long[coll.size()];
         int i = 0;
         for (final Number n : coll)
+        {
             ret[i++] = n.longValue();
+        }
         return ret;
     }
 
@@ -842,7 +936,9 @@ public final class Colls
         final float[] ret = new float[coll.size()];
         int i = 0;
         for (final Number n : coll)
+        {
             ret[i++] = n.floatValue();
+        }
         return ret;
     }
 
@@ -858,7 +954,9 @@ public final class Colls
         final double[] ret = new double[coll.size()];
         int i = 0;
         for (final Number n : coll)
+        {
             ret[i++] = n.doubleValue();
+        }
         return ret;
     }
 
