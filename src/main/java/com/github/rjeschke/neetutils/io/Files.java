@@ -419,6 +419,11 @@ public final class Files implements Runnable
         return new File(new File(System.getProperty("user.home")), path.toString());
     }
 
+    public final static File home()
+    {
+        return new File(System.getProperty("user.home"));
+    }
+
     public final static String cwd(final String path)
     {
         return new File(System.getProperty("user.dir"), path).getAbsolutePath();
@@ -427,6 +432,11 @@ public final class Files implements Runnable
     public final static File cwd(final File path)
     {
         return new File(new File(System.getProperty("user.dir")), path.toString());
+    }
+
+    public final static File cwd()
+    {
+        return new File(System.getProperty("user.dir"));
     }
 
     public final static File normalize(final File file)

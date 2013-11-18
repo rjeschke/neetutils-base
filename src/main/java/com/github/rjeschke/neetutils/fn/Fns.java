@@ -15,8 +15,10 @@
  */
 package com.github.rjeschke.neetutils.fn;
 
+import java.util.List;
 import java.util.Map;
 
+import com.github.rjeschke.neetutils.collections.Colls;
 import com.github.rjeschke.neetutils.math.Numbers;
 
 /**
@@ -66,6 +68,18 @@ public final class Fns
             {
                 if (a == null) return b == null;
                 return a.equals(b);
+            }
+        };
+    }
+
+    public final static <A> FnInstance<List<A>> newListInstance()
+    {
+        return new FnInstance<List<A>>()
+        {
+            @Override
+            public List<A> newInstance()
+            {
+                return Colls.list();
             }
         };
     }

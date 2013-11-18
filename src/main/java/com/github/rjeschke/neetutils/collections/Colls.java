@@ -31,6 +31,7 @@ import java.util.Vector;
 import com.github.rjeschke.neetutils.fn.FnCombine;
 import com.github.rjeschke.neetutils.fn.FnEquals;
 import com.github.rjeschke.neetutils.fn.FnFoldStep;
+import com.github.rjeschke.neetutils.fn.FnInstance;
 import com.github.rjeschke.neetutils.fn.FnMapping;
 import com.github.rjeschke.neetutils.fn.FnPredicate;
 import com.github.rjeschke.neetutils.fn.Fns;
@@ -183,7 +184,8 @@ public final class Colls
     }
 
     /**
-     * Tries to call trimToSize() on the given list. If no suitable type is found, then this method is a no-op.
+     * Tries to call trimToSize() on the given list. If no suitable type is
+     * found, then this method is a no-op.
      *
      * @param list
      *            The list
@@ -458,7 +460,8 @@ public final class Colls
     }
 
     /**
-     * Returns a new list containing the first 'amount' elements of the given collection.
+     * Returns a new list containing the first 'amount' elements of the given
+     * collection.
      *
      * @param coll
      *            The collection.
@@ -481,7 +484,8 @@ public final class Colls
     }
 
     /**
-     * Returns a new list containing the first 'amount' elements of the given collection.
+     * Returns a new list containing the first 'amount' elements of the given
+     * collection.
      *
      * @param coll
      *            The collection.
@@ -503,7 +507,8 @@ public final class Colls
     }
 
     /**
-     * Returns a new List containing all but the first 'amount' elements of 'coll'.
+     * Returns a new List containing all but the first 'amount' elements of
+     * 'coll'.
      *
      * @param coll
      *            The collection.
@@ -531,7 +536,8 @@ public final class Colls
     }
 
     /**
-     * Returns a new List containing all but the first 'amount' elements of 'coll'.
+     * Returns a new List containing all but the first 'amount' elements of
+     * 'coll'.
      *
      * @param coll
      *            The collection.
@@ -1016,5 +1022,40 @@ public final class Colls
         {
             coll.add(t);
         }
+    }
+
+    public static <A, B> B get(final Map<A, B> map, final A key, final B def)
+    {
+        final B b = map.get(key);
+        return b == null ? def : b;
+    }
+
+    public static <A, B> B get(final Map<A, B> map, final A key, final FnInstance<B> def)
+    {
+        final B b = map.get(key);
+        return b == null ? def.newInstance() : b;
+    }
+
+    public static <A, B> B getOrCreate(final Map<A, B> map, final A key, final B def)
+    {
+        final B b = map.get(key);
+        if (b == null)
+        {
+            map.put(key, def);
+            return def;
+        }
+        return b;
+    }
+
+    public static <A, B> B getOrCreate(final Map<A, B> map, final A key, final FnInstance<B> def)
+    {
+        final B b = map.get(key);
+        if (b == null)
+        {
+            final B d = def.newInstance();
+            map.put(key, d);
+            return d;
+        }
+        return b;
     }
 }
