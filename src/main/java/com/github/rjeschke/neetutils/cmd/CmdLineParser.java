@@ -17,6 +17,7 @@ package com.github.rjeschke.neetutils.cmd;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,14 +31,9 @@ public final class CmdLineParser
         // meh!
     }
 
-    public static List<String> parse(final String[] args, final Object... objs) throws IOException
+    private static void parseArgs(final Object[] objs, final List<Arg> allArgs, final HashMap<String, Arg> shortArgs, final HashMap<String, Arg> longArgs)
+            throws IOException
     {
-        final List<String> ret = Colls.list();
-
-        final List<Arg> allArgs = Colls.list();
-        final HashMap<String, Arg> shortArgs = new HashMap<>();
-        final HashMap<String, Arg> longArgs = new HashMap<>();
-
         for (final Object obj : objs)
         {
             final Class<?> cl = obj.getClass();
@@ -76,6 +72,95 @@ public final class CmdLineParser
                 }
             }
         }
+    }
+
+    public static String generateHelp(final int columnWidth, final boolean sort, final Object... objs) throws IOException
+    {
+        final List<Arg> allArgs = Colls.list();
+        final HashMap<String, Arg> shortArgs = new HashMap<>();
+        final HashMap<String, Arg> longArgs = new HashMap<>();
+
+        parseArgs(objs, allArgs, shortArgs, longArgs);
+
+        int minArgLen = 0;
+
+        for (final Arg a : allArgs)
+        {
+            int len = a.toString().length();
+            if (!a.isSwitch)
+            {
+                len += 4;
+            }
+            minArgLen = Math.max(minArgLen, len);
+        }
+        minArgLen += 2;
+        if (sort)
+        {
+            Collections.sort(allArgs);
+        }
+
+        final StringBuilder sb = new StringBuilder();
+
+        for (final Arg a : allArgs)
+        {
+            final StringBuilder line = new StringBuilder();
+            line.append(' ');
+            line.append(a);
+            if (!a.isSwitch)
+            {
+                if (a.isCatchAll())
+                {
+                    line.append(" ...");
+                }
+                else
+                {
+                    line.append(" arg");
+                }
+            }
+            while (line.length() < minArgLen)
+            {
+                line.append(' ');
+            }
+
+            line.append(":");
+
+            final List<String> toks = Strings.split(a.desc, ' ');
+
+            for (final String s : toks)
+            {
+                if (line.length() + s.length() + 1 > columnWidth)
+                {
+                    sb.append(line);
+                    sb.append('\n');
+                    line.setLength(0);
+                    while (line.length() <= minArgLen)
+                    {
+                        line.append(' ');
+                    }
+                }
+                line.append(' ');
+                line.append(s);
+            }
+
+            if (line.length() > minArgLen)
+            {
+                sb.append(line);
+                sb.append('\n');
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static List<String> parse(final String[] args, final Object... objs) throws IOException
+    {
+        final List<String> ret = Colls.list();
+
+        final List<Arg> allArgs = Colls.list();
+        final HashMap<String, Arg> shortArgs = new HashMap<>();
+        final HashMap<String, Arg> longArgs = new HashMap<>();
+
+        parseArgs(objs, allArgs, shortArgs, longArgs);
 
         for (int i = 0; i < args.length; i++)
         {
@@ -147,7 +232,7 @@ public final class CmdLineParser
         return ret;
     }
 
-    static class Arg
+    static class Arg implements Comparable<Arg>
     {
         public final String  s;
         public final String  l;
@@ -270,7 +355,19 @@ public final class CmdLineParser
             {
                 return "--" + this.l;
             }
-            return "-" + this.s;
+            if (Strings.isEmpty(this.l))
+            {
+                return "-" + this.s;
+            }
+            return "--" + this.l + ", -" + this.s;
+        }
+
+        @Override
+        public int compareTo(final Arg o)
+        {
+            final String a = Strings.isEmpty(this.l) ? this.s : this.l;
+            final String b = Strings.isEmpty(o.l) ? o.s : o.l;
+            return a.compareTo(b);
         }
     }
 }
