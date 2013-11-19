@@ -93,7 +93,7 @@ public final class CmdLineParser
             }
             minArgLen = Math.max(minArgLen, len);
         }
-        minArgLen += 2;
+        minArgLen += 3;
         if (sort)
         {
             Collections.sort(allArgs);
@@ -104,7 +104,7 @@ public final class CmdLineParser
         for (final Arg a : allArgs)
         {
             final StringBuilder line = new StringBuilder();
-            line.append(' ');
+            line.append("  ");
             line.append(a);
             if (!a.isSwitch)
             {
@@ -122,7 +122,7 @@ public final class CmdLineParser
                 line.append(' ');
             }
 
-            line.append(":");
+            line.append(':');
 
             final List<String> toks = Strings.split(a.desc, ' ');
 
@@ -353,20 +353,20 @@ public final class CmdLineParser
         {
             if (Strings.isEmpty(this.s))
             {
-                return "--" + this.l;
+                return "    --" + this.l;
             }
             if (Strings.isEmpty(this.l))
             {
                 return "-" + this.s;
             }
-            return "--" + this.l + ", -" + this.s;
+            return "-" + this.s + ", --" + this.l;
         }
 
         @Override
         public int compareTo(final Arg o)
         {
-            final String a = Strings.isEmpty(this.l) ? this.s : this.l;
-            final String b = Strings.isEmpty(o.l) ? o.s : o.l;
+            final String a = Strings.isEmpty(this.s) ? this.l : this.s;
+            final String b = Strings.isEmpty(o.s) ? o.l : o.s;
             return a.compareTo(b);
         }
     }
