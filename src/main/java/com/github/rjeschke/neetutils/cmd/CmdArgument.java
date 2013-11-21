@@ -26,7 +26,7 @@ public @interface CmdArgument
 {
     String l() default "";
 
-    String s() default "";
+    char s() default '\0';
 
     String desc() default "";
 

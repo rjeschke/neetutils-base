@@ -137,6 +137,7 @@ public final class CmdLineParser
                     {
                         line.append(' ');
                     }
+                    line.append(' ');
                 }
                 line.append(' ');
                 line.append(s);
@@ -246,7 +247,7 @@ public final class CmdLineParser
 
         public Arg(final CmdArgument arg, final Object obj, final Field field)
         {
-            this.s = arg.s();
+            this.s = arg.s() == 0 ? "" : Character.toString(arg.s());
             this.l = arg.l();
             this.desc = arg.desc();
             this.isSwitch = arg.isSwitch();
