@@ -30,7 +30,13 @@ public @interface CmdArgument
 
     String desc() default "";
 
+    char itemSep() default ',';
+
+    Class<?> listClass() default String.class;
+
     boolean isSwitch() default false;
 
     boolean required() default false;
+
+    boolean catchAll() default false;
 }

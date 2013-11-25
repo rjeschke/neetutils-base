@@ -522,6 +522,11 @@ public final class Files implements Runnable
         return new File(sb.toString());
     }
 
+    public final static File absolute(final File parent, final File possibleChild)
+    {
+        return possibleChild.isAbsolute() ? possibleChild : new File(parent, possibleChild.toString());
+    }
+
     @Override
     public void run()
     {

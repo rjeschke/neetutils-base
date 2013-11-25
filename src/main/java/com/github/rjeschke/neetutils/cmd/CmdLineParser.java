@@ -239,8 +239,10 @@ public final class CmdLineParser
         public final String  l;
         public final String  id;
         public final String  desc;
+        public final char    itemSep;
         public final boolean isSwitch;
         public final boolean required;
+        public final boolean catchAll;
         private boolean      present = false;
         private final Object object;
         private final Field  field;
@@ -252,6 +254,8 @@ public final class CmdLineParser
             this.desc = arg.desc();
             this.isSwitch = arg.isSwitch();
             this.required = arg.required();
+            this.catchAll = arg.catchAll();
+            this.itemSep = arg.itemSep();
             this.id = this.s + "/" + this.l;
 
             this.object = obj;
