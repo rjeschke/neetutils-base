@@ -44,7 +44,7 @@ public final class JSONTokenizer
 
     /**
      *
-     * @return the last tokenized {@code double] value.
+     * @return the last tokenized {@code double} value.
      *
      */
     public double getDoubleValue()
@@ -98,7 +98,7 @@ public final class JSONTokenizer
     }
 
     /**
-     * @return the current parsing position as a {@code String] suitable for error reporting.
+     * @return the current parsing position as a {@code String} suitable for error reporting.
 
      */
     public String getPosition()

@@ -22,7 +22,7 @@ package com.github.rjeschke.neetutils.json;
  * String into an enum.
  * </p>
  * <p>
- * If you don't use this interface on enums, enums will be serialized by {@link Enum#toString()} and deserialized using {@link Enum#valueOf(String)}.
+ * If you don't use this interface on enums, enums will be serialized by {@link Enum#toString()} and deserialized using {@link Enum#valueOf(Class, String)}.
  * </p>
  *
  * @author René Jeschke (rene_jeschke@yahoo.de)

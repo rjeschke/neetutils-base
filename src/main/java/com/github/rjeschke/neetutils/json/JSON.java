@@ -386,7 +386,7 @@ public final class JSON
      * Returns the given object casted to {@code Map<String, Object>}.
      *
      * @param obj
-     * @return
+     * @return The given object casted to {@code Map<String, Object>}.
      */
     @SuppressWarnings("unchecked")
     public final static Map<String, Object> asMap(final Object obj)
@@ -398,7 +398,7 @@ public final class JSON
      * Returns the given object casted to {@code List<Object>}.
      *
      * @param obj
-     * @return
+     * @return The given object casted to {@code List<Object>}.
      */
     @SuppressWarnings("unchecked")
     public final static List<Object> asArray(final Object obj)
@@ -410,7 +410,7 @@ public final class JSON
      * Returns the given object casted to {@code Number}.
      *
      * @param obj
-     * @return
+     * @return The given object casted to {@code Number}.
      */
     public final static Number asNumber(final Object obj)
     {
@@ -421,7 +421,7 @@ public final class JSON
      * Returns the given object casted to {@code Boolean}.
      *
      * @param obj
-     * @return
+     * @return The given object casted to {@code Boolean}.
      */
     public final static Boolean asBoolean(final Object obj)
     {
@@ -432,7 +432,7 @@ public final class JSON
      * Escapes the given string.
      *
      * @param value
-     * @return
+     * @return The escaped string.
      */
     public final static String escapeString(final String value)
     {
@@ -444,7 +444,7 @@ public final class JSON
      *
      * @param sb
      * @param value
-     * @return
+     * @return The provided StringBuilder.
      */
     public final static StringBuilder escapeString(final StringBuilder sb, final String value)
     {

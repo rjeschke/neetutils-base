@@ -19,16 +19,89 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
+import com.github.rjeschke.neetutils.Classes;
+import com.github.rjeschke.neetutils.Once;
 import com.github.rjeschke.neetutils.Strings;
 import com.github.rjeschke.neetutils.collections.Colls;
+import com.github.rjeschke.neetutils.iterables.ArrayIterator;
 
+/**
+ * Generic command line parser.
+ *
+ * @author René Jeschke (rene_jeschke@yahoo.de)
+ */
 public final class CmdLineParser
 {
     private CmdLineParser()
     {
         // meh!
+    }
+
+    enum Type
+    {
+        UNSUPPORTED, STRING, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, LIST, BOOL;
+    }
+
+    final static HashMap<Class<?>, Type> TYPE_MAP        = new HashMap<>();
+    final static Class<?>[]              TYPE_CLASS_LIST = Colls.objArray(String.class, byte.class, Byte.class, short.class, Short.class, int.class,
+                                                                 Integer.class, long.class, Long.class, float.class, Float.class, double.class, Double.class,
+                                                                 List.class, Boolean.class, boolean.class);
+    final static Type[]                  TYPE_TYPE_LIST  = Colls.objArray(Type.STRING, Type.BYTE, Type.BYTE, Type.SHORT, Type.SHORT, Type.INT, Type.INT,
+                                                                 Type.LONG, Type.LONG, Type.FLOAT, Type.FLOAT, Type.DOUBLE, Type.DOUBLE, Type.LIST, Type.BOOL,
+                                                                 Type.BOOL);
+
+    final static HashSet<String>         BOOL_TRUE       = new HashSet<>(Colls.list("on", "true", "yes"));
+    final static HashSet<String>         BOOL_FALSE      = new HashSet<>(Colls.list("off", "false", "no"));
+
+    static
+    {
+        Colls.intoMap(new ArrayIterator<>(false, TYPE_CLASS_LIST), new ArrayIterator<>(false, TYPE_TYPE_LIST), TYPE_MAP);
+    }
+
+    static Type getTypeFor(final Class<?> clazz)
+    {
+        final Type type = TYPE_MAP.get(clazz);
+
+        if (type != null)
+        {
+            return type;
+        }
+
+        if (Classes.implementsInterface(clazz, List.class))
+        {
+            return Type.LIST;
+        }
+
+        return Type.UNSUPPORTED;
+    }
+
+    static String defaultToString(final Object value, final Type type, final Arg arg)
+    {
+        if (value == null || arg.isSwitch || arg.catchAll || !arg.printDefault)
+        {
+            return null;
+        }
+
+        if (type == Type.LIST)
+        {
+            final List<?> list = (List<?>)value;
+
+            if (list.isEmpty()) return null;
+
+            final StringBuilder sb = new StringBuilder();
+            final Once<String> once = Once.of("", Character.toString(arg.itemSep));
+            for (final Object o : list)
+            {
+                sb.append(once.get());
+                sb.append(o.toString());
+            }
+            return sb.toString();
+        }
+
+        return value.toString();
     }
 
     private static void parseArgs(final Object[] objs, final List<Arg> allArgs, final HashMap<String, Arg> shortArgs, final HashMap<String, Arg> longArgs)
@@ -44,6 +117,16 @@ public final class CmdLineParser
                 if (f.isAnnotationPresent(CmdArgument.class))
                 {
                     final Arg arg = new Arg(f.getAnnotation(CmdArgument.class), obj, f);
+
+                    if (arg.type == Type.UNSUPPORTED)
+                    {
+                        throw new IOException("Unsupported parameter type: " + f.getType().getCanonicalName() + " for: " + arg);
+                    }
+
+                    if (arg.listType == Type.UNSUPPORTED || arg.listType == Type.LIST)
+                    {
+                        throw new IOException("Unsupported list type: " + f.getType().getCanonicalName() + " for: " + arg);
+                    }
 
                     if (Strings.isEmpty(arg.s) && Strings.isEmpty(arg.l))
                     {
@@ -68,12 +151,36 @@ public final class CmdLineParser
                         longArgs.put(arg.l, arg);
                     }
 
+                    if (arg.isCatchAll() && arg.type != Type.LIST)
+                    {
+                        throw new IOException("Parameter '" + arg + "' requires a List field.");
+                    }
+
+                    if (arg.isSwitch && arg.type != Type.BOOL)
+                    {
+                        throw new IOException("Parameter '" + arg + "' requires a Boolean/boolean field.");
+                    }
+
                     allArgs.add(arg);
                 }
             }
         }
     }
 
+    /**
+     * Generates a formatted help (Unix-style) for the given argument objects.
+     *
+     * @param columnWidth
+     *            Maximum column width. Words get wrapped at spaces.
+     * @param sort
+     *            Set {@code true} to sort arguments before printing.
+     * @param objs
+     *            One or more objects with annotated public fields.
+     * @return The formatted argument help text.
+     * @throws IOException
+     *             if a parsing error occurred.
+     * @see CmdArgument
+     */
     public static String generateHelp(final int columnWidth, final boolean sort, final Object... objs) throws IOException
     {
         final List<Arg> allArgs = Colls.list();
@@ -89,11 +196,20 @@ public final class CmdLineParser
             int len = a.toString().length();
             if (!a.isSwitch)
             {
-                len += 4;
+                ++len;
+                len += a.getResolvedType().toString().length();
+                if (a.isCatchAll())
+                {
+                    ++len;
+                }
+                else if (a.isList())
+                {
+                    len += 6;
+                }
             }
             minArgLen = Math.max(minArgLen, len);
         }
-        minArgLen += 3;
+        minArgLen += 2;
         if (sort)
         {
             Collections.sort(allArgs);
@@ -104,17 +220,21 @@ public final class CmdLineParser
         for (final Arg a : allArgs)
         {
             final StringBuilder line = new StringBuilder();
-            line.append("  ");
+            line.append(' ');
             line.append(a);
             if (!a.isSwitch)
             {
+                line.append(' ');
+                line.append(a.getResolvedType().toString().toLowerCase());
                 if (a.isCatchAll())
                 {
-                    line.append(" ...");
+                    line.append('s');
                 }
-                else
+                else if (a.isList())
                 {
-                    line.append(" arg");
+                    line.append('[');
+                    line.append(a.itemSep);
+                    line.append("...]");
                 }
             }
             while (line.length() < minArgLen)
@@ -124,7 +244,18 @@ public final class CmdLineParser
 
             line.append(':');
 
-            final List<String> toks = Strings.split(a.desc, ' ');
+            final StringBuilder desc = new StringBuilder(a.desc.trim());
+
+            final String defVal = defaultToString(a.safeFieldGet(), a.type, a);
+
+            if (defVal != null)
+            {
+                desc.append(" Default is: '");
+                desc.append(defVal);
+                desc.append("'.");
+            }
+
+            final List<String> toks = Strings.split(desc.toString(), ' ');
 
             for (final String s : toks)
             {
@@ -153,6 +284,18 @@ public final class CmdLineParser
         return sb.toString();
     }
 
+    /**
+     * Parses command line arguments.
+     *
+     * @param args
+     *            Array of arguments, like the ones provided by {@code void main(String[] args)}
+     * @param objs
+     *            One or more objects with annotated public fields.
+     * @return A {@code List} containing all unparsed arguments (i.e. arguments that are no switches)
+     * @throws IOException
+     *             if a parsing error occurred.
+     * @see CmdArgument
+     */
     public static List<String> parse(final String[] args, final Object... objs) throws IOException
     {
         final List<String> ret = Colls.list();
@@ -210,7 +353,7 @@ public final class CmdLineParser
                         {
                             ca.add(args[i]);
                         }
-                        a.setListField(ca);
+                        a.setCatchAll(ca);
                     }
                     else
                     {
@@ -233,19 +376,22 @@ public final class CmdLineParser
         return ret;
     }
 
-    static class Arg implements Comparable<Arg>
+    private static class Arg implements Comparable<Arg>
     {
-        public final String  s;
-        public final String  l;
-        public final String  id;
-        public final String  desc;
-        public final char    itemSep;
-        public final boolean isSwitch;
-        public final boolean required;
-        public final boolean catchAll;
-        private boolean      present = false;
-        private final Object object;
-        private final Field  field;
+        final String  s;
+        final String  l;
+        final String  id;
+        final String  desc;
+        final char    itemSep;
+        final boolean isSwitch;
+        final boolean required;
+        final boolean catchAll;
+        final boolean printDefault;
+        final Type    type;
+        final Type    listType;
+        boolean       present = false;
+        final Object  object;
+        final Field   field;
 
         public Arg(final CmdArgument arg, final Object obj, final Field field)
         {
@@ -255,23 +401,53 @@ public final class CmdLineParser
             this.isSwitch = arg.isSwitch();
             this.required = arg.required();
             this.catchAll = arg.catchAll();
-            this.itemSep = arg.itemSep();
+            this.itemSep = arg.listSep();
+            this.printDefault = arg.printDefault();
             this.id = this.s + "/" + this.l;
 
             this.object = obj;
             this.field = field;
+            this.type = getTypeFor(this.field.getType());
+            this.listType = getTypeFor(arg.listType());
+        }
+
+        public Type getResolvedType()
+        {
+            return this.isList() ? this.listType : this.type;
         }
 
         public boolean isCatchAll()
         {
-            return this.field.getType().equals(List.class);
+            return this.catchAll;
+        }
+
+        public boolean isList()
+        {
+            return this.type == Type.LIST;
+        }
+
+        public void setCatchAll(final List<String> list) throws IOException
+        {
+            this.setListField(list);
         }
 
         public void setListField(final List<String> list) throws IOException
         {
             try
             {
-                this.field.set(this.object, list);
+                if (this.listType == Type.STRING)
+                {
+                    this.field.set(this.object, list);
+                }
+                else
+                {
+                    final List<Object> temp = Colls.list();
+                    for (final String i : list)
+                    {
+                        temp.add(this.toObject(i, this.listType));
+                    }
+                    this.field.set(this.object, temp);
+                }
             }
             catch (IllegalArgumentException | IllegalAccessException e)
             {
@@ -279,51 +455,74 @@ public final class CmdLineParser
             }
         }
 
+        Object safeFieldGet()
+        {
+            try
+            {
+                return this.field.get(this.object);
+            }
+            catch (IllegalArgumentException | IllegalAccessException e)
+            {
+                return null;
+            }
+        }
+
+        private Object toObject(final String value, final Type type) throws IOException
+        {
+            try
+            {
+                switch (type)
+                {
+                case STRING:
+                    return value;
+                case BYTE:
+                    return Byte.parseByte(value);
+                case SHORT:
+                    return Short.parseShort(value);
+                case INT:
+                    return Integer.parseInt(value);
+                case LONG:
+                    return Long.parseLong(value);
+                case FLOAT:
+                    return Float.parseFloat(value);
+                case DOUBLE:
+                    return Double.parseDouble(value);
+                case BOOL:
+                    if (BOOL_TRUE.contains(value.toLowerCase()))
+                    {
+                        return true;
+                    }
+                    if (BOOL_FALSE.contains(value.toLowerCase()))
+                    {
+                        return false;
+                    }
+                    throw new IOException("Illegal bool value for:" + this.toString());
+                default:
+                    throw new IOException("Illegal type: " + type.toString().toLowerCase());
+                }
+            }
+            catch (final Throwable t)
+            {
+                throw new IOException("Parsing error for: " + this.toString() + "; '" + value + "'", t);
+            }
+        }
+
         public void setField(final String value) throws IOException
         {
             try
             {
-                if (this.field.getType().equals(String.class))
+                if (this.isList())
                 {
-                    this.field.set(this.object, value);
-                }
-                else if (this.field.getType().equals(byte.class))
-                {
-                    this.field.set(this.object, Byte.parseByte(value));
-                }
-                else if (this.field.getType().equals(short.class))
-                {
-                    this.field.set(this.object, Short.parseShort(value));
-                }
-                else if (this.field.getType().equals(int.class))
-                {
-                    this.field.set(this.object, Integer.parseInt(value));
-                }
-                else if (this.field.getType().equals(long.class))
-                {
-                    this.field.set(this.object, Long.parseLong(value));
-                }
-                else if (this.field.getType().equals(float.class))
-                {
-                    this.field.set(this.object, Float.parseFloat(value));
-                }
-                else if (this.field.getType().equals(double.class))
-                {
-                    this.field.set(this.object, Double.parseDouble(value));
-                }
-                else if (this.field.getType().equals(boolean.class))
-                {
-                    final String v = value.toLowerCase();
-                    this.field.set(this.object, v.equals("true") || v.equals("on") || v.equals("yes"));
+                    this.setListField(Strings.split(value, this.itemSep));
                 }
                 else
                 {
-                    throw new IOException("Unsupported field type: " + this.field.getType());
+                    this.field.set(this.object, this.toObject(value, this.type));
                 }
             }
-            catch (final Exception e)
+            catch (IllegalArgumentException | IllegalAccessException e)
             {
-                throw new IOException("Failed to write value", e);
+                throw new IOException("Failed to write field: " + this.field.getName(), e);
             }
         }
 
