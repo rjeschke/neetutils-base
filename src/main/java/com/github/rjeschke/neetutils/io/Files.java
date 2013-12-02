@@ -77,15 +77,18 @@ public final class Files implements Runnable
         else
         {
             final File[] fs = parent.listFiles();
-            for (final File f : fs)
+            if (fs != null)
             {
-                if (f.isFile())
+                for (final File f : fs)
                 {
-                    files.add(f);
-                }
-                else
-                {
-                    listFiles(f, files);
+                    if (f.isFile())
+                    {
+                        files.add(f);
+                    }
+                    else
+                    {
+                        listFiles(f, files);
+                    }
                 }
             }
         }
