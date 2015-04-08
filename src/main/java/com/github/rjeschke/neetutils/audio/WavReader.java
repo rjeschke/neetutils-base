@@ -32,13 +32,15 @@ public final class WavReader
 {
     private final int     sampleRate;
     private final int     channels;
+    private final int     bits;
     private final float[] data;
     private final int[]   originalData;
 
-    private WavReader(final int sampleRate, final int channels, final float[] data, final int[] originalData)
+    private WavReader(final int sampleRate, final int channels, final int bits, final float[] data, final int[] originalData)
     {
         this.sampleRate = sampleRate;
         this.channels = channels;
+        this.bits = bits;
         this.data = data;
         this.originalData = originalData;
     }
@@ -61,6 +63,11 @@ public final class WavReader
     public int[] getOriginalData()
     {
         return this.originalData;
+    }
+
+    public int getBits()
+    {
+        return this.bits;
     }
 
     public static WavReader load(final String filename) throws IOException
@@ -118,7 +125,7 @@ public final class WavReader
                 ret[i] = v / 8388608.0f;
             }
 
-            return new WavReader(samplerate, channels, ret, iret);
+            return new WavReader(samplerate, channels, bits, ret, iret);
         }
     }
 }

@@ -15,6 +15,8 @@
  */
 package com.github.rjeschke.neetutils.vectors;
 
+import com.github.rjeschke.neetutils.math.NMath;
+
 /**
  *
  * @author René Jeschke (rene_jeschke@yahoo.de)
@@ -150,7 +152,10 @@ public final class Math3D
     {
         final float d = n.dot(i);
         final float k = 1.0f - eta * eta * (1.0f - d * d);
-        if (k < 0) return new Vector3f(0, 0, 0);
+        if (k < 0)
+        {
+            return new Vector3f(0, 0, 0);
+        }
         return i.clone().scale(eta).sub(n, eta * d + Math3D.sqrt(k));
     }
 
@@ -158,7 +163,10 @@ public final class Math3D
     {
         final double d = n.dot(i);
         final double k = 1.0 - eta * eta * (1.0 - d * d);
-        if (k < 0) return new Vector3d(0, 0, 0);
+        if (k < 0)
+        {
+            return new Vector3d(0, 0, 0);
+        }
         return i.clone().scale(eta).sub(n, eta * d + Math.sqrt(k));
     }
 
@@ -216,7 +224,8 @@ public final class Math3D
         return new Matrix4x4f(ret);
     }
 
-    public final static Matrix4x4f matrixProjectionLH(final float fov, final float aspect, final float near_z, final float far_z)
+    public final static Matrix4x4f matrixProjectionLH(final float fov, final float aspect, final float near_z,
+            final float far_z)
     {
         final float[] ret = new float[16];
         final float yscale = 1.0f / (float)Math.tan(fov * 0.5f), t = 1.0f / (far_z - near_z);
@@ -234,7 +243,8 @@ public final class Math3D
         return new Matrix4x4f(ret);
     }
 
-    public final static Matrix4x4f matrixProjectionRH(final float fov, final float aspect, final float near_z, final float far_z)
+    public final static Matrix4x4f matrixProjectionRH(final float fov, final float aspect, final float near_z,
+            final float far_z)
     {
         final float[] ret = new float[16];
         final float yscale = 1.0f / (float)Math.tan(fov * 0.5f), t = 1.0f / (far_z - near_z);
@@ -335,5 +345,143 @@ public final class Math3D
         ret[Matrix4x4f.M33] = 1.0f;
 
         return new Matrix4x4f(ret);
+    }
+
+    public final static Vector2d min(final Vector2d a, final Vector2d b, final Vector2d out)
+    {
+        return out.set(Math.min(a.x, b.x), Math.min(a.y, b.y));
+    }
+
+    public final static Vector3d min(final Vector3d a, final Vector3d b, final Vector3d out)
+    {
+        return out.set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+    }
+
+    public final static Vector4d min(final Vector4d a, final Vector4d b, final Vector4d out)
+    {
+        return out.set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z), Math.min(a.w, b.w));
+    }
+
+    public final static Vector2f min(final Vector2f a, final Vector2f b, final Vector2f out)
+    {
+        return out.set(Math.min(a.x, b.x), Math.min(a.y, b.y));
+    }
+
+    public final static Vector3f min(final Vector3f a, final Vector3f b, final Vector3f out)
+    {
+        return out.set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+    }
+
+    public final static Vector4f min(final Vector4f a, final Vector4f b, final Vector4f out)
+    {
+        return out.set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z), Math.min(a.w, b.w));
+    }
+
+    public final static Vector2i min(final Vector2i a, final Vector2i b, final Vector2i out)
+    {
+        return out.set(Math.min(a.x, b.x), Math.min(a.y, b.y));
+    }
+
+    public final static Vector3i min(final Vector3i a, final Vector3i b, final Vector3i out)
+    {
+        return out.set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+    }
+
+    public final static Vector4i min(final Vector4i a, final Vector4i b, final Vector4i out)
+    {
+        return out.set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z), Math.min(a.w, b.w));
+    }
+
+    public final static Vector2d max(final Vector2d a, final Vector2d b, final Vector2d out)
+    {
+        return out.set(Math.max(a.x, b.x), Math.max(a.y, b.y));
+    }
+
+    public final static Vector3d max(final Vector3d a, final Vector3d b, final Vector3d out)
+    {
+        return out.set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
+    }
+
+    public final static Vector4d max(final Vector4d a, final Vector4d b, final Vector4d out)
+    {
+        return out.set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z), Math.max(a.w, b.w));
+    }
+
+    public final static Vector2f max(final Vector2f a, final Vector2f b, final Vector2f out)
+    {
+        return out.set(Math.max(a.x, b.x), Math.max(a.y, b.y));
+    }
+
+    public final static Vector3f max(final Vector3f a, final Vector3f b, final Vector3f out)
+    {
+        return out.set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
+    }
+
+    public final static Vector4f max(final Vector4f a, final Vector4f b, final Vector4f out)
+    {
+        return out.set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z), Math.max(a.w, b.w));
+    }
+
+    public final static Vector2i max(final Vector2i a, final Vector2i b, final Vector2i out)
+    {
+        return out.set(Math.max(a.x, b.x), Math.max(a.y, b.y));
+    }
+
+    public final static Vector3i max(final Vector3i a, final Vector3i b, final Vector3i out)
+    {
+        return out.set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
+    }
+
+    public final static Vector4i max(final Vector4i a, final Vector4i b, final Vector4i out)
+    {
+        return out.set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z), Math.max(a.w, b.w));
+    }
+
+    public final static Vector2d clamp(final Vector2d x, final Vector2d min, final Vector2d max, final Vector2d out)
+    {
+        return out.set(NMath.clamp(x.x, min.x, max.x), NMath.clamp(x.y, min.y, max.y));
+    }
+
+    public final static Vector3d clamp(final Vector3d x, final Vector3d min, final Vector3d max, final Vector3d out)
+    {
+        return out.set(NMath.clamp(x.x, min.x, max.x), NMath.clamp(x.y, min.y, max.y), NMath.clamp(x.z, min.z, max.z));
+    }
+
+    public final static Vector4d clamp(final Vector4d x, final Vector4d min, final Vector4d max, final Vector4d out)
+    {
+        return out.set(NMath.clamp(x.x, min.x, max.x), NMath.clamp(x.y, min.y, max.y), NMath.clamp(x.z, min.z, max.z),
+                NMath.clamp(x.w, min.w, max.w));
+    }
+
+    public final static Vector2f clamp(final Vector2f x, final Vector2f min, final Vector2f max, final Vector2f out)
+    {
+        return out.set(NMath.clamp(x.x, min.x, max.x), NMath.clamp(x.y, min.y, max.y));
+    }
+
+    public final static Vector3f clamp(final Vector3f x, final Vector3f min, final Vector3f max, final Vector3f out)
+    {
+        return out.set(NMath.clamp(x.x, min.x, max.x), NMath.clamp(x.y, min.y, max.y), NMath.clamp(x.z, min.z, max.z));
+    }
+
+    public final static Vector4f clamp(final Vector4f x, final Vector4f min, final Vector4f max, final Vector4f out)
+    {
+        return out.set(NMath.clamp(x.x, min.x, max.x), NMath.clamp(x.y, min.y, max.y), NMath.clamp(x.z, min.z, max.z),
+                NMath.clamp(x.w, min.w, max.w));
+    }
+
+    public final static Vector2i clamp(final Vector2i x, final Vector2i min, final Vector2i max, final Vector2i out)
+    {
+        return out.set(NMath.clamp(x.x, min.x, max.x), NMath.clamp(x.y, min.y, max.y));
+    }
+
+    public final static Vector3i clamp(final Vector3i x, final Vector3i min, final Vector3i max, final Vector3i out)
+    {
+        return out.set(NMath.clamp(x.x, min.x, max.x), NMath.clamp(x.y, min.y, max.y), NMath.clamp(x.z, min.z, max.z));
+    }
+
+    public final static Vector4i clamp(final Vector4i x, final Vector4i min, final Vector4i max, final Vector4i out)
+    {
+        return out.set(NMath.clamp(x.x, min.x, max.x), NMath.clamp(x.y, min.y, max.y), NMath.clamp(x.z, min.z, max.z),
+                NMath.clamp(x.w, min.w, max.w));
     }
 }
