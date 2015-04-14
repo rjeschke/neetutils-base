@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 René Jeschke <rene_jeschke@yahoo.de>
+ * Copyright (C) 2015 René Jeschke <rene_jeschke@yahoo.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.github.rjeschke.neetutils.vectors;
+
+import java.util.Arrays;
+
+import com.github.rjeschke.neetutils.vectors.Vector3f;
+import com.github.rjeschke.neetutils.vectors.Vector4f;
 
 /**
  *
@@ -23,218 +29,253 @@ package com.github.rjeschke.neetutils.vectors;
 public class Matrix4x4f
 {
     // column major order
-    public final static int        M00      = 0 * 4 + 0;
-    public final static int        M01      = 1 * 4 + 0;
-    public final static int        M02      = 2 * 4 + 0;
-    public final static int        M03      = 3 * 4 + 0;
-    public final static int        M10      = 0 * 4 + 1;
-    public final static int        M11      = 1 * 4 + 1;
-    public final static int        M12      = 2 * 4 + 1;
-    public final static int        M13      = 3 * 4 + 1;
-    public final static int        M20      = 0 * 4 + 2;
-    public final static int        M21      = 1 * 4 + 2;
-    public final static int        M22      = 2 * 4 + 2;
-    public final static int        M23      = 3 * 4 + 2;
-    public final static int        M30      = 0 * 4 + 3;
-    public final static int        M31      = 1 * 4 + 3;
-    public final static int        M32      = 2 * 4 + 3;
-    public final static int        M33      = 3 * 4 + 3;
-    protected final float[]        data     = new float[16];
+    public final static int M00 = 0 * 4 + 0;
+    public final static int M01 = 1 * 4 + 0;
+    public final static int M02 = 2 * 4 + 0;
+    public final static int M03 = 3 * 4 + 0;
+    public final static int M10 = 0 * 4 + 1;
+    public final static int M11 = 1 * 4 + 1;
+    public final static int M12 = 2 * 4 + 1;
+    public final static int M13 = 3 * 4 + 1;
+    public final static int M20 = 0 * 4 + 2;
+    public final static int M21 = 1 * 4 + 2;
+    public final static int M22 = 2 * 4 + 2;
+    public final static int M23 = 3 * 4 + 2;
+    public final static int M30 = 0 * 4 + 3;
+    public final static int M31 = 1 * 4 + 3;
+    public final static int M32 = 2 * 4 + 3;
+    public final static int M33 = 3 * 4 + 3;
+    public final float[]    m   = new float[16];
 
-    public final static Matrix4x4f IDENTITY = Matrix4x4f.identity();
-
-    private Matrix4x4f()
+    public Matrix4x4f()
     {
-        //
-    }
-
-    public Matrix4x4f(final float[] m, final boolean transpose)
-    {
-        if (transpose)
-        {
-            for (int y = 0; y < 4; y++)
-            {
-                for (int x = 0; x < 4; x++)
-                {
-                    this.data[y * 4 + x] = m[x * 4 + y];
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < 16; i++)
-                this.data[i] = m[i];
-        }
+        this.m[M00] = 1;
+        this.m[M11] = 1;
+        this.m[M22] = 1;
+        this.m[M33] = 1;
     }
 
     public Matrix4x4f(final float[] m)
     {
-        this(m, false);
+        System.arraycopy(m, 0, this.m, 0, 16);
     }
 
     public Matrix4x4f(final float[] m, final int offset)
     {
-        System.arraycopy(m, offset, this.data, 0, 16);
+        System.arraycopy(m, offset, this.m, 0, 16);
     }
 
-    public Matrix4x4d toDoubleMatrix()
+    public Matrix4x4f(final Matrix4x4f m)
     {
-        final double[] a = new double[16];
-        for (int i = 0; i < 16; i++)
-            a[i] = this.data[i];
-        return new Matrix4x4d(a);
+        System.arraycopy(m.m, 0, this.m, 0, 16);
     }
 
-    private static Matrix4x4f identity()
+    public Matrix4x4f preConcat(final Matrix4x4f other)
     {
-        final Matrix4x4f mat = new Matrix4x4f();
-        mat.data[M00] = 1.0f;
-        mat.data[M11] = 1.0f;
-        mat.data[M22] = 1.0f;
-        mat.data[M33] = 1.0f;
-        return mat;
+        MatrixMathF.multiplyInPlace(this.m, other.m, this.m);
+        return this;
     }
 
-    public float determinant()
+    public Matrix4x4f postConcat(final Matrix4x4f other)
     {
-        final float s0 = this.data[M00] * this.data[M11] - this.data[M01] * this.data[M10];
-        final float s1 = this.data[M00] * this.data[M12] - this.data[M02] * this.data[M10];
-        final float s2 = this.data[M00] * this.data[M13] - this.data[M03] * this.data[M10];
-        final float s3 = this.data[M01] * this.data[M12] - this.data[M02] * this.data[M13];
-        final float s4 = this.data[M01] * this.data[M13] - this.data[M03] * this.data[M11];
-        final float s5 = this.data[M02] * this.data[M13] - this.data[M03] * this.data[M12];
-
-        final float c5 = this.data[M22] * this.data[M33] - this.data[M23] * this.data[M32];
-        final float c4 = this.data[M21] * this.data[M33] - this.data[M23] * this.data[M31];
-        final float c3 = this.data[M21] * this.data[M32] - this.data[M22] * this.data[M31];
-        final float c2 = this.data[M20] * this.data[M33] - this.data[M23] * this.data[M30];
-        final float c1 = this.data[M20] * this.data[M32] - this.data[M22] * this.data[M30];
-        final float c0 = this.data[M20] * this.data[M31] - this.data[M21] * this.data[M30];
-
-        return s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
+        MatrixMathF.multiplyInPlace(other.m, this.m, this.m);
+        return this;
     }
 
-    public Matrix4x4f adjugate()
+    public Matrix4x4f set(final float[] arr, final int offs)
     {
-        final float s0 = this.data[M00] * this.data[M11] - this.data[M01] * this.data[M10];
-        final float s1 = this.data[M00] * this.data[M12] - this.data[M02] * this.data[M10];
-        final float s2 = this.data[M00] * this.data[M13] - this.data[M03] * this.data[M10];
-        final float s3 = this.data[M01] * this.data[M12] - this.data[M02] * this.data[M13];
-        final float s4 = this.data[M01] * this.data[M13] - this.data[M03] * this.data[M11];
-        final float s5 = this.data[M02] * this.data[M13] - this.data[M03] * this.data[M12];
-
-        final float c5 = this.data[M22] * this.data[M33] - this.data[M23] * this.data[M32];
-        final float c4 = this.data[M21] * this.data[M33] - this.data[M23] * this.data[M31];
-        final float c3 = this.data[M21] * this.data[M32] - this.data[M22] * this.data[M31];
-        final float c2 = this.data[M20] * this.data[M33] - this.data[M23] * this.data[M30];
-        final float c1 = this.data[M20] * this.data[M32] - this.data[M22] * this.data[M30];
-        final float c0 = this.data[M20] * this.data[M31] - this.data[M21] * this.data[M30];
-
-        final Matrix4x4f mat = new Matrix4x4f();
-
-        mat.data[M00] = this.data[M11] * c5 - this.data[M12] * c4 + this.data[M13] * c3;
-        mat.data[M01] = -this.data[M01] * c5 + this.data[M02] * c4 - this.data[M03] * c3;
-        mat.data[M02] = this.data[M31] * s5 - this.data[M32] * s4 + this.data[M33] * s3;
-        mat.data[M03] = -this.data[M21] * s5 + this.data[M22] * s4 - this.data[M23] * s3;
-
-        mat.data[M10] = -this.data[M10] * c5 + this.data[M12] * c2 - this.data[M13] * c1;
-        mat.data[M11] = this.data[M00] * c5 - this.data[M02] * c2 + this.data[M03] * c1;
-        mat.data[M12] = -this.data[M30] * s5 + this.data[M32] * s2 - this.data[M33] * s1;
-        mat.data[M13] = this.data[M20] * s5 - this.data[M22] * s2 + this.data[M23] * s1;
-
-        mat.data[M20] = this.data[M10] * c4 - this.data[M11] * c2 + this.data[M13] * c0;
-        mat.data[M21] = -this.data[M00] * c4 + this.data[M01] * c2 - this.data[M03] * c0;
-        mat.data[M22] = this.data[M30] * s4 - this.data[M31] * s2 + this.data[M33] * s0;
-        mat.data[M23] = -this.data[M20] * s4 + this.data[M21] * s2 - this.data[M23] * s0;
-
-        mat.data[M30] = -this.data[M10] * c3 + this.data[M11] * c1 - this.data[M12] * c0;
-        mat.data[M31] = this.data[M00] * c3 - this.data[M01] * c1 + this.data[M02] * c0;
-        mat.data[M32] = -this.data[M30] * s3 + this.data[M31] * s1 - this.data[M32] * s0;
-        mat.data[M33] = this.data[M20] * s3 - this.data[M21] * s1 + this.data[M22] * s0;
-
-        return mat;
+        System.arraycopy(arr, offs, this.m, 0, 16);
+        return this;
     }
 
-    public Matrix4x4f inverse()
+    public Matrix4x4f set(final Matrix4x4f other)
     {
-        final float s0 = this.data[M00] * this.data[M11] - this.data[M01] * this.data[M10];
-        final float s1 = this.data[M00] * this.data[M12] - this.data[M02] * this.data[M10];
-        final float s2 = this.data[M00] * this.data[M13] - this.data[M03] * this.data[M10];
-        final float s3 = this.data[M01] * this.data[M12] - this.data[M02] * this.data[M13];
-        final float s4 = this.data[M01] * this.data[M13] - this.data[M03] * this.data[M11];
-        final float s5 = this.data[M02] * this.data[M13] - this.data[M03] * this.data[M12];
+        return this.set(other.m, 0);
+    }
 
-        final float c5 = this.data[M22] * this.data[M33] - this.data[M23] * this.data[M32];
-        final float c4 = this.data[M21] * this.data[M33] - this.data[M23] * this.data[M31];
-        final float c3 = this.data[M21] * this.data[M32] - this.data[M22] * this.data[M31];
-        final float c2 = this.data[M20] * this.data[M33] - this.data[M23] * this.data[M30];
-        final float c1 = this.data[M20] * this.data[M32] - this.data[M22] * this.data[M30];
-        final float c0 = this.data[M20] * this.data[M31] - this.data[M21] * this.data[M30];
+    public Matrix4x4f set(final float[] arr)
+    {
+        return this.set(arr, 0);
+    }
 
-        final Matrix4x4f mat = new Matrix4x4f();
-        final float rcpdet = 1.0f / (s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0);
+    public Matrix4x4f setTranslate(final float x, final float y, final float z)
+    {
+        return MatrixMathF.translate(x, y, z, this);
+    }
 
-        mat.data[M00] = (this.data[M11] * c5 - this.data[M12] * c4 + this.data[M13] * c3) * rcpdet;
-        mat.data[M01] = (-this.data[M01] * c5 + this.data[M02] * c4 - this.data[M03] * c3) * rcpdet;
-        mat.data[M02] = (this.data[M31] * s5 - this.data[M32] * s4 + this.data[M33] * s3) * rcpdet;
-        mat.data[M03] = (-this.data[M21] * s5 + this.data[M22] * s4 - this.data[M23] * s3) * rcpdet;
+    public Matrix4x4f preTranslate(final float x, final float y, final float z)
+    {
+        return this.preConcat(MatrixMathF.translate(x, y, z, STATE.get().temp));
+    }
 
-        mat.data[M10] = (-this.data[M10] * c5 + this.data[M12] * c2 - this.data[M13] * c1) * rcpdet;
-        mat.data[M11] = (this.data[M00] * c5 - this.data[M02] * c2 + this.data[M03] * c1) * rcpdet;
-        mat.data[M12] = (-this.data[M30] * s5 + this.data[M32] * s2 - this.data[M33] * s1) * rcpdet;
-        mat.data[M13] = (this.data[M20] * s5 - this.data[M22] * s2 + this.data[M23] * s1) * rcpdet;
+    public Matrix4x4f postTranslate(final float x, final float y, final float z)
+    {
+        return this.postConcat(MatrixMathF.translate(x, y, z, STATE.get().temp));
+    }
 
-        mat.data[M20] = (this.data[M10] * c4 - this.data[M11] * c2 + this.data[M13] * c0) * rcpdet;
-        mat.data[M21] = (-this.data[M00] * c4 + this.data[M01] * c2 - this.data[M03] * c0) * rcpdet;
-        mat.data[M22] = (this.data[M30] * s4 - this.data[M31] * s2 + this.data[M33] * s0) * rcpdet;
-        mat.data[M23] = (-this.data[M20] * s4 + this.data[M21] * s2 - this.data[M23] * s0) * rcpdet;
+    public Matrix4x4f setScale(final float x, final float y, final float z)
+    {
+        return MatrixMathF.scale(x, y, z, this);
+    }
 
-        mat.data[M31] = (this.data[M00] * c3 - this.data[M01] * c1 + this.data[M02] * c0) * rcpdet;
-        mat.data[M30] = (-this.data[M10] * c3 + this.data[M11] * c1 - this.data[M12] * c0) * rcpdet;
-        mat.data[M33] = (this.data[M20] * s3 - this.data[M21] * s1 + this.data[M22] * s0) * rcpdet;
-        mat.data[M32] = (-this.data[M30] * s3 + this.data[M31] * s1 - this.data[M32] * s0) * rcpdet;
+    public Matrix4x4f preScale(final float x, final float y, final float z)
+    {
+        return this.preConcat(MatrixMathF.scale(x, y, z, STATE.get().temp));
+    }
 
-        return mat;
+    public Matrix4x4f postScale(final float x, final float y, final float z)
+    {
+        return this.postConcat(MatrixMathF.scale(x, y, z, STATE.get().temp));
+    }
+
+    public Matrix4x4f setRotateX(final float radians)
+    {
+        return MatrixMathF.rotateX(radians, this);
+    }
+
+    public Matrix4x4f preRotateX(final float radians)
+    {
+        return this.preConcat(MatrixMathF.rotateX(radians, STATE.get().temp));
+    }
+
+    public Matrix4x4f postRotateX(final float radians)
+    {
+        return this.postConcat(MatrixMathF.rotateX(radians, STATE.get().temp));
+    }
+
+    public Matrix4x4f setRotateY(final float radians)
+    {
+        return MatrixMathF.rotateY(radians, this);
+    }
+
+    public Matrix4x4f preRotateY(final float radians)
+    {
+        return this.preConcat(MatrixMathF.rotateY(radians, STATE.get().temp));
+    }
+
+    public Matrix4x4f postRotateY(final float radians)
+    {
+        return this.postConcat(MatrixMathF.rotateY(radians, STATE.get().temp));
+    }
+
+    public Matrix4x4f setRotateZ(final float radians)
+    {
+        return MatrixMathF.rotateZ(radians, this);
+    }
+
+    public Matrix4x4f preRotateZ(final float radians)
+    {
+        return this.preConcat(MatrixMathF.rotateZ(radians, STATE.get().temp));
+    }
+
+    public Matrix4x4f postRotateZ(final float radians)
+    {
+        return this.postConcat(MatrixMathF.rotateZ(radians, STATE.get().temp));
+    }
+
+    public Matrix4x4f setLookAtLH(final Vector3f pos, final Vector3f lookat, final Vector3f up)
+    {
+        return MatrixMathF.lookAtLH(pos, lookat, up, this);
+    }
+
+    public Matrix4x4f preLookAtLH(final Vector3f pos, final Vector3f lookat, final Vector3f up)
+    {
+        return this.preConcat(MatrixMathF.lookAtLH(pos, lookat, up, STATE.get().temp));
+    }
+
+    public Matrix4x4f postLookAtLH(final Vector3f pos, final Vector3f lookat, final Vector3f up)
+    {
+        return this.postConcat(MatrixMathF.lookAtLH(pos, lookat, up, STATE.get().temp));
+    }
+
+    public Matrix4x4f setLookAtRH(final Vector3f pos, final Vector3f lookat, final Vector3f up)
+    {
+        return MatrixMathF.lookAtRH(pos, lookat, up, this);
+    }
+
+    public Matrix4x4f preLookAtRH(final Vector3f pos, final Vector3f lookat, final Vector3f up)
+    {
+        return this.preConcat(MatrixMathF.lookAtRH(pos, lookat, up, STATE.get().temp));
+    }
+
+    public Matrix4x4f postLookAtRH(final Vector3f pos, final Vector3f lookat, final Vector3f up)
+    {
+        return this.postConcat(MatrixMathF.lookAtRH(pos, lookat, up, STATE.get().temp));
+    }
+
+    public Matrix4x4f setProjectionLH(final float fovRadians, final float aspectRatio, final float near_z,
+            final float far_z)
+    {
+        return MatrixMathF.projectionLH(fovRadians, aspectRatio, near_z, far_z, this);
+    }
+
+    public Matrix4x4f preProjectionLH(final float fovRadians, final float aspectRatio, final float near_z,
+            final float far_z)
+    {
+        return this.preConcat(MatrixMathF.projectionLH(fovRadians, aspectRatio, near_z, far_z, STATE.get().temp));
+    }
+
+    public Matrix4x4f postProjectionLH(final float fovRadians, final float aspectRatio, final float near_z,
+            final float far_z)
+    {
+        return this.postConcat(MatrixMathF.projectionLH(fovRadians, aspectRatio, near_z, far_z, STATE.get().temp));
+    }
+
+    public Matrix4x4f setProjectionRH(final float fovRadians, final float aspectRatio, final float near_z,
+            final float far_z)
+    {
+        return MatrixMathF.projectionRH(fovRadians, aspectRatio, near_z, far_z, this);
+    }
+
+    public Matrix4x4f preProjectionRH(final float fovRadians, final float aspectRatio, final float near_z,
+            final float far_z)
+    {
+        return this.preConcat(MatrixMathF.projectionRH(fovRadians, aspectRatio, near_z, far_z, STATE.get().temp));
+    }
+
+    public Matrix4x4f postProjectionRH(final float fovRadians, final float aspectRatio, final float near_z,
+            final float far_z)
+    {
+        return this.postConcat(MatrixMathF.projectionRH(fovRadians, aspectRatio, near_z, far_z, STATE.get().temp));
+    }
+
+    public Matrix4x4f setIdentity()
+    {
+        Arrays.fill(this.m, 0);
+        this.m[M00] = 1;
+        this.m[M11] = 1;
+        this.m[M22] = 1;
+        this.m[M33] = 1;
+        return this;
+    }
+
+    public Matrix4x4f invert()
+    {
+        MatrixMathF.invert(this.m, this.m);
+        return this;
     }
 
     public Matrix4x4f transpose()
     {
-        final Matrix4x4f mat = new Matrix4x4f();
+        final Matrix4x4f mat = STATE.get().temp;
         for (int y = 0; y < 4; y++)
         {
             for (int x = 0; x < 4; x++)
             {
-                mat.data[y * 4 + x] = this.data[x * 4 + y];
+                mat.m[(y << 2) + x] = this.m[(x << 2) + y];
             }
         }
-        return mat;
+        return this.set(mat.m, 0);
     }
 
     public Matrix4x4f multiply(final Matrix4x4f mat)
     {
-        final Matrix4x4f r = new Matrix4x4f();
+        return this.preConcat(mat);
+    }
 
-        r.data[M00] = this.data[M00] * mat.data[M00] + this.data[M01] * mat.data[M10] + this.data[M02] * mat.data[M20] + this.data[M03] * mat.data[M30];
-        r.data[M01] = this.data[M00] * mat.data[M01] + this.data[M01] * mat.data[M11] + this.data[M02] * mat.data[M21] + this.data[M03] * mat.data[M31];
-        r.data[M02] = this.data[M00] * mat.data[M02] + this.data[M01] * mat.data[M12] + this.data[M02] * mat.data[M22] + this.data[M03] * mat.data[M32];
-        r.data[M03] = this.data[M00] * mat.data[M03] + this.data[M01] * mat.data[M13] + this.data[M02] * mat.data[M23] + this.data[M03] * mat.data[M33];
-
-        r.data[M10] = this.data[M10] * mat.data[M00] + this.data[M11] * mat.data[M10] + this.data[M12] * mat.data[M20] + this.data[M13] * mat.data[M30];
-        r.data[M11] = this.data[M10] * mat.data[M01] + this.data[M11] * mat.data[M11] + this.data[M12] * mat.data[M21] + this.data[M13] * mat.data[M31];
-        r.data[M12] = this.data[M10] * mat.data[M02] + this.data[M11] * mat.data[M12] + this.data[M12] * mat.data[M22] + this.data[M13] * mat.data[M32];
-        r.data[M13] = this.data[M10] * mat.data[M03] + this.data[M11] * mat.data[M13] + this.data[M12] * mat.data[M23] + this.data[M13] * mat.data[M33];
-
-        r.data[M20] = this.data[M20] * mat.data[M00] + this.data[M21] * mat.data[M10] + this.data[M22] * mat.data[M20] + this.data[M23] * mat.data[M30];
-        r.data[M21] = this.data[M20] * mat.data[M01] + this.data[M21] * mat.data[M11] + this.data[M22] * mat.data[M21] + this.data[M23] * mat.data[M31];
-        r.data[M22] = this.data[M20] * mat.data[M02] + this.data[M21] * mat.data[M12] + this.data[M22] * mat.data[M22] + this.data[M23] * mat.data[M32];
-        r.data[M23] = this.data[M20] * mat.data[M03] + this.data[M21] * mat.data[M13] + this.data[M22] * mat.data[M23] + this.data[M23] * mat.data[M33];
-
-        r.data[M30] = this.data[M30] * mat.data[M00] + this.data[M31] * mat.data[M10] + this.data[M32] * mat.data[M20] + this.data[M33] * mat.data[M30];
-        r.data[M31] = this.data[M30] * mat.data[M01] + this.data[M31] * mat.data[M11] + this.data[M32] * mat.data[M21] + this.data[M33] * mat.data[M31];
-        r.data[M32] = this.data[M30] * mat.data[M02] + this.data[M31] * mat.data[M12] + this.data[M32] * mat.data[M22] + this.data[M33] * mat.data[M32];
-        r.data[M33] = this.data[M30] * mat.data[M03] + this.data[M31] * mat.data[M13] + this.data[M32] * mat.data[M23] + this.data[M33] * mat.data[M33];
-
-        return r;
+    public Matrix4x4f concat(final Matrix4x4f mat)
+    {
+        return this.preConcat(mat);
     }
 
     public Matrix4x4f toMatrix3x3()
@@ -247,17 +288,17 @@ public class Matrix4x4f
             {
                 if (x < 3 && y < 3)
                 {
-                    ret.data[x + y * 4] = this.data[x + y * 4];
+                    ret.m[x + (y << 2)] = this.m[x + (y << 2)];
                 }
                 else
                 {
                     if (x == 3 && y == 3)
                     {
-                        ret.data[x + y * 4] = 1;
+                        ret.m[x + (y << 2)] = 1;
                     }
                     else
                     {
-                        ret.data[x + y * 4] = 0;
+                        ret.m[x + (y << 2)] = 0;
                     }
                 }
             }
@@ -271,10 +312,10 @@ public class Matrix4x4f
         final float x = vec.x;
         final float y = vec.y;
         final float z = vec.z;
-        final float rcpw = 1.0f / (x * this.data[M30] + y * this.data[M31] + z * this.data[M32] + this.data[M33]);
-        vec.x = (x * this.data[M00] + y * this.data[M01] + z * this.data[M02] + this.data[M03]) * rcpw;
-        vec.y = (x * this.data[M10] + y * this.data[M11] + z * this.data[M12] + this.data[M13]) * rcpw;
-        vec.z = (x * this.data[M20] + y * this.data[M21] + z * this.data[M22] + this.data[M23]) * rcpw;
+        final float rcpw = 1 / (x * this.m[M30] + y * this.m[M31] + z * this.m[M32] + this.m[M33]);
+        vec.x = (x * this.m[M00] + y * this.m[M01] + z * this.m[M02] + this.m[M03]) * rcpw;
+        vec.y = (x * this.m[M10] + y * this.m[M11] + z * this.m[M12] + this.m[M13]) * rcpw;
+        vec.z = (x * this.m[M20] + y * this.m[M21] + z * this.m[M22] + this.m[M23]) * rcpw;
         return vec;
     }
 
@@ -283,9 +324,9 @@ public class Matrix4x4f
         final float x = vec.x;
         final float y = vec.y;
         final float z = vec.z;
-        vec.x = x * this.data[M00] + y * this.data[M01] + z * this.data[M02];
-        vec.y = x * this.data[M10] + y * this.data[M11] + z * this.data[M12];
-        vec.z = x * this.data[M20] + y * this.data[M21] + z * this.data[M22];
+        vec.x = x * this.m[M00] + y * this.m[M01] + z * this.m[M02];
+        vec.y = x * this.m[M10] + y * this.m[M11] + z * this.m[M12];
+        vec.z = x * this.m[M20] + y * this.m[M21] + z * this.m[M22];
         return vec;
     }
 
@@ -295,23 +336,44 @@ public class Matrix4x4f
         final float y = vec.y;
         final float z = vec.z;
         final float w = vec.w;
-        vec.x = x * this.data[M00] + y * this.data[M01] + z * this.data[M02] + w * this.data[M03];
-        vec.y = x * this.data[M10] + y * this.data[M11] + z * this.data[M12] + w * this.data[M13];
-        vec.z = x * this.data[M20] + y * this.data[M21] + z * this.data[M22] + w * this.data[M23];
-        vec.w = x * this.data[M30] + y * this.data[M31] + z * this.data[M32] + w * this.data[M33];
+        vec.x = x * this.m[M00] + y * this.m[M01] + z * this.m[M02] + w * this.m[M03];
+        vec.y = x * this.m[M10] + y * this.m[M11] + z * this.m[M12] + w * this.m[M13];
+        vec.z = x * this.m[M20] + y * this.m[M21] + z * this.m[M22] + w * this.m[M23];
+        vec.w = x * this.m[M30] + y * this.m[M31] + z * this.m[M32] + w * this.m[M33];
         return vec;
     }
 
-    public void writeInto(final float[] array, final int offset)
+    public void writeTo(final float[] array, final int offset)
     {
-        System.arraycopy(this.data, 0, array, offset, 16);
+        System.arraycopy(this.m, 0, array, offset, 16);
+    }
+
+    @Override
+    public Matrix4x4f clone()
+    {
+        return new Matrix4x4f(this);
     }
 
     @Override
     public String toString()
     {
-        return "{" + this.data[M00] + ", " + this.data[M01] + ", " + this.data[M02] + ", " + this.data[M03] + "\n" + this.data[M10] + ", " + this.data[M11]
-                + ", " + this.data[M12] + ", " + this.data[M13] + "\n" + this.data[M20] + ", " + this.data[M21] + ", " + this.data[M22] + ", " + this.data[M23]
-                + "\n" + this.data[M30] + ", " + this.data[M31] + ", " + this.data[M32] + ", " + this.data[M33] + "}";
+        return "{" + this.m[M00] + ", " + this.m[M01] + ", " + this.m[M02] + ", " + this.m[M03] + "\n"
+                + this.m[M10] + ", " + this.m[M11] + ", " + this.m[M12] + ", " + this.m[M13] + "\n"
+                + this.m[M20] + ", " + this.m[M21] + ", " + this.m[M22] + ", " + this.m[M23] + "\n"
+                + this.m[M30] + ", " + this.m[M31] + ", " + this.m[M32] + ", " + this.m[M33] + "}";
+    }
+
+    private final static ThreadLocal<State> STATE = new ThreadLocal<State>()
+                                                  {
+                                                      @Override
+                                                      protected State initialValue()
+                                                      {
+                                                          return new State();
+                                                      };
+                                                  };
+
+    private final static class State
+    {
+        public Matrix4x4f temp = new Matrix4x4f();
     }
 }
