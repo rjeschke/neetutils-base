@@ -83,6 +83,13 @@ public class Vector2f
         return this;
     }
 
+    public Vector2f set(final float[] buffer, final int offset)
+    {
+        this.x = buffer[offset];
+        this.y = buffer[offset + 1];
+        return this;
+    }
+
     public Vector2f set(final Vector2f v)
     {
         this.x = v.x;
@@ -119,7 +126,10 @@ public class Vector2f
 
     public float get(final int index)
     {
-        if (index == 0) return this.x;
+        if (index == 0)
+        {
+            return this.x;
+        }
         return this.y;
     }
 
@@ -248,7 +258,7 @@ public class Vector2f
         float len = this.x * this.x + this.y * this.y;
         if (len != 0)
         {
-            len = (float)(1.0 / Math.sqrt(len));
+            len = (float)(1 / Math.sqrt(len));
             this.x *= len;
             this.y *= len;
         }
@@ -267,19 +277,34 @@ public class Vector2f
         return (float)Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
+    public Vector2f swizzle(final int a, final int b, final Vector2f out)
+    {
+        return out.set(this.get(a), this.get(b));
+    }
+
     public Vector2f swizzle(final int a, final int b)
     {
-        return Vector2f.of(this.get(a), this.get(b));
+        return this.swizzle(a, b, new Vector2f());
+    }
+
+    public Vector3f swizzle(final int a, final int b, final int c, final Vector3f out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c));
     }
 
     public Vector3f swizzle(final int a, final int b, final int c)
     {
-        return Vector3f.of(this.get(a), this.get(b), this.get(c));
+        return this.swizzle(a, b, c, new Vector3f());
+    }
+
+    public Vector4f swizzle(final int a, final int b, final int c, final int d, final Vector4f out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c), this.get(d));
     }
 
     public Vector4f swizzle(final int a, final int b, final int c, final int d)
     {
-        return Vector4f.of(this.get(a), this.get(b), this.get(c), this.get(d));
+        return this.swizzle(a, b, c, d, new Vector4f());
     }
 
     public void into(final float[] arr, final int offset)

@@ -101,6 +101,24 @@ public class Vector4i
         return this;
     }
 
+    public Vector4i set(final IntBuffer buffer, final int offset)
+    {
+        this.x = buffer.get(offset);
+        this.y = buffer.get(offset + 1);
+        this.z = buffer.get(offset + 2);
+        this.w = buffer.get(offset + 3);
+        return this;
+    }
+
+    public Vector4i set(final int[] buffer, final int offset)
+    {
+        this.x = buffer[offset];
+        this.y = buffer[offset + 1];
+        this.z = buffer[offset + 2];
+        this.w = buffer[offset + 3];
+        return this;
+    }
+
     public Vector4i set(final Vector2i v, final int z, final int w)
     {
         this.x = v.x;
@@ -151,10 +169,28 @@ public class Vector4i
 
     public int get(final int index)
     {
-        if (index == 0) return this.x;
-        if (index == 1) return this.y;
-        if (index == 2) return this.z;
+        if (index == 0)
+        {
+            return this.x;
+        }
+        if (index == 1)
+        {
+            return this.y;
+        }
+        if (index == 2)
+        {
+            return this.z;
+        }
         return this.w;
+    }
+
+    public Vector4i scale(final int f)
+    {
+        this.w *= f;
+        this.x *= f;
+        this.y *= f;
+        this.z *= f;
+        return this;
     }
 
     public Vector4i add(final Vector4i v)
@@ -163,6 +199,15 @@ public class Vector4i
         this.x += v.x;
         this.y += v.y;
         this.z += v.z;
+        return this;
+    }
+
+    public Vector4i add(final Vector4i v, final int scale)
+    {
+        this.w += v.w * scale;
+        this.x += v.x * scale;
+        this.y += v.y * scale;
+        this.z += v.z * scale;
         return this;
     }
 
@@ -175,12 +220,30 @@ public class Vector4i
         return this;
     }
 
+    public Vector4i sub(final Vector4i v, final int scale)
+    {
+        this.w -= v.w * scale;
+        this.x -= v.x * scale;
+        this.y -= v.y * scale;
+        this.z -= v.z * scale;
+        return this;
+    }
+
     public Vector4i mul(final Vector4i v)
     {
         this.w *= v.w;
         this.x *= v.x;
         this.y *= v.y;
         this.z *= v.z;
+        return this;
+    }
+
+    public Vector4i mul(final Vector4i v, final int scale)
+    {
+        this.w *= v.w * scale;
+        this.x *= v.x * scale;
+        this.y *= v.y * scale;
+        this.z *= v.z * scale;
         return this;
     }
 
@@ -193,6 +256,29 @@ public class Vector4i
         return this;
     }
 
+    public Vector4i div(final Vector4i v, final int scale)
+    {
+        this.w /= v.w * scale;
+        this.x /= v.x * scale;
+        this.y /= v.y * scale;
+        this.z /= v.z * scale;
+        return this;
+    }
+
+    public Vector4i lerp(final Vector4i v, final int f)
+    {
+        this.x += (v.x - this.x) * f;
+        this.y += (v.y - this.y) * f;
+        this.z += (v.z - this.z) * f;
+        this.w += (v.w - this.w) * f;
+        return this;
+    }
+
+    public int dot(final Vector4i v)
+    {
+        return this.w * v.w + this.x * v.x + this.y * v.y + this.z * v.z;
+    }
+
     public Vector4i min(final Vector4i other)
     {
         this.x = Math.min(this.x, other.x);
@@ -200,6 +286,11 @@ public class Vector4i
         this.z = Math.min(this.z, other.z);
         this.w = Math.min(this.w, other.w);
         return this;
+    }
+
+    public int min()
+    {
+        return Math.min(this.x, Math.min(this.y, Math.min(this.z, this.w)));
     }
 
     public Vector4i max(final Vector4i other)
@@ -211,6 +302,11 @@ public class Vector4i
         return this;
     }
 
+    public int max()
+    {
+        return Math.max(this.x, Math.max(this.y, Math.max(this.z, this.w)));
+    }
+
     public Vector4i clamp(final Vector4i min, final Vector4i max)
     {
         this.x = NMath.clamp(this.x, min.x, max.x);
@@ -220,19 +316,60 @@ public class Vector4i
         return this;
     }
 
-    public Vector2d swizzle(final int a, final int b)
+    public Vector4i abs()
     {
-        return Vector2d.of(this.get(a), this.get(b));
+        this.x = Math.abs(this.x);
+        this.y = Math.abs(this.y);
+        this.z = Math.abs(this.z);
+        this.w = Math.abs(this.w);
+        return this;
     }
 
-    public Vector3d swizzle(final int a, final int b, final int c)
+    public Vector4i negate()
     {
-        return Vector3d.of(this.get(a), this.get(b), this.get(c));
+        this.x = -this.x;
+        this.y = -this.y;
+        this.z = -this.z;
+        this.w = -this.w;
+        return this;
+    }
+
+    public double length()
+    {
+        return Math.sqrt((double)this.w * (double)this.w
+                + (double)this.x * (double)this.x
+                + (double)this.y * (double)this.y
+                + (double)this.z * (double)this.z);
+    }
+
+    public Vector2i swizzle(final int a, final int b, final Vector2i out)
+    {
+        return out.set(this.get(a), this.get(b));
+    }
+
+    public Vector2i swizzle(final int a, final int b)
+    {
+        return this.swizzle(a, b, new Vector2i());
+    }
+
+    public Vector3i swizzle(final int a, final int b, final int c, final Vector3i out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c));
+    }
+
+    public Vector3i swizzle(final int a, final int b, final int c)
+    {
+        return this.swizzle(a, b, c, new Vector3i());
+    }
+
+    public Vector4i swizzle(final int a, final int b, final int c, final int d, final Vector4i out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c), this.get(d));
     }
 
     public Vector4i swizzle(final int a, final int b, final int c, final int d)
     {
-        return Vector4i.of(this.get(a), this.get(b), this.get(c), this.get(d));
+        return this.swizzle(a, b, c, d, new Vector4i());
     }
 
     public void into(final int[] arr, final int offset)
@@ -251,14 +388,24 @@ public class Vector4i
         buffer.put(offset + 3, this.w);
     }
 
+    public Vector2i asVector2(final Vector2i out)
+    {
+        return out.set(this.x, this.y);
+    }
+
     public Vector2i asVector2()
     {
-        return Vector2i.of(this.x, this.y);
+        return this.asVector2(new Vector2i());
+    }
+
+    public Vector3i asVector3(final Vector3i out)
+    {
+        return out.set(this.x, this.y, this.z);
     }
 
     public Vector3i asVector3()
     {
-        return Vector3i.of(this.x, this.y, this.z);
+        return this.asVector3(new Vector3i());
     }
 
     @Override

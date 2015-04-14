@@ -83,6 +83,13 @@ public class Vector2d
         return this;
     }
 
+    public Vector2d set(final double[] buffer, final int offset)
+    {
+        this.x = buffer[offset];
+        this.y = buffer[offset + 1];
+        return this;
+    }
+
     public Vector2d set(final Vector2d v)
     {
         this.x = v.x;
@@ -119,7 +126,10 @@ public class Vector2d
 
     public double get(final int index)
     {
-        if (index == 0) return this.x;
+        if (index == 0)
+        {
+            return this.x;
+        }
         return this.y;
     }
 
@@ -248,7 +258,7 @@ public class Vector2d
         double len = this.x * this.x + this.y * this.y;
         if (len != 0)
         {
-            len = 1.0 / Math.sqrt(len);
+            len = 1 / Math.sqrt(len);
             this.x *= len;
             this.y *= len;
         }
@@ -267,19 +277,34 @@ public class Vector2d
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
+    public Vector2d swizzle(final int a, final int b, final Vector2d out)
+    {
+        return out.set(this.get(a), this.get(b));
+    }
+
     public Vector2d swizzle(final int a, final int b)
     {
-        return Vector2d.of(this.get(a), this.get(b));
+        return this.swizzle(a, b, new Vector2d());
+    }
+
+    public Vector3d swizzle(final int a, final int b, final int c, final Vector3d out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c));
     }
 
     public Vector3d swizzle(final int a, final int b, final int c)
     {
-        return Vector3d.of(this.get(a), this.get(b), this.get(c));
+        return this.swizzle(a, b, c, new Vector3d());
+    }
+
+    public Vector4d swizzle(final int a, final int b, final int c, final int d, final Vector4d out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c), this.get(d));
     }
 
     public Vector4d swizzle(final int a, final int b, final int c, final int d)
     {
-        return Vector4d.of(this.get(a), this.get(b), this.get(c), this.get(d));
+        return this.swizzle(a, b, c, d, new Vector4d());
     }
 
     public void into(final double[] arr, final int offset)

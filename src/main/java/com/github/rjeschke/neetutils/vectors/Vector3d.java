@@ -110,6 +110,14 @@ public class Vector3d
         return this;
     }
 
+    public Vector3d set(final double[] buffer, final int offset)
+    {
+        this.x = buffer[offset];
+        this.y = buffer[offset + 1];
+        this.z = buffer[offset + 2];
+        return this;
+    }
+
     public Vector3d set(final Vector2d v, final double z)
     {
         this.x = v.x;
@@ -153,8 +161,14 @@ public class Vector3d
 
     public double get(final int index)
     {
-        if (index == 0) return this.x;
-        if (index == 1) return this.y;
+        if (index == 0)
+        {
+            return this.x;
+        }
+        if (index == 1)
+        {
+            return this.y;
+        }
         return this.z;
     }
 
@@ -332,19 +346,34 @@ public class Vector3d
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
+    public Vector2d swizzle(final int a, final int b, final Vector2d out)
+    {
+        return out.set(this.get(a), this.get(b));
+    }
+
     public Vector2d swizzle(final int a, final int b)
     {
-        return Vector2d.of(this.get(a), this.get(b));
+        return this.swizzle(a, b, new Vector2d());
+    }
+
+    public Vector3d swizzle(final int a, final int b, final int c, final Vector3d out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c));
     }
 
     public Vector3d swizzle(final int a, final int b, final int c)
     {
-        return Vector3d.of(this.get(a), this.get(b), this.get(c));
+        return this.swizzle(a, b, c, new Vector3d());
+    }
+
+    public Vector4d swizzle(final int a, final int b, final int c, final int d, final Vector4d out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c), this.get(d));
     }
 
     public Vector4d swizzle(final int a, final int b, final int c, final int d)
     {
-        return Vector4d.of(this.get(a), this.get(b), this.get(c), this.get(d));
+        return this.swizzle(a, b, c, d, new Vector4d());
     }
 
     public void into(final double[] arr, final int offset)
@@ -361,9 +390,14 @@ public class Vector3d
         buffer.put(offset + 2, this.z);
     }
 
-    public Vector2d asVector2()
+    public Vector2d toVector2(final Vector2d out)
     {
-        return Vector2d.of(this.x, this.y);
+        return out.set(this.x, this.y);
+    }
+
+    public Vector2d toVector2()
+    {
+        return this.toVector2(new Vector2d());
     }
 
     public NColor asNColor()

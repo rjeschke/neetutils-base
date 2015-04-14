@@ -119,6 +119,15 @@ public class Vector4f
         return this;
     }
 
+    public Vector4f set(final float[] buffer, final int offset)
+    {
+        this.x = buffer[offset];
+        this.y = buffer[offset + 1];
+        this.z = buffer[offset + 2];
+        this.w = buffer[offset + 3];
+        return this;
+    }
+
     public Vector4f set(final Vector2f v, final float z, final float w)
     {
         this.x = v.x;
@@ -169,9 +178,18 @@ public class Vector4f
 
     public float get(final int index)
     {
-        if (index == 0) return this.x;
-        if (index == 1) return this.y;
-        if (index == 2) return this.z;
+        if (index == 0)
+        {
+            return this.x;
+        }
+        if (index == 1)
+        {
+            return this.y;
+        }
+        if (index == 2)
+        {
+            return this.z;
+        }
         return this.w;
     }
 
@@ -353,19 +371,34 @@ public class Vector4f
         return (float)Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
+    public Vector2f swizzle(final int a, final int b, final Vector2f out)
+    {
+        return out.set(this.get(a), this.get(b));
+    }
+
     public Vector2f swizzle(final int a, final int b)
     {
-        return Vector2f.of(this.get(a), this.get(b));
+        return this.swizzle(a, b, new Vector2f());
+    }
+
+    public Vector3f swizzle(final int a, final int b, final int c, final Vector3f out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c));
     }
 
     public Vector3f swizzle(final int a, final int b, final int c)
     {
-        return Vector3f.of(this.get(a), this.get(b), this.get(c));
+        return this.swizzle(a, b, c, new Vector3f());
+    }
+
+    public Vector4f swizzle(final int a, final int b, final int c, final int d, final Vector4f out)
+    {
+        return out.set(this.get(a), this.get(b), this.get(c), this.get(d));
     }
 
     public Vector4f swizzle(final int a, final int b, final int c, final int d)
     {
-        return Vector4f.of(this.get(a), this.get(b), this.get(c), this.get(d));
+        return this.swizzle(a, b, c, d, new Vector4f());
     }
 
     public void into(final float[] arr, final int offset)
@@ -384,14 +417,24 @@ public class Vector4f
         buffer.put(offset + 3, this.w);
     }
 
+    public Vector2f asVector2(final Vector2f out)
+    {
+        return out.set(this.x, this.y);
+    }
+
     public Vector2f asVector2()
     {
-        return Vector2f.of(this.x, this.y);
+        return this.asVector2(new Vector2f());
+    }
+
+    public Vector3f asVector3(final Vector3f out)
+    {
+        return out.set(this.x, this.y, this.z);
     }
 
     public Vector3f asVector3()
     {
-        return Vector3f.of(this.x, this.y, this.z);
+        return this.asVector3(new Vector3f());
     }
 
     public Vector3f asVector3DivW(final Vector3f v)
