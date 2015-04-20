@@ -18,9 +18,6 @@ package com.github.rjeschke.neetutils.vectors;
 
 import java.util.Arrays;
 
-import com.github.rjeschke.neetutils.vectors.Vector3d;
-import com.github.rjeschke.neetutils.vectors.Vector4d;
-
 /**
  *
  * @author René Jeschke (rene_jeschke@yahoo.de)
@@ -98,6 +95,68 @@ public class Matrix4x4d
         return this.set(arr, 0);
     }
 
+    public static Matrix4x4d identity()
+    {
+        return new Matrix4x4d();
+    }
+
+    public static Matrix4x4d translate(final double x, final double y, final double z)
+    {
+        return new Matrix4x4d().setTranslate(x, y, z);
+    }
+
+    public static Matrix4x4d translate(final Vector3d v)
+    {
+        return new Matrix4x4d().setTranslate(v);
+    }
+
+    public static Matrix4x4d scale(final double x, final double y, final double z)
+    {
+        return new Matrix4x4d().setScale(x, y, z);
+    }
+
+    public static Matrix4x4d scale(final Vector3d v)
+    {
+        return new Matrix4x4d().setScale(v);
+    }
+
+    public static Matrix4x4d rotateX(final double radians)
+    {
+        return MatrixMathD.rotateX(radians, new Matrix4x4d());
+    }
+
+    public static Matrix4x4d rotateY(final double radians)
+    {
+        return MatrixMathD.rotateY(radians, new Matrix4x4d());
+    }
+
+    public static Matrix4x4d rotateZ(final double radians)
+    {
+        return MatrixMathD.rotateZ(radians, new Matrix4x4d());
+    }
+
+    public static Matrix4x4d lookAtLH(final Vector3d pos, final Vector3d lookat, final Vector3d up)
+    {
+        return MatrixMathD.lookAtLH(pos, lookat, up, new Matrix4x4d());
+    }
+
+    public static Matrix4x4d lookAtRH(final Vector3d pos, final Vector3d lookat, final Vector3d up)
+    {
+        return MatrixMathD.lookAtRH(pos, lookat, up, new Matrix4x4d());
+    }
+
+    public static Matrix4x4d projectionLH(final double fovRadians, final double aspectRatio, final double near_z,
+            final double far_z)
+    {
+        return MatrixMathD.projectionLH(fovRadians, aspectRatio, near_z, far_z, new Matrix4x4d());
+    }
+
+    public static Matrix4x4d projectionRH(final double fovRadians, final double aspectRatio, final double near_z,
+            final double far_z)
+    {
+        return MatrixMathD.projectionRH(fovRadians, aspectRatio, near_z, far_z, new Matrix4x4d());
+    }
+
     public Matrix4x4d setTranslate(final double x, final double y, final double z)
     {
         return MatrixMathD.translate(x, y, z, this);
@@ -113,6 +172,21 @@ public class Matrix4x4d
         return this.postConcat(MatrixMathD.translate(x, y, z, STATE.get().temp));
     }
 
+    public Matrix4x4d setTranslate(final Vector3d v)
+    {
+        return MatrixMathD.translate(v.x, v.y, v.z, this);
+    }
+
+    public Matrix4x4d preTranslate(final Vector3d v)
+    {
+        return this.preConcat(MatrixMathD.translate(v.x, v.y, v.z, STATE.get().temp));
+    }
+
+    public Matrix4x4d postTranslate(final Vector3d v)
+    {
+        return this.postConcat(MatrixMathD.translate(v.x, v.y, v.z, STATE.get().temp));
+    }
+
     public Matrix4x4d setScale(final double x, final double y, final double z)
     {
         return MatrixMathD.scale(x, y, z, this);
@@ -126,6 +200,21 @@ public class Matrix4x4d
     public Matrix4x4d postScale(final double x, final double y, final double z)
     {
         return this.postConcat(MatrixMathD.scale(x, y, z, STATE.get().temp));
+    }
+
+    public Matrix4x4d setScale(final Vector3d v)
+    {
+        return MatrixMathD.scale(v.x, v.y, v.z, this);
+    }
+
+    public Matrix4x4d preScale(final Vector3d v)
+    {
+        return this.preConcat(MatrixMathD.scale(v.x, v.y, v.z, STATE.get().temp));
+    }
+
+    public Matrix4x4d postScale(final Vector3d v)
+    {
+        return this.postConcat(MatrixMathD.scale(v.x, v.y, v.z, STATE.get().temp));
     }
 
     public Matrix4x4d setRotateX(final double radians)
